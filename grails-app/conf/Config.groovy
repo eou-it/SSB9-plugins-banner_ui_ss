@@ -1,5 +1,13 @@
+import com.sungardhe.banner.configuration.ApplicationConfigurationUtils as ConfigFinder
 // configuration for plugin testing - will not be included in the plugin zip
- 
+grails.config.locations = [] // leave this initialized to an empty list, and add your locations
+// in the APPLICATION CONFIGURATION section below.
+
+def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
+
+[bannerGrailsAppConfig: "${userHome}/.grails/banner_on_grails-local-config.groovy",
+        customRepresentationConfig: "grails-app/conf/CustomRepresentationConfig.groovy",
+].each { envName, defaultFileName -> locationAdder(envName, defaultFileName) } 
 log4j = {
     // Example of changing the log pattern for the default console
     // appender:
