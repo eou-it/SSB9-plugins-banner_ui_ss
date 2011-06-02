@@ -11,12 +11,10 @@ class BannerUiSsGrailsPlugin {
     ]
 
     // TODO Fill in these fields
-    def author = "Your name"
+    def author = "Sungard Higher Education"
     def authorEmail = ""
-    def title = "Plugin summary/headline"
-    def description = '''\\
-Brief description of the plugin.
-'''
+    def title = "banner-ui-ss plugin"
+    def description = '''This plugin is BannerUiSs.'''
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/banner-ui-ss"

@@ -11,6 +11,7 @@ grails.project.dependency.resolution = {
         mavenRepo "http://m038083.sungardhe.com:8081/nexus/content/repositories/releases/"
         mavenRepo "http://m038083.sungardhe.com:8081/nexus/content/repositories/snapshots/"
         mavenRepo "http://m038083.sungardhe.com:8081/nexus/content/repositories/thirdparty/"
+        mavenRepo "http://m038083.sungardhe.com:8081/nexus/content/repositories/public/asm/"
 
         grailsPlugins()
         grailsHome()
