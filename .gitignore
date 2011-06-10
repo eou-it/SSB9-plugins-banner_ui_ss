@@ -17,6 +17,6 @@ SendFailures.txt
 out/
 *.zip
 *.sha1
-test/**/cobertura.ser
+**/cobertura.ser
 test/**/release_info.groovy
 test/**/release_info.groovy.old
