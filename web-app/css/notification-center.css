@@ -1,0 +1,94 @@
+.notification-center {
+    position: absolute;
+    right: 10px;
+    left: 10px;
+    top: 10px;
+    z-index: 3;
+}
+
+.notification-center-hidden {
+    visibility: hidden;
+    display: none;
+}
+
+.notification-center-count {
+    background-color: rgba(235, 207, 207, 0.95);
+    border-left: 1px solid #808080;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    float: left;
+    padding: 10px;
+    padding: 10px;
+    text-align: center;
+    min-width: 30px;
+}
+
+.notification-center-message {
+    background-color: rgba(235, 207, 207, 0.95);
+    border-color: #808080;
+    border-style: solid;
+    border-width: 1px;
+    margin-left: 50px;
+}
+
+.notification-center-message ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.notification-center-message li {
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 10px 50px 10px 35px;
+}
+
+.notification-center-message div:first-child {
+
+}
+
+.notification-center-toggle {
+    float: right;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.notification-center-message li.notification-center-message-error {
+    background-image: url(../images/error_icon.png);
+}
+
+.notification-center-message li.notification-center-message-warning {
+    background-image: url(../images/warning_icon.png);
+    background-color: yellow;
+}
+
+.notification-center-message li.notification-center-message-success {
+    background-image: url(../images/warning_icon.png);
+    background-color: green;
+}
+
+
+li span.notification-item-prompt-message {
+    visibility: hidden;
+    display: none;
+}
+
+
+li:first-child span.notification-item-prompt-message {
+    visibility: visible;
+    display: inline;
+}
+
+
+li .notification-item-prompts {
+    visibility: hidden;
+    display: none;
+}
+
+
+li:first-child .notification-item-prompts {
+    visibility: visible;
+    display: block;
+    padding-top: 10px;
+}

@@ -1,0 +1,15 @@
+/*
+ * KeyTable
+ */
+table.cellselect td.focus,
+table.rowselect tr.focus {
+    border: 1px solid green;
+    background-color: #ccffcc !important;
+}
+table.rowselect tr.focus td {
+    background-color: #ccffcc !important;
+}    
+table.keytable td {
+    border-left-width: 1px;
+    border-right-width: 1px;
+}    

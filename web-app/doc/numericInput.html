@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="dir" content="ltr"/>
+        <title>Demo custom editable component</title>
+
+<style type='text/css'>
+.number form, .numeric form {display:inline;}
+.error {
+    background-color: red;
+}
+</style>
+<script src="../js/jquery/jquery-1.4.1.js"></script>
+<script src="../js/jquery-plugins/jquery.jeditable.js"></script>
+<script src="../js/jquery-plugins/jquery.numeric.js"></script>
+
+<script type="text/javascript">
+$(function() {
+    /*
+     * Create a 'validated input type that requires entered value to
+     * pass validation function.
+     * Requires:
+     *     settings.validate( value ) -> numeric value, or false
+     */
+    $.editable.addInputType('validated', {
+        element: function( settings, original ) {
+            // any assertions about state
+            // these will be invoked when the user first invokes the element
+            if (!settings.validate) {
+                throw 'Validated input element requires a validate function';
+            }
+
+            // add our input field markup
+            var ele = $('<input>');
+            $(this).append(ele);
+
+            // return the input that holds the value and
+            // controls onblur, etc.
+            return ele;
+        },
+        submit: function( settings, original ) {
+            /*
+             * Update the hidden value in the form if the visible value validates,
+             * otherwise, reset the form to the original value.
+             */
+            var ele = $('input', this);
+            var value = settings.validate(ele.val(), settings, original);
+            if (false === value ) {
+              original.reset(this); // reset the value
+              return false;
+            } else {
+              return true;
+            }
+        }
+    });
+
+    /*
+     * return numeric value, or false
+     */
+    function validateNumber(value, settings, original) {
+        if (isNaN(value)) {
+            $(original).addClass('error');
+            alert( 'Value: "' + value + '" must be a number.' );
+            return false;
+        } else {
+            $(original).removeClass('error');
+            return value;
+        }
+    }
+
+    /*
+     * create a validated input type that accepts only numeric values
+     * Note the poor-man's inheritance.
+     */
+    var validatedTypeSettings = $.editable.types['validated'];
+    var numericTypeSettings = $.extend( {}, validatedTypeSettings, {
+        element: function( settings, original ) {
+            settings.validate = settings.validate || validateNumber;
+            return validatedTypeSettings.element.call( this, settings, original );
+        }
+    });
+    $.editable.addInputType( 'numeric', numericTypeSettings );
+
+    /*
+     * create an input type that allows only numbers.
+     *
+     * Allows:
+     *  numberOptions: map. default is {decimal:false, negative:false}
+     */
+    $.editable.addInputType( 'number', {
+        element: function( settings, original ) {
+            settings.numberOptions = settings.numberOptions || {decimal: false, negative: false};
+            
+            // add our input field markup
+            var ele = $('<input>');
+            $(this).append(ele);
+            $(ele).numeric(settings.numberOptions);
+            
+            // return the input that holds the value and
+            // controls onblur, etc.
+            return ele;
+        }
+    });
+    
+    // submit changed value
+    function submit(value, settings) {
+        alert( 'Updated value: ' + value );
+
+        // submit must return the new html content, or
+        // it gets settings.placeholder
+       return value;
+    }
+  
+    $('.numeric').editable( submit, {
+        type: 'numeric',            // use our numeric input type
+        onblur: 'submit'            // leave the field, save the value
+    });
+    
+    $('.number').editable( submit, {
+        type: 'number',
+        onblur: 'submit'
+        
+    });
+});  
+
+</script>
+    </head>
+    <body>
+        The following editable field accepts only numeric input: <label class="numeric">15</label>
+    <br/>
+    HTML5 input type='number':    <input type='number' value=75></input>
+  <br/>
+    Only digits: <span class='number'>17</span> (try copy & paste, then paste with the mouse, try Ctrl-A or shift-arrows to select...)
+    </body>
+</html>

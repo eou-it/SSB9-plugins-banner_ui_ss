@@ -1,0 +1,19 @@
+section#personalInformation div.menuTitle {
+  background-image: url('http://www.rw-designer.com/PAD/icon-icon-48o.png');
+  background-repeat: no-repeat;
+  height: 48px;
+  padding-left: 50px;
+  background-position: left;
+}
+
+section#facultyServices div.menuTitle {
+  background-image: url('http://icons.iconarchive.com/icons/iconka/beer/48/messenger-icon.png');
+  background-repeat: no-repeat;
+  height: 48px;
+  padding-left: 50px;
+  background-position: left;
+}
+
+html {
+    direction: ltr;
+}
