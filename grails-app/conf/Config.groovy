@@ -6,7 +6,7 @@ grails.config.locations = [] // leave this initialized to an empty list, and add
 def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
 
 [bannerGrailsAppConfig: "${userHome}/.grails/banner_on_grails-local-config.groovy",
-        customRepresentationConfig: "grails-app/conf/CustomRepresentationConfig.groovy",
+ //TODO :missing file        customRepresentationConfig: "grails-app/conf/CustomRepresentationConfig.groovy",
 ].each { envName, defaultFileName -> locationAdder(envName, defaultFileName) } 
 log4j = {
     // Example of changing the log pattern for the default console

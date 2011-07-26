@@ -1,3 +1,4 @@
+//excluded during package-plugin
 dataSource {
   	pooled = true
 	driverClassName = "oracle.jdbc.OracleDriver"

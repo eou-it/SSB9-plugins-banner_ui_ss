@@ -22,12 +22,12 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        compile 'com.sungardhe:banner-core:0.2.32'
+        compile 'com.sungardhe:banner-core:0.2.38'  //TODO change version to :latest.integration or latest.release (maven repositories only)??
         compile 'com.sungardhe:spring-security-cas:1.0.2'
         compile 'com.sungardhe:banner-codenarc:0.1.3'
     }
 
     dependencies {
-          compile 'com.sungardhe:banner-core:0.2.32'   // Note: Also update version within 'application.properties'
+        compile 'com.sungardhe:banner-core:0.2.38'   // Note: Also update version within 'application.properties'
     }
 }
