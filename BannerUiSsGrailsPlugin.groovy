@@ -28,7 +28,7 @@ class BannerUiSsGrailsPlugin {
     //
     //String version = "0.1-SNAPSHOT"
 
-    def version = "0.0.3"
+    def version = "0.0.5"
 
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
@@ -41,10 +41,8 @@ class BannerUiSsGrailsPlugin {
         feeds:'1.5 => *',
         jquery:'1.6.1.1 => *',
         jqueryUi:'1.8.11 => *',
-        resources:'1.0 => *',
         selenium:'0.6 => *',
-        seleniumRc:'1.0.2 => *',
-        zippedResources:'1.0 => *',
+        seleniumRc:'1.0.2 => *'
     ]
 
     // resources that are excluded from plugin packaging
