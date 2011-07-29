@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sungardhe</groupId>
   <artifactId>banner-ui-ss</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <packaging>zip</packaging>
   <description>A Grails Plugin providing core and UI framework for Banner Self Service</description>
   <distributionManagement>
@@ -36,12 +36,4 @@
       <url>http://m038083:8081/nexus/content/repositories/releases/</url>
     </repository>
   </distributionManagement>
-   <dependencies>
-<!--    <dependency>
-         <groupId>com.sungardhe</groupId>
-         <artifactId>sghe-zk-core</artifactId>
-         <type>zip</type>
-         <version>0.1.0</version>
-     </dependency>-->
-   </dependencies>
 </project>
