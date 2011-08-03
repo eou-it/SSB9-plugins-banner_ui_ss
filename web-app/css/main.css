@@ -156,3 +156,46 @@ tr.odd td.sorting_1, tr.even td.sorting_1 {
     width: 16px;
     height: 16px;
 }
+
+.ui-layout-pane-north, .ui-layout-pane-south {
+    padding: 0px !important;
+}
+
+.aurora-fake-header {
+    width: 100%;
+}
+
+.aurora-fake-header-left {
+    float: left;
+    background: url('../images/aurora-fake-header-left.png') no-repeat;
+    width: 181px;
+    height: 73px;
+}
+
+.aurora-fake-header-middle {
+    background: url('../images/aurora-fake-header-middle.png') repeat-x;
+    height: 73px;
+}
+
+.aurora-fake-header-right {
+    float: right;
+    background: url('../images/aurora-fake-header-right.png') no-repeat;
+    width: 490px;
+    height: 73px;
+}
+
+.aurora-fake-footer {
+    width: 100%;
+}
+
+.aurora-fake-footer-middle {
+    background: url('../images/aurora-fake-footer-middle.png') repeat-x;
+    height: 27px;
+}
+
+.aurora-fake-footer-right {
+    float: right;
+    background: url('../images/aurora-fake-footer-right.png') no-repeat;
+    width: 392px;
+    height: 27px;
+}
