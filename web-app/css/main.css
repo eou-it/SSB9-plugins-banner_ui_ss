@@ -52,7 +52,7 @@ table.display tr.odd.row_hover td.sorting_1 {
 .cell-save-successful {
     background-color: #FFFFFF !important;
     background-image: url("../images/success_new.png");
-    background-origin:�content;
+    background-origin: content;
     background-position: right center;
     background-repeat: no-repeat;
     border-color: green;
@@ -127,4 +127,32 @@ tr.odd td.sorting_1, tr.even td.sorting_1 {
 
 .footer {
     float: right;
+}
+
+/* UI Layout */
+
+.ui-layout-resizer-west, .ui-layout-resizer-east {
+    background: url('../images/ui-layout-resizer-bg.png') repeat scroll 0 0 !important;
+}
+
+.ui-layout-toggler-east-open {
+    background: url('../images/ui-layout-resizer-handle-east.png') no-repeat scroll center center !important;
+}
+
+.ui-layout-toggler-east-closed {
+    background: url('../images/ui-layout-resizer-handle-west.png') no-repeat scroll center center !important;
+}
+
+/* Notification Center */
+
+.notification-center-closed  {
+    background: url('../images/arrow_closed.png') no-repeat !important;
+    width: 7px;
+    height: 7px;
+}
+
+.notification-center-exit  {
+    background: url('../images/icon_exit.png') no-repeat !important;
+    width: 16px;
+    height: 16px;
 }

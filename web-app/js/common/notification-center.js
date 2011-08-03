@@ -176,7 +176,7 @@ $(document).ready(function() {
             $(this.el).addClass("notification-center");
             $(this.el).addClass("notification-center-hidden");
 
-            $(this.el).html('<div class="notification-center-count"></div><div class="notification-center-message"><div class="notification-center-toggle"><img class="toggle" src="images/arrow_closed.png" alt="Open"/><img class="toggle" src="images/icon_exit.png" alt="Close"/></div><ul/></div>');
+            $(this.el).html('<div class="notification-center-count"></div><div class="notification-center-message"><div class="notification-center-toggle"><span class="toggle notification-center-closed"></span><span class="toggle notification-center-exit"></span></div><ul/></div>');
 
             _.bindAll(this, 'render', 'add');
             notifications.bind("add", this.add);
