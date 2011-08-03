@@ -10,9 +10,9 @@ class UiCatalogController {
     def demoPersonTableData = {
         def rows = []
 
-        rows << [firstName: "Johnny", lastName: "Appleseed", phoneNum: "5551234567", streetAddress: "123 Any Drive", city: "Smalltown", state: "PA", zip: "12345"]
-        rows << [firstName: "Johnny", lastName: "Begood", phoneNum: "5552345678", streetAddress: "321 A Avenue", city: "Westside", state: "AK", zip: "23456"]
-        rows << [firstName: "Johnny", lastName: "Rotten", phoneNum: "5553456789", streetAddress: "101 Pikes Peak Drive", city: "East Village", state: "CT", zip: "34567"]
+        rows << [bannerId: "A00000685", firstName: "Johnny", lastName: "Appleseed", phone: "5551234567", email: "jappleseed@apple.com", birthDate: new Date(1992, 9, 3)]
+        rows << [bannerId: "A00000686", firstName: "Johnny", lastName: "Begood", phone: "5552345678", email: "chuck.berry@sungardhe.com", birthDate: new Date(1992, 9, 10)]
+        rows << [bannerId: "A00000687", firstName: "Johnny", lastName: "Rotten", phone: "5553456789", email: "rottenj@gmail.com", birthDate: new Date(1993, 9, 17)]
 
 
         def dataTablesFormat = [sEcho: 1, iTotalRecords: rows.size(), iTotalDisplayRecords: rows.size(), aaData: rows]

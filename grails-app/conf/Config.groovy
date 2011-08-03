@@ -126,7 +126,7 @@ grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
 grails.plugins.springsecurity.logout.afterLogoutUrl = "/banner.zul?page=mainPage"
 grails.converters.domain.include.version = true
-grails.converters.json.date = "javascript"
+grails.converters.json.date = "default"
 grails.converters.json.pretty.print = true
 grails.converters.json.default.deep = true
 

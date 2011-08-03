@@ -1,0 +1,11 @@
+.component {
+    margin-bottom: 1em;
+}
+
+.catalog-entry > .ui-widget-header {
+    padding:  .5em;
+}
+
+.catalog-entry > .ui-widget-content {
+    padding: 1em;
+}

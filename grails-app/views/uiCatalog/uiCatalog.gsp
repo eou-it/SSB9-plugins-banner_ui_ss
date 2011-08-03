@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
-        <meta name="layout" content="main"/>
+        <meta name="layout" content="mainManual"/>
         <link rel="icon" href="${resource(dir: 'images/poc', file: 'events-favicon.png')}" sizes="32x32" type="image/png">
         <title><g:message code="ui.catalog.index.title"/></title>
-        <r:use modules="sghe-common, jquery-ui, jquery-ui-plugins, jquery-plugins, datatables"/>
+        %{--<r:use modules="sghe-common, jquery-ui, jquery-ui-plugins, jquery-plugins, datatables"/>--}%
+
     </head>
     <body>
         <div class="jquery-ui-components component ui-widget catalog-entry">
