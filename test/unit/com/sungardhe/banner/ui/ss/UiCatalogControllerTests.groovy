@@ -1,8 +1,8 @@
-package com.sungardhe.banner.ui
+package com.sungardhe.banner.ui.ss
 
 import grails.test.*
 
-class UICatalogControllerTests extends ControllerUnitTestCase {
+class UiCatalogControllerTests extends ControllerUnitTestCase {
     protected void setUp() {
         super.setUp()
     }

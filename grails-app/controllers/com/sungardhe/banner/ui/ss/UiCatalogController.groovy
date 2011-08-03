@@ -1,7 +1,6 @@
-package com.sungardhe.banner.ui
+package com.sungardhe.banner.ui.ss
 
 import grails.converters.JSON
-//import com.sungardhe.banner.student.Student
 
 class UiCatalogController {
     static defaultAction = "uiCatalog"
