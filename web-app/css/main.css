@@ -199,3 +199,7 @@ tr.odd td.sorting_1, tr.even td.sorting_1 {
     width: 392px;
     height: 27px;
 }
+
+.ui-widget-section {
+    padding: 10px;
+}

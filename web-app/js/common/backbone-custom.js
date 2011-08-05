@@ -99,26 +99,9 @@ _.extend(Backbone.Model.prototype, {
     _dirty: false
 });
 
-var spotToBreak = "o";
-
-var baselineCollectionFetch = _.bind( Backbone.Collection.prototype.fetch, Backbone.Collection.prototype );
 
 // Extend Backbone.Collection to include 'save' which will inspect all dirty models and attempt to save them.
 _.extend(Backbone.Collection.prototype, {
-    fetch1: function( options ) {
-        options || (options = {});
-
-        if (!options.url && this.fetchCriteria) {
-            var getUrl = function(object) {
-                if (!(object && object.url)) return null;
-                return _.isFunction(object.url) ? object.url() : object.url;
-            };
-
-            options.url = createFetchCriteriaUrl( getUrl( this ), this );
-        }
-
-        return baselineCollectionFetch( options );
-    },
     save: function(options) {
         options || (options = {});
 
@@ -264,13 +247,18 @@ function createBatchModel(model) {
     }
 }
 
+function createFetchOptions( collection, options ) {
 
-function createFetchCriteriaUrl( url, model) {
-    var returnUrl = url;
+    var getUrl = function(object) {
+        if (!(object && object.url)) return null;
+        return _.isFunction(object.url) ? object.url() : object.url;
+    };
 
-    if (model.fetchCriteria) {
-        // Loop through the fetchCriteria and add query parameters to the url
-        _.each(model.fetchCriteria(),
+    var returnUrl = getUrl( collection );
+
+    if (options.params) {
+        // Loop through the params and add query parameters to the url
+        _.each(options.params,
             function(value, key) {
                 if (returnUrl.indexOf("?") > 0) {
                     returnUrl = returnUrl + "&";
@@ -283,9 +271,8 @@ function createFetchCriteriaUrl( url, model) {
             }
         );
 
-        // TODO:  Need to url encode the url
-        //url = $.escape( url );
+        options.url = returnUrl;
     }
 
-    return returnUrl;
+    return options;
 }
