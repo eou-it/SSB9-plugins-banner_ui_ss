@@ -1,6 +1,19 @@
 body {
     background: #f8f8f8;
-    font: 80%/1.45em "Lucida Grande",Verdana,Arial,Helvetica,sans-serif;
+    font: .9em Arial,Helvetica,sans-serif;
+}
+
+.ui-widget, .ui-widget .ui-widget {
+    font-size: .9em;
+}
+
+.display {
+    font-size: 1.2em;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    font-size: 1.3em;
+    padding: 0 1em;
 }
 
 .ui-widget-header {
