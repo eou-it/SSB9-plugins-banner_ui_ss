@@ -1,218 +1,360 @@
-body {
-    background: #f8f8f8;
-    font: .9em Arial,Helvetica,sans-serif;
+#student-picture {
+    background-color: #FFFFFF;
+    border-color: #666666;
+    border-style: solid;
+    border-width: 2px;
+    float: right;
+    padding: 10px 10px 5px;
+    vertical-align: bottom;
 }
 
-.ui-widget, .ui-widget .ui-widget {
-    font-size: .9em;
+#facultySection-final tbody tr td form {
+    margin: 0;
 }
 
-.display {
-    font-size: 1.2em;
+#grades tbody tr td form {
+    margin: 0;
 }
 
-.ui-tabs .ui-tabs-nav li a {
-    font-size: 1.3em;
-    padding: 0 1em;
+#facultySection-midTerm_wrapper {
+    min-height: 100px;
+    margin-bottom: 20px;
 }
 
-.ui-widget-header {
-    min-height: 2.5em;
-    line-height: 2.5em;
-    padding-left: .75em;
+#facultySection-midTerm_wrapper .ui-toolbar {
+    display: none;
 }
 
-.ui-input-text {
-    padding: 0.46em 0.5em;
-    margin-right: 0.1em;
+#facultySection-final_wrapper {
+    min-height: 100px;
+    margin-bottom: 20px;
 }
 
-.inputWrapper {
+#facultySection-final_wrapper .ui-toolbar {
+    display: none;
+}
+
+#gradesSection {
     float: left;
+    clear: both;
 }
 
-
-.floatLeft {
-    float: left;
+#grades_first, #grades_last {
+    display: none;
 }
 
-#courseSelectionContainer {
+#grades_wrapper .ui-corner-tl {
+    display: none;
+}
+
+.dataTables_paginate {
     float: left;
+    text-align: left;
+}
+
+.notvisible {
+    visibility: hidden;
+    display: none;
+}
+
+#grades-row-highlight-col {
+    width: 30px;
+}
+
+#grades-version-col {
+    width: 50px;
+}
+
+#grades-lastName-col {
+    width: 100px;
+}
+
+#grades-firstName-col {
+    width: 100px;
+}
+
+#grades-id-col {
+    width: 70px;
+}
+
+#grades-course-col {
+    width: 300px;
+}
+
+#grades-term-col {
+    width: 100px;
+}
+
+#grades-midTermGrade-col {
+    width: 100px;
+}
+
+#grades-finalGrade-col {
+    width: 100px;
+}
+
+#grades td select {
+    width: 100%;
+    height: 100%;
+    border: 0px;
+}
+
+html, body {
+    width: 100%;
+    margin: 0px;
+}
+
+.export-wizard {
+    width: 300px;
+}
+
+.export-wizard-type-list {
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+.import-wizard {
+    width: 100%;
+    height: 100%;
+}
+
+.import-wizard-content {
+    max-width: 750px;
+    max-height: 350px;
+    float: left;
+    clear: both;
+    overflow: auto;
+    margin-top: 10px
+}
+
+.import-wizard-directions, .import-wizard-legend {
+    float: left;
+    clear: both;
+    margin-top: 10px
+}
+
+.import-wizard-legend-item {
+    float: left;
+    clear: none;
+    margin-right: 20px;
+}
+
+.import-wizard-buttons {
+    float: right;
     clear: both;
     margin-top: 10px;
 }
 
-#enableTermSelectControl {
+.file-upload {
+    display: inline;
+}
+
+.import-form {
     display: none;
 }
 
-table.display tr.even.row_hover td {
-	background-color: #D9D9D9;
-}
-
-table.display tr.even.row_hover td.sorting_1 {
-	background-color: #DEDEDE;
-}
-
-table.display tr.odd.row_hover td {
-	background-color: #D8D8D8;
-}
-
-table.display tr.odd.row_hover td.sorting_1 {
-	background-color: #C5C5C5;
-}
-
-.cell-save-successful {
-    background-color: #FFFFFF !important;
-    background-image: url("../images/success_new.png");
-    background-origin: content;
-    background-position: right center;
-    background-repeat: no-repeat;
-    border-color: green;
-    border-style: solid;
-    border-width: 1px;
-    padding-right: 5px;
-}
-
-.cell-error {
-    background-color: #FFFFFF !important;
-    background-image: url("../images/error_icon.png");
-    background-origin: content;
-    background-position: right center;
-    background-repeat: no-repeat;
-    border-color: red;
-    border-style: solid;
-    border-width: 1px;
-    padding-right: 5px;
-}
-
-.page-with-sidebar {
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    right: 0;
-    left: 0;
-    overflow: hidden;
-    margin: 0px;
-    padding: 0px;
-    border: medium none;
-}
-
-div.navigation-flyout {
-    position: fixed;
-    margin: 0px;
-    padding: 0px;
-    top: 10px;
-    right: 0px;
-    list-style: none;
-    z-index:9999;
-}
-
-div.navigation-flyout div.navigation-themeswitcher  {
-    display: block;
-    margin-right: -2px;
-    width: 175px;
-    height: 70px;
-    background-color:#CFCFCF;
-    background-repeat:no-repeat;
-    background-position:center center;
-    border:1px solid #AFAFAF;
-    -moz-border-radius:10px 0px 0px 10px;
-    -webkit-border-bottom-left-radius: 10px;
-    -webkit-border-top-left-radius: 10px;
-    -khtml-border-bottom-left-radius: 10px;
-    -khtml-border-top-left-radius: 10px;
-    /*-moz-box-shadow: 0px 4px 3px #000;
-    -webkit-box-shadow: 0px 4px 3px #000;
-    */
-    opacity: 1;
-    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
-}
-
-div.navigation-flyout div.navigation-themeswitcher > div {
-    margin-top: 15px;
-}
-
-tr.odd td.sorting_1, tr.even td.sorting_1 {
-
-}
-
-
 .footer {
-    float: right;
+    margin-top: 10px;
+    margin-right: 5px;
+    min-height: 45px;
 }
 
-/* UI Layout */
-
-.ui-layout-resizer-west, .ui-layout-resizer-east {
-    background: url('../images/ui-layout-resizer-bg.png') repeat scroll 0 0 !important;
+.ui-tabs, .ui-tabs .ui-tabs-panel {
+    padding:  0;
 }
 
-.ui-layout-toggler-east-open {
-    background: url('../images/ui-layout-resizer-handle-east.png') no-repeat scroll center center !important;
+/* TODO: REMOVE THIS RULE AND MOVE IT INTO THE MAIN CSS CONFIG */
+.ui-corner-all { -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px; }
+
+.ui-layout-pane { padding:  0px !important; }
+
+
+#facultySection-midTerm-status-col, #facultySection-final-status-col {
+    width: 50px;
 }
 
-.ui-layout-toggler-east-closed {
-    background: url('../images/ui-layout-resizer-handle-west.png') no-repeat scroll center center !important;
+#facultySection-final-rolled-col {
+    width: 50px;
 }
 
-/* Notification Center */
+#facultySection-midTerm-section-col, #facultySection-final-section-col {
+    width: 50px;
+}
 
-.notification-center-closed  {
-    background: url('../images/arrow_closed.png') no-repeat !important;
-    width: 7px;
+#facultySection-midTerm-subject-col, #facultySection-final-subject-col {
+    width: 200px;
+}
+
+#facultySection-midTerm-term-col, #facultySection-final-term-col {
+    width: 150px;
+}
+
+#facultySection-midTerm-title-col, #facultySection-final-title-col {
+    width: 200px;
+}
+
+.facultySection-completed {
+    background: url('../../../images/fully_rolled.png') no-repeat;
     height: 7px;
-}
-
-.notification-center-exit  {
-    background: url('../images/icon_exit.png') no-repeat !important;
-    width: 16px;
-    height: 16px;
-}
-
-.ui-layout-pane-north, .ui-layout-pane-south {
-    padding: 0px !important;
-}
-
-.aurora-fake-header {
     width: 100%;
+    background-position: center;
 }
 
-.aurora-fake-header-left {
-    float: left;
-    background: url('../images/aurora-fake-header-left.png') no-repeat;
-    width: 181px;
-    height: 73px;
-}
-
-.aurora-fake-header-middle {
-    background: url('../images/aurora-fake-header-middle.png') repeat-x;
-    height: 73px;
-}
-
-.aurora-fake-header-right {
-    float: right;
-    background: url('../images/aurora-fake-header-right.png') no-repeat;
-    width: 490px;
-    height: 73px;
-}
-
-.aurora-fake-footer {
+.facultySection-in-progress {
+    background: url('../../../images/partial_roll.png') no-repeat;
+    height: 7px;
     width: 100%;
+    background-position: center;
 }
 
-.aurora-fake-footer-middle {
-    background: url('../images/aurora-fake-footer-middle.png') repeat-x;
-    height: 27px;
+.facultySection-not-started {
+    background: url('../../../images/not_rolled.png') no-repeat;
+    height: 7px;
+    width: 100%;
+    background-position: center;
 }
 
-.aurora-fake-footer-right {
-    float: right;
-    background: url('../images/aurora-fake-footer-right.png') no-repeat;
-    width: 392px;
-    height: 27px;
+#courseDetails {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:14px;
 }
 
-.ui-widget-section {
-    padding: 10px;
+#courseDetails > div {
+    background-color:#888;
+    padding:.5em;
+}
+
+#courseDetails > div > div {
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding:1em;
+    background-color:#fff;
+}
+
+#courseDetails > ul {
+    background:transparent;
+    background-image:none;
+    border:none;
+}
+
+#tabs-courseDetails-sectionDetail {
+    padding:0;
+}
+
+#sectionDetail #sectionDetailTabs {
+    padding: 5px 20px 5px 20px;
+    /*font-size:125%;*/
+    background-color:#404040;
+    color:#fff;
+}
+
+#sectionDetail #sectionDetailTabs ul {
+    margin:0;
+    padding:0;
+    list-style-type: none;
+}
+
+#sectionDetail .sectionTitle {
+    padding-bottom: .5em;
+    border-bottom: 5px solid #888;
+    font-weight: bold;
+}
+
+#sectionDetail .courseInfo {
+    color:#404040;
+    font-weight: bold;
+}
+
+#sectionDetail .courseInfo {
+    margin:5px 0 5px 0;
+    padding-bottom: 5px;
+    font-size:100%;
+}
+
+#sectionDetail  #gradeSummary > ul,
+#sectionDetail  #sectionInfo > ul {
+    margin:.5em 0 0 0;
+}
+
+#sectionDetail .gradeSummary {
+    background-color:#f4f4f4;
+    color: #6b6766;
+    padding: 1em;
+}
+
+#sectionDetail #gradeSummary ul li {
+    color: #6b6766;
+}
+
+#sectionDetail .notifybox  {
+    padding:.5em .5em .5em .5em;
+    border: 2px solid #f9dc87;
+    background-color: #fcf8d9;
+    color: #ae9c6c;
+    font-size: 125%;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#sectionDetail .notifybox img.warnicon {
+    width:1.2em;
+    height:1.2em;
+    vertical-align:bottom;
+    margin-right:.5em;
+}
+
+#sectionDetail .fieldlist {
+    margin-top:.5em;
+    color:#404040;
+}
+
+#sectionDetail .fieldlist label {
+    font-weight:bold;
+}
+
+#sectionDetail .fieldlist label:after {
+    content:': ';
+}
+
+.registration-rolled-yes {
+    background: url('../../../images/registraion_rolled_yes.png') no-repeat;
+    height: 17px;
+    width: 100%;
+    background-position: center;
+}
+
+.registration-rolled-no {
+    background: url('../../../images/registraion_rolled_no.png') no-repeat;
+    height: 17px;
+    width: 100%;
+    background-position: center;
+}
+
+/* datatables column data truncation */
+#grades {
+    table-layout: fixed;
+}
+
+#grades tr td {
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.development {
+    display: none;
+    visibility: hidden;
+}
+
+.fui-lazy-load {
+    display: none;
+    visibility: hidden;
+}
+
+.display {
+    font-size: 1.0em;
+}
+
+div#gradesSection.ui-widget div#grades_wrapper.dataTables_wrapper div.fg-toolbar {
+    visibility: hidden;
+    display: none;
 }
