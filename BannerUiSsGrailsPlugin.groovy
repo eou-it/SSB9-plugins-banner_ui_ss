@@ -28,7 +28,7 @@ class BannerUiSsGrailsPlugin {
     //
     //String version = "0.1-SNAPSHOT"
 
-    def version = "0.0.14"
+    def version = "0.0.15"
 
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
@@ -49,7 +49,7 @@ class BannerUiSsGrailsPlugin {
     def pluginExcludes = [
         "grails-app/views/error.gsp",
         // exclude UI catalog stuff
-        "grails-app/controllers/**",
+        "grails-app/controllers/com/sungardhe/banner/ui/ss/**",
         "grails-app/views/**",
         "web-app/css/views/**",
         "web-app/js/views/**"

@@ -1,7 +1,20 @@
+/** *****************************************************************************
+ ? 2011 SunGard Higher Education.  All Rights Reserved.
+
+ CONFIDENTIAL BUSINESS INFORMATION
+
+ THIS PROGRAM IS PROPRIETARY INFORMATION OF SUNGARD HIGHER EDUCATION
+ AND IS NOT TO BE COPIED, REPRODUCED, LENT, OR DISPOSED OF,
+ NOR USED FOR ANY PURPOSE OTHER THAN THAT WHICH IT IS SPECIFICALLY PROVIDED
+ WITHOUT THE WRITTEN PERMISSION OF THE SAID COMPANY
+ ****************************************************************************** */
 package com.sungardhe.banner.ui
 
 import org.codehaus.groovy.grails.web.util.GrailsPrintWriter
 
+/**
+ * Provides the style and javascript hooks for those files following the same naming convention as the view.
+ */
 class ViewResourcesTagLib {
     /**
      * This will return a list of key, property pairs for the DataTable list.

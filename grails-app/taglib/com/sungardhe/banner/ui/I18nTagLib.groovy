@@ -2,6 +2,9 @@ package com.sungardhe.banner.ui
 
 import java.security.MessageDigest
 
+/**
+ * Tag lib used to support JavaScript localization utilizing the messages.properties from Grails.
+ */
 class I18nTagLib {
 
     def i18nProperties = { attrs ->

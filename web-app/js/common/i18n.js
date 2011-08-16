@@ -7,7 +7,7 @@ $(document).ready(function() {
 
         if (i18nCacheKey) {
             if (localStorage["i18n.cacheKey"] === i18nCacheKey) {
-                i18nCache = localStorage["i18n.cache"];
+                i18nCache = JSON.parse( localStorage["i18n.cache"] );
             }
         }
     }
@@ -28,7 +28,7 @@ $(document).ready(function() {
                 if (Modernizr.localstorage) {
                     if (i18nCacheKey) {
                         localStorage["i18n.cacheKey" ] = i18nCacheKey
-                        localStorage["i18n.cache"] = $.i18n.map;
+                        localStorage["i18n.cache"] = JSON.stringify($.i18n.map);
                     }
                 }
 

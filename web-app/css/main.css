@@ -4,7 +4,7 @@ body {
 }
 
 .display {
-    font-size: 1.2em;
+
 }
 
 .ui-tabs .ui-tabs-nav li a {
@@ -23,7 +23,7 @@ body {
 }
 
 
-.ui-button {
+.ui-corner-all.ui-button.ui-widget {
     border: none;
     background-color: transparent;
     background-image: url( '../images/prim-secndry-buttons-sprite.png' ), url( '../images/prim-secndry-buttons-sprite.png' ), url( '../images/prim-secndry-buttons-sprite.png' );
@@ -33,7 +33,7 @@ body {
     color: #FFFFFF;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    font-size: 1.0em;
+    font-size: 10px;
 }
 
 .ui-button:hover {
