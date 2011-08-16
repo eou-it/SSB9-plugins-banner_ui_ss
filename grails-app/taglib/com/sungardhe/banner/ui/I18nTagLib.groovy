@@ -20,6 +20,8 @@ class I18nTagLib {
         // This is to ensure the bare minimum of properities are sent down.
         def props = new java.util.Properties()
 
+        // TODO:  This does not and will not work on WAR deployments.  Find a different way to load the properties files, recognizing
+        //        also that some properties may come from plugins.
         if (new File("grails-app/i18n/${name}.properties").exists()) {
             props.load(new FileInputStream("grails-app/i18n/${name}.properties"))
         }
