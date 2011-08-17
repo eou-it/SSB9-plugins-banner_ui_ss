@@ -47,6 +47,13 @@ function validateDate( input ) {
     return true;
 }
 
+// Setup the default logging.
+// TODO:  Logging appenders and layout formats should come from the server via the HTML and used to dynmically setup logging.
+var log = log4javascript.getLogger();
+var browserConsoleAppender = new log4javascript.BrowserConsoleAppender();
+var browserConsoleUpLayout = new log4javascript.PatternLayout("%d{HH:mm:ss} %-5p - %m%n");
+browserConsoleAppender.setLayout( browserConsoleUpLayout );
+log.addAppender(browserConsoleAppender);
 
 $(document).ready(function() {
     var dir = $('meta[name=dir]').attr("content");
