@@ -56,12 +56,6 @@ browserConsoleAppender.setLayout( browserConsoleUpLayout );
 log.addAppender(browserConsoleAppender);
 
 
-yepnope({
-  test : window.JSON,
-  nope : 'json2.js'
-});
-
-
 $(document).ready(function() {
     var dir = $('meta[name=dir]').attr("content");
 
