@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+
     var i18nCache = null;
 
     if (Modernizr.localstorage) {
@@ -8,7 +9,7 @@ $(document).ready(function() {
         if (i18nCacheKey) {
             if (localStorage["i18n.cacheKey"] === i18nCacheKey) {
                 try {
-                    i18nCache = JSON.parse( localStorage["i18n.cache"] );
+                    i18nCache = $.parseJSON( localStorage["i18n.cache"] );
                 }
                 catch (err) {
                     // There was an error parsing the cache from local storage.  We are going to ignore the cache and rebuild it.

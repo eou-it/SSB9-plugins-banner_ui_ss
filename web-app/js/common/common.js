@@ -55,6 +55,13 @@ var browserConsoleUpLayout = new log4javascript.PatternLayout("%d{HH:mm:ss} %-5p
 browserConsoleAppender.setLayout( browserConsoleUpLayout );
 log.addAppender(browserConsoleAppender);
 
+
+yepnope({
+  test : window.JSON,
+  nope : 'json2.js'
+});
+
+
 $(document).ready(function() {
     var dir = $('meta[name=dir]').attr("content");
 
@@ -91,3 +98,5 @@ $(document).ready(function() {
         switcher.themeswitcher();
     }
 });
+
+
