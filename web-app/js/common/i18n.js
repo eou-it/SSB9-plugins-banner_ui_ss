@@ -7,7 +7,12 @@ $(document).ready(function() {
 
         if (i18nCacheKey) {
             if (localStorage["i18n.cacheKey"] === i18nCacheKey) {
-                i18nCache = JSON.parse( localStorage["i18n.cache"] );
+                try {
+                    i18nCache = JSON.parse( localStorage["i18n.cache"] );
+                }
+                catch (err) {
+                    // There was an error parsing the cache from local storage.  We are going to ignore the cache and rebuild it.
+                }
             }
         }
     }
