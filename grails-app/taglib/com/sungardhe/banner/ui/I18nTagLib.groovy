@@ -16,17 +16,19 @@ class I18nTagLib {
     }
 
     private def getProperties( name ) {
+
         // Scan properties file for the js.* properties.  They follow a convention that states that they are used by JavaScript
         // This is to ensure the bare minimum of properities are sent down.
         def props = new java.util.Properties()
 
-        // TODO:  This does not and will not work on WAR deployments.  Find a different way to load the properties files, recognizing
-        //        also that some properties may come from plugins.
-        if (new File("grails-app/i18n/${name}.properties").exists()) {
-            props.load(new FileInputStream("grails-app/i18n/${name}.properties"))
-        }
 
-        // Should we get the keys, then with the locale we have in Grails do get.message on each key?
+        def propertiesPath = "grails-app/i18n/${name}.properties"
+        if (grailsApplication.isWarDeployed()) {
+            propertiesPath = "/WEB-INF/$propertiesPath"
+        }
+        if (new File( propertiesPath ).exists()) {
+            props.load(new FileInputStream( propertiesPath ))
+        }
 
         def output = ""
         props.keySet().findAll { key -> key.startsWith("js.") }.each {
