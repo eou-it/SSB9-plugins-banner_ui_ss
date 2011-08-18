@@ -28,7 +28,7 @@ class BannerUiSsGrailsPlugin {
     //
     //String version = "0.1-SNAPSHOT"
 
-    def version = "0.0.17"
+    def version = "0.0.18"
 
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
