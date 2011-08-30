@@ -25,7 +25,7 @@ body {
 
 .ui-corner-all.ui-button.ui-widget {
     border: none;
-    background-color: transparent;
+    background-color: rgb(88, 88, 88);
     background-image: url( '../images/prim-secndry-buttons-sprite.png' ), url( '../images/prim-secndry-buttons-sprite.png' ), url( '../images/prim-secndry-buttons-sprite.png' );
     background-position: left 0px, right -58px, 0 -29px;
     background-repeat: no-repeat, no-repeat, repeat-x;
