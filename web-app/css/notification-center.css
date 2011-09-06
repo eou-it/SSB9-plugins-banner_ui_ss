@@ -72,11 +72,11 @@
 #notification-center-flyout ul {
     background-color: #FFFFFF;
     margin: 0;
-    min-height: 100px;
+    max-height: 30em;
     padding: 0.5em;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
+    border-radius: .2em;
+    -moz-border-radius: .2em;
+    -webkit-border-radius: .2em;
 }
 
 .notification-center-anchor {
@@ -127,42 +127,45 @@
     margin-left: 50px;
 }
 
-.notification-center-message ul {
+.notification-center-flyout.notification-center-flyout ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.notification-center-message li {
-    background-position: 10px 10px;
+
+.notification-center-flyout li {
+    background-position: 0 8px;
     background-repeat: no-repeat;
-    padding: 10px 50px 10px 35px;
+    padding: 8px 3px 5px 22px;
+    border-bottom: 1px solid #CCCCCC;
 }
 
-.notification-center-message div:first-child {
 
+.notification-center-flyout li:last-child {
+    background-position: 0 8px;
+    padding-top: 8px;
+    border-bottom-style: none;
 }
 
-.notification-center-toggle {
-    float: right;
-    padding-top: 10px;
-    padding-right: 10px;
-    padding-left: 10px;
+
+.notification-center-flyout li:first-child {
+    background-position: 0 3px;
+    padding-top: 5px;
 }
 
-.notification-center-message li.notification-center-message-error {
-    background-image: url(../images/error_icon.png);
+.notification-center-flyout li.notification-center-message-error {
+    background-image: url(../images/icon-error-16x16.png);
 }
 
-.notification-center-message li.notification-center-message-warning {
-    background-image: url(../images/warning_icon.png);
-    background-color: yellow;
+.notification-center-flyout li.notification-center-message-warning {
+    background-image: url(../images/icon-warning-16x16.png);
 }
 
-.notification-center-message li.notification-center-message-success {
-    background-image: url(../images/warning_icon.png);
-    background-color: #DB7F33;
+.notification-center-flyout li.notification-center-message-success {
+    background-image: url(../images/icon-success-16x16.png);
 }
+
 
 
 li span.notification-item-prompt-message {

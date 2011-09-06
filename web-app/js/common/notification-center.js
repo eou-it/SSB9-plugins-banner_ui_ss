@@ -98,6 +98,8 @@ $(document).ready(function() {
                 prefix = "1";
             }
 
+            log.debug( 'comparator: ' + prefix + "-" + notification.get("type") );
+
             return prefix + "-" + notification.get("type");
         },
         hasErrors: function() {
@@ -110,6 +112,10 @@ $(document).ready(function() {
     window.NotificationView = Backbone.View.extend({
         tagName: "li",
         className: "notification-item",
+        initialize: function() {
+            _.bindAll(this, "render", "removeNotification" );
+            notifications.bind("remove", this.removeNotification);
+        },
         render: function() {
             //  Evaluate the notification type to determine what css class to append to the notification.
             var notificationType = this.model.get("type");
@@ -150,7 +156,7 @@ $(document).ready(function() {
                     messageDiv.append( promptSpan );
                 }
 
-                promptsDiv = $( "<div></div>" ).addClass( "notification-item-prompts" );
+                promptsDiv = $( "<div></div>" ).addClass( "notification-item-prompts" ).append( "<div></div>" );
 
                 _.each(this.model.get( "prompts" ), function(prompt) {
                     var b = $("<button></button>").html( prompt.label ).click( prompt.action );
@@ -164,6 +170,11 @@ $(document).ready(function() {
                 $(this.el).append( promptsDiv );
             }
             return this;
+        },
+        removeNotification: function(notification) {
+            if (this.model === notification) {
+                $(this.el).remove();
+            }
         }
     });
 
@@ -217,28 +228,17 @@ $(document).ready(function() {
         initialize: function() {
             $(this.el).addClass( "notification-center-flyout" ).addClass( "notification-center-flyout-hidden" );
 
-            _.bindAll(this, "render", "addNotification", "removeNotification", "display", "hide" );
-            notifications.bind("add", this.addNotification);
-            notifications.bind("remove", this.removeNotification);
-
+            _.bindAll(this, "render", "display", "hide" );
+            notifications.bind("all", this.render);
+        },
+        render: function() {
             $(this.el.selector + ' ul').empty();
 
             _.each(notifications.models, function(notification) {
-                this.addNotification(notification);
+                var view = new NotificationView( {model:notification} );
+                $(this.el.selector + ' ul').append( view.render().el );
             }, this);
-        },
-        render: function() {
-            log.info( "Render is called.  This is where we'll add and remove the class for the ul?" );
-            return this;
-        },
-        addNotification: function(notification) {
-            var view = new NotificationView( {model:notification} );
-            $(this.el.selector + ' ul').append( view.render().el );
 
-            return this;
-        },
-        removeNotification: function(notification) {
-            log.info( "Remove notification", notification );
             return this;
         },
         display: function() {
