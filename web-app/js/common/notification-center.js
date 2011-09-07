@@ -91,11 +91,13 @@ $(document).ready(function() {
 
             var prefix;
 
-            if (notification.hasPrompts()) {
+            if (notification.get("type") === "success") {
                 prefix = "0";
+            } else if (notification.hasPrompts()) {
+                prefix = "1";
             }
             else {
-                prefix = "1";
+                prefix = "2";
             }
 
             log.debug( 'comparator: ' + prefix + "-" + notification.get("type") );
@@ -151,12 +153,14 @@ $(document).ready(function() {
             var promptsDiv;
             if (this.model.hasPrompts()) {
 
+                $(this.el).addClass( "notification-center-message-with-prompts" );
+
                 if (this.model.get( "promptMessage" )) {
                     var promptSpan = $("<span></span>").addClass("notification-item-prompt-message").html( "  " + this.model.get( "promptMessage" ));
                     messageDiv.append( promptSpan );
                 }
 
-                promptsDiv = $( "<div></div>" ).addClass( "notification-item-prompts" ).append( "<div></div>" );
+                promptsDiv = $( "<div></div>" ).addClass( "notification-item-prompts" );
 
                 _.each(this.model.get( "prompts" ), function(prompt) {
                     var b = $("<button></button>").html( prompt.label ).click( prompt.action );
@@ -282,6 +286,9 @@ $(document).ready(function() {
         addNotification: function(notification) {
             this.notificationCenterAnchor.display();
             this.notificationCenterFlyout.display();
+
+            this.configNotificationShim();
+
             return this;
         },
         removeNotification: function(notification) {
@@ -289,10 +296,12 @@ $(document).ready(function() {
                 this.notificationCenterAnchor.hide();
                 this.notificationCenterFlyout.hide();
             }
+
+            this.configNotificationShim();
+
             return this;
         },
         toggle: function() {
-
             if (notifications.length > 0) {
                 if (this.notificationCenterAnchor.isDisplayed()) {
                     this.notificationCenterAnchor.hide();
@@ -305,6 +314,19 @@ $(document).ready(function() {
             }
 
             return this;
+        },
+        configNotificationShim: function() {
+            // Check to see if any prompts exist.  If there is a prompt, the user must be forced to address the prompt prior
+            // to moving on.
+            if (_.any( notifications, function( context, index, list ) { return list.at(index).hasPrompts(); })) {
+                // Only ever add one shim
+                if ($("#notification-center-shim").length == 0) {
+                    $("body").append( '<div id="notification-center-shim"></div>');
+                }
+            }
+            else {
+                $("#notification-center-shim").remove();
+            }
         }
     });
 
