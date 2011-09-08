@@ -60,11 +60,20 @@ function SaveTimer( options ) {
     this.start = function() {
         this.notificationPrompt = function() {
             if (options.isDirty()) {
+
+                this.save = function() {
+                    if (options.saveAction) {
+                        options.saveAction();
+                    }
+                }
+
                 var n = new Notification( {message: "Changes have been made.", type:"warning", promptMessage: "Do you want to save changes?"} );
 
                 this.doNotSavePromptAction = function() {
                     notifications.remove( n );
-                    this.stop();
+                    if (options.isDirty()) {
+                        this.reset();
+                    }
                 };
 
                 this.savePromptAction = function() {
@@ -83,12 +92,6 @@ function SaveTimer( options ) {
         };
 
         _.bindAll( this, "notificationPrompt" );
-
-        this.save = function() {
-            if (options.saveAction) {
-                options.saveAction();
-            }
-        }
 
         this.saveTimerId = window.setTimeout( this.notificationPrompt, options.delay);
     };

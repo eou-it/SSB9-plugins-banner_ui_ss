@@ -111,13 +111,13 @@ _.extend(Backbone.Collection.prototype, {
             var success = function(batch) {
                 // The model that comes down is the batch that was sent up.
                 // Loop through the model and update the collection.
-                _.each((batch.create || []).concat(batch.update || []), function(updatedModel) {
+                _.each((batch.data.create || []).concat(batch.data.update || []), function(updatedModel) {
                     var model = collection.get(updatedModel.id);
                     model.set(model.parse(updatedModel), options);
                     model.resetDirty();
                 });
 
-                _.each(batch.destroy, function(modelToDelete) {
+                _.each(batch.data.destroy, function(modelToDelete) {
                     var model = _.select(this.deletedModels, function(deletedModel) {
                         return deletedModel.id == modelToDelete.id;
                     });
