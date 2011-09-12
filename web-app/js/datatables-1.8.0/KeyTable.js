@@ -94,8 +94,8 @@ function KeyTable ( oInit )
 	 */
     this.focus = function(x,y) {
         _fnCaptureKeys();
-        if (x && y) {
-            fnSetPosition(x,y);
+        if (x != null && y != null) {
+            this.fnSetPosition(x,y);
         }
         else {
             _fnSetFocus( x );
@@ -121,6 +121,21 @@ function KeyTable ( oInit )
 			_fnSetFocus( _fnCellFromCoords(x, y) );
 		}
 	};
+
+    /*
+     * Clean up bound events
+     */
+    this.fnDestroy = function() {
+        jQuery(document).unbind( "keypress", _fnKey ).unbind( "keydown", _fnKey );
+		if ( _oDatatable )
+		{
+			jQuery('tbody td', _oDatatable.fnSettings().nTable).die( 'click', _fnClick );
+		}
+		else
+		{
+			jQuery('td', _nBody).die( 'click', _fnClick );
+		}
+    }
 
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -447,7 +462,7 @@ function KeyTable ( oInit )
 
             // ensure x is within enabled columns
             var min = _aEnabledColumns[0];
-            var max = _aEnabledColumns[_aEnabledColumns.length];
+            var max = _aEnabledColumns[_aEnabledColumns.length-1];
             x = x < min ? min : x;
             x = x > max ? max : x;
             
@@ -641,7 +656,9 @@ function KeyTable ( oInit )
 	{
 		jQuery(nTarget).removeClass( _sFocusClass );
 		jQuery(nTarget).parent().removeClass( _sFocusClass );
-		_fnEventFire( "blur", _iOldX, _iOldY );
+        if ( nTarget !== null ) {
+		    _fnEventFire( "blur", _iOldX, _iOldY );
+        }
 	}
 
 
@@ -746,7 +763,7 @@ function KeyTable ( oInit )
         if ( e.keytable_done ) {
             return _Action.NO_ACTION;
         }
-        e.keytable_done = true;
+        e.keytable_done = true; // would like to convert to a preventDefault & stopPropagation (except in the set-it-back-to-false case below)
 
         if ( !anyModifier ) {
             if ( e.keyCode in _UnmodifiedKeyActions ) return _UnmodifiedKeyActions[e.keyCode];
@@ -867,17 +884,20 @@ function KeyTable ( oInit )
 	 */
 	function _fnKey ( e )
 	{
-        if ( e.keytable_done ) {
+        if ( e.keytable_done || (e.originalEvent && e.originalEvent.keytable_done)) {
+            //console.log( _oDatatable.fnSettings().nTable.id + ' _fnKey keytable done: ' + e );
             return false; // this event has already been handled
         }
 		/* If user or system has blocked KeyTable from doing anything, just ignore this event */
 		if ( _that.block || !_bKeyCapture )
 		{
+            //console.log( '_fnKey block || !keycapture: ' + e + ': ' + _that.block + '/' + _bKeyCapture );
 			return true;
 		}
 
 		var action = _fnGetAction( e );
         if ( action === _Action.NO_ACTION ) {
+            //console.log( '_fnKey NO_ACTION' );
             return true;
         }
 
@@ -900,6 +920,7 @@ function KeyTable ( oInit )
 		     var aDtPos = _fnFindDtCell( _nOldFocus );
 		     if ( aDtPos === null )
 		     {
+                 //console.log( '_fnKey focused cell cannot be seen: do nothing' );
 			     /* If the table has been updated such that the focused cell can't be seen - do nothing */
 			     return;
 		     }
@@ -911,6 +932,7 @@ function KeyTable ( oInit )
 		     iTableHeight = _nBody.getElementsByTagName('tr').length;
 	     }
 
+         //console.log( _oDatatable.fnSettings().nTable.id + ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
 	     switch( action )
 	     {
 			 case _Action.ACTION:
