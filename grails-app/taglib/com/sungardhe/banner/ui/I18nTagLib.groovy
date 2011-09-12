@@ -1,6 +1,7 @@
 package com.sungardhe.banner.ui
 
 import java.security.MessageDigest
+import com.sungardhe.banner.BannerPluginAwareResourceBundleMessageSource
 
 /**
  * Tag lib used to support JavaScript localization utilizing the messages.properties from Grails.
@@ -20,12 +21,12 @@ class I18nTagLib {
     private def getProperties( name ) {
         def output
 
-        // TODO:  Validate that the messageSource has 'getJavaScriptKeys()' method.
-        messageSource.getJavaScriptKeys().each { key ->
-            if (output) output += "\n"
-            output += "$key=${g.message(code: key)}"
+        if (messageSource instanceof BannerPluginAwareResourceBundleMessageSource) {
+            messageSource.getJavaScriptKeys().each { key ->
+                if (output) output += "\n"
+                output += "$key=${g.message(code: key)}"
+            }
         }
-
         output
     }
 
