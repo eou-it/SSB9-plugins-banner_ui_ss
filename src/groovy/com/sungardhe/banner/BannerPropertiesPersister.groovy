@@ -9,17 +9,30 @@
  Luminis are either registered trademarks or trademarks of SunGard Higher
  Education in the U.S.A. and/or other regions and/or countries.
  ****************************************************************************** */
-package com.sungardhe.banner.ui
+package com.sungardhe.banner;
+
+import org.springframework.util.*
 
 /**
- *
+ * Allow us to store off the properties being used within a Grails application.
  */
-class I18nController {
+class BannerPropertiesPersister extends DefaultPropertiesPersister {
 
-    static defaultAction = "index"
+	private final Map<Object, Object> data = new HashMap<Object, Object>()
 
-    def index = {
-        def output = g.i18nProperties( name: params.name )
-        render(text: output, contentType: "text/plain")
-    }
+	@Override
+	public void load(Properties props, InputStream is) throws IOException {
+		super.load(props, is)
+		data.putAll(props)
+	}
+
+	@Override
+	public void load(Properties props, Reader reader) throws IOException {
+		super.load(props, reader)
+		data.putAll(props)
+	}
+
+	public Map<Object, Object> getData() {
+		return Collections.unmodifiableMap(data)
+	}
 }

@@ -7,6 +7,8 @@ import java.security.MessageDigest
  */
 class I18nTagLib {
 
+    def messageSource
+
     def i18nProperties = { attrs ->
         out << getProperties( attrs.name )
     }
@@ -16,24 +18,12 @@ class I18nTagLib {
     }
 
     private def getProperties( name ) {
+        def output
 
-        // Scan properties file for the js.* properties.  They follow a convention that states that they are used by JavaScript
-        // This is to ensure the bare minimum of properities are sent down.
-        def props = new java.util.Properties()
-
-
-        def propertiesPath = "grails-app/i18n/${name}.properties"
-        if (grailsApplication.isWarDeployed()) {
-            propertiesPath = "/WEB-INF/$propertiesPath"
-        }
-        if (new File( propertiesPath ).exists()) {
-            props.load(new FileInputStream( propertiesPath ))
-        }
-
-        def output = ""
-        props.keySet().findAll { key -> key.startsWith("js.") }.each {
+        // TODO:  Validate that the messageSource has 'getJavaScriptKeys()' method.
+        messageSource.getJavaScriptKeys().each { key ->
             if (output) output += "\n"
-            output += "$it=${g.message(code: it)}"
+            output += "$key=${g.message(code: key)}"
         }
 
         output
