@@ -112,8 +112,8 @@ _.extend(Backbone.Collection.prototype, {
                 // The model that comes down is the batch that was sent up.
                 // Loop through the model and update the collection.
                 _.each((batch.data.create || []).concat(batch.data.update || []), function(updatedModel) {
-                    var model = collection.get(updatedModel.data.id);
-                    model.set(model.parse(updatedModel.data), options);
+                    var model = collection.get(updatedModel.id);
+                    model.set(model.parse(updatedModel), options);
                     model.resetDirty();
                 });
 

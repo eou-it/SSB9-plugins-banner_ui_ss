@@ -56,9 +56,9 @@ $(document).ready(function() {
         addNotificationsFromModel: function(model) {
             if (model) {
                 function evaluateModel(model) {
-                    if (model.get("errors")) {
-                        _.each( model.get("errors"), function( errorObject ) {
-                            this.addNotification( new Notification( {message: errorObject, type: "error", model: this.model} ) );
+                    if (model.has("messages")) {
+                        _.each( model.get("messages"), function( message ) {
+                            this.addNotification( new Notification( {message: message.message, type: message.type, model: this.model} ) );
                         }, this);
                     }
                 }
