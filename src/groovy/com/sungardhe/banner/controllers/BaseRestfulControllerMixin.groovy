@@ -14,6 +14,8 @@ package com.sungardhe.banner.controllers
 import grails.converters.JSON
 import grails.converters.XML
 import com.sungardhe.banner.exceptions.ApplicationException
+import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
+
 
 /**
  * A mixin to be used to add features provided by the RestfulControllerMixin, but that does require basic authentication.
@@ -25,7 +27,7 @@ import com.sungardhe.banner.exceptions.ApplicationException
 class BaseRestfulControllerMixin {
 
     def localizer = { mapToLocalize ->
-        message(mapToLocalize)
+        new ValidationTagLib().message( mapToLocalize )
     }
 
     public Map createSuccessMap( entities, count, params, classSimpleName) {
@@ -59,7 +61,9 @@ class BaseRestfulControllerMixin {
         }
 
         if (e instanceof ApplicationException) {
-            entity.messages << createMessage( e.returnMap( localizer ).message, "error" )
+            e.returnMap( localizer ).errors.each {
+                entity.messages << createMessage( it.message, "error", it.field )
+            }
         }
         else {
             if (e.hasProperty( "errors" )) {

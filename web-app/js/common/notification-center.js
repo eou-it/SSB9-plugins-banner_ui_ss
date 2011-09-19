@@ -59,6 +59,10 @@ $(document).ready(function() {
                     if (model.has("messages")) {
                         _.each( model.get("messages"), function( message ) {
                             this.addNotification( new Notification( {message: message.message, type: message.type, model: this.model} ) );
+
+                            //this.model.bind( "change:messages", function() {
+                            //    log.debug( "model's messages has changed" );
+                            //}, this );
                         }, this);
                     }
                 }
