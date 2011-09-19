@@ -58,11 +58,24 @@ $(document).ready(function() {
                 function evaluateModel(model) {
                     if (model.has("messages")) {
                         _.each( model.get("messages"), function( message ) {
-                            this.addNotification( new Notification( {message: message.message, type: message.type, model: this.model} ) );
+                            this.addNotification( new Notification( {message: message.message, type: message.type, model: model} ) );
 
-                            //this.model.bind( "change:messages", function() {
-                            //    log.debug( "model's messages has changed" );
-                            //}, this );
+                            model.bind( "change:messages", function( m ) {
+                                // Reset the notifications that are associated with the model that has new or updated messages
+
+                                log.debug( "Update notification for model", m );
+
+                                var associatedNotifications = _.select( notifications.models, function(n) {
+                                    return (n.get( "model" ) === m);
+                                })
+
+                                _.each( associatedNotifications, function( n ) {
+                                    notifications.remove( n );
+                                });
+
+                                log.debug( "associatedNotifications", associatedNotifications );
+
+                            }, this );
                         }, this);
                     }
                 }

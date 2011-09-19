@@ -113,6 +113,9 @@ _.extend(Backbone.Collection.prototype, {
                 // Loop through the model and update the collection.
                 _.each((batch.data.create || []).concat(batch.data.update || []), function(updatedModel) {
                     var model = collection.get(updatedModel.id);
+                    if (model.has( "messages" )) {
+                        model.unset( "messages" );
+                    }
                     model.set(model.parse(updatedModel), options);
                     model.resetDirty();
                 });
