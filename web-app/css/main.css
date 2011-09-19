@@ -201,19 +201,6 @@ tr.odd td.sorting_1, tr.even td.sorting_1 {
     background: url('../images/ui-layout-resizer-handle-west.png') no-repeat scroll center center !important;
 }
 
-/* Notification Center */
-
-.notification-center-closed  {
-    background: url('../images/arrow_closed.png') no-repeat !important;
-    width: 7px;
-    height: 7px;
-}
-
-.notification-center-exit  {
-    background: url('../images/icon_exit.png') no-repeat !important;
-    width: 16px;
-    height: 16px;
-}
 
 .ui-layout-pane-north, .ui-layout-pane-south {
     padding: 0px !important;
@@ -260,4 +247,23 @@ tr.odd td.sorting_1, tr.even td.sorting_1 {
 
 .ui-widget-section {
     padding: 10px;
+}
+
+/* TODO: Remove once Aurora is in place */
+#sign-out {
+    height: 20px;
+    padding-left: 3px;
+    padding-right: 5px;
+    padding-top: 3px;
+    background: url("../images/aurora-fake-header-middle.png") repeat-x scroll 0 -12px transparent;
+    cursor: pointer;
+    position: absolute;
+    right: 257px;
+    top: 2px;
+}
+
+#sign-out a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 1.1em;
 }
