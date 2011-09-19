@@ -466,35 +466,6 @@ grails.plugins.springsecurity.interceptUrlMap = [
        '/**': [ 'ROLE_DETERMINED_DYNAMICALLY' ]
 ]
 
-// This is just used to provide a place that we can drive those controllers that map to existing forms in Banner.
-// This is purely tluginemporary, and is used to highlight these pages within the main page.
-convertedPages = ["medicalCondition", "disability", "medicalEquipment", "disabilityAssistance", "medicalInformation"]
-
-// ******************************************************************************
-//
-//                       +++ REST API SUPPORT +++
-//
-// ******************************************************************************
-//
-// Representations officially supported within Banner. Custom representations should not be added to this map,
-// but should instead be added to a 'CustomRepresentationConfig.groovy' file, within a 'customRepresentationHandlerMap'
-// that follows the same structure as the map below.  Please see the configuration location information earlier in
-// this file regarding options for externalizing this 'CustomRepresentationConfig' configuration.
-//
-// Following are the 'built-in' representations supported by SunGard Higher Education. Note that representation support may be in the
-// form of custom handler classes, or may be implemented in-line within the map below via closures.  See the
-// banner-core plugin test-banner-core test application's Config.groovy for an example of in-lining representation support.
-//
-bannerRepresentationHandlerMap = [
-        "application/vnd.sungardhe.banner.general.v0.01+xml": ["College": "com.sungardhe.banner.general.system.CollegeRepresentationHandler_v0_01",
-                // next Model supported goes here
-        ],
-        // The next MIME type(s) should be added here
-        // "application/vnd.sungardhe.xxxxxxxxxxx.v0.00+xml": [ "College": "com.sungardhe.banner.general.system.CollegeRepresentationHandler_v0_01",
-        //                                                      // next Model supported goes here
-        //                                                    ],
-]
-
 
 // CodeNarc rulesets
 codenarc.ruleSetFiles="rulesets/banner.groovy"
