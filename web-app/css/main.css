@@ -249,6 +249,16 @@ tr.odd td.sorting_1, tr.even td.sorting_1 {
     padding: 10px;
 }
 
+#splash {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: #FFFFFF;
+    z-index: 999;
+}
+
 /* TODO: Remove once Aurora is in place */
 #sign-out {
     height: 20px;
