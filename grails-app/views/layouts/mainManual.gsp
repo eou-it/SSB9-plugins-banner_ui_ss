@@ -36,6 +36,12 @@
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/common/notification-center.js')}" type="text/javascript" ></script>
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.hoverintent.js')}" type="text/javascript" ></script>
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.js')}" type="text/javascript" ></script>
+        <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.datepicker.js')}" type="text/javascript" ></script>
+        <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.simplemodal-1.4.1.js')}" type="text/javascript" ></script>
+        <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.autocomplete.js')}" type="text/javascript" ></script>
+        <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.autocomplete.autoSelect.js')}" type="text/javascript" ></script>
+        <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.autocomplete.selectFirst.js')}" type="text/javascript" ></script>
+        <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.combobox.js')}" type="text/javascript" ></script>
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.editable.input.types.js')}" type="text/javascript" ></script>
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.layout-latest.js')}" type="text/javascript" ></script>
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.timers-1.2.js')}" type="text/javascript" ></script>

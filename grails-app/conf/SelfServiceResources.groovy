@@ -23,6 +23,12 @@ modules = {
         
         resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.hoverintent.js']
         resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.jeditable.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.simplemodal-1.4.1.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.jeditable.datepicker.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.jeditable.autocomplete.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.ui.autocomplete.autoSelect.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.ui.autocomplete.selectFirst.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.jeditable.combobox.js']
         resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.editable.input.types.js']
         resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.layout-latest.js']
         resource url:[plugin:'banner-ui-ss', dir:'js/jquery-plugins', file:'jquery.timers-1.2.js']
