@@ -58,6 +58,7 @@ function validateDate( dateString ) {
 function SaveTimer( options ) {
     this.saveTimerId = 0;
     this.start = function() {
+
         this.notificationPrompt = function() {
             if (options.isDirty()) {
 
@@ -76,6 +77,7 @@ function SaveTimer( options ) {
                     }
                 };
 
+
                 this.savePromptAction = function() {
                     this.save();
                     notifications.remove( n );
@@ -93,6 +95,10 @@ function SaveTimer( options ) {
 
         _.bindAll( this, "notificationPrompt" );
 
+        // Watch activity on the page to determine user activity.
+        $( "body" ).mousemove( this.lazyResetter );
+        $( "body" ).keypress( this.lazyResetter );
+
         this.saveTimerId = window.setTimeout( this.notificationPrompt, options.delay);
     };
 
@@ -100,14 +106,30 @@ function SaveTimer( options ) {
         if (this.saveTimerId) {
             window.clearTimeout( this.saveTimerId );
         }
+
+        $( "body" ).unbind( "mousemove", this.lazyResetter );
+        $( "body" ).unbind( "keypress", this.lazyResetter );
     };
 
     this.reset = function() {
         this.stop();
-        this.start();
+
+        if (options.isDirty()) {
+            this.start();
+        }
     };
 
-    _.bindAll(this, "start", "stop", "reset" );
+    // We will monitor activity by looking at how often the mouse moves.
+    // Keystrokes are assumed to directly change the dirty state and reset in another manner.
+    // The debounce will only fire the body of the function 500 ms after the last mouse move.  This way we don't kill the browser.
+    this.lazyResetter = _.throttle( function(e) {
+        if (this.saveTimerId) {
+            log.debug( "reseting saveTimer '" + this.saveTimerId + "' due to '" + e.type  + "' type." );
+            this.reset();
+        }
+    }, 2000 );
+
+    _.bindAll(this, "start", "stop", "reset", "lazyResetter" );
 }
 
 
