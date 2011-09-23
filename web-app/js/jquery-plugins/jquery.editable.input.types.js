@@ -75,7 +75,7 @@
             settings.numberOptions = settings.numberOptions || {decimal: false, negative: false};
 
             // add our input field markup
-            var ele = $('<input />');
+            var ele = $(settings.element || '<input />');
             $(this).append(ele);
             $(ele).numeric(settings.numberOptions);
 
