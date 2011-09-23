@@ -3,47 +3,50 @@
  * based on jQuery UI autocomplete combobox example.
  */
 (function( $ ) {
-	$.widget( "ui.combobox", {
-		_create: function() {
-			var self = this,
+    $.widget( "ui.combobox", {
+        _create: function() {
+            var self = this,
             input = this.input = this.element;
             input.addClass('combobox');
             input.autocomplete( this.options ).attr('style','') //autocomplete adds a style attribute
-				.addClass( "ui-widget ui-widget-content ui-corner-left" );
+                .addClass( "ui-widget ui-widget-content ui-corner-left" );
 
-			this.button = $( "<button type='button'>&nbsp;</button>" )
-				.attr( "tabIndex", -1 )
-				.attr( "title", "Show All Items" )
-				.insertAfter( input )
-				.button({
-					text: true,
-                    label:'...'
-				})
-				.removeClass( "ui-corner-all" ).removeClass( "ui-icon-only" )
+            this.button = $( "<button type='button'>&nbsp;</button>" )
+                .attr( "tabIndex", -1 )
+                .attr( "title", "Show All Items" )
+                .insertAfter( input )
+                .button({
+		    icons: {
+			primary: "ui-icon-triangle-1-s"
+		    }
+                    //text: true,
+                    //label:'...'
+                })
+                .removeClass( "ui-corner-all" ).removeClass( "ui-icon-only" )
                 .addClass( "combobox" )
-				.addClass( "ui-corner-right" )
-				.click(function() {
-					// close if already visible
-					if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
-						input.autocomplete( "close" );
-						return;
-					}
+                .addClass( "ui-corner-right" )
+                .click(function() {
+                    // close if already visible
+                    if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
+                        input.autocomplete( "close" );
+                        return;
+                    }
 
                     // copied the following from original, but haven't seen the bug...
                     // needed to work around a bug (likely same cause as #5265)
-					//$( this ).blur();
+                    //$( this ).blur();
 
-					// pass empty string as value to search for, displaying all results
-					input.autocomplete( "search", "" );
-					input.focus();
-				});
-		},
+                    // pass empty string as value to search for, displaying all results
+                    input.autocomplete( "search", "" );
+                    input.focus();
+                });
+        },
 
-		destroy: function() {
-			this.button.remove();
-			$.Widget.prototype.destroy.call( this );
-		}
-	});
+        destroy: function() {
+            this.button.remove();
+            $.Widget.prototype.destroy.call( this );
+        }
+    });
 
 
     ////////// create an editable 'combobox' type
