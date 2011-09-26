@@ -20,7 +20,8 @@ $(document).ready(function() {
             return prompts && prompts.length > 0;
         },
         isEqual: function( that ) {
-            var comparisonAttributes = [ "message", "type", "model", "attribute" ]
+
+            var comparisonAttributes = [ "message", "type", "model", "attribute", "groupBy" ]
 
             var returnValue = true;
 
@@ -47,6 +48,15 @@ $(document).ready(function() {
             }
             else {
                 this.add( notification );
+
+                if (notification.get( "flash" )) {
+                    var removeNotification = function() {
+                        this.remove( notification );
+                    };
+
+                    removeNotification = _.bind( removeNotification, this );
+                    _.delay( removeNotification, 5000 );
+                }
                 return notification;
             }
         },
@@ -58,7 +68,14 @@ $(document).ready(function() {
                 function evaluateModel(model) {
                     if (model.has("messages")) {
                         _.each( model.get("messages"), function( message ) {
-                            this.addNotification( new Notification( {message: message.message, type: message.type, model: model} ) );
+
+                            var notification = new Notification( {message: message.message, type: message.type, model: model} );
+
+                            if (message.type === "success") {
+                                notification.set( { flash: true, message: $.i18n.prop("js.notification.success"), groupBy: ["message"] } );
+                            }
+
+                            this.addNotification( notification );
 
                             model.bind( "change:messages", function( m ) {
                                 // Reset the notifications that are associated with the model that has new or updated messages
@@ -92,18 +109,6 @@ $(document).ready(function() {
                 }
             }
         },
-        addSaveSuccessful: function( options ) {
-            options || (options = {});
-
-            var defaults = {
-                message:        'Save Successful'
-            };
-
-            options = $.extend(defaults, options);
-
-            var n = new Notification( {message: options.message, type:"success", flash: true } );
-            this.addNotification( n );
-        },
         comparator: function(notification) {
 
             var prefix;
@@ -123,6 +128,41 @@ $(document).ready(function() {
         },
         hasErrors: function() {
             return this.find( function(model) { return model.get( "type" ) === "error" } );
+        },
+        grouped: function() {
+            var grouper = function( notifications ) {
+                return notifications.groupBy( function( notification ) {
+                    var props = ["message", "type", "model", "field", "ignoreForGroupBy" ];
+
+                    var key = "";
+                    _.each( props, function(p) {
+                        if (key !== "") {
+                            key += "|";
+                        }
+
+                        var value = notification.get( p );
+
+                        if (notification.has( "ignoreForGroupBy" )) {
+                            if (_.include( notification.get( "ignoreForGroupBy" ), p )) {
+                                value = "+";  // '+' is shorthand to show a value is grouped.
+                            }
+                        }
+
+                        key += p + ":" + value;
+                    });
+
+                    return key;
+                });
+            }
+
+            var groupedModels = [];
+            var groupedNotificationsSet = grouper( this );
+            for each (var p in groupedNotificationsSet) {
+                // Push the first notification in the group.
+                groupedModels.push( p[0] );
+            }
+
+            return groupedModels;
         }
     });
 
@@ -156,16 +196,6 @@ $(document).ready(function() {
 
             var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html( $("<span></span>" ).append( this.model.get("message" ) ) );
 
-            if (!this.model.hasPrompts() && this.model.get( "flash" ) === true) {
-                // Set a timer to remove this model.
-                var removeNotification = function() {
-                    this.model.collection.remove( this.model );
-                }
-                removeNotification = _.bind( removeNotification, this );
-                $(this.el).delay( "5000" ).fadeOut( "1000", removeNotification );
-            }
-
-
             // Manage the prompts if available
             var promptsDiv;
             if (this.model.hasPrompts()) {
@@ -187,6 +217,7 @@ $(document).ready(function() {
 
             $(this.el).html( messageDiv );
 
+
             if (promptsDiv) {
                 $(this.el).append( promptsDiv );
             }
@@ -194,7 +225,7 @@ $(document).ready(function() {
         },
         removeNotification: function(notification) {
             if (this.model === notification) {
-                $(this.el).remove();
+                $(this.el).fadeOut( 1000 ).remove();
             }
         }
     });
@@ -221,14 +252,16 @@ $(document).ready(function() {
             this.render();
         },
         render: function() {
-            if (notifications.length > 0) {
+            var displayedNotifications = notifications.grouped();
+
+            if (displayedNotifications.length > 0) {
                 $( "#notification-center-count" ).removeClass( "notification-center-count-nil");
             }
             else {
                 $( "#notification-center-count" ).addClass( "notification-center-count-nil");
             }
 
-            $( "#notification-center-count span" ).html( notifications.length );
+            $( "#notification-center-count span" ).html( displayedNotifications.length );
             return this;
         },
         isDisplayed: function() {
@@ -255,7 +288,7 @@ $(document).ready(function() {
         render: function() {
             $(this.el.selector + ' ul').empty();
 
-            _.each(notifications.models, function(notification) {
+            _.each(notifications.grouped(), function(notification) {
                 var view = new NotificationView( {model:notification} );
                 $(this.el.selector + ' ul').append( view.render().el );
             }, this);
@@ -271,6 +304,7 @@ $(document).ready(function() {
                 at: "left bottom",
                 of: "#notification-center"
             });
+
             return this;
         },
         hide: function() {
@@ -287,11 +321,11 @@ $(document).ready(function() {
         initialize: function() {
             $(this.el).addClass("notification-center");
 
-            $(this.el).append( '<div id="notification-center-anchor"></div>' );
-            this.notificationCenterAnchor = new NotificationCenterAnchor({el: $( "#notification-center-anchor" )});
-
             $(this.el).append( '<div id="notification-center-flyout"><ul/></div>' );
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $( "#notification-center-flyout" )});
+
+            $(this.el).append( '<div id="notification-center-anchor"></div>' );
+            this.notificationCenterAnchor = new NotificationCenterAnchor({el: $( "#notification-center-anchor" )});
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle' );
             notifications.bind("add", this.addNotification);

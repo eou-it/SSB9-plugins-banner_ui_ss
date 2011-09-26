@@ -117,7 +117,11 @@ _.extend(Backbone.Collection.prototype, {
                         model.unset( "messages" );
                     }
                     model.set(model.parse(updatedModel), options);
-                    model.resetDirty();
+
+                    if (!model.has( "messages")) {
+                        model.set( { messages: [{ message:"save successful", type:"success"}] } );
+                        model.resetDirty();
+                    }
                 });
 
                 _.each(batch.data.destroy, function(modelToDelete) {
