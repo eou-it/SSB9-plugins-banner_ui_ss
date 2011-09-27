@@ -19,19 +19,15 @@ import org.springframework.util.PropertiesPersister
  * the properties that are loaded for the application.
  */
 public class BannerPluginAwareResourceBundleMessageSource extends PluginAwareResourceBundleMessageSource {
-	def propertiesPersisterers = [];
+	def bannerPropertiesPersister;
 	
 	def getJavaScriptKeys() {
-        def properties = [:]
-        propertiesPersisterers.each { properties.putAll it.getData() }
-		return properties.keySet().findAll{ it.startsWith( "js." )}
+		return bannerPropertiesPersister.getData().keySet().findAll{ it.startsWith( "js" )}
 	}
 	
 	@Override 
 	public void setPropertiesPersister(PropertiesPersister propertiesPersister) {
 		super.setPropertiesPersister( propertiesPersister )
-
-        // I'm not sure if I have to do this or not, but it appears that setPropertiesPersister can be called multiple times.  Doesn't make sense from signature, but seems like it is happening.
-		this.propertiesPersisterers << propertiesPersister
+		this.bannerPropertiesPersister = propertiesPersister
 	}
 }
