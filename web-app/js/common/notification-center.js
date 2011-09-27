@@ -157,10 +157,10 @@ $(document).ready(function() {
 
             var groupedModels = [];
             var groupedNotificationsSet = grouper( this );
-            for each (var p in groupedNotificationsSet) {
+            _.each( groupedNotificationsSet, function(p) {
                 // Push the first notification in the group.
                 groupedModels.push( p[0] );
-            }
+            });
 
             return groupedModels;
         }
