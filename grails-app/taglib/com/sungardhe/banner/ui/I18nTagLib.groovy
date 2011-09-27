@@ -19,10 +19,13 @@ class I18nTagLib {
     }
 
     private def getProperties( name ) {
-        def output
+        String output = ""
 
         if (messageSource instanceof BannerPluginAwareResourceBundleMessageSource) {
             messageSource.getJavaScriptKeys().each { key ->
+
+                println "$key=${g.message(code: key)}"
+
                 if (output) output += "\n"
                 output += "$key=${g.message(code: key)}"
             }
