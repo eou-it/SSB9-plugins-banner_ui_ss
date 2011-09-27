@@ -39,10 +39,10 @@ modules = {
     'datatables' {
         dependsOn "jquery"
 
-        resource url:[plugin:'banner-ui-ss', dir:'js/datatables-1.8.0', file:'jquery.dataTables.js']
-        resource url:[plugin:'banner-ui-ss', dir:'js/datatables-1.8.0', file:'fnReloadAjaxPlugin.js']
-        resource url:[plugin:'banner-ui-ss', dir:'js/datatables-1.8.0', file:'fnFilterClearPlugin.js']
-        resource url:[plugin:'banner-ui-ss', dir:'js/datatables-1.8.0', file:'KeyTable.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/datatables-1.8.2', file:'jquery.dataTables.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/datatables-1.8.2', file:'fnReloadAjaxPlugin.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/datatables-1.8.2', file:'fnFilterClearPlugin.js']
+        resource url:[plugin:'banner-ui-ss', dir:'js/datatables-1.8.2', file:'KeyTable.js']
         resource url:[plugin:'banner-ui-ss', dir:'js/common', file:'datatables-custom.js']
         resource url:[plugin:'banner-ui-ss', dir:'css', file:'datatables-demo_table_jui.css']
         resource url:[plugin:'banner-ui-ss', dir:'css', file:'demo_table.css']

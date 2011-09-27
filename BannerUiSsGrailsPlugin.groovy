@@ -13,47 +13,39 @@
 import com.sungardhe.banner.BannerPropertiesPersister
 import com.sungardhe.banner.BannerPluginAwareResourceBundleMessageSource
 
+import org.apache.commons.logging.LogFactory
+
+
 /**
- * A Grails Plugin providing core UI framework for Self Service Banner application
- * */
+ * A Grails Plugin providing core UI framework for Self Service Banner application.
+ **/
 class BannerUiSsGrailsPlugin {
-    // Note: the groupId 'should' be used when deploying this plugin via the 'grails maven-deploy --repository=snapshots' command,
-    // however it is not being picked up.  Consequently, a pom.xml file is added to the root directory with the correct groupId
-    // and will be removed when the maven-publisher plugin correctly sets the groupId based on the following field.
+    
     String groupId = "com.sungardhe"
 
-    // Note: Using '0.1-SNAPSHOT' (to put a timestamp on the artifact) is not used due to GRAILS-5624 see: http://jira.codehaus.org/browse/GRAILS-5624
-    // Until this is resolved, Grails application's that use a SNAPSHOT plugin do not check for a newer plugin release, so that the
-    // only way we'd be able to upgrade a project would be to clear the .grails and .ivy2 cache to force a fetch from our Nexus server.
-    // Consequently, we'll use 'RELEASES' so that each project can explicitly identify the needed plugin version. Using RELEASES provides
-    // more control on 'when' a grails app is updated to use a newer plugin version, and therefore 'could' allow delayed testing within those apps
-    // independent of deploying a new plugin build to Nexus.
-    //
-    //String version = "0.1-SNAPSHOT"
+    def version = "0.0.65"
 
-    def version = "0.0.64"
-
-    // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
 
-    // the other plugins this plugin depends on
     def dependsOn = [
-        bannerCore:'0.2.38 => *',
+//        resources:'1.0.2 => *',
         cacheHeaders:'1.1.5 => *',
         csv:'0.3 => *',
         feeds:'1.5 => *',
         jquery:'1.6.1.1 => *',
         jqueryUi:'1.8.11 => *',
         selenium:'0.6 => *',
-        seleniumRc:'1.0.2 => *'
+        seleniumRc:'1.0.2 => *',
+        bannerCore:'1.0.3 => *',
     ]
 
-    // resources that are excluded from plugin packaging
     def pluginExcludes = [
         "grails-app/views/error.gsp",
         // exclude UI catalog stuff
         "grails-app/controllers/com/sungardhe/banner/ui/ss/**",
-        "grails-app/views/**",
+        "grails-app/views/index.gsp",
+        "grails-app/views/layouts/mainManual.gsp",
+        "grails-app/views/uiCatalog/**",
         "web-app/css/views/**",
         "web-app/js/views/**"
     ]
@@ -63,32 +55,50 @@ class BannerUiSsGrailsPlugin {
     def title = "SunGard Higher Education Banner UI Plugin"
     def description = '''Web user interface components for Banner Self-Service.'''
 
-    // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/banner-ui-ss"
+
 
     def doWithWebDescriptor = { xml ->
         //no-op
     }
 
+
     def doWithSpring = {
-        messageSource(BannerPluginAwareResourceBundleMessageSource) {
+        messageSource( BannerPluginAwareResourceBundleMessageSource ) {
             basename = "WEB-INF/grails-app/i18n/messages"
             cacheSeconds = -1
             propertiesPersister = new BannerPropertiesPersister()
         }
     }
 
+
     def doWithDynamicMethods = { ctx ->
-        //no-op
+         // Explicitly inject the log into the resources plugin artifacts, to circumvent NPEs
+         application.allClasses.each {
+             if (it.name?.contains( "plugin.resource" )) {
+                 println ".... adding log to $it"
+                 // Note: weblogic throws an error if we try to inject the method if it is already present
+                 if (!it.metaClass.methods.find { m -> m.name.matches( "getLog" ) }) { 
+                     def name = it.name // needed as this 'it' is not visible within the below closure...
+                     try {
+                         it.metaClass.getLog = { LogFactory.getLog( "$name" ) }
+                     } 
+                     catch (e) { } // rare case where we'll bury it...
+                 }
+             }
+        }
     }
+
 
     def doWithApplicationContext = { applicationContext ->
         //no-op
     }
 
+
     def onChange = { event ->
         //no-op
     }
+
 
     def onConfigChange = { event ->
         //no-op

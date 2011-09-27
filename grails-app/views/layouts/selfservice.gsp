@@ -11,7 +11,9 @@
 
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 
-        %{--<r:layoutResources/>--}%
+        <r:require modules="sghe-common, jquery-ui, jquery-ui-plugins, jquery-plugins, datatables, backbone, colorbox, file-upload"/>
+
+        <r:layoutResources/>
 
         <g:viewResources/>
 
@@ -26,6 +28,6 @@
         <div class="dialog-confirm"><p></p></div>
         <div id="notification-center"></div>
         <g:layoutBody />
-        %{--<r:layoutResources/>--}%
+        <r:layoutResources/>
     </body>
 </html>

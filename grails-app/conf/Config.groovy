@@ -9,11 +9,8 @@
  WITHOUT THE WRITTEN PERMISSION OF THE SAID COMPANY
  ****************************************************************************** */
 
-
 import com.sungardhe.banner.configuration.ApplicationConfigurationUtils as ConfigFinder
 import grails.plugins.springsecurity.SecurityConfigType
-
-
 
 
 
@@ -34,72 +31,10 @@ grails.config.locations = [] // leave this initialized to an empty list, and add
 
 def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
 
-[ bannerAppConfig:      "${userHome}/.grails/banner_configuration.groovy",
-  customRepresentationConfig: "grails-app/conf/CustomRepresentationConfig.groovy",
-  releaseInfo:                "release_info.groovy",
+// Since this configuration is only needed for testing, we'll just use the Faculty Grade Entry configuration for convenience. 
+[ BANNER_APP_CONFIG:                 "banner_configuration.groovy",
+  BANNER_FACULTY_GRADE_ENTRY_CONFIG: "${appName}_configuration.groovy",
 ].each { envName, defaultFileName -> locationAdder(envName, defaultFileName) }
-
-// You must create a small configuration file named 'banner_on_grails-local-config.groovy' (as referenced
-// in the above map defining externalized configuration files) that contains your own specific
-// configuration (e.g., URIs, usernames, etc.).  Following is an example of this file:
-
-/* ***************************** EXAMPLE local file ******************************
-myDataSource.username = "banproxy"
-myDataSource.password = "u_pick_it"
-myDataSource.driver = "oracle.jdbc.OracleDriver"
-myDataSource.url = "jdbc:oracle:thin:@{YOUR_HOST}:1521:ban83"
-myDataSource.jndiName = "jdbc/horizonDataSource"
-********************************************************************************* */
-
-/* *************** ANOTHER EXAMPLE of the same local file ***********************
-def username = "banproxy"
-def password = "u_pick_it"
-def url      ="jdbc:oracle:thin:@MAL0600026.corp.sct.com:1521:ban83"
-def driver   = "oracle.jdbc.OracleDriver"
-
-// Note: When using the com.elvyx.Driver, you may run the standalone elvyx client to see the actual SQL being executed.
-// You must download the elvyx-1.0.24_beta.zip from http://sourceforge.net/projects/elvyx/files and unzip where you want to keep it.
-// Note: You do NOT need to add the jar file to the project -- it is already present.
-// Next, Update the url below in this file for your environment, then
-//       Run the elvyz.bat or elvyz.sh file to launch the swing UI, and lastly
-//       Rrun your tests or the grails application.
-
-myDataSource.username = username
-myDataSource.password = password
-
-myDataSource.driver = driver
-// myDataSource.driver = "com.elvyx.Driver"
-
-myDataSource.url = url
-// myDataSource.url = "jdbc:elvyx://localhost:4448/?elvyx.real_driver=$driver&elvyx.real_jdbc=$url&user=$username&password=$password"
-
-myDataSource.jndiName = "jdbc/horizonDataSource"
-********************************************************************************* */
-
-
-
-
-// ******************************************************************************
-//
-//                       +++ BUILD NUMBER SEQUENCE UUID +++
-//
-// ******************************************************************************
-//
-// A UUID corresponding to this project, which is used by the build number generator.
-// Since the build number generator web service provides build number sequences to
-// multiple projects, and each project uses a unique UUID to identify which number
-// sequence it is using.
-//
-// This number should NOT be changed.
-// FYI: When a new UUID is needed (e.g., for a new project), use this URI:
-//      http://maldevl2.sungardhe.com:8080/BuildNumberServer/newUUID
-//
-// DO NOT EDIT THIS UUID UNLESS YOU ARE AUTHORIZED TO DO SO AND KNOW WHAT YOU ARE DOING
-//
-build.number.uuid = "900b87f8-fbd4-439d-8f55-2f8cd07c54a3"
-build.number.base.url="http://maldevl2.sungardhe.com:8080/BuildNumberServer/buildNumber?method=getNextBuildNumber&uuid="
-
-
 
 
 grails.project.groupId = "com.sungardhe" // used when deploying to a maven repo
@@ -139,13 +74,13 @@ grails.views.gsp.sitemesh.preprocess = true
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
-        grails.serverURL = "http://localhost:8080/${appName}"
+        grails.serverURL = "http://NOT_USED:8080/${appName}"
     }
     development {
-        grails.serverURL = "http://localhost:8080/${appName}"
+        grails.serverURL = "http://NOT_USED:8080/${appName}"
     }
     test {
-        grails.serverURL = "http://localhost:8080/${appName}"
+        grails.serverURL = "http://NOT_USED:8080/${appName}"
     }
 }
 
@@ -160,6 +95,7 @@ environments {
 // the lastModified uses the current timestamp, and the dataOrigin uses the value
 // specified here:
 dataOrigin = "Banner"
+
 
 // ******************************************************************************
 //
@@ -288,7 +224,7 @@ formControllerMap = [
         'sectionstatus': ['STVSSTS'],
         'partofterm': ['STVPTRM'],
         'sessioncode': ['STVSESS'],
-		    'schedule': ['SSASECT'],
+		'schedule': ['SSASECT'],
         'reservedseatsinquiry': ['SSIRESV'],
         'section': ['SSASECT'],
         'specialapproval': ['STVSAPR'],
@@ -419,7 +355,7 @@ formControllerMap = [
 ]
 
 grails.plugins.springsecurity.useRequestMapDomainClass = false
-grails.plugins.springsecurity.providerNames = ['bannerAuthenticationProvider']
+grails.plugins.springsecurity.providerNames = ['casBannerAuthenticationProvider', 'selfServiceBannerAuthenticationProvider', 'bannerAuthenticationProvider']
 //grails.plugins.springsecurity.rejectIfNoRule = true
 
 grails.plugins.springsecurity.filterChain.chainMap = [
