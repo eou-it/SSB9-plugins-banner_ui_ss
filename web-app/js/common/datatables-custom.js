@@ -82,6 +82,25 @@ function createDataTable( settings ) {
     return table;
 }
 
+
+/**
+ * Use this to create json based off a table that is prepared for usage in DataTables
+ * @param collection a backbone collection.
+ * @param prefix is the prefix you want to set to each tr in the table.  E.g. 'grades-roster' will create a class of 'grades-roster-1234' if
+ *        id is 1234.
+ */
+function createDataTablesJSON( collection, prefix ) {
+    var json = collection.toJSON();
+
+    _.each( json, function( o ) {
+        o[ "DT_RowId" ] = prefix + "-" + o.id;
+        o[ "DT_RowClass" ] = prefix + "-row";
+    });
+
+    return json;
+}
+
+
 /* Get the rows which are currently selected */
 function fnGetSelected( oTableLocal ) {
 	var aReturn = [];
