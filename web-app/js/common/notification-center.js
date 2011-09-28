@@ -140,6 +140,11 @@ $(document).ready(function() {
 
                         var value = notification.get( p );
 
+                        // We can uniquely identify the model through the cid.  If the value is not null we should use the cid.
+                        if (p === "model" && value) {
+                            value = value.cid;
+                        }
+
                         if (notification.has( "ignoreForGroupBy" )) {
                             if (_.include( notification.get( "ignoreForGroupBy" ), p )) {
                                 value = "+";  // '+' is shorthand to show a value is grouped.

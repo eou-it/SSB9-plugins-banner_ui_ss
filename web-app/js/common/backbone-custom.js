@@ -105,6 +105,14 @@ _.extend(Backbone.Collection.prototype, {
     save: function(options) {
         options || (options = {});
 
+        // Prior to talking to the service we are going to clear all messages and let the response tell us what
+        // errors still exist.
+        this.each( function( model ) {
+            if (model.has( "messages" )) {
+                model.unset( "messages", {silent: true} );
+            }
+        });
+
         if (this.batch) {
             var collection = this;
 
@@ -149,15 +157,6 @@ _.extend(Backbone.Collection.prototype, {
 
                 return url + "/batch";
             };
-
-
-            // When we save a collection we are going to clear all messages and let the response tell us what
-            // errors still exist.
-            this.each( function( model ) {
-                if (model.has( "messages" )) {
-                    model.unset( "messages", {silent: true} );
-                }
-            });
 
 
             // Setup the options to send to sync.  Note that the url is using the var getUrl from Backbone.
