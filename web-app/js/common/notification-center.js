@@ -21,7 +21,7 @@ $(document).ready(function() {
         },
         isEqual: function( that ) {
 
-            var comparisonAttributes = [ "message", "type", "model", "attribute", "groupBy" ]
+            var comparisonAttributes = [ "message", "type", "model", "attribute", "ignoreForGroupBy" ]
 
             var returnValue = true;
 
@@ -72,7 +72,7 @@ $(document).ready(function() {
                             var notification = new Notification( {message: message.message, type: message.type, model: model} );
 
                             if (message.type === "success") {
-                                notification.set( { flash: true, message: $.i18n.prop("js.notification.success"), groupBy: ["message"] } );
+                                notification.set( { flash: true, message: $.i18n.prop("js.notification.success"), ignoreForGroupBy: ["model"] } );
                             }
 
                             this.addNotification( notification );
@@ -122,8 +122,6 @@ $(document).ready(function() {
                 prefix = "2";
             }
 
-            log.debug( 'comparator: ' + prefix + "-" + notification.get("type") );
-
             return prefix + "-" + notification.get("type");
         },
         hasErrors: function() {
@@ -157,6 +155,10 @@ $(document).ready(function() {
 
             var groupedModels = [];
             var groupedNotificationsSet = grouper( this );
+
+            // The grouper function will return a set of models key'd by a unique key
+            // This loop is to pluck out the first model for each key since we only need one to pass back
+            // in the collection.
             _.each( groupedNotificationsSet, function(p) {
                 // Push the first notification in the group.
                 groupedModels.push( p[0] );

@@ -57,17 +57,6 @@ function createDataTable( settings ) {
             "sInfoEmpty":$.i18n.prop('js.dataTable.sInfoEmpty'),
             "sInfoFiltered":$.i18n.prop('js.dataTable.sInfoFiltered'),
             "sEmptyTable":$.i18n.prop('js.dataTable.sEmptyTable')
-        },
-        fnRowCallback: function( nRow, aData, iDisplayIndex ) {
-            if (aData.errors) {
-                $('td:eq(0)', nRow).html( '<b>Error</b>' );
-                $(nRow).addClass( "ui-state-error" );
-            }
-            else {
-                $(nRow).removeClass( "ui-state-error" );
-            }
-
-            return nRow;
         }
     };
     settings = $.extend(defaults, settings);

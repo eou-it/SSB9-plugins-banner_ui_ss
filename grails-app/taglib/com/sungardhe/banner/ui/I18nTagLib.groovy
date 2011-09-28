@@ -23,9 +23,6 @@ class I18nTagLib {
 
         if (messageSource instanceof BannerPluginAwareResourceBundleMessageSource) {
             messageSource.getJavaScriptKeys().each { key ->
-
-                println "$key=${g.message(code: key)}"
-
                 if (output) output += "\n"
                 output += "$key=${g.message(code: key)}"
             }
