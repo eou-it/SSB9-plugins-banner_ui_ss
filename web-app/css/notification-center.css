@@ -226,7 +226,7 @@ li:first-child .notification-item-prompts {
     padding-right: 5px;
 }
 
-#notification-center-shim {
+body > .notification-center-shim {
     background-color: #666;
     bottom: 0;
     left: 0;

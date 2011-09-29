@@ -180,7 +180,7 @@ $(document).ready(function() {
         className: "notification-item",
         initialize: function() {
             _.bindAll(this, "render", "removeNotification" );
-            notifications.bind("remove", this.removeNotification);
+            this.model.collection.bind("remove", this.removeNotification);
         },
         render: function() {
             //  Evaluate the notification type to determine what css class to append to the notification.
@@ -253,13 +253,13 @@ $(document).ready(function() {
 
             _.bindAll(this, "render", "display", "hide" );
 
-            notifications.bind("add", this.render);
-            notifications.bind("remove", this.render);
+            this.model.bind("add", this.render);
+            this.model.bind("remove", this.render);
 
             this.render();
         },
         render: function() {
-            var displayedNotifications = notifications.grouped();
+            var displayedNotifications = this.model.grouped();
 
             if (displayedNotifications.length > 0) {
                 $( "#notification-center-count" ).removeClass( "notification-center-count-nil");
@@ -290,12 +290,12 @@ $(document).ready(function() {
             $(this.el).addClass( "notification-center-flyout" ).addClass( "notification-center-flyout-hidden" );
 
             _.bindAll(this, "render", "display", "hide" );
-            notifications.bind("all", this.render);
+            this.model.bind("all", this.render);
         },
         render: function() {
             $(this.el.selector + ' ul').empty();
 
-            _.each(notifications.grouped(), function(notification) {
+            _.each(this.model.grouped(), function(notification) {
                 var view = new NotificationView( {model:notification} );
                 $(this.el.selector + ' ul').append( view.render().el );
             }, this);
@@ -329,14 +329,14 @@ $(document).ready(function() {
             $(this.el).addClass("notification-center");
 
             $(this.el).append( '<div id="notification-center-flyout"><ul/></div>' );
-            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $( "#notification-center-flyout" )});
+            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $( "#notification-center-flyout" ), model: this.model });
 
             $(this.el).append( '<div id="notification-center-anchor"></div>' );
-            this.notificationCenterAnchor = new NotificationCenterAnchor({el: $( "#notification-center-anchor" )});
+            this.notificationCenterAnchor = new NotificationCenterAnchor({el: $( "#notification-center-anchor" ), model: this.model });
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle' );
-            notifications.bind("add", this.addNotification);
-            notifications.bind("remove", this.removeNotification);
+            this.model.bind("add", this.addNotification);
+            this.model.bind("remove", this.removeNotification);
         },
         render: function() {
             return this;
@@ -350,7 +350,7 @@ $(document).ready(function() {
             return this;
         },
         removeNotification: function(notification) {
-            if (notifications.length == 0) {
+            if (this.model.length == 0) {
                 this.notificationCenterAnchor.hide();
                 this.notificationCenterFlyout.hide();
             }
@@ -360,7 +360,7 @@ $(document).ready(function() {
             return this;
         },
         toggle: function() {
-            if (notifications.length > 0) {
+            if (this.model.length > 0) {
                 if (this.notificationCenterAnchor.isDisplayed()) {
                     this.notificationCenterAnchor.hide();
                     this.notificationCenterFlyout.hide();
@@ -376,14 +376,19 @@ $(document).ready(function() {
         configNotificationShim: function() {
             // Check to see if any prompts exist.  If there is a prompt, the user must be forced to address the prompt prior
             // to moving on.
-            if (_.any( notifications, function( context, index, list ) { return list.at(index).hasPrompts(); })) {
-                // Only ever add one shim
-                if ($("#notification-center-shim").length == 0) {
-                    $("body").append( '<div id="notification-center-shim"></div>');
+            var target = this.options.shimTarget;
+
+            if (_.isUndefined(target)) {
+                target = $("body");
+            }
+
+            if (this.model.find( function( n ) { return n.hasPrompts(); } )) {
+                if ($(target.selector + " .notification-center-shim").length === 0) {
+                    target.append( '<div class="notification-center-shim"></div>' );
                 }
             }
             else {
-                $("#notification-center-shim").remove();
+                $(target.selector + " .notification-center-shim").remove();
             }
         }
     });
@@ -393,6 +398,9 @@ $(document).ready(function() {
     var auroraHeader = $("#aurora-header" );
     auroraHeader.append( '<div id="notification-center"></div>' );
 
-    window.notificationCenter = new NotificationCenter({el: $("#notification-center") });
+    window.notificationCenter = new NotificationCenter({
+        el: $("#notification-center"),
+        model: notifications
+    });
 
 });
