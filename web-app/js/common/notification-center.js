@@ -249,7 +249,7 @@ $(document).ready(function() {
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
 
-            $(this.el).append( '<div id="notification-center-count"><span/></div>' ).append( '<div id="notification-center-label"><span>Notifications</span></div>');
+            $(this.el).append( '<div class="notification-center-count"><span/></div>' ).append( '<div class="notification-center-label"><span>Notifications</span></div>');
 
             _.bindAll(this, "render", "display", "hide" );
 
@@ -262,13 +262,13 @@ $(document).ready(function() {
             var displayedNotifications = this.model.grouped();
 
             if (displayedNotifications.length > 0) {
-                $( "#notification-center-count" ).removeClass( "notification-center-count-nil");
+                $( this.el.selector + " .notification-center-count" ).removeClass( "notification-center-count-nil");
             }
             else {
-                $( "#notification-center-count" ).addClass( "notification-center-count-nil");
+                $( this.el.selector + " .notification-center-count" ).addClass( "notification-center-count-nil");
             }
 
-            $( "#notification-center-count span" ).html( displayedNotifications.length );
+            $( this.el.selector + " .notification-center-count span" ).html( displayedNotifications.length );
             return this;
         },
         isDisplayed: function() {
@@ -309,7 +309,7 @@ $(document).ready(function() {
             $(this.el).position({
                 my: "left top",
                 at: "left bottom",
-                of: "#notification-center"
+                of: this.options.parent.selector
             });
 
             return this;
@@ -323,16 +323,16 @@ $(document).ready(function() {
 
     window.NotificationCenter = Backbone.View.extend({
         events: {
-            "click #notification-center-anchor":"toggle"
+            "click .notification-center-anchor":"toggle"
         },
         initialize: function() {
             $(this.el).addClass("notification-center");
 
-            $(this.el).append( '<div id="notification-center-flyout"><ul/></div>' );
-            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $( "#notification-center-flyout" ), model: this.model });
+            $(this.el).append( '<div class="notification-center-flyout"><ul/></div>' );
+            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $( this.el.selector + " .notification-center-flyout" ), model: this.model, parent: this.el });
 
-            $(this.el).append( '<div id="notification-center-anchor"></div>' );
-            this.notificationCenterAnchor = new NotificationCenterAnchor({el: $( "#notification-center-anchor" ), model: this.model });
+            $(this.el).append( '<div class="notification-center-anchor"></div>' );
+            this.notificationCenterAnchor = new NotificationCenterAnchor({el: $( this.el.selector + " .notification-center-anchor" ), model: this.model });
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle' );
             this.model.bind("add", this.addNotification);
