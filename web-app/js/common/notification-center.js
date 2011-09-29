@@ -403,13 +403,4 @@ $(document).ready(function() {
         el: $("#notification-center"),
         model: notifications
     });
-
-
-
-    window.notifications2 = new Notifications;
-    window.notificationCenter2 = new NotificationCenter({
-        el: $("#notification-center-2"),
-        model: notifications2
-    });
-
 });
