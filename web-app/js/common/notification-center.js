@@ -397,10 +397,19 @@ $(document).ready(function() {
     // TODO:  Figure out the right way to add features to Aurora.
     var auroraHeader = $("#aurora-header" );
     auroraHeader.append( '<div id="notification-center"></div>' );
+    auroraHeader.append( '<div id="notification-center-2"></div>' );
 
     window.notificationCenter = new NotificationCenter({
         el: $("#notification-center"),
         model: notifications
+    });
+
+
+
+    window.notifications2 = new Notifications;
+    window.notificationCenter2 = new NotificationCenter({
+        el: $("#notification-center-2"),
+        model: notifications2
     });
 
 });
