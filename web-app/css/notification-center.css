@@ -76,6 +76,7 @@
     border-radius: .2em;
     -moz-border-radius: .2em;
     -webkit-border-radius: .2em;
+    overflow: auto;
 }
 
 .notification-center-anchor {
