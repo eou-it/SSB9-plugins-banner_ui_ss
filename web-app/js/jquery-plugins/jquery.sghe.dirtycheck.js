@@ -43,7 +43,7 @@ jQuery.fn.dirtyCheck = function(options) {
         var target = this;
         var $target = jQuery(target);
 
-        log.debug( "registering target for dirty check.", target );
+        //log.debug( "registering target for dirty check.", target );
 
         var saveHandlers = function() {
             var events = jQuery.data(target, 'events');
