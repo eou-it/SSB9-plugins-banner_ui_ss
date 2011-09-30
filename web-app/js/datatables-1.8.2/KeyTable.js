@@ -727,6 +727,7 @@ function KeyTable ( oInit )
 ,       PREVIOUS_CONTROL: _actionCount++
 ,       NEXT_CONTROL: _actionCount++
     };
+    this.Action = _Action;
 
     /*
      * Variable: _KeyCode
@@ -735,7 +736,7 @@ function KeyTable ( oInit )
      */
     var _KeyCode = {
         TAB: 9
-,       RETURN: 13
+,       ENTER: 13
 ,       ESC: 27
 ,       LEFT_ARROW: 37
 ,       UP_ARROW: 38
@@ -751,7 +752,7 @@ function KeyTable ( oInit )
      */
     var _UnmodifiedKeyActions = {};
     _UnmodifiedKeyActions[_KeyCode.TAB] = _Action.RIGHT;
-    _UnmodifiedKeyActions[_KeyCode.RETURN] = _Action.ACTION;
+    _UnmodifiedKeyActions[_KeyCode.ENTER] = _Action.ACTION;
     _UnmodifiedKeyActions[_KeyCode.ESC] = _Action.ESCAPE;
     _UnmodifiedKeyActions[_KeyCode.LEFT_ARROW] = _Action.LEFT;
     _UnmodifiedKeyActions[_KeyCode.UP_ARROW] = _Action.UP;
@@ -886,31 +887,8 @@ function KeyTable ( oInit )
         return [x,oldY];
     }
 
-    /*
-     * Function: _fnKey
-     * Purpose:  Deal with a key events, be it moving the focus or return etc.
-     * Returns:  bool: - allow browser default action
-     * Inputs:   event:e - key event
-     */
-    function _fnKey ( e )
+    function _fnAction(action)
     {
-        if ( e.keytable_done || (e.originalEvent && e.originalEvent.keytable_done)) {
-            //console.log( _oDatatable.fnSettings().nTable.id + ' _fnKey keytable done: ' + e );
-            return false; // this event has already been handled
-        }
-        /* If user or system has blocked KeyTable from doing anything, just ignore this event */
-        if ( _that.block || !_bKeyCapture )
-        {
-            //console.log( '_fnKey block || !keycapture: ' + e + ': ' + _that.block + '/' + _bKeyCapture );
-            return true;
-        }
-
-        var action = _fnGetAction( e );
-        if ( action === _Action.NO_ACTION ) {
-            //console.log( '_fnKey NO_ACTION' );
-            return true;
-        }
-
         var
              x, y,
              iTableWidth = _nBody.getElementsByTagName('tr')[0].getElementsByTagName('td').length,
@@ -942,12 +920,10 @@ function KeyTable ( oInit )
              iTableHeight = _nBody.getElementsByTagName('tr').length;
          }
 
-         //_log( _oDatatable.fnSettings().nTable.id + ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
+         _log( _oDatatable.fnSettings().nTable.id + ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
          switch( action )
          {
              case _Action.ACTION:
-                  e.preventDefault();
-                  e.stopPropagation();
                  _fnEventFire( "action", _iOldX, _iOldY );
                  return true;
 
@@ -1011,6 +987,58 @@ function KeyTable ( oInit )
 
         _fnSetFocus( _fnCellFromCoords(x, y) );
         return false;
+    }
+    this.fnAction = _fnAction;
+        
+    /*
+     * Function: _fnKey
+     * Purpose:  Deal with a key events, be it moving the focus or return etc.
+     * Returns:  bool: - allow browser default action
+     * Inputs:   event:e - key event
+     */
+    function _fnKey ( e )
+    {
+        if ( e.keytable_done || (e.originalEvent && e.originalEvent.keytable_done)) {
+            return false; // this event has already been handled
+        }
+        if (!_bKeyCapture ) // focus is not on this KeyTable
+        {
+            return true;
+        }
+
+        if (_that.block) { 
+            // KeyTable has been told to block/ignore keypresses, because a component is open
+            // so handle TAB/ENTER here.  _that.block should be reset in the blur/close event of the component.
+            function move(direction) {
+                _log( 'KeyTable.js move', direction);
+                _.defer( function() { // do it after the submit
+                    _that.fnAction( direction );
+                });
+            }
+            switch (event.keyCode) {
+            case _KeyCode.TAB: // make TAB move LEFT (RIGHT with SHIFT)
+                move( event.shiftKey ?
+                      gradesKeys.Action.LEFT : 
+                      gradesKeys.Action.RIGHT );
+                break;
+            case _KeyCode.ENTER: // make ENTER move down
+                move( gradesKeys.Action.DOWN );
+                break;
+            }
+            return true; 
+        }
+
+        var action = _fnGetAction( e );
+        if ( action === _Action.NO_ACTION ) {
+            return true;
+        }
+
+        if (action == _Action.ACTION ) {
+            // don't let other listeners receive the ENTER keypress. This may not be needed in the "always submit" model.
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        return _fnAction(action);
     }
 
     /*

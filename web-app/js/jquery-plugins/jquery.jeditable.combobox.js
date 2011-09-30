@@ -85,10 +85,12 @@
             var form = this,
                 input = form.find('input');
             var isOpen = false;
+            var orgOnBlur = settings.onblur || function() {};
             settings.onblur = function() {
                 setTimeout( function() {
                     if (!isOpen) { // clicked elsewhere
-                        original.reset( form );
+                        //console.log( 'combobox onblur', arguments);
+                        orgOnBlur();
                     }
                     // otherwise, lost focus because dropdown opened, so do nothing
     
@@ -116,7 +118,9 @@
                             // input still HAS focus after 150ms which means
                             // dropdown was closed due to Enter in the input field
                             // so lets submit the form and close the input field
-                            form.submit();
+                            // However, it could also be closed because of invalid input, in which case we don't want to close.
+                            // so we'll handle the ENTER or TAB closure separately and ignore this close.
+                            //form.submit();
                         }
     
                         // the delay is necessary; dropdown must be already
