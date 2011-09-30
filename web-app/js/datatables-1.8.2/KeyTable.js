@@ -84,6 +84,10 @@ function KeyTable ( oInit )
         return _nOldFocus;
     };
 
+    function _log() {
+        // convert to use real logging when available
+        //console.log.apply(console, [_oDatatable.fnSettings().nTable.id].concat( arguments ));
+    }        
 
     /*
      * Function: focus
@@ -267,7 +271,7 @@ function KeyTable ( oInit )
             }
             else
             {
-                alert( "Unhandable event type was added: x" +x+ "  y:" +y+ "  z:" +z );
+                alert( "Unhandleable event type was added: x" +x+ "  y:" +y+ "  z:" +z );
             }
         };
     }
@@ -322,7 +326,7 @@ function KeyTable ( oInit )
             }
             else
             {
-                alert( "Unhandable event type was removed: x" +x+ "  y:" +y+ "  z:" +z );
+                alert( "Unhandleable event type was removed: x" +x+ "  y:" +y+ "  z:" +z );
             }
         };
     }
@@ -498,7 +502,13 @@ function KeyTable ( oInit )
         if ( _oDatatable )
         {
             oSettings = _oDatatable.fnSettings();
-            var iRow = _fnFindDtCell( nTarget )[1];
+            var position = _fnFindDtCell( nTarget );
+            if (!position) {
+                _log( '_fnSetFocus on cell that is not found', nTarget );
+                //alert('_fnSetFocus on cell that is not found');
+                return;
+            }
+            var iRow = position[1];
             var bKeyCaptureCache = _bKeyCapture;
 
             /* Page forwards */
@@ -920,7 +930,7 @@ function KeyTable ( oInit )
              var aDtPos = _fnFindDtCell( _nOldFocus );
              if ( aDtPos === null )
              {
-                 //console.log( '_fnKey focused cell cannot be seen: do nothing' );
+                 //_log( '_fnKey focused cell cannot be seen: do nothing' );
                  /* If the table has been updated such that the focused cell can't be seen - do nothing */
                  return;
              }
@@ -932,7 +942,7 @@ function KeyTable ( oInit )
              iTableHeight = _nBody.getElementsByTagName('tr').length;
          }
 
-         //console.log( _oDatatable.fnSettings().nTable.id + ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
+         //_log( _oDatatable.fnSettings().nTable.id + ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
          switch( action )
          {
              case _Action.ACTION:
@@ -1002,7 +1012,6 @@ function KeyTable ( oInit )
         _fnSetFocus( _fnCellFromCoords(x, y) );
         return false;
     }
-
 
     /*
      * Function: _fnCaptureKeys
