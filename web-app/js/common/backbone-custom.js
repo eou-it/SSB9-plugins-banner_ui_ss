@@ -40,20 +40,17 @@ Backbone.sync = function(method, model, options) {
         if (model.fetchCriteria) {
             // Loop through the fetchCriteria and add query parameters to the url
             _.each(model.fetchCriteria(),
-            function(value, key) {
-                if (params.url.indexOf("?") > 0) {
-                    params.url = params.url + "&";
-                }
-                else {
-                    params.url = params.url + "?";
-                }
+                function(value, key) {
+                    if (params.url.indexOf("?") > 0) {
+                        params.url = params.url + "&";
+                    }
+                    else {
+                        params.url = params.url + "?";
+                    }
 
-                params.url = params.url + key + "=" + value;
-            }
+                    params.url = params.url + key + "=" + value;
+                }
             );
-
-            // TODO:  Need to url encode the url
-            //url = $.escape( url );
         }
     }
 
@@ -80,6 +77,15 @@ Backbone.sync = function(method, model, options) {
                 xhr.setRequestHeader('X-HTTP-Method-Override', type);
             };
         }
+    }
+
+    // Clear out all messages prior to syncing.
+    if (model) {
+        model.each(function(m) {
+            if (m.has( "messages" )) {
+                m.unset( "messages" );
+            }
+        });
     }
 
     // Make the request.
@@ -121,9 +127,6 @@ _.extend(Backbone.Collection.prototype, {
                 // Loop through the model and update the collection.
                 _.each((batch.data.create || []).concat(batch.data.update || []), function(updatedModel) {
                     var model = collection.get(updatedModel.id);
-                    if (model.has( "messages" )) {
-                        model.unset( "messages" );
-                    }
                     model.set(model.parse(updatedModel), options);
 
                     if (!model.has( "messages")) {
