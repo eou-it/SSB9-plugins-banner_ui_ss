@@ -72,7 +72,8 @@ class BaseRestfulControllerMixin {
                 }
             }
             else {
-                entity.messages << createMessage( localizer( e.message ) )
+            println "Error: ${e} ${e.message}"
+                entity.messages << createMessage( localizer( error: e.message ) )
             }
         }
 
