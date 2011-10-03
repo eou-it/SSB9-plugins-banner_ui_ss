@@ -1015,14 +1015,14 @@ function KeyTable ( oInit )
                     _that.fnAction( direction );
                 });
             }
-            switch (event.keyCode) {
+            switch (e.keyCode) {
             case _KeyCode.TAB: // make TAB move LEFT (RIGHT with SHIFT)
-                move( event.shiftKey ?
-                      gradesKeys.Action.LEFT : 
-                      gradesKeys.Action.RIGHT );
+                move( e.shiftKey ?
+                      _Action.LEFT : 
+                      _Action.RIGHT );
                 break;
             case _KeyCode.ENTER: // make ENTER move down
-                move( gradesKeys.Action.DOWN );
+                move( _Action.DOWN );
                 break;
             }
             return true; 
