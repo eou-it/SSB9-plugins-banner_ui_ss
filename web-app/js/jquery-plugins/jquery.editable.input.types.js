@@ -65,7 +65,8 @@
     $.editable.addInputType( 'numeric', numericTypeSettings );
 
     /*
-     * create an input type that allows only numbers.
+     * create an input type that allows only numbers, preventing any non-digits from being entered - this confusingly
+     * uses the 'numeric' type defined in jquery.numeric.js, as opposed to the 'numeric' editable type defined above
      *
      * Allows:
      *  numberOptions: map. default is {decimal:false, negative:false}
@@ -84,4 +85,23 @@
             return ele;
         }
     });
+
+    _.defer(function() { // allow numeric to initialize first
+
+        // monkey patch $.numeric to position the cursor
+        // after the decimal if keyup prepends a 0
+        var oldkeyup = $.fn.numeric.keyup;
+        
+        $.fn.numeric.keyup = function(e) {
+            var decimal = $.data( this, "numeric.decimal" );
+            var dot = this.value.indexOf( decimal );
+
+            oldkeyup.apply(this, [e]);
+
+            if ( dot == 0 && this.value.match( /0\./ ) ) { // oldkeyup prepended a 0
+                $.fn.setSelection(this, this.value.indexOf(decimal)+1);
+            }
+            // don't worry about negative values for now.
+        }
+    })
 })(jQuery);
