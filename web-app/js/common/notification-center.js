@@ -63,6 +63,38 @@ $(document).ready(function() {
         fetch: function() {
             throw new Error("not supported");
         },
+        clearNotifications: function( model, atttributes ) {
+            if (model) {
+                // Remove all notifications that are bound to the model
+                var notificationsToRemove = this.find( function( n ) {
+                    var notificationModel = n.get( "model" );
+                    if (notificationModel && notificationModel.id === model.id) {
+                        if (attributes) {
+                            // We are going to only going to select the the notifications that have the same model and attribute
+                            _.each( attributes, function( a ) {
+                                console.log( "attribute", a );
+                            });
+                        }
+                        else {
+                            return true;
+                        }
+                    }
+                    else {
+                        return false;
+                    }
+                });
+
+                if (notificationsToRemove) {
+                    _.each( notificationsToRemove, function( n ) {
+                        this.remove( n );
+                    }, this );
+                }
+            }
+            else {
+                // Remove all models
+                this.reset();
+            }
+        },
         addNotificationsFromModel: function(model) {
             if (model) {
                 function evaluateModel(model) {
