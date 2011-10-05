@@ -44,6 +44,20 @@ class BaseRestfulControllerMixin {
     }
 
 
+    public Object addSuccessMessageToEntity( Object entity ) {
+        return addMessagesToEntity( entity, null, "success", null );
+    }
+
+
+    public Object addMessagesToEntity( Object entity, String field, String type, String message ) {
+        initMessages( entity )
+
+        entity.messages << createMessage( message, type, field )
+
+        return entity
+    }
+
+
     /**
      * This adds a messages property to an entity based off exceptions that have occurred.
      * @param entity
@@ -51,14 +65,7 @@ class BaseRestfulControllerMixin {
      * @return the entity to promote chaining.
      */
     public Object addMessagesToEntity( Object entity, Exception e ) {
-        if (entity.hasProperty( "messages" )) {
-            if (!(entity.messages instanceof List)) {
-                throw new Exception( "'messages' is a reserved property. ${entity.class} cannot be marshalled" )
-            }
-        }
-        else {
-            entity.messages = []
-        }
+        initMessages( entity )
 
         if (e instanceof ApplicationException) {
             e.returnMap( localizer ).errors.each {
@@ -72,8 +79,7 @@ class BaseRestfulControllerMixin {
                 }
             }
             else {
-            println "Error: ${e} ${e.message}"
-                entity.messages << createMessage( localizer( error: e.message ) )
+                entity.messages << createMessage( e.toString() )
             }
         }
 
@@ -153,6 +159,19 @@ class BaseRestfulControllerMixin {
         }
         else {
             throw new RuntimeException("@@r1:com.sungardhe.framework.unsupported_content_type:${request.format}")
+        }
+    }
+
+
+    private initMessages( Object entity ) {
+        if (entity.hasProperty( "messages" )) {
+            if (!(entity.messages instanceof List)) {
+                throw new Exception( "'messages' is a reserved property. ${entity.class} cannot be marshalled" )
+            }
+        }
+        else {
+            // This meta programming isn't working at the moment.  Need to dig into as to why.
+            //entity.metaClass.messages = []
         }
     }
 }

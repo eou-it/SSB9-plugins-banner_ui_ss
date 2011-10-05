@@ -63,24 +63,35 @@ $(document).ready(function() {
         fetch: function() {
             throw new Error("not supported");
         },
-        clearNotifications: function( model, atttributes ) {
+        clearNotifications: function( model, attributes ) {
             if (model) {
                 // Remove all notifications that are bound to the model
                 var notificationsToRemove = this.find( function( n ) {
                     var notificationModel = n.get( "model" );
                     if (notificationModel && notificationModel.id === model.id) {
                         if (attributes) {
-                            // We are going to only going to select the the notifications that have the same model and attribute
-                            _.each( attributes, function( a ) {
-                                console.log( "attribute", a );
-                            });
+                            if (n.has( "attribute" )) {
+                                // We are going to only going to select the the notifications that have the same model and attribute
+                                var keys = _.keys( attributes );
+
+                                _.each( keys, function( k ) {
+                                    if (n.get( "attribute" ) === attributes[k]) {
+                                        return true;
+                                    }
+                                });
+
+                                // If we got to this point we do not want to mark this notification for removal because none of the attributes are in the notification.
+                                return false;
+                            }
+                            else {
+                                // This specific notification does not have an attribute so we will not include it since the request to clear notifications was by model and attributes.
+                                return false;
+                            }
                         }
                         else {
+                            // We are not inspecting attributes and will return this notification.
                             return true;
                         }
-                    }
-                    else {
-                        return false;
                     }
                 });
 

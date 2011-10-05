@@ -129,8 +129,8 @@ _.extend(Backbone.Collection.prototype, {
                     var model = collection.get(updatedModel.id);
                     model.set(model.parse(updatedModel), options);
 
-                    if (!model.has( "messages")) {
-                        model.set( { messages: [{ message:"save successful", type:"success"}] } );
+                    if (model.get( "messages")[0].type == "success" ) {
+                        //model.set( { messages: [{ message:"save successful", type:"success"}] } );
                         model.resetDirty();
                     }
                 });
