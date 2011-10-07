@@ -60,7 +60,6 @@ function SaveTimer( options ) {
     this.start = function() {
 
         this.notificationPrompt = function() {
-            // TODO:  This must be localized.
             if (options.isDirty()) {
 
                 this.save = function() {
@@ -69,15 +68,15 @@ function SaveTimer( options ) {
                     }
                 }
 
-                var n = new Notification( {message: "", type:"warning", promptMessage: "Do you want to save the changes you have made?"} );
+                var n = new Notification( {message: "", type:"warning", promptMessage: $.i18n.prop("js.notification.savePrompt.message")} );
 
                 this.doNotSavePromptAction = function() {
                     notifications.remove( n );
+
                     if (options.isDirty()) {
                         this.reset();
                     }
                 };
-
 
                 this.savePromptAction = function() {
                     this.save();
@@ -85,16 +84,10 @@ function SaveTimer( options ) {
                     this.stop();
                 };
 
+                _.bindAll( this, "doNotSavePromptAction", "savePromptAction" );
 
-                this.doNothingAction = function() {
-                    notifications.remove( n );
-                }
-
-                _.bindAll( this, "doNotSavePromptAction", "savePromptAction", "doNothingAction" );
-
-                n.addPromptAction( "Cancel", this.doNothingAction );
-                n.addPromptAction( "No", this.doNotSavePromptAction );
-                n.addPromptAction( "Yes", this.savePromptAction );
+                n.addPromptAction( $.i18n.prop("js.notification.savePrompt.doNotSaveActionButton"), this.doNotSavePromptAction );
+                n.addPromptAction( $.i18n.prop("js.notification.savePrompt.saveActionButton"), this.savePromptAction );
 
                 notifications.addNotification( n );
             }
