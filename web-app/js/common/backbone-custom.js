@@ -243,7 +243,7 @@ _.extend(Backbone.Collection.prototype, {
 function createBatchModel(model) {
     if (model.isDirty()) {
         var changedModels = _.select(model.models, function(model) {
-            return model.isDirty() && _.isUndefined(model.validate(model.attributes));
+            return model.isDirty();
         });
 
         var createModels = _.select(changedModels, function(model) {
@@ -294,4 +294,45 @@ function createFetchOptions( collection, options ) {
     }
 
     return options;
+}
+
+
+// Add validation logic when models change.  We do not use the 'validate' function on the model due to some lack of control when it is called.
+// For example, validate is called on the model when the model is fetched/added to the collection.  This means we will validate as we prepare the model
+// which has the unforeseen consquence that the model we were validating does not exist in the collection yet.  We want to avoid that.
+function registerModelValidation( collection, validationFunction ) {
+    collection.bind( "change", function( model ) {
+        var valid = validationFunction( model, model.changedAttributes());
+
+        if (_.isUndefined( valid )) {
+            valid = true;
+        }
+        else {
+            // Something was returned which means that the model did not validate.
+            valid = false;
+        }
+
+        if (!valid) {
+            log.debug( "model did not validate on change", model, model.changedAttributes());
+        }
+    });
+
+    collection.bind( "reset", function( models ) {
+        models.each( function( m ) {
+
+            var valid = validationFunction( m, m.attributes);
+
+            if (_.isUndefined( valid )) {
+                valid = true;
+            }
+            else {
+                // Something was returned which means that the model did not validate.
+                valid = false;
+            }
+
+            if (!valid) {
+                log.debug( "model did not validate on reset", m, m.attributes);
+            }
+        });
+    });
 }

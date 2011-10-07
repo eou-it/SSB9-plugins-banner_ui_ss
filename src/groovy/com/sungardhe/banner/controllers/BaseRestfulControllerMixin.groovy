@@ -16,7 +16,6 @@ import grails.converters.XML
 import com.sungardhe.banner.exceptions.ApplicationException
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 
-
 /**
  * A mixin to be used to add features provided by the RestfulControllerMixin, but that does require basic authentication.
  *
@@ -44,17 +43,22 @@ class BaseRestfulControllerMixin {
     }
 
 
-    public Object addSuccessMessageToEntity( Object entity ) {
-        return addMessagesToEntity( entity, null, "success", null );
+    public Object createSuccessMap( Object entity ) {
+        return createEntityMap( entity, null, "success", null );
     }
 
 
-    public Object addMessagesToEntity( Object entity, String field, String type, String message ) {
-        initMessages( entity )
+    public Object createEntityMap( Object entity, String field, String type, String message ) {
+        def map = entity.getProperties()
+        initMessages( map )
+        map.messages << createMessage( message, type, field )
 
-        entity.messages << createMessage( message, type, field )
-
-        return entity
+        // When we convert the entity to a map, the metaClass may be added.  If the metaClass is there, it will prevent us from converting the map to JSON at a later stage.
+        // Remove the key if it exists since it is not needed by the caller.
+        if (map["metaClass"]) {
+            map.remove( "metaClass" )
+        }
+        return map
     }
 
 
@@ -64,7 +68,7 @@ class BaseRestfulControllerMixin {
      * @param e
      * @return the entity to promote chaining.
      */
-    public Object addMessagesToEntity( Object entity, Exception e ) {
+    public Object createErrorMap( Object entity, Exception e ) {
         initMessages( entity )
 
         if (e instanceof ApplicationException) {
@@ -163,15 +167,14 @@ class BaseRestfulControllerMixin {
     }
 
 
-    private initMessages( Object entity ) {
-        if (entity.hasProperty( "messages" )) {
+    private initMessages( entity ) {
+        if (entity.messages) {
             if (!(entity.messages instanceof List)) {
-                throw new Exception( "'messages' is a reserved property. ${entity.class} cannot be marshalled" )
+                throw new Exception( "'messages' is a reserved key and mut be a List. The JSON cannot add messages as requested." )
             }
         }
         else {
-            // This meta programming isn't working at the moment.  Need to dig into as to why.
-            //entity.metaClass.messages = []
+            entity.put( "messages", [])
         }
     }
 }

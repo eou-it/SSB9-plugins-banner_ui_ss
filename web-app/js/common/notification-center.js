@@ -49,6 +49,18 @@ $(document).ready(function() {
             else {
                 this.add( notification );
 
+                // If the notification gets orphaned remove it from the collection.
+                if (notification.has( "model" ) && notification.get( "model" )) {
+                    var model = notification.get( "model" );
+
+                    model.collection.bind( "reset", function(models) {
+                        if (_.isUndefined( model.collection )) {
+                            this.remove( notification );
+                        }
+                    }, this );
+                }
+
+                // If the notification is a flash, we are going to set to remove it automagically.
                 if (notification.get( "flash" )) {
                     var removeNotification = function() {
                         this.remove( notification );
@@ -74,14 +86,12 @@ $(document).ready(function() {
                                 // We are going to only going to select the the notifications that have the same model and attribute
                                 var keys = _.keys( attributes );
 
-                                _.each( keys, function( k ) {
-                                    if (n.get( "attribute" ) === attributes[k]) {
-                                        return true;
-                                    }
+                                var found = _.find( keys, function(k) {
+                                    return k === n.get( "attribute" );
                                 });
 
                                 // If we got to this point we do not want to mark this notification for removal because none of the attributes are in the notification.
-                                return false;
+                                return found;
                             }
                             else {
                                 // This specific notification does not have an attribute so we will not include it since the request to clear notifications was by model and attributes.
@@ -109,10 +119,12 @@ $(document).ready(function() {
         addNotificationsFromModel: function(model) {
             if (model) {
                 function evaluateModel(model) {
+                    this.clearNotifications( model );
+
                     if (model.has("messages")) {
                         _.each( model.get("messages"), function( message ) {
 
-                            var notification = new Notification( {message: message.message, type: message.type, model: model} );
+                            var notification = new Notification( {message: message.message, type: message.type, model: model, attribute: message.field } );
 
                             if (message.type === "success") {
                                 notification.set( { flash: true, message: $.i18n.prop("js.notification.success"), ignoreForGroupBy: ["model"] } );
@@ -122,19 +134,13 @@ $(document).ready(function() {
 
                             model.bind( "change:messages", function( m ) {
                                 // Reset the notifications that are associated with the model that has new or updated messages
-
-                                log.debug( "Update notification for model", m );
-
                                 var associatedNotifications = _.select( notifications.models, function(n) {
-                                    return (n.get( "model" ) === m);
-                                })
+                                    return n.get( "model" ) === m;
+                                });
 
                                 _.each( associatedNotifications, function( n ) {
                                     notifications.remove( n );
                                 });
-
-                                log.debug( "associatedNotifications", associatedNotifications );
-
                             }, this );
                         }, this);
                     }
