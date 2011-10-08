@@ -36,7 +36,7 @@ class BannerUiSsGrailsPlugin {
         jqueryUi:'1.8.11 => *',
         selenium:'0.6 => *',
         seleniumRc:'1.0.2 => *',
-        bannerCore:'1.0.3 => *',
+        bannerCore:'1.0.4 => *',
     ]
 
     def pluginExcludes = [

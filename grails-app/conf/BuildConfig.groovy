@@ -22,7 +22,7 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        compile 'com.sungardhe:banner-core:1.0.3'
+        compile 'com.sungardhe:banner-core:1.0.4'
         compile 'com.sungardhe:spring-security-core:1.0.1'
         compile 'com.sungardhe:banner-codenarc:0.1.3'
     }
