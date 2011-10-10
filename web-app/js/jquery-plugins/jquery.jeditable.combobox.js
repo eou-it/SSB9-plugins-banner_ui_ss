@@ -1,6 +1,7 @@
 /*
  * $(...).combobox( options ) makes an input element into an autoselect combobox.
  * based on jQuery UI autocomplete combobox example.
+ * set options.combobox.data to the list of dropdown values
  */
 (function( $ ) {
     $.widget( "ui.combobox", {
@@ -81,57 +82,74 @@
                 return true;
             }
         },
-        plugin : function(settings, original) {
+        plugin: function(settings, original) {
             var form = this,
                 input = form.find('input');
-            var isOpen = false;
-            var orgOnBlur = settings.onblur || function() {};
+            form.data('isOpen', false); // !! where to store this value? copy autocomplete
+            form.data('selected', false);
+            var orgOnblur = settings.onblur;
             settings.onblur = function() {
+                var args = arguments;
                 setTimeout( function() {
-                    if (!isOpen) { // clicked elsewhere
-                        //console.log( 'combobox onblur', arguments);
-                        orgOnBlur();
+                    if (!form.data('isOpen')) { // clicked elsewhere
+                        log.debug( 'combobox onblur', this, args, orgOnblur);
+                        orgOnblur && orgOnblur.apply(original, args); // only support functions for now
                     }
                     // otherwise, lost focus because dropdown opened, so do nothing
-    
+                    
                     // the delay is necessary to allow the dropdown to be closed
                     // and the submit to have occurred (in the close callback below).
                 }, onblurdelay); 
-            };
-            var combobox = {
-                source: settings.combobox.data,
+            }
+            var combobox = jQuery.extend( {}, settings.combobox, {
+                source:settings.combobox.source || settings.combobox.data,
                 minLength: 0,
                 delay:0,
                 open:function(evt,ui){
-                    isOpen = true;
+                    console.log( 'OPEN: this=', this, 'self=', form);
+                    form.data('isOpen', true);
+                    form.data('selected', false);
+                    var orgOpen = settings.combobox && settings.combobox.open;
+                    orgOpen && orgOpen.apply( this, [evt,ui] );
+                },
+                select:function(evt,ui){
+                    form.data('selected', true);
                 },
                 close:function(evt,ui){
-                    isOpen = false;
-                    // from jquery.jeditable.datepicker.js
-                    setTimeout( function() {
-                        if ( !input.is( ':focus' ) ) {
-                            // input has NO focus after 150ms which means
-                            // dropdown was closed due to click outside of it
-                            // so let's close the input field without saving
-                            original.reset( form );
-                        } else {
-                            // input still HAS focus after 150ms which means
-                            // dropdown was closed due to Enter in the input field
-                            // so lets submit the form and close the input field
-                            // However, it could also be closed because of invalid input, in which case we don't want to close.
-                            // so we'll handle the ENTER or TAB closure separately and ignore this close.
-                            //form.submit();
-                        }
-    
-                        // the delay is necessary; dropdown must be already
-                        // closed for the above :focus checking to work properly;
-                        // without a delay the form is submitted in all scenarios, which is wrong
-                    }, onclosedelay );
-                },
-            };
-            if (settings.combobox) {
-                jQuery.extend(combobox, settings.combobox);
-            }
+                    var self = this;
+                    var orgClose = settings.combobox && settings.combobox.close;
+                    form.data('isOpen', false);
+                    if ( form.data('selected') ) {
+                        form.data('selected', false);
+                        orgClose && orgClose.apply( self, [evt, ui]);
+                        evt.stopPropagation(); // prevent an autocomplete click from triggering _fnBlur in the KeyTable
+                    } else {
+                        setTimeout( function() { // from jquery.jeditable.datepicker.js
+                            if ( form.data('isOpen') && // if we submit again when form is closed, it reloads the page.  cool.
+                                 !input.is( ':focus' ) ) {
+                                // input has NO focus after 150ms which means
+                                // dropdown was closed due to click outside of it
+                                // so close the input field
+                                log.debug( 'close method, click outside, orgClose') ;
+                                orgClose && orgClose.apply( self, [evt,ui]);
+                            } else {
+                                // input still HAS focus after 150ms which means
+                                // dropdown was closed due to ENTER in the input field
+                                // or because of invalid/unrecognized input.
+                                // we'd like to submit for ENTER, but need to keep it open for
+                                // invalid. We could call a validate here, or ignore the event
+                                // and test elsewhere.
+                                log.debug( 'close method, input still has focus, think you selected, would like to submit, but think it may be because of invalid input' );
+                                //form.submit();
+                            }
+                            
+                            // the delay is necessary; dropdown must be already
+                            // closed for the above :focus checking to work properly;
+                            // without a delay the form is submitted in all scenarios, which is wrong
+                        }, onclosedelay );
+                    }
+                }
+            });
             input.combobox(combobox);
         },
     });

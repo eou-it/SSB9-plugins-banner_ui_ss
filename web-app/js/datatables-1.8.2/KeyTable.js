@@ -1011,18 +1011,20 @@ function KeyTable ( oInit )
             // so handle TAB/ENTER here.  _that.block should be reset in the blur/close event of the component.
             function move(direction) {
                 _log( 'KeyTable.js move', direction);
-                _.defer( function() { // do it after the submit
-                    _that.fnAction( direction );
-                });
+                _that.fnAction( direction );
             }
             switch (e.keyCode) {
             case _KeyCode.TAB: // make TAB move LEFT (RIGHT with SHIFT)
                 move( e.shiftKey ?
                       _Action.LEFT : 
                       _Action.RIGHT );
+                //!!breaks onblur?return false;
+                e.stopPropagation();
+                e.preventDefault();
                 break;
             case _KeyCode.ENTER: // make ENTER move down
                 move( _Action.DOWN );
+                //!!breaks onblur?return false;
                 break;
             }
             return true; 
@@ -1038,7 +1040,8 @@ function KeyTable ( oInit )
             e.preventDefault();
             e.stopPropagation();
         }
-        return _fnAction(action);
+        var result = _fnAction(action);
+        return result;
     }
 
     /*
