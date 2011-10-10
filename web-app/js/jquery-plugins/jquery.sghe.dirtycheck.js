@@ -43,8 +43,6 @@ jQuery.fn.dirtyCheck = function(options) {
         var target = this;
         var $target = jQuery(target);
 
-        //log.debug( "registering target for dirty check.", target );
-
         var saveHandlers = function() {
             var events = jQuery.data(target, 'events');
             if (!events && target.href) {
@@ -64,19 +62,28 @@ jQuery.fn.dirtyCheck = function(options) {
                     target._handlers.push(events[type][i]);
                 }
             }
-        }
+        };
 
         var executeExistingHandlers = _.bind( function() {
             // Rebind the saved handlers.
             if (target._handlers != undefined) {
+
+                // We'll remove the dirtyCheck handler in preparation to execute the existing handlers
+                $target.unbind( type, handler );
+
+                // Rebind the stored handlers
                 jQuery.each(target._handlers, function(indexInArray, valueOfElement) {
                     $target.bind( type, valueOfElement.handler );
                 });
 
-                $target.unbind( type, handler );
+                // Fire the event
                 $target.trigger( type );
-                $target.bind( type, handler );
 
+                // Unbind everything we just setup in the binds before
+                $target.unbind( type );
+
+                // And setup the default dirty check handler.
+                $target.bind( type, handler );
             }
         }, this );
 
