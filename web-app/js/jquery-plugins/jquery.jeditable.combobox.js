@@ -106,7 +106,6 @@
                 minLength: 0,
                 delay:0,
                 open:function(evt,ui){
-                    console.log( 'OPEN: this=', this, 'self=', form);
                     form.data('isOpen', true);
                     form.data('selected', false);
                     var orgOpen = settings.combobox && settings.combobox.open;
