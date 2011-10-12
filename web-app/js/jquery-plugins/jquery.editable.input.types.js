@@ -86,22 +86,26 @@
         }
     });
 
-    _.defer(function() { // allow numeric to initialize first
+    function fixNumericZeroInsertion() {
+        if ($.fn.numeric) {
+            // monkey patch $.numeric to position the cursor
+            // after the decimal if keyup prepends a 0
+            var oldkeyup = $.fn.numeric.keyup;
+            
+            $.fn.numeric.keyup = function(e) {
+                var decimal = $.data( this, "numeric.decimal" );
+                var dot = this.value.indexOf( decimal );
 
-        // monkey patch $.numeric to position the cursor
-        // after the decimal if keyup prepends a 0
-        var oldkeyup = $.fn.numeric.keyup;
-        
-        $.fn.numeric.keyup = function(e) {
-            var decimal = $.data( this, "numeric.decimal" );
-            var dot = this.value.indexOf( decimal );
+                oldkeyup.apply(this, [e]);
 
-            oldkeyup.apply(this, [e]);
-
-            if ( dot == 0 && this.value.match( /0\./ ) ) { // oldkeyup prepended a 0
-                $.fn.setSelection(this, this.value.indexOf(decimal)+1);
+                if ( dot == 0 && this.value.match( /0\./ ) ) { // oldkeyup prepended a 0
+                    $.fn.setSelection(this, this.value.indexOf(decimal)+1);
+                }
+                // don't worry about negative values for now.
             }
-            // don't worry about negative values for now.
+        } else {
+            setTimeout(fixNumericZeroInsertion, 200);
         }
-    })
+    }
+    fixNumericZeroInsertion();
 })(jQuery);
