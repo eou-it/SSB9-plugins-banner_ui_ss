@@ -1,3 +1,9 @@
+//IE fix to support indexOf method on Array objects
+Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
+    for(b=this,c=b.length,r=-1;~c;r=b[--c]===a?c:r);
+    return r;
+}
+
 function getUrl(name) {
     var url = $("#endpoint-" + name).attr('data-endpoint');
 
