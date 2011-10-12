@@ -256,7 +256,7 @@ tr.odd td.sorting_1, tr.even td.sorting_1 {
     right: 0;
     left: 0;
     background-color: #FFFFFF;
-    z-index: 999;
+    z-index: 9999;
 }
 
 /* TODO: Remove once Aurora is in place */

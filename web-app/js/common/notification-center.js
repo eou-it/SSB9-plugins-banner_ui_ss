@@ -442,14 +442,12 @@ $(document).ready(function() {
         }
     });
 
-    // Speak with Aurora and add a DIV to it.
-    // TODO:  Figure out the right way to add features to Aurora.
-    var auroraHeader = $("#aurora-header" );
-    auroraHeader.append( '<div id="notification-center"></div>' );
-    auroraHeader.append( '<div id="notification-center-2"></div>' );
-
-    window.notificationCenter = new NotificationCenter({
-        el: $("#notification-center"),
-        model: notifications
+    EventDispatcher.addEventListener( Application.events.initialized, function() {
+        var nc = $("<div><div id='notification-center'></div></div>" );
+        ControlBar.append( nc );
+        window.notificationCenter = new NotificationCenter({
+            el: $("#notification-center"),
+            model: notifications
+        });
     });
 });
