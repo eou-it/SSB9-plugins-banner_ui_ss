@@ -14,16 +14,18 @@ import com.sungardhe.banner.BannerPropertiesPersister
 import com.sungardhe.banner.BannerPluginAwareResourceBundleMessageSource
 
 import org.apache.commons.logging.LogFactory
-
+import org.apache.log4j.Logger
 
 /**
  * A Grails Plugin providing core UI framework for Self Service Banner application.
  **/
 class BannerUiSsGrailsPlugin {
+
+    def log = Logger.getLogger( this.getClass() )
     
     String groupId = "com.sungardhe"
 
-    def version = "0.0.70"
+    def version = "0.0.71"
 
     def grailsVersion = "1.3.7 > *"
 
@@ -76,7 +78,8 @@ class BannerUiSsGrailsPlugin {
          // Explicitly inject the log into the resources plugin artifacts, to circumvent NPEs
          application.allClasses.each {
              if (it.name?.contains( "plugin.resource" )) {
-                 println ".... adding log to $it"
+                 log.info "adding log property to $it"
+
                  // Note: weblogic throws an error if we try to inject the method if it is already present
                  if (!it.metaClass.methods.find { m -> m.name.matches( "getLog" ) }) { 
                      def name = it.name // needed as this 'it' is not visible within the below closure...
