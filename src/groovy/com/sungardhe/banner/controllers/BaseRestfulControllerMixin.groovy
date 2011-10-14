@@ -72,8 +72,13 @@ class BaseRestfulControllerMixin {
         initMessages( entity )
 
         if (e instanceof ApplicationException) {
-            e.returnMap( localizer ).errors.each {
+            if (e.returnMap( localizer )?.errors == null) {
+                entity.messages << createMessage( e.returnMap( localizer ).message )
+            }
+            else {
+                e.returnMap( localizer ).errors.each {
                 entity.messages << createMessage( it.message, "error", it.field )
+                }
             }
         }
         else {
