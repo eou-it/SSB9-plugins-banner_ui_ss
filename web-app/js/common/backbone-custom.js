@@ -39,7 +39,7 @@ Backbone.sync = function(method, model, options) {
         // Check to see if the model contains fetch criteria
         if (model.fetchCriteria) {
             // Loop through the fetchCriteria and add query parameters to the url
-            _.each(model.fetchCriteria(),
+            _.each(model.fetchCriteria( options ),
                 function(value, key) {
                     if (params.url.indexOf("?") > 0) {
                         params.url = params.url + "&";
@@ -89,7 +89,14 @@ Backbone.sync = function(method, model, options) {
     }
 
     // Make the request.
-    return $.ajax(params);
+
+    if (options.ajaxManager) {
+        // Use the ajaxManager
+        return options.ajaxManager.add( params );
+    }
+    else {
+        return $.ajax(params);
+    }
 };
 
 _.extend(Backbone.Model.prototype, {
