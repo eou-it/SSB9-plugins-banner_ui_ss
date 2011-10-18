@@ -11,9 +11,10 @@
  ****************************************************************************** */
 package com.sungardhe.banner.controllers
 
+import com.sungardhe.banner.exceptions.ApplicationException
 import grails.converters.JSON
 import grails.converters.XML
-import com.sungardhe.banner.exceptions.ApplicationException
+import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 
 /**
@@ -24,6 +25,9 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
  * TODO:  This should be folded into the RestfulControllerMixin at some point.
  */
 class BaseRestfulControllerMixin {
+
+    @Lazy // note: Lazy annotation is needed here to ensure 'this' refers to the service we're mixed into (if we're mixed in)
+    def log = Logger.getLogger( this.getClass() )
 
     def localizer = { mapToLocalize ->
         new ValidationTagLib().message( mapToLocalize )
@@ -121,9 +125,11 @@ class BaseRestfulControllerMixin {
             return createSuccessMap( entities, count, params, classSimpleName )
         }
         catch (ApplicationException e) {
+            log.error( e )
             return createErrorResponseMap(e, [], e.returnMap(localizer)?.message, e.httpStatusCode)
         }
         catch (e) { // CI logging
+            log.error( e )
             return createErrorResponseMap(e, [], localizer(code: 'default.not.listed.message'))
         }
     }
