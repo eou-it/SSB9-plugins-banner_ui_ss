@@ -2,6 +2,7 @@
     color: #000000;
     margin-top: -6px;
     padding-left: 5px;
+    direction: ltr;
 }
 
 .notification-center-hidden {
@@ -122,6 +123,8 @@
     list-style-type: none;
     margin: 0;
     padding-left: 0px;
+    padding-right: 0px;
+    direction: ltr;
 }
 
 .notification-center-flyout li:first-child {
@@ -143,9 +146,11 @@
     margin-left: 5px;
     margin-right: 5px;
     padding-left: 27px;
+    padding-right: 0px;
     padding-top: 5px;
     min-height: 2.4em;
     border-bottom: 1px solid #CCCCCC;
+    text-align: left;
 }
 
 .notification-center-flyout li:last-child div.notification-item-message {
