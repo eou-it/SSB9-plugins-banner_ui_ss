@@ -81,7 +81,7 @@ class BaseRestfulControllerMixin {
             }
             else {
                 e.returnMap( localizer ).errors.each {
-                entity.messages << createMessage( it.message, "error", it.field )
+                    entity.messages << createMessage( it.message, "error", it.field )
                 }
             }
         }
