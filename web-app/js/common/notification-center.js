@@ -78,12 +78,12 @@ $(document).ready(function() {
         clearNotifications: function( model, attributes ) {
             if (model) {
                 // Remove all notifications that are bound to the model
-                var notificationsToRemove = this.find( function( n ) {
+                var notificationsToRemove = this.filter( function( n ) {
                     var notificationModel = n.get( "model" );
                     if (notificationModel && notificationModel.id === model.id) {
                         if (attributes) {
                             if (n.has( "attribute" )) {
-                                // We are going to only going to select the the notifications that have the same model and attribute
+                                // We are going to only select the the notifications that have the same model and attribute
                                 var keys = _.keys( attributes );
 
                                 var found = _.find( keys, function(k) {
@@ -171,7 +171,7 @@ $(document).ready(function() {
                 prefix = "2";
             }
 
-            return prefix + "-" + notification.get("type");
+            return prefix + "-" + notification.get("type") + notification.get( "message" );
         },
         hasErrors: function() {
             return this.find( function(model) { return model.get( "type" ) === "error" } );
