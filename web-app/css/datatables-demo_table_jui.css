@@ -65,9 +65,11 @@
 }
 
 table.display thead th {
-	padding: 3px 0px 3px 10px;
-	cursor: pointer;
-	* cursor: hand;
+    background-color: #EDF0F4 !important;
+    border-bottom: 2px solid #AAAAAA;
+    cursor: pointer;
+    padding: 3px 0 3px 10px;
+    height:25px;
 }
 
 div.dataTables_wrapper .ui-widget-header {
@@ -279,19 +281,17 @@ table.display tr.even.gradeU {
 
 
 tr.odd {
-	background-color: #FFFFFF;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #DDDDDD;
+    border-color: #DDDDDD;
+    height: 25px;
 }
-
 tr.even {
-	background-color: #FFFFFF;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #DDDDDD;
+    border-color: #DDDDDD;
+    height: 25px;
 }
-
-
-
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -369,13 +369,14 @@ td.details {
 }
 
 table.display tr.even.row_selected td {
-	background-color: #B0BED9;
+    background-color: #194F85;
+    color: white;
 }
 
 table.display tr.odd.row_selected td {
-	background-color: #9FAFD1;
+    background-color: #194F85;
+    color: white;
 }
-
 
 /*
  * Sorting classes for columns
