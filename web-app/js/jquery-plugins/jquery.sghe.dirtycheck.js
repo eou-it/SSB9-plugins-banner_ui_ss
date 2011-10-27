@@ -26,6 +26,9 @@
  * For the internal dirtyCheck handler the function needs to know when it is executing the existing handlers and make
  * sure it does not re-excute itself when it triggers the handlers.
  *
+ * If the dirty check should be ignored for those special cases (i.e. automatically logging someone out) you can set the
+ * $(selector).data( 'ignoreDirtyCheckOneTime', true ) to bypass dirty checking one time.
+ *
  * This function was derived from the jQuery confirm plug-in.
  */
 jQuery.fn.dirtyCheck = function(options) {
@@ -89,7 +92,7 @@ jQuery.fn.dirtyCheck = function(options) {
 
 
         var handler = function() {
-            if (options.isDirty()) {
+            if (!jQuery.data( target, 'ignoreDirtyCheckOneTime' ) && options.isDirty()) {
                 var n = new Notification( {message: "Changes have been made.", type:"warning", promptMessage: "Do you want to save changes?"} );
 
                 n.addPromptAction( "Cancel", function() {
@@ -115,6 +118,10 @@ jQuery.fn.dirtyCheck = function(options) {
             }
             else {
                 executeExistingHandlers();
+            }
+
+            if (jQuery.data( target, 'ignoreDirtyCheckOneTime' )) {
+                delete jQuery.data().ignoreDirtyCheckOneTime;
             }
 
             // We'll always return false and let the handling of the notificaiton and existing handlers do their thing.

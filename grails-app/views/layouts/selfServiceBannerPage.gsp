@@ -9,16 +9,18 @@
         <meta name="i18nCacheKey" content="${g.i18nCacheKey(name:'messages')}"/>
         <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerToken.store( session ).currentToken}"/>
         <meta name="logLevel" content="${g.logLevel()}"/>
+        <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
+        <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
 
-        <title><g:layoutTitle default="Banner"/></title>
+        <title><g:layoutTitle default="Banner"/>${createLink(controller:"keepAlive")}</title>
 
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/yepnope.1.0.1-min.js')}" type="text/javascript"></script>
         <g:javascript>
         yepnope({
-          test : window.JSON,
-          nope : '${resource(plugin: 'banner-ui-ss', file: 'js/json2.js')}'
+           test : window.JSON,
+           nope : '${resource(plugin: 'banner-ui-ss', file: 'js/json2.js')}'
         });
         </g:javascript>
 
@@ -41,6 +43,7 @@
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/common/document-ready.js')}" type="text/javascript"></script>
     </head>
     <body>
+        <pre>${createLink(controller:"keepAlive")}</pre>
         <div id="aurora-resource-bundle" data-source="${resource(plugin: 'sghe-aurora', file: 'js/')}"/>
     
         <div id="splash"></div>

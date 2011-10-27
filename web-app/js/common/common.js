@@ -53,6 +53,111 @@ function validateDate( dateString ) {
     return true;
 }
 
+window.ActivityTimer = Backbone.Model.extend({
+    saveTimerId: 0,
+    initialize: function( options ) {
+        if (!options.delay) {
+            this.set( {delay: 1000} );
+        }
+    },
+    start: function() {
+        var events = this.activityEvents;
+
+        if (events) {
+            _.each( events, function ( event ) {
+                this.activityTarget().bind( event, _.bind( this.lazyResetter, this ) );
+            }, this );
+        }
+
+        this.saveTimerId = window.setTimeout( _.bind( this.timeoutHandler, this ), this.get( "delay" ));
+
+        this.trigger( 'timer:start' );
+    },
+    stop: function( options ) {
+        if (this.saveTimerId) {
+            window.clearTimeout( this.saveTimerId );
+        }
+
+        var events = this.activityEvents;
+        if (events) {
+            _.each( events, function ( event ) {
+                this.activityTarget().unbind( event, _.bind( this.lazyResetter, this ) );
+            }, this );
+        }
+
+        this.trigger( 'timer:stop' );
+    },
+    reset: function( options ) {
+        this.stop();
+        this.start();
+        this.trigger( 'timer:reset' );
+    },
+    lazyResetter: _.throttle( function(e) {
+        if (this.saveTimerId) {
+            log.debug( "reseting timer '" + this.saveTimerId + "' due to '" + e.type  + "' type." );
+            this.reset();
+        }
+    }, 1500 )
+});
+
+window.InactivityTimer = ActivityTimer.extend({
+    timeoutHandler: function() {
+        var n = new Notification( {
+            message: $.i18n.prop("js.notification.inactivityTimer.message"),
+            type:"warning",
+            promptMessage: $.i18n.prop("js.notification.inactivityTimer.promptMessage")
+        });
+
+        this.logoutAction = function() {
+            // Logout the user
+            log.debug( "logout due to inactivity" );
+
+            // disable dirty checking
+            $("#signOutText").data( "ignoreDirtyCheckOneTime", true );
+
+            $("#signOutText").click();
+        };
+
+        this.keepAliveAction = function() {
+            $.ajax({
+                url: $("meta[name='keepAliveURL']").attr( "content" ),
+                dataType: "html",
+                success: function(data, textStatus, jqXHR) {
+                    inactivityTimer.reset();
+                    notifications.remove( n );
+                }
+            });
+        };
+
+        _.bindAll( this, "logoutAction", "keepAliveAction" );
+
+        n.addPromptAction( $.i18n.prop("js.notification.inactivityTimer.keepAliveButton"), this.keepAliveAction );
+        n.addPromptAction( $.i18n.prop("js.notification.inactivityTimer.logoutButton"), this.logoutAction );
+
+        notifications.addNotification( n );
+
+        // Create another timer that will monitor of the notification is still in the notifications collection.
+        // If it is when the timer fires, we are goign to automatically call the logoutAction.
+
+        window.setTimeout( _.bind( function() {
+            if (notifications.find( function( notification ) { return notification === n; })) {
+                this.logoutAction();
+            }
+        }, this ),
+        20 * 1000 /** 20 seconds */ );
+
+    },
+    activityEvents: [ "ajaxStart" ],
+    activityTarget: function() { return $(document); }
+});
+
+var inactivityTimer = new InactivityTimer({
+    delay: parseInt( $("meta[name='maxInactiveInterval']").attr( "content" ) ) * 1000
+})
+
+inactivityTimer.start();
+
+
 
 // #################################################################################################################
 // Name: SaveTimer
@@ -61,82 +166,51 @@ function validateDate( dateString ) {
 //       this can be simplified, but have validated this works.
 // Req:  This requires notification center to be usable.
 // #################################################################################################################
-function SaveTimer( options ) {
-    this.saveTimerId = 0;
-    this.start = function() {
+window.SaveTimer = ActivityTimer.extend({
+    initialize: function( options ) {
+        console.log( "init SaveTimer" );
+    },
+    timeoutHandler: function() {
+        var isDirty = this.get( "isDirty" );
+        var saveAction = this.get( "saveAction" );
 
-        this.notificationPrompt = function() {
-            if (options.isDirty()) {
+        if (isDirty()) {
+            this.save = function() {
+                saveAction();
+            };
 
-                this.save = function() {
-                    if (options.saveAction) {
-                        options.saveAction();
-                    }
+            var n = new Notification( {
+                message: "",
+                type:"warning",
+                promptMessage: $.i18n.prop("js.notification.savePrompt.message")
+            });
+
+            this.doNotSavePromptAction = function() {
+                notifications.remove( n );
+
+                if (isDirty()) {
+                    // Reset the timer
+                    this.reset();
                 }
+            };
 
-                var n = new Notification( {message: "", type:"warning", promptMessage: $.i18n.prop("js.notification.savePrompt.message")} );
+            this.savePromptAction = function() {
+                this.save();
+                notifications.remove( n );
+                this.stop();
+            };
 
-                this.doNotSavePromptAction = function() {
-                    notifications.remove( n );
+            _.bindAll( this, "doNotSavePromptAction", "savePromptAction" );
 
-                    if (options.isDirty()) {
-                        this.reset();
-                    }
-                };
+            n.addPromptAction( $.i18n.prop("js.notification.savePrompt.doNotSaveActionButton"), this.doNotSavePromptAction );
+            n.addPromptAction( $.i18n.prop("js.notification.savePrompt.saveActionButton"), this.savePromptAction );
 
-                this.savePromptAction = function() {
-                    this.save();
-                    notifications.remove( n );
-                    this.stop();
-                };
-
-                _.bindAll( this, "doNotSavePromptAction", "savePromptAction" );
-
-                n.addPromptAction( $.i18n.prop("js.notification.savePrompt.doNotSaveActionButton"), this.doNotSavePromptAction );
-                n.addPromptAction( $.i18n.prop("js.notification.savePrompt.saveActionButton"), this.savePromptAction );
-
-                notifications.addNotification( n );
-            }
-        };
-
-        _.bindAll( this, "notificationPrompt" );
-
-        // Watch activity on the page to determine user activity.
-        $( "body" ).mousemove( this.lazyResetter );
-        $( "body" ).keypress( this.lazyResetter );
-
-        this.saveTimerId = window.setTimeout( this.notificationPrompt, options.delay);
-    };
-
-    this.stop = function() {
-        if (this.saveTimerId) {
-            window.clearTimeout( this.saveTimerId );
+            notifications.addNotification( n );
         }
-
-        $( "body" ).unbind( "mousemove", this.lazyResetter );
-        $( "body" ).unbind( "keypress", this.lazyResetter );
-    };
-
-    this.reset = function() {
-        this.stop();
-
-        if (options.isDirty()) {
-            this.start();
-        }
-    };
-
-    // We will monitor activity by looking at how often the mouse moves.
-    // Keystrokes are assumed to directly change the dirty state and reset in another manner.
-    // The debounce will only fire the body of the function 500 ms after the last mouse move.  This way we don't kill the browser.
-    this.lazyResetter = _.throttle( function(e) {
-        if (this.saveTimerId) {
-            log.debug( "reseting saveTimer '" + this.saveTimerId + "' due to '" + e.type  + "' type." );
-            this.reset();
-        }
-    }, 2000 );
-
-    _.bindAll(this, "start", "stop", "reset", "lazyResetter" );
-}
+    },
+    activityEvents: [ "mousemove", "keypress" ],
+    activityTarget: function() { return $("body"); }
+});
 
 
 // #################################################################################################################
