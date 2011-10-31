@@ -33,24 +33,17 @@ $.fn.bindFirst = function(name, fn) {
 
 
 function validateDate( dateString ) {
-    var validformat = /^\d{2}\/\d{2}\/\d{4}$/; //Basic check for format validity
-    if (!validformat.test(dateString)) {
-         return false;
-    }
-    else {
-        //Detailed check for valid date ranges
-        var monthfield = dateString.split("/")[0];
-        var dayfield = dateString.split("/")[1];
-        var yearfield = dateString.split("/")[2];
-        var dayobj = new Date(yearfield, monthfield - 1, dayfield);
 
-        if ((dayobj.getMonth() + 1 != monthfield) || (dayobj.getDate() != dayfield) || (dayobj.getFullYear() != yearfield)) {
-            console.log("Invalid Day, Month, or Year range detected. Please correct and submit again.");
-            return false;
-        }
-    }
-
-    return true;
+    var dateFormat = $.i18n.prop("js.datepicker.dateFormat");
+      var result = false;
+      try{
+          if (dateString == $.datepicker.formatDate( dateFormat, $.datepicker.parseDate( dateFormat, dateString))){
+            result = true;
+          }
+      } catch(e){
+          result = false;
+      }
+      return result;
 }
 
 window.ActivityTimer = Backbone.Model.extend({
