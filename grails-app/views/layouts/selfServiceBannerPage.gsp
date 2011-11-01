@@ -12,7 +12,7 @@
         <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
         <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
 
-        <title><g:layoutTitle default="Banner"/>${createLink(controller:"keepAlive")}</title>
+        <title><g:layoutTitle default="Banner"/></title>
 
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 
