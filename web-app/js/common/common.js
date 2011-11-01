@@ -8,7 +8,7 @@ function getUrl(name) {
     var url = $("#endpoint-" + name).attr('data-endpoint');
 
     if (url === null || url === undefined) {
-        console.log("#endpoint-" + name + " was not found or does not include a data-endpoint.");
+        log.debug("#endpoint-" + name + " was not found or does not include a data-endpoint.");
     }
 
     return url;
@@ -101,7 +101,7 @@ inactivityTimer.start();
 // #################################################################################################################
 window.SaveTimer = ActivityTimer.extend({
     initialize: function( options ) {
-        console.log( "init SaveTimer" );
+        log.debug( "init SaveTimer" );
     },
     timeoutHandler: function() {
         var isDirty = this.get( "isDirty" );
