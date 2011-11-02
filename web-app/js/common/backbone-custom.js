@@ -90,9 +90,9 @@ Backbone.sync = function(method, model, options) {
 
     // Make the request.
 
-    if (options.ajaxManager) {
-        // Use the ajaxManager
-        return options.ajaxManager.add( params );
+    if (model && model.ajaxCallback) {
+        // Use the ajaxCallback
+        return model.ajaxCallback( params );
     }
     else {
         return $.ajax(params);
@@ -235,7 +235,8 @@ _.extend(Backbone.Collection.prototype, {
 
         this.deletedModels.push(model);
     },
-    deletedModels : null,
+    deletedModels: null,
+    ajaxManager: null,
     containsMarkedAsDeleted: function() {
         return (this.deletedModels && this.deletedModels.length);
     },

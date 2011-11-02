@@ -11,6 +11,8 @@
         <meta name="logLevel" content="${g.logLevel()}"/>
         <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
         <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
+        <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
+        <meta name="fullName" content="${g.fullName()}"/>
 
         <title><g:layoutTitle default="Banner"/></title>
 

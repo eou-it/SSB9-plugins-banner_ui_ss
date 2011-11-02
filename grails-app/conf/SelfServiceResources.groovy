@@ -53,6 +53,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.tooltip.js'],                  disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.form.js'],                        disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ajaxmanager.js'],                 disposition: 'head'
+        resource url:[plugin: 'banner-ui-ss', file: 'js/common/ajax-manager.js'],                               disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/jquery.dataTables.js'],                disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/fnReloadAjaxPlugin.js'],               disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/fnFilterClearPlugin.js'],              disposition: 'head'
