@@ -17,6 +17,7 @@
     <resource>com.sungardhe.banner.ui.ss.UiCatalogController</resource>
     <resource>com.sungardhe.banner.ui.ClientLoggingTagLib</resource>
     <resource>com.sungardhe.banner.ui.I18nTagLib</resource>
+    <resource>com.sungardhe.banner.ui.PersonIdentificationTagLib</resource>
     <resource>com.sungardhe.banner.ui.ViewResourcesTagLib</resource>
     <resource>com.sungardhe.banner.webtailor.WebTailorUtility</resource>
   </resources>
