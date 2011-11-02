@@ -1,4 +1,4 @@
-<plugin name='banner-ui-ss' version='0.1.5' grailsVersion='1.3.7 &gt; *'>
+<plugin name='banner-ui-ss' version='0.1.6' grailsVersion='1.3.7 &gt; *'>
   <author>SunGard Higher Education</author>
   <authorEmail>horizon-support@sungardhe.com</authorEmail>
   <title>SunGard Higher Education Banner UI Plugin</title>
