@@ -1,3 +1,15 @@
+/** *****************************************************************************
+ Copyright 2008-2011 SunGard Higher Education. All Rights Reserved.
+
+ This copyrighted software contains confidential and proprietary information of
+ SunGard Higher Education and its subsidiaries. Any use of this software is
+ limited solely to SunGard Higher Education licensees, and is further subject
+ to the terms and conditions of one or more written license agreements between
+ SunGard Higher Education and the licensee in question. SunGard, Banner and
+ Luminis are either registered trademarks or trademarks of SunGard Higher
+ Education in the U.S.A. and/or other regions and/or countries.
+ ****************************************************************************** */
+
 modules = {
     'overrides' {
         'jquery-theme' {
@@ -8,7 +20,7 @@ modules = {
         }
     }
 
-    'self-service-banner-page' {
+    'bannerSelfService' {
         dependsOn "jquery, jquery-ui"
         defaultBundle false
 
@@ -31,7 +43,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/backbone-custom.js'],                            disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/activity-timer.js'],                             disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/modernizr-2.0.6.js'],                                   disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/common/i18n.js'],                                       disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/logging.js'],                                    disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/common.js'],                                     disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.sghe.dirtycheck.js'],             disposition: 'head'
@@ -50,7 +61,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.i18n.properties.js'],             disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.numeric.js'],                     disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.themeswitcher.js'],            disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.tooltip.js'],                  disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.form.js'],                        disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ajaxmanager.js'],                 disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/ajax-manager.js'],                               disposition: 'head'

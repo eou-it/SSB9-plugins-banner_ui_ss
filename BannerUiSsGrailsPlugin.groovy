@@ -66,11 +66,11 @@ class BannerUiSsGrailsPlugin {
 
 
     def doWithSpring = {
-        messageSource( BannerPluginAwareResourceBundleMessageSource ) {
-            basename = "WEB-INF/grails-app/i18n/messages"
-            cacheSeconds = -1
-            propertiesPersister = new BannerPropertiesPersister()
-        }
+        //messageSource( BannerPluginAwareResourceBundleMessageSource ) {
+        //    basename = "WEB-INF/grails-app/i18n/messages"
+        //    cacheSeconds = -1
+        //    propertiesPersister = new BannerPropertiesPersister()
+        //}
     }
 
 

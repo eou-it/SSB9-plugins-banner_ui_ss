@@ -2,11 +2,12 @@
 <!DOCTYPE html>
 <html lang="${message(code: 'default.language.direction')}">
     <head>
-        <r:require module="self-service-banner-page"/>
+        <r:require module="bannerSelfService"/>
+
+        <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
 
         <meta charset="${message(code: 'default.character.encoding')}"/>
         <meta name="dir" content="${message(code:'default.language.direction')}"/>
-        <meta name="i18nCacheKey" content="${g.i18nCacheKey(name:'messages')}"/>
         <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerToken.store( session ).currentToken}"/>
         <meta name="logLevel" content="${g.logLevel()}"/>
         <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
@@ -27,6 +28,7 @@
         </g:javascript>
 
         <r:layoutResources/>
+        <g:i18nJavaScript/>
 
         <!-- Aurora platform -->
         <script src="${resource(plugin: 'sghe-aurora', file: 'js/utils.js')}" type="text/javascript"></script>
