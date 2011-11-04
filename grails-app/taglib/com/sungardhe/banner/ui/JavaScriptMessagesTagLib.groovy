@@ -22,9 +22,6 @@ class JavaScriptMessagesTagLib {
             request.resourceDependencyTracker.each { name ->
                 resourceService.getModule( name ).resources.collect {
                     if (it.hasProperty( "localeKeys" )) {
-
-                        println "resource in taglib=$it;  it.localeKeys=$it.localeKeys"
-
                         keys.addAll( it.localeKeys )
                     }
                 }
