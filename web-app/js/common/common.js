@@ -4,6 +4,11 @@ Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
     return r;
 }
 
+function encodeHTML(string) {
+    if (string == null) return null;
+    return string.replace(/&(?!\w+;|#\d+;|#x[\da-f]+;)/gi, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace(/\//g,'&#x2F;');
+};
+
 function getUrl(name) {
     var url = $("#endpoint-" + name).attr('data-endpoint');
 
