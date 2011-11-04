@@ -36,6 +36,7 @@ jQuery.fn.dirtyCheck = function(options) {
         isDirty: function() {
             return false;
         },
+        no: options.callback,
         eventType: "click",
         notifications: notifications
     }, options);
@@ -101,7 +102,7 @@ jQuery.fn.dirtyCheck = function(options) {
 
                 n.addPromptAction( "No", function() {
                     options.notifications.remove( n );
-                    executeExistingHandlers();
+                    options.no( { callback:executeExistingHandlers });
                 });
 
                 n.addPromptAction( "Yes", function() {
