@@ -28,11 +28,9 @@ modules = {
             disposition: 'head',
             wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
 
-        resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],       attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-demo_table_jui.css'], attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/demo_table.css'],                attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'],  attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/main.css'],                      attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss.css'],             attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
 
         resource url:[plugin: 'sghe-aurora', file: 'css/common-controls.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'sghe-aurora', file: 'css/common-platform.css'], attrs:[media:'screen, projection']
