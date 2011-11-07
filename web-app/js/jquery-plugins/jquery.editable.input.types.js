@@ -73,7 +73,10 @@
      */
     $.editable.addInputType( 'number', {
         element: function( settings, original ) {
-            settings.numberOptions = settings.numberOptions || {decimal: false, negative: false};
+            settings.numberOptions = $.extend(
+                { negative: false, decimal: $.i18n.prop("js.number.decimal") },
+                settings.numberOptions
+            );
 
             // add our input field markup
             var ele = $(settings.element || '<input />');
@@ -103,7 +106,7 @@
                 }
                 // don't worry about negative values for now.
             }
-        } else {
+        } else {mber
             setTimeout(fixNumericZeroInsertion, 200);
         }
     }
