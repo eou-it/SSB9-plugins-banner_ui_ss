@@ -106,7 +106,7 @@
                 }
                 // don't worry about negative values for now.
             }
-        } else {mber
+        } else {
             setTimeout(fixNumericZeroInsertion, 200);
         }
     }
