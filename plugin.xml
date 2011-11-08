@@ -21,15 +21,6 @@
     <resource>com.sungardhe.banner.ui.PersonIdentificationTagLib</resource>
     <resource>com.sungardhe.banner.webtailor.WebTailorUtility</resource>
   </resources>
-  <dependencies>
-    <plugin name='cacheHeaders' version='1.1.5 =&gt; *' />
-    <plugin name='csv' version='0.3 =&gt; *' />
-    <plugin name='feeds' version='1.5 =&gt; *' />
-    <plugin name='jquery' version='1.6.1.1 =&gt; *' />
-    <plugin name='jqueryUi' version='1.8.11 =&gt; *' />
-    <plugin name='selenium' version='0.6 =&gt; *' />
-    <plugin name='seleniumRc' version='1.0.2 =&gt; *' />
-    <plugin name='bannerCore' version='1.0.4 =&gt; *' />
-  </dependencies>
+  <dependencies />
   <behavior />
 </plugin>

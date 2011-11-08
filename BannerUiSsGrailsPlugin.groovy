@@ -10,9 +10,6 @@
  Education in the U.S.A. and/or other regions and/or countries.
  ****************************************************************************** */
 
-import com.sungardhe.banner.BannerPropertiesPersister
-import com.sungardhe.banner.BannerPluginAwareResourceBundleMessageSource
-
 import org.apache.commons.logging.LogFactory
 import org.apache.log4j.Logger
 
@@ -25,20 +22,19 @@ class BannerUiSsGrailsPlugin {
     
     String groupId = "com.sungardhe"
 
-    def version = "0.1.11"
+    def version = "0.1.12"
 
     def grailsVersion = "1.3.7 > *"
 
     def dependsOn = [
-//        resources:'1.0.2 => *',
-        cacheHeaders:'1.1.5 => *',
-        csv:'0.3 => *',
-        feeds:'1.5 => *',
-        jquery:'1.6.1.1 => *',
-        jqueryUi:'1.8.11 => *',
-        selenium:'0.6 => *',
-        seleniumRc:'1.0.2 => *',
-        bannerCore:'1.0.4 => *',
+        resources:'1.0.2',
+        cacheHeaders:'1.1.5',
+        csv:'0.3',
+        feeds:'1.5',
+        jquery:'1.6.1.1',
+        jqueryUi:'1.8.15',
+        selenium:'0.6',
+        bannerCore:'1.0.17',
     ]
 
     def pluginExcludes = [
