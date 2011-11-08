@@ -34,7 +34,7 @@ class BannerUiSsGrailsPlugin {
         jquery:'1.6.1.1',
         jqueryUi:'1.8.15',
         selenium:'0.6',
-        bannerCore:'1.0.17',
+        bannerCore:'1.0.17'
     ]
 
     def pluginExcludes = [
@@ -53,7 +53,7 @@ class BannerUiSsGrailsPlugin {
     def title = "SunGard Higher Education Banner UI Plugin"
     def description = '''Web user interface components for Banner Self-Service.'''
 
-    def documentation = "http://grails.org/plugin/banner-ui-ss"
+    def documentation = "http://sungardhe.com/development/horizon/plugins/banner-ui-ss"
 
 
     def doWithWebDescriptor = { xml ->
