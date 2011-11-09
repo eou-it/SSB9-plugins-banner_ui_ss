@@ -94,18 +94,18 @@ jQuery.fn.dirtyCheck = function(options) {
 
         var handler = function() {
             if (!jQuery.data( target, 'ignoreDirtyCheckOneTime' ) && options.isDirty()) {
-                var n = new Notification( {message: "Changes have been made.", type:"warning", promptMessage: "Do you want to save changes?"} );
+                var n = new Notification( {message: $.i18n.prop("js.notification.dirtyCheck.message"), type:"warning", promptMessage: $.i18n.prop("js.notification.dirtyCheck.promptMessage")} );
 
-                n.addPromptAction( "Cancel", function() {
+                n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.cancelActionButton"), function() {
                     options.notifications.remove( n );
                 });
 
-                n.addPromptAction( "No", function() {
+                n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.doNotSaveActionButton"), function() {
                     options.notifications.remove( n );
                     options.no( { callback:executeExistingHandlers });
                 });
 
-                n.addPromptAction( "Yes", function() {
+                n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.saveActionButton"), function() {
                     options.save( {
                         callback: function() {
                             executeExistingHandlers();
