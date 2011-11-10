@@ -37,6 +37,28 @@ function getColumnSelector( table, mDataProp ) {
     return table.selector + ' tbody tr td:nth-child(' + getColumnDivIndexByProperty( table, mDataProp ) + ')';
 }
 
+function listenForRemovingFocusOnEditableCell() {
+    if(!$('#inner-content-center').data('events') || !$('#inner-content-center').data('events').scroll) {
+         $('#inner-content-center').scroll(function () {
+            removeFocusOnEditableField();
+        });
+    }
+
+    $('.KeyTable').each(function() {
+        $(this).children('thead').click(function () {
+            removeFocusOnEditableField();
+        });
+    });
+};
+
+function removeFocusOnEditableField () {
+    var form = $('.KeyTable form');
+    form.submit();
+
+    //Perform any other clean up if needed.
+    //Hide calendar
+    $('#ui-datepicker-div').css('display','none');
+};
 
 /**
  * This function will create a data table with default settings.
@@ -78,6 +100,8 @@ function createDataTable( settings ) {
             $(this).removeClass('row_hover');
         }
     });
+
+    listenForRemovingFocusOnEditableCell();
 
     return table;
 }
