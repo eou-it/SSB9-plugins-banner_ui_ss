@@ -35,12 +35,14 @@ grails.project.dependency.resolution = {
         compile ':hibernate:1.3.7'
         compile ':jquery:1.6.1.1'
         compile ':jquery-ui:1.8.15'
-        compile ':maven-publisher:0.8.1'
+
         compile ':resources:1.0.2'
         compile ':selenium:0.6'
         compile ':selenium-rc:1.0.2'
         compile ':spring-security-cas:1.0.2'
         compile ':tomcat:1.3.7'
+
+        provided ':maven-publisher:0.8.1'
     }
 
     dependencies {

@@ -22,7 +22,7 @@ modules = {
 
     'bannerSelfService' {
         dependsOn "jquery, jquery-ui"
-        defaultBundle false
+        defaultBundle environment == "development" ? false : "bannerSelfService"
 
         resource url: 'http://html5shim.googlecode.com/svn/trunk/html5.js',
             disposition: 'head',

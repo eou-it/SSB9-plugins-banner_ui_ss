@@ -45,6 +45,9 @@
 
         %{-- This is where we doc the last set of event handlers on the document ready of the dom --}%
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/common/document-ready.js')}" type="text/javascript"></script>
+
+        <g:customResources/>
+
     </head>
     <body>
         <pre>${createLink(controller:"keepAlive")}</pre>
