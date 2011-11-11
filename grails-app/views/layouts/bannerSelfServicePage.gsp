@@ -43,14 +43,13 @@
 
         <g:layoutHead />
 
+        <g:customResources/>
+
         %{-- This is where we doc the last set of event handlers on the document ready of the dom --}%
         <script src="${resource(plugin: 'banner-ui-ss', file: 'js/common/document-ready.js')}" type="text/javascript"></script>
 
-        <g:customResources/>
-
     </head>
     <body>
-        <pre>${createLink(controller:"keepAlive")}</pre>
         <div id="aurora-resource-bundle" data-source="${resource(plugin: 'sghe-aurora', file: 'js/')}"/>
     
         <div id="splash"></div>

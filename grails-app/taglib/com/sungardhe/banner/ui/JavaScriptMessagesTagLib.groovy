@@ -11,6 +11,11 @@
  ****************************************************************************** */
 package com.sungardhe.banner.ui
 
+/**
+ * This class is built off the knowledge provided within the ResourceTagLib from
+ * the resources plug-in.  It's goal is to scan the files that have been processed
+ * for localication call outs and provide them in the i18n map on the client.
+ */
 class JavaScriptMessagesTagLib {
     def resourceService
 
@@ -19,10 +24,14 @@ class JavaScriptMessagesTagLib {
         if (request.resourceDependencyTracker) {
             Set keys = []
 
+            // Search for any place where we are referencing message codes
+            def regex = ~/\(*\.i18n.prop\(.*?\"(.*?)\".*?\)/
+
             request.resourceDependencyTracker.each { name ->
-                resourceService.getModule( name ).resources.collect {
-                    if (it.hasProperty( "localeKeys" )) {
-                        keys.addAll( it.localeKeys )
+                resourceService.getModule( name ).resources.findAll{ it.sourceUrlExtension == "js" && it.processedFile }.each {
+                    def matcher = regex.matcher( it.processedFile.text )
+                    while (matcher.find()) {
+                        keys << matcher.group(1)
                     }
                 }
             }
