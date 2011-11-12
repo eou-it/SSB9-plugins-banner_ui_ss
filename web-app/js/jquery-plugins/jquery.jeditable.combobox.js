@@ -59,8 +59,8 @@
         return elem === document.activeElement && ( elem.type || elem.href );
     };
     
-    var onclosedelay = 150,
-        onblurdelay = onclosedelay + 150;
+    var onclosedelay = 50,
+        onblurdelay = onclosedelay + 100;
     
     /*
      * editable inputType 'combobox' provides an autocomplete with a button
