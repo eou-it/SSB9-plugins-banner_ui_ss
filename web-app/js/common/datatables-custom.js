@@ -71,7 +71,6 @@ function createDataTable( settings ) {
     var defaults = {
         bJQueryUI: true,
         sPaginationType: "full_numbers",
-        bProcessing: true,
         oLanguage: {
             "sLengthMenu":$.i18n.prop('js.dataTable.sLengthMenu'),
             "sZeroRecords":$.i18n.prop('js.dataTable.sZeroRecords'),
