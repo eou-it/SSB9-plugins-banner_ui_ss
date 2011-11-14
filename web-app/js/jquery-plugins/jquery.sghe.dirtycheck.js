@@ -93,39 +93,41 @@ jQuery.fn.dirtyCheck = function(options) {
 
 
         var handler = function() {
-            if (!jQuery.data( target, 'ignoreDirtyCheckOneTime' ) && options.isDirty()) {
-                var n = new Notification( {message: $.i18n.prop("js.notification.dirtyCheck.message"), type:"warning", promptMessage: $.i18n.prop("js.notification.dirtyCheck.promptMessage")} );
+            setTimeout( function() { // let blur handlers proceed before checking dirty
+                if (!jQuery.data( target, 'ignoreDirtyCheckOneTime' ) && options.isDirty()) {
+                    var n = new Notification( {message: $.i18n.prop("js.notification.dirtyCheck.message"), type:"warning", promptMessage: $.i18n.prop("js.notification.dirtyCheck.promptMessage")} );
+    
+                    n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.cancelActionButton"), function() {
+                        options.notifications.remove( n );
+                    });
+    
+                    n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.doNotSaveActionButton"), function() {
+                        options.notifications.remove( n );
+                        options.no( { callback:executeExistingHandlers });
+                    });
+    
+                    n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.saveActionButton"), function() {
+                        options.save( {
+                            callback: function() {
+                                executeExistingHandlers();
+                            }
+                        });
 
-                n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.cancelActionButton"), function() {
-                    options.notifications.remove( n );
-                });
-
-                n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.doNotSaveActionButton"), function() {
-                    options.notifications.remove( n );
-                    options.no( { callback:executeExistingHandlers });
-                });
-
-                n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.saveActionButton"), function() {
-                    options.save( {
-                        callback: function() {
-                            executeExistingHandlers();
-                        }
+                        options.notifications.remove( n );
                     });
 
-                    options.notifications.remove( n );
-                });
+                    options.notifications.addNotification( n );
+                }
+                else {
+                    executeExistingHandlers();
+                }
 
-                options.notifications.addNotification( n );
-            }
-            else {
-                executeExistingHandlers();
-            }
-
-            if (jQuery.data( target, 'ignoreDirtyCheckOneTime' )) {
-                delete jQuery.data().ignoreDirtyCheckOneTime;
-            }
-
-            // We'll always return false and let the handling of the notificaiton and existing handlers do their thing.
+                if (jQuery.data( target, 'ignoreDirtyCheckOneTime' )) {
+                    delete jQuery.data().ignoreDirtyCheckOneTime;
+                }
+            }, 200);
+                     
+            // We'll always return false and let the handling of the notification and existing handlers do their thing.
             return false;
         };
 
