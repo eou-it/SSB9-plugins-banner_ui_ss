@@ -28,10 +28,14 @@ class JavaScriptMessagesTagLib {
             def regex = ~/\(*\.i18n.prop\(.*?\"(.*?)\".*?\)/
 
             request.resourceDependencyTracker.each { name ->
-                resourceService.getModule( name ).resources.findAll{ it.sourceUrlExtension == "js" && it.processedFile }.each {
-                    def matcher = regex.matcher( it.processedFile.text )
-                    while (matcher.find()) {
-                        keys << matcher.group(1)
+                resourceService.getModule( name ).resources.findAll{ it.sourceUrlExtension == "js" }.each {
+println "###### resource = $it"
+println "###### it.processedFile = ${it.processedFile}"
+                    if (it.processedFile) {
+                        def matcher = regex.matcher( it.processedFile.text )
+                        while (matcher.find()) {
+                            keys << matcher.group(1)
+                        }
                     }
                 }
             }

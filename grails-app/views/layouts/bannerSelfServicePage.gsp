@@ -39,8 +39,6 @@
         <script src="${resource(plugin: 'sghe-aurora', file: 'js/common-platform.js')}" type="text/javascript"></script>
         <script src="${resource(plugin: 'sghe-aurora', file: 'js/init.js')}" type="text/javascript"></script>
 
-        %{--<g:viewResources/>--}%
-
         <g:layoutHead />
 
         <g:customResources/>
