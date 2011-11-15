@@ -37,37 +37,37 @@ modules = {
         resource url:[plugin: 'sghe-aurora', file: 'css/common-controls.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'sghe-aurora', file: 'css/common-platform.css'], attrs:[media:'screen, projection']
 
-        resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js'],                                        disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.js'],                                          disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/log4javascript.js'],                                    disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/common/backbone-custom.js'],                            disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/common/activity-timer.js'],                             disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/modernizr-2.0.6.js'],                                   disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/common/logging.js'],                                    disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/common/common.js'],                                     disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.sghe.dirtycheck.js'],             disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/common/notification-center.js'],                        disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.hoverintent.js'],                 disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.js'],                   disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.simplemodal-1.4.1.js'],           disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.datepicker.js'],        disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.autocomplete.js'],      disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.autocomplete.autoSelect.js'],  disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.autocomplete.selectFirst.js'], disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.combobox.js'],          disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.editable.input.types.js'],        disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.layout-latest.js'],               disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.timers-1.2.js'],                  disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.i18n.properties.js'],             disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.numeric.js'],                     disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.themeswitcher.js'],            disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.form.js'],                        disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ajaxmanager.js'],                 disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/common/ajax-manager.js'],                               disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/jquery.dataTables.js'],                disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/fnReloadAjaxPlugin.js'],               disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/fnFilterClearPlugin.js'],              disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/KeyTable.js'],                         disposition: 'head'
-        resource url:[plugin: 'banner-ui-ss', file: 'js/common/datatables-custom.js'],                          disposition: 'head'
+        resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/log4javascript.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/common/backbone-custom.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/common/activity-timer.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/modernizr-2.0.6.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/common/logging.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/common/common.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.sghe.dirtycheck.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/common/notification-center.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.hoverintent.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.simplemodal-1.4.1.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.datepicker.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.autocomplete.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.autocomplete.autoSelect.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.autocomplete.selectFirst.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.jeditable.combobox.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.editable.input.types.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.layout-latest.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.timers-1.2.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.i18n.properties.js'], disposition: "head"
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.numeric.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.themeswitcher.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.form.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ajaxmanager.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/common/ajax-manager.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/jquery.dataTables.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/fnReloadAjaxPlugin.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/fnFilterClearPlugin.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/KeyTable.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/common/datatables-custom.js']
     }
 }
