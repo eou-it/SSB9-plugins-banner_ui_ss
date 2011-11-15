@@ -21,7 +21,7 @@ modules = {
     }
 
     'bannerSelfService' {
-        dependsOn "jquery, jquery-ui"
+        dependsOn "jquery, jquery-ui, aurora"
         defaultBundle environment == "development" ? false : "bannerSelfService"
         //defaultBundle false
 

@@ -30,15 +30,6 @@
         <r:layoutResources/>
         <g:i18nJavaScript/>
 
-        <!-- Aurora platform -->
-        <script src="${resource(plugin: 'sghe-aurora', file: 'js/utils.js')}" type="text/javascript"></script>
-		<script src="${resource(plugin: 'sghe-aurora', file: 'js/config.js')}" type="text/javascript"></script>
-        <script src="${resource(plugin: 'sghe-aurora', file: 'js/common-controls.js')}" type="text/javascript"></script>
-        <script src="${resource(plugin: 'sghe-aurora', file: 'js/common-integration.js')}" type="text/javascript"></script>
-        <script src="${resource(plugin: 'sghe-aurora', file: 'js/common-navigation.js')}" type="text/javascript"></script>
-        <script src="${resource(plugin: 'sghe-aurora', file: 'js/common-platform.js')}" type="text/javascript"></script>
-        <script src="${resource(plugin: 'sghe-aurora', file: 'js/init.js')}" type="text/javascript"></script>
-
         <g:layoutHead />
 
         <g:customResources/>
@@ -48,15 +39,11 @@
 
     </head>
     <body>
-        <div id="aurora-resource-bundle" data-source="${resource(plugin: 'sghe-aurora', file: 'js/')}"/>
-    
         <div id="splash"></div>
         <div id="spinner" class="spinner" style="display:none;">
             <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
         </div>
         <div id="grailsLogo"><a href="http://grails.org"><img src="${resource(dir:'images',file:'grails_logo.png')}" alt="Grails" border="0" /></a></div>
-
-        <div id="aurora-header"></div>
 
         <g:layoutBody />
         <r:layoutResources/>

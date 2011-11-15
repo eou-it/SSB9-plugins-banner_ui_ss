@@ -29,8 +29,6 @@ class JavaScriptMessagesTagLib {
 
             request.resourceDependencyTracker.each { name ->
                 resourceService.getModule( name ).resources.findAll{ it.sourceUrlExtension == "js" }.each {
-println "###### resource = $it"
-println "###### it.processedFile = ${it.processedFile}"
                     if (it.processedFile) {
                         def matcher = regex.matcher( it.processedFile.text )
                         while (matcher.find()) {

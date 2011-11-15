@@ -7,7 +7,7 @@ Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
 function encodeHTML(string) {
     if (string == null) return null;
     return string.toString().replace(/&(?!\w+;|#\d+;|#x[\da-f]+;)/gi, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace(/\//g,'&#x2F;');
-};
+}
 
 function getUrl(name) {
     var url = $("#endpoint-" + name).attr('data-endpoint');
@@ -21,17 +21,17 @@ function getUrl(name) {
 
 
 function validateDate( dateString ) {
-
     var dateFormat = $.i18n.prop("js.datepicker.dateFormat");
-      var result = false;
-      try{
-          if (dateString == $.datepicker.formatDate( dateFormat, $.datepicker.parseDate( dateFormat, dateString))){
+    var result = false;
+    try {
+        if (dateString == $.datepicker.formatDate( dateFormat, $.datepicker.parseDate( dateFormat, dateString))){
             result = true;
-          }
-      } catch(e){
-          result = false;
-      }
-      return result;
+        }
+    } catch (e) {
+      result = false;
+    }
+
+    return result;
 }
 
 
@@ -195,10 +195,35 @@ $(document).ready(function() {
                     promptMessage: $.i18n.prop("js.com.sungardhe.banner.logout.timeout.promptMessage")
                 });
 
-                n.addPromptAction( $.i18n.prop("js.com.sungardhe.banner.logout.timeout.acknowledgement"), function() { window.location = window.location; } );
+                n.addPromptAction( $.i18n.prop("js.com.sungardhe.banner.logout.timeout.acknowledgement"), function() { window.location.reload() } );
 
                 notifications.addNotification( n );
             }
         }
     });
+
+    // Initialize Aurora
+    CommonPlatform.initialize( {
+        standalone : true,
+        globalNav : true,
+        header : true,
+        footer : true,
+        resourceMap : {
+            areas_label_browse :                    $.i18n.prop( "aurora.areas_label_browse" ),
+            areas_label_opened :                    $.i18n.prop( "aurora.areas_label_opened" ),
+            areas_label_tools :                     $.i18n.prop( "aurora.areas_label_tools" ),
+            areas_label_browse_shortcut :           $.i18n.prop( "aurora.areas_label_browse_shortcut" ),
+            areas_label_home_shortcut :             $.i18n.prop( "aurora.areas_label_home_shortcut" ),
+            areas_label_opened_shortcut :           $.i18n.prop( "aurora.areas_label_opened_shortcut" ),
+            areas_label_tools_shortcut :            $.i18n.prop( "aurora.areas_label_tools_shortcut" ),
+            openitems_label_closeSelected :         $.i18n.prop( "aurora.openitems_label_closeSelected" ),
+            openitems_label_closeAll :              $.i18n.prop( "aurora.openitems_label_closeAll" ),
+            preferences_label :                     $.i18n.prop( "aurora.preferences_label" ),
+            userdetails_signin :                    $.i18n.prop( "aurora.userdetails_signin" ),
+            userdetails_signout :                   $.i18n.prop( "aurora.userdetails_signout" ),
+            userdetails_help :                      $.i18n.prop( "aurora.userdetails_help" )
+        },
+        handler : function( data ) {
+        }
+    } );
 });
