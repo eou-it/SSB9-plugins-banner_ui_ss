@@ -13,10 +13,7 @@
 modules = {
     'overrides' {
         'jquery-theme' {
-            resource id: 'theme',
-            url:[plugin:'banner-ui-ss', dir:'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme', file:'jquery-ui-1.8.13.custom.css'],
-                dispostion: 'head',
-                attrs:[media:'screen, projection']
+            resource id: 'theme', url:[plugin:'banner-ui-ss', dir:'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme', file:'jquery-ui-1.8.13.custom.css'], attrs:[media:'screen, projection']
         }
     }
 
@@ -34,11 +31,9 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
 
-        resource url:[plugin: 'sghe-aurora', file: 'css/common-controls.css'], attrs:[media:'screen, projection']
-        resource url:[plugin: 'sghe-aurora', file: 'css/common-platform.css'], attrs:[media:'screen, projection']
-
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/yepnope.1.0.1-min.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/log4javascript.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/backbone-custom.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/activity-timer.js']
@@ -58,7 +53,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.editable.input.types.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.layout-latest.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.timers-1.2.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.i18n.properties.js'], disposition: "head"
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.i18n.properties.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.numeric.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.themeswitcher.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.form.js']

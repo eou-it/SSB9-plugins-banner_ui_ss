@@ -183,22 +183,20 @@ $(document).ready(function() {
     });
 
 
-    $.ajaxSetup({
-        complete: function(jqXHR, textStatus) {
-            // We will inspect each response header.  If a customer header exists where we are requested to show the login page
-            // we will inform the user that their session is no longer valid and that they have to log back in.
-            if (jqXHR.getResponseHeader( "X-Login-Page" ) === "true") {
+    $(document).ajaxComplete( function(event, jqXHR, ajaxOptions) {
+        // We will inspect each response header.  If a customer header exists where we are requested to show the login page
+        // we will inform the user that their session is no longer valid and that they have to log back in.
+        if (jqXHR.getResponseHeader( "X-Login-Page" ) === "true") {
 
-                var n = new Notification( {
-                    message: $.i18n.prop("js.com.sungardhe.banner.logout.timeout.message"),
-                    type:"warning",
-                    promptMessage: $.i18n.prop("js.com.sungardhe.banner.logout.timeout.promptMessage")
-                });
+            var n = new Notification( {
+                message: $.i18n.prop("js.com.sungardhe.banner.logout.timeout.message"),
+                type:"warning",
+                promptMessage: $.i18n.prop("js.com.sungardhe.banner.logout.timeout.promptMessage")
+            });
 
-                n.addPromptAction( $.i18n.prop("js.com.sungardhe.banner.logout.timeout.acknowledgement"), function() { window.location.reload() } );
+            n.addPromptAction( $.i18n.prop("js.com.sungardhe.banner.logout.timeout.acknowledgement"), function() { window.location.reload() } );
 
-                notifications.addNotification( n );
-            }
+            notifications.addNotification( n );
         }
     });
 

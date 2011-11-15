@@ -44,11 +44,9 @@ class JavaScriptMessagesTagLib {
                     javaScriptProperties << "\"$it\": \"${g.message( code: it ).encodeAsHTML()}\""
                 }
 
-                out << '<script type="text/javascript">'
                 out << '\$.i18n.map = {'
                 out << javaScriptProperties.join( "," )
                 out << '};'
-                out << '</script>'
             }
         }
     }

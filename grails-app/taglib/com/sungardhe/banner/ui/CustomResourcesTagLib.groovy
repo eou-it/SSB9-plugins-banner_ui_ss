@@ -28,17 +28,25 @@ package com.sungardhe.banner.ui
  */
 class CustomResourcesTagLib {
 
-    def customResources = { attrs ->
+    def customStylesheetIncludes = { attrs ->
         def controller = attrs.controller ?: controllerName
         def action = attrs.action ?: actionName
 
-        // Check to see bannerSelfService-custom.css or bannerSelfService-custom.js exist
+        // Check to see bannerSelfService-custom.css exists
         writeCssIfExists( out, "css/bannerSelfService-custom.css" )
-        writeJavaScriptIfExists( out, "js/bannerSelfService-custom.js" )
-
 
         // Determine the current page
         writeCssIfExists( out, "css/views/$controller/${action}-custom.css" )
+    }
+
+    def customJavaScriptIncludes = { attrs ->
+        def controller = attrs.controller ?: controllerName
+        def action = attrs.action ?: actionName
+
+        // Check to see bannerSelfService-custom.js exists
+        writeJavaScriptIfExists( out, "js/bannerSelfService-custom.js" )
+
+        // Determine the current page
         writeJavaScriptIfExists( out, "js/views/$controller/${action}-custom.js" )
     }
 

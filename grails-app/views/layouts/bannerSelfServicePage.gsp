@@ -19,23 +19,26 @@
 
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 
-        <script src="${resource(plugin: 'banner-ui-ss', file: 'js/yepnope.1.0.1-min.js')}" type="text/javascript"></script>
-        <g:javascript>
-        yepnope({
-           test : window.JSON,
-           nope : '${resource(plugin: 'banner-ui-ss', file: 'js/json2.js')}'
-        });
-        </g:javascript>
+        <r:script>
+            <g:i18nJavaScript/>
+
+            yepnope({
+               test : window.JSON,
+               nope : '${resource(plugin: 'banner-ui-ss', file: 'js/json2.js')}'
+            });
+
+            $(document).ready(function() {
+                _.defer( function() {
+                    $( "#splash" ).remove();
+                });
+            });
+        </r:script>
 
         <r:layoutResources/>
-        <g:i18nJavaScript/>
 
         <g:layoutHead />
 
-        <g:customResources/>
-
-        %{-- This is where we doc the last set of event handlers on the document ready of the dom --}%
-        <script src="${resource(plugin: 'banner-ui-ss', file: 'js/common/document-ready.js')}" type="text/javascript"></script>
+        <g:customStylesheetIncludes/>
 
     </head>
     <body>
@@ -46,7 +49,10 @@
         <div id="grailsLogo"><a href="http://grails.org"><img src="${resource(dir:'images',file:'grails_logo.png')}" alt="Grails" border="0" /></a></div>
 
         <g:layoutBody />
+
         <r:layoutResources/>
+
+        <g:customJavaScriptIncludes/>
     </body>
 </html>
 
