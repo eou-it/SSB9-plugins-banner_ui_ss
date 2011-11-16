@@ -43,8 +43,8 @@
     </head>
     <body>
         <div id="splash"></div>
-        <div id="spinner" class="spinner" style="display:none;">
-            <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
+        <div id="spinner" class="spinner spinner-img" style="display:none;">
+
         </div>
 
         <g:layoutBody />
