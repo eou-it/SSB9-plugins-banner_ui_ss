@@ -53,7 +53,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.timers-1.2.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.i18n.properties.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.numeric.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.themeswitcher.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.form.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ajaxmanager.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/ajax-manager.js']
