@@ -34,24 +34,21 @@ Backbone.sync = function(method, model, options) {
     }
 
     // This code is an 'enhancement' to Backbone where we will append query parameters on reads if a fetchCriteria
-    // object exists.
+    // object and/or the pagingCriteria object exists.
     if (method === "read" && model) {
-        // Check to see if the model contains fetch criteria
-        if (model.fetchCriteria) {
-            // Loop through the fetchCriteria and add query parameters to the url
-            _.each(model.fetchCriteria( options ),
-                function(value, key) {
-                    if (params.url.indexOf("?") > 0) {
-                        params.url = params.url + "&";
-                    }
-                    else {
-                        params.url = params.url + "?";
-                    }
+        var queryParams = [];
 
-                    params.url = params.url + key + "=" + value;
-                }
-            );
+        if (model.fetchCriteria) {
+            var p = _.map(model.fetchCriteria( options ), function(value, key) { return key + "=" + value; });
+            _.each(p, function(it) { queryParams.push(it); });
         }
+
+        if (model.paginate && model.pagingCriteria) {
+            var p = _.map(model.pagingCriteria( options ), function(value, key) { return key + "=" + value; });
+            _.each(p, function(it) { queryParams.push(it); });
+        }
+
+        params.url = params.url + (params.url.indexOf("?") > 0 ? "&" : "?") + queryParams.join("&");
     }
 
     // Ensure that we have the appropriate request data.
@@ -245,6 +242,112 @@ _.extend(Backbone.Collection.prototype, {
         return _.any(this.models, function(model) {
             return model.isDirty()
         }) || this.deletedModels;
+    },
+    paginate:      false,
+    page:          1,
+    pageMaxSize:   20,
+    pageOffset:    0,
+    sortColumn:    "",
+    sortDirection: "",
+    totalCount:    0,
+    pagingCriteria: function() {
+        var self = this;
+
+        if (!self.paginate) {
+            return { };
+        }
+
+        return {
+            pageOffset:    self.pageMaxSize * (self.page - 1),
+            pageMaxSize:   self.pageMaxSize,
+            sortColumn:    self.sortColumn,
+            sortDirection: self.sortDirection
+        };
+    },
+    pageInfo: function() {
+        var self = this;
+        var ceil = Math.ceil(self.totalCount / self.pageMaxSize);
+        var pageRanges = []
+
+        for (var x = 1; x <= ceil; x++) {
+            pageRanges.push(self.pageMaxSize * x);
+        }
+
+        var info = {
+            totalCount:  self.totalCount,
+            pageMaxSize: self.pageMaxSize,
+            pages:       ceil,
+            page:        self.page,
+            prev:        self.page > 1    ? self.page - 1 : false,
+            next:        self.page < ceil ? self.page + 1 : false,
+            pageRanges: pageRanges
+        };
+
+        var max = Math.min(self.totalCount, self.page * self.pageMaxSize);
+
+        if (self.totalCount == self.pages * self.pageMaxSize) {
+            max = self.totalCount;
+        }
+
+        info.range = [(self.page - 1) * self.pageMaxSize + 1, max];
+        return info;
+    },
+    firstPage: function() {
+        if (this.page != 1) {
+            this.page = 1;
+
+            return this.fetch();
+        }
+        return false;
+    },
+    lastPage: function() {
+        var info = this.pageInfo();
+
+        if (this.page != info.pages) {
+            this.page = info.pages;
+
+            return this.fetch();
+        }
+        return false;
+    },
+    nextPage: function() {
+        if (!this.pageInfo().next) {
+            return false;
+        }
+        this.page = this.page + 1;
+        return this.fetch();
+    },
+    previousPage: function() {
+        if (!this.pageInfo().prev) {
+            return false;
+        }
+        this.page = this.page - 1;
+        return this.fetch();
+    },
+    goToPage: function(page) {
+        if (typeof(page) == 'undefined' || typeof(page) != 'number') {
+            return false;
+        }
+
+        var info = this.pageInfo();
+
+        if (info.page == page) {
+            return false;
+        }
+
+        if (page > info.pages || page < 1) {
+            return false;
+        }
+
+        this.page = page;
+        return this.fetch();
+    },
+    setPageSize: function(size) {
+        if (typeof(size) == 'number') {
+            this.pageMaxSize = size;
+            return this.fetch();
+        }
+        return false;
     }
 });
 

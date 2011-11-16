@@ -76,6 +76,30 @@ div.dataTables_wrapper .ui-widget-header {
 	width: 350px !important;
 }
 
+.paginate_button {
+    background: url('../images/pagination-sprite.png');
+}
+
+.paginate_button.first.enabled    { background-position: 0 0;      width: 22px; height: 23px; }
+.paginate_button.last.enabled     { background-position: 0 -112px; width: 22px; height: 23px; }
+.paginate_button.next.enabled     { background-position: 0 -224px; width: 22px; height: 23px; }
+.paginate_button.previous.enabled { background-position: 0 -336px; width: 22px; height: 23px; }
+
+.paginate_button.first    { background-position: 0 -28px;  width: 22px; height: 23px; }
+.paginate_button.last     { background-position: 0 -140px; width: 22px; height: 23px; }
+.paginate_button.next     { background-position: 0 -252px; width: 22px; height: 23px; }
+.paginate_button.previous { background-position: 0 -364px; width: 22px; height: 23px; }
+
+.paginate_button.first.enabled:hover    { background-position: 0 -84px;  width: 22px; height: 23px; }
+.paginate_button.last.enabled:hover     { background-position: 0 -196px; width: 22px; height: 23px; }
+.paginate_button.next.enabled:hover     { background-position: 0 -308px; width: 22px; height: 23px; }
+.paginate_button.previous.enabled:hover { background-position: 0 -420px; width: 22px; height: 23px; }
+
+.pagination-firstPage.enabled.down { background-position: 0 -56px;  width: 22px; height: 23px; }
+.pagination-lastPage.enabled.down  { background-position: 0 -168px; width: 22px; height: 23px; }
+.pagination-nextPage.enabled.down  { background-position: 0 -280px; width: 22px; height: 23px; }
+.pagination-prevPage.enabled.down  { background-position: 0 -392px; width: 22px; height: 23px; }
+
 .dataTables_wrapper .ui-toolbar {
 	padding: 5px;
 }
