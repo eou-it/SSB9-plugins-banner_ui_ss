@@ -21,13 +21,20 @@ import java.util.zip.GZIPInputStream
 class JavaScriptMessagesTagLib {
     def resourceService
 
+     def encodeHTML( msg ) {
+        msg = msg.replace("\"","&quot;")
+        msg = msg.replace("<","&lt;")
+        msg = msg.replace(">","&gt;")
+        return msg;
+    }
+
     def i18nJavaScript = { attrs ->
 
         if (request.resourceDependencyTracker) {
             Set keys = []
 
             // Search for any place where we are referencing message codes
-            def regex = ~/\(*\.i18n.prop\(.*?\"(.*?)\".*?\)/
+            def regex = ~/\(*\.i18n.prop\(.*?[\'\"](.*?)[\'\"].*?\)/
 
             request.resourceDependencyTracker.each { name ->
                 resourceService.getModule( name ).resources.findAll{ it.sourceUrlExtension == "js" }.each {
@@ -63,7 +70,9 @@ class JavaScriptMessagesTagLib {
             if (keys) {
                 def javaScriptProperties = []
                 keys.sort().each {
-                    javaScriptProperties << "\"$it\": \"${g.message( code: it ).encodeAsHTML()}\""
+                    def msg = "${g.message( code: it )}"
+                    msg = encodeHTML(msg)
+                    javaScriptProperties << "\"$it\": \"$msg\""
                 }
 
                 out << '\$.i18n.map = {'
