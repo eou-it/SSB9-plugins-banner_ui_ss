@@ -11,6 +11,8 @@
  ****************************************************************************** */
 package com.sungardhe.banner.ui
 
+import java.util.zip.GZIPInputStream
+
 /**
  * This class is built off the knowledge provided within the ResourceTagLib from
  * the resources plug-in.  It's goal is to scan the files that have been processed
@@ -29,8 +31,28 @@ class JavaScriptMessagesTagLib {
 
             request.resourceDependencyTracker.each { name ->
                 resourceService.getModule( name ).resources.findAll{ it.sourceUrlExtension == "js" }.each {
+
                     if (it.processedFile) {
-                        def matcher = regex.matcher( it.processedFile.text )
+                        def fileText
+
+                        // Check to see if the file has been zipped.
+                        if (it.processedFile.path.endsWith( ".gz" )) {
+                            new GZIPInputStream(it.newInputStream()).withStream { stream ->
+                                stream.eachLine { line ->
+                                    if (!fileText) {
+                                        fileText = line
+                                    }
+                                    else {
+                                        fileText += "$line\n"
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            fileText = it.processedFile.text
+                        }
+
+                        def matcher = regex.matcher( fileText )
                         while (matcher.find()) {
                             keys << matcher.group(1)
                         }

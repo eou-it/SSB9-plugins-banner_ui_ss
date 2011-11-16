@@ -37,6 +37,9 @@ grails.project.dependency.resolution = {
         compile ':jquery-ui:1.8.15'
 
         compile ':resources:1.0.2'
+        compile ':zipped-resources:1.0'
+        compile ':cached-resources:1.0'
+
         compile ':selenium:0.6'
         compile ':selenium-rc:1.0.2'
         compile ':spring-security-cas:1.0.2'
