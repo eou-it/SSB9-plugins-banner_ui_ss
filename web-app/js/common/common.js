@@ -206,6 +206,7 @@ $(document).ready(function() {
         globalNav : true,
         header : true,
         footer : true,
+        showHelp: false,
         resourceMap : {
             areas_label_browse :                    $.i18n.prop( "aurora.areas_label_browse" ),
             areas_label_opened :                    $.i18n.prop( "aurora.areas_label_opened" ),
