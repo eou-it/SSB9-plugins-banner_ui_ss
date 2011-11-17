@@ -150,6 +150,16 @@ def convertCSSToRTL(CSSEntry) {
                     }
 
                     break;
+                case 'background':
+                    styleProp = styleProp.toLowerCase();
+                    if(styleProp.toLowerCase().contains("right")) {
+                        styleProp = styleProp.replace("right","left")
+                    }
+                    else if(styleProp.toLowerCase().contains("left")) {
+                        styleProp = styleProp.replace("left","right")
+                    }
+
+                    break;
                 /****************************************
                  * SAFARI SPECIFIC STYLES
                  ****************************************/
