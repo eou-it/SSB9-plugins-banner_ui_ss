@@ -46,10 +46,16 @@ class JavaScriptMessagesTagLib {
                         if (it.processedFile) {
                             def fileText
 
-                            // Check to see if the file has been zipped.
+                            // Check to see if the file has been zipped.  This only occurs in the Environment.DEVELOPMENT
+                            // If it occurs, we'll create a reference to the original file and parse it instead.
                             if (it.processedFile.path.endsWith(".gz")) {
-                                log.error "The file processed, ${it.processedFile} is a gzipped version and cannot be scanned.  Any localization that exist within this file will not be available.  This should not be happening."
-                                fileText = ""
+                                def originalFile = new File( "${it.workDir}${it.sourceUrl}" )
+                                if (originalFile.exists()) {
+                                    fileText = originalFile.text
+                                }
+                                else {
+                                    fileText = ""
+                                }
                             }
                             else {
                                 fileText = it.processedFile.text
