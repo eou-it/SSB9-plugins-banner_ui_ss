@@ -52,12 +52,32 @@ def formatStyleLine(styleName, styleProp) {
     "    " + styleName + ":" + styleProp + ";\n"
 }
 
+def getStyleArrayFromLine(String styleLine) {
+    def positionOfColon = styleLine.indexOf(":")
+    def styleName = ''
+    def styleProp = ''
+    String[] styleArray
+
+    if(positionOfColon >= 0) {
+        styleName = styleLine.substring(0, positionOfColon)
+        styleProp = styleLine.substring(positionOfColon + 1, styleLine.length())
+        styleArray = [styleName, styleProp]
+    }
+    else {
+        styleArray = [styleName]
+    }
+
+    return styleArray
+}
+
+
+
 def convertCSSToRTL(CSSEntry) {
     def styles = CSSEntry.toString().split(";")
     def newCSSEntry = "";
 
     styles.each { styleLine ->
-        def style = styleLine.split(":")
+        def style = getStyleArrayFromLine(styleLine)//styleLine.split(":")
 
         if(style.length > 1) {
             def styleName = style[0].trim()
