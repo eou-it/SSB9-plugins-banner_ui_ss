@@ -11,7 +11,8 @@
  ****************************************************************************** */
 package com.sungardhe.banner.ui
 
-import java.util.zip.GZIPInputStream
+import com.sungardhe.banner.ui.i18n.DateAndDecimalUtils
+import org.springframework.web.servlet.support.RequestContextUtils as RCU
 
 /**
  * This class is built off the knowledge provided within the ResourceTagLib from
@@ -19,13 +20,13 @@ import java.util.zip.GZIPInputStream
  * for localication call outs and provide them in the i18n map on the client.
  */
 class JavaScriptMessagesTagLib {
+
+    static LOCALE_KEYS_ATTRIBUTE = "localeKeys"
+
     def resourceService
 
-     def encodeHTML( msg ) {
-        msg = msg.replace("\"","&quot;")
-        msg = msg.replace("<","&lt;")
-        msg = msg.replace(">","&gt;")
-        return msg;
+    def encodeHTML( msg ) {
+        msg.replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;")
     }
 
     def i18nJavaScript = { attrs ->
@@ -37,48 +38,56 @@ class JavaScriptMessagesTagLib {
             def regex = ~/\(*\.i18n.prop\(.*?[\'\"](.*?)[\'\"].*?\)/
 
             request.resourceDependencyTracker.each { name ->
-                resourceService.getModule( name ).resources.findAll{ it.sourceUrlExtension == "js" }.each {
+                resourceService.getModule(name)?.resources?.findAll { it.sourceUrlExtension == "js" }?.each {
 
-                    if (it.processedFile) {
-                        def fileText
+                    if (!it.attributes.containsKey( LOCALE_KEYS_ATTRIBUTE )) {
+                        it.attributes[LOCALE_KEYS_ATTRIBUTE] = new HashSet()
 
-                        // Check to see if the file has been zipped.
-                        if (it.processedFile.path.endsWith( ".gz" )) {
-                            new GZIPInputStream(it.newInputStream()).withStream { stream ->
-                                stream.eachLine { line ->
-                                    if (!fileText) {
-                                        fileText = line
-                                    }
-                                    else {
-                                        fileText += "$line\n"
-                                    }
-                                }
+                        if (it.processedFile) {
+                            def fileText
+
+                            // Check to see if the file has been zipped.
+                            if (it.processedFile.path.endsWith(".gz")) {
+                                log.error "The file processed, ${it.processedFile} is a gzipped version and cannot be scanned.  Any localization that exist within this file will not be available.  This should not be happening."
+                                fileText = ""
+                            }
+                            else {
+                                fileText = it.processedFile.text
+                            }
+
+                            def matcher = regex.matcher(fileText)
+                            while (matcher.find()) {
+                                it.attributes[LOCALE_KEYS_ATTRIBUTE] << matcher.group(1)
                             }
                         }
-                        else {
-                            fileText = it.processedFile.text
-                        }
-
-                        def matcher = regex.matcher( fileText )
-                        while (matcher.find()) {
-                            keys << matcher.group(1)
-                        }
                     }
+
+                    keys.addAll( it.attributes[LOCALE_KEYS_ATTRIBUTE] )
                 }
             }
 
+            out << '\$.i18n.map = {'
             if (keys) {
                 def javaScriptProperties = []
                 keys.sort().each {
-                    def msg = "${g.message( code: it )}"
+                    def msg = "${g.message(code: it)}"
+
+                    // Assume the key was not found.  Look to see if it exists in the bundle
+                    if (msg == it) {
+                        def value = DateAndDecimalUtils.properties( RCU.getLocale( request ) )[it]
+
+                        if (value) {
+                            msg = value
+                        }
+                    }
+
                     msg = encodeHTML(msg)
                     javaScriptProperties << "\"$it\": \"$msg\""
                 }
 
-                out << '\$.i18n.map = {'
-                out << javaScriptProperties.join( "," )
-                out << '};'
+                out << javaScriptProperties.join(",")
             }
+            out << '};'
         }
     }
 }
