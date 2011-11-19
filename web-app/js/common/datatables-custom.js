@@ -105,6 +105,15 @@ function createDataTable( settings ) {
     return table;
 }
 
+/* This method adds keytable-popup class to calender widget and dropdown select list,
+*  so that the click event on these popups can be neglected in keytable.js*/
+markDataTablePopups();
+
+function markDataTablePopups(){
+    $('#ui-datepicker-div, .ui-datepicker-header').live('mousedown' , function(){
+        $(this).addClass('keytable-popup');
+    });
+}
 
 /**
  * Use this to create json based off a table that is prepared for usage in DataTables
