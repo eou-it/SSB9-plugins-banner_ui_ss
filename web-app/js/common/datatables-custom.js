@@ -151,6 +151,10 @@ function fnGetSelected( oTableLocal ) {
 function selectObject(dataTable, target, eventObject, selectedProperty ) {
     var object = dataTable.fnGetData( target )
 
+    //TODO this could be better handled in the facultyGradeEntry.js
+    if (object != null && object.bannerId != null && object.bannerId.indexOf("stud_id") != -1)
+    object.bannerId = $(object.bannerId).attr('href').split("=")[3]
+
     var map = new Object();
     map[ selectedProperty ] = object;
 
