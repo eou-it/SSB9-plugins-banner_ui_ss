@@ -26,13 +26,13 @@ class WebTailorUtility {
         def session = sessionFactory.currentSession
         def sql = new Sql(session.connection())
         def sqlQueryString = """select twgrinfo_text text from twgrinfo
-	    					    where  twgrinfo_name = '${name}'
-	    					    and    twgrinfo_label = '${label}'
+	    					    where  twgrinfo_name = ${name}
+	    					    and    twgrinfo_label = ${label}
 	    						and twgrinfo_source_ind =
-	       						(select nvl( '${source}',nvl( max(twgrinfo_source_ind ),'B'))
+	       						(select nvl( ${source},nvl( max(twgrinfo_source_ind ),'B'))
 	        					from twgrinfo
-	        					where  twgrinfo_name = '${name}'
-	        					and    twgrinfo_label = '${label}'
+	        					where  twgrinfo_name = ${name}
+	        					and    twgrinfo_label = ${label}
 	        					and twgrinfo_source_ind='L')
 	    						order by twgrinfo_sequence"""
 	   
