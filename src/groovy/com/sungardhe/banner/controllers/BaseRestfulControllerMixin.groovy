@@ -156,7 +156,7 @@ class BaseRestfulControllerMixin {
             return responseMap.toString()
         }
         else if (request.getHeader('Accept') ==~ /.*json.*/) {
-            response.setHeader("Content-Type", "application/json")
+            response.setHeader("Content-Type", "application/json; charset=UTF-8")
             return (responseMap as JSON).toString()
         }
         else if (request.getHeader('Accept') ==~ /.*xml.*/) {
@@ -165,7 +165,7 @@ class BaseRestfulControllerMixin {
         }
         // but if that doesn't work, we'll fall back to the format determined by grails
         else if (request.format ==~ /.*json.*/) {
-            response.setHeader("Content-Type", "application/json")
+            response.setHeader("Content-Type", "application/json; charset=UTF-8")
             return (responseMap as JSON).toString()
         }
         else if (request.format ==~ /.*xml.*/) {
