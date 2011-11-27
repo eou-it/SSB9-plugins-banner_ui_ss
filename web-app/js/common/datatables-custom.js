@@ -69,15 +69,22 @@ function createDataTable( settings ) {
 
     // set up settings
     var defaults = {
-        bJQueryUI: true,
+        bJQueryUI:       true,
+        bAutoWidth:      false,
+        bInfo:           false,
+        bLengthChange:   false,
+        bPaginate:       false,
         sPaginationType: "full_numbers",
+        iDisplayLength:  50,
+        aLengthMenu:     [50, 100, 250, 500],
+        sDom:            'rt<"bottom ui-widget-header"p<"bottom-divider">l<"dataTables_info"><"clear">',
         oLanguage: {
-            "sLengthMenu":$.i18n.prop('js.dataTable.sLengthMenu'),
-            "sZeroRecords":$.i18n.prop('js.dataTable.sZeroRecords'),
-            "sInfo":$.i18n.prop('js.dataTable.sInfo'),
-            "sInfoEmpty":$.i18n.prop('js.dataTable.sInfoEmpty'),
-            "sInfoFiltered":$.i18n.prop('js.dataTable.sInfoFiltered'),
-            "sEmptyTable":$.i18n.prop('js.dataTable.sEmptyTable')
+            sLengthMenu:   $.i18n.prop('js.dataTable.sLengthMenu'),
+            sZeroRecords:  $.i18n.prop('js.dataTable.sZeroRecords'),
+            sInfo:         $.i18n.prop('js.dataTable.sInfo'),
+            sInfoEmpty:    $.i18n.prop('js.dataTable.sInfoEmpty'),
+            sInfoFiltered: $.i18n.prop('js.dataTable.sInfoFiltered'),
+            sEmptyTable:   $.i18n.prop('js.dataTable.sEmptyTable')
         }
     };
     settings = $.extend(defaults, settings);
