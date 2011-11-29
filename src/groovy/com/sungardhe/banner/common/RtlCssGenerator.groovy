@@ -292,7 +292,7 @@ class RtlCssGenerator {
 
 
     public generateRTLCss(includePluginsDir = null) {
-        println "inside generateRTLCss"
+        println "generating RTL CSS"
         if (includePluginsDir) {
             transformAllFilesUnder(BuildSettingsHolder.settings.projectPluginsDir)
         }
