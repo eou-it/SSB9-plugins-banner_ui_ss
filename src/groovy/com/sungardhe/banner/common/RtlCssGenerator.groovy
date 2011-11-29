@@ -292,11 +292,12 @@ class RtlCssGenerator {
 
 
     public generateRTLCss(includePluginsDir = null) {
-        println "generating RTL CSS"
+        println "Start CSS RTL Transformation"
         if (includePluginsDir) {
             transformAllFilesUnder(BuildSettingsHolder.settings.projectPluginsDir)
         }
         transformAllFilesUnder(new File(BuildSettingsHolder.settings.baseDir.absolutePath + File.separator + "web-app" + File.separator + "css" + File.separator))
+        println "CSS RTL Transformation Complete"
     }
 
 }
