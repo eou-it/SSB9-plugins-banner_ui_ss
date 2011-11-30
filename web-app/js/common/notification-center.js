@@ -349,10 +349,7 @@ $(document).ready(function() {
                 $(this.el.selector + ' ul').append( view.render().el );
             }, this);
 
-            if($(this.el.selector + ' ul > li').length) {
-                if($(this.el.selector + ' ul > li').find('.notification-item-prompts').length)
-                    $(this.el.selector + ' ul > li').find('.notification-item-prompts button:first').focus();
-            }
+            $(this.el.selector + ' ul > li').find('.notification-item-prompts button:first').focus();
 
             return this;
         },
@@ -382,7 +379,7 @@ $(document).ready(function() {
         initialize: function() {
             $(this.el).addClass("notification-center");
 
-            $(this.el).append( '<div class="notification-center-flyout"><ul role="alert"/></div>' );
+            $(this.el).append( '<div class="notification-center-flyout"><ul aria-role="alert"/></div>' );
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $( this.el.selector + " .notification-center-flyout" ), model: this.model, parent: this.el });
 
             $(this.el).append( '<div class="notification-center-anchor"></div>' );
