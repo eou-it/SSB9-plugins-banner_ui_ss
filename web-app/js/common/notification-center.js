@@ -349,7 +349,7 @@ $(document).ready(function() {
                 $(this.el.selector + ' ul').append( view.render().el );
             }, this);
 
-            $(this.el.selector + ' ul > li').find('.notification-item-prompts button:first').focus();
+            $(this.el.selector + ' ul>li').find('.notification-item-prompts button:first').focus();
 
             return this;
         },
