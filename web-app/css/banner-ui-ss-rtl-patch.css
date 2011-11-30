@@ -1,0 +1,11 @@
+.notification-center-flyout li div.notification-item-message {
+    background-position: 369px 4px !important;
+}
+
+.notification-center-flyout li:first-child div.notification-item-message {
+    background-position: 369px 8px !important;
+}
+
+.ui-button {
+    margin-right: 0;
+}

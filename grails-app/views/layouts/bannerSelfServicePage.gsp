@@ -4,6 +4,9 @@
     <head>
         <r:require module="bannerSelfService"/>
 
+        <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
+           <r:require module="bannerSelfServiceRTL"/>
+        </g:if>
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
 
         <meta charset="${message(code: 'default.character.encoding')}"/>
