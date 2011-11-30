@@ -165,6 +165,7 @@ table.display thead th div.DataTables_sort_wrapper span {
 	top: 50%;
 	margin-top: -8px;
 	right: 0;
+    left:auto;
 }
 
 table.display tfoot th {
