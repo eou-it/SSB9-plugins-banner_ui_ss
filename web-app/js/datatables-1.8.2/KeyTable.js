@@ -1350,7 +1350,7 @@ function KeyTable ( oInit )
         }
 
         /* Lose table focus when click outside the table */
-        jQuery(document).click( function(e) {
+        jQuery(document).bind('click focus', function(e) {
             var nTarget = e.target;
             var bTableClick = false;
             if($(e.target).parents('.keytable-popup').length) bTableClick = true;
