@@ -198,12 +198,10 @@ li:first-child span.notification-item-prompt-message {
     display: inline;
 }
 
-
 li .notification-item-prompts {
     visibility: hidden;
     display: none;
 }
-
 
 li:first-child .notification-item-prompts {
     visibility: visible;

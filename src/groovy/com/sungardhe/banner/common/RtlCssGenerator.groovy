@@ -1,9 +1,24 @@
+/*********************************************************************************
+ Copyright 2009-2011 SunGard Higher Education. All Rights Reserved.
+ This copyrighted software contains confidential and proprietary information of
+ SunGard Higher Education and its subsidiaries. Any use of this software is limited
+ solely to SunGard Higher Education licensees, and is further subject to the terms
+ and conditions of one or more written license agreements between SunGard Higher
+ Education and the licensee in question. SunGard is either a registered trademark or
+ trademark of SunGard Data Systems in the U.S.A. and/or other regions and/or countries.
+ Banner and Luminis are either registered trademarks or trademarks of SunGard Higher
+ Education in the U.S.A. and/or other regions and/or countries.
+ **********************************************************************************/
 package com.sungardhe.banner.common
 
 
 import grails.util.BuildSettingsHolder
 import groovy.io.FileType
 
+/**
+ * This class is a utility class used to take as input a CSS file that is created to support left to right languages
+ * and generate a right to left equivalent.
+ */
 class RtlCssGenerator {
     /* Need to move this out */
 
@@ -16,12 +31,6 @@ class RtlCssGenerator {
     def removeCommentedStyles(style) {
         style = style.toString().replaceAll("/\\*(.|[\r\n])*?\\*/", "")
         return style
-    }
-
-
-    def removeNewLineCharacter(style) {
-        def t1 = style.toString().replaceAll(" ", "");
-        def t2 = t1.replace('\n', '')
     }
 
 
@@ -272,29 +281,45 @@ class RtlCssGenerator {
         return rtlFile
     }
 
-    def cssFiles = []
 
-    def transformAllFilesUnder(dir) {
-        dir.traverse(
-                type: FileType.FILES,
-                nameFilter: ~/.*\.css/,
-                excludeNameFilter: ~/.*rtl.*\.css/
-        ) { srcFile ->
-            cssFiles.add(srcFile.name)
-            def destFile = getRTLFileName(srcFile)
-            def CSS_DSL = getCSSFileDSL(srcFile)
-            def RTL_CSS_DSL = convertCSSDSLToRTL(CSS_DSL)
-            createRTLCSSFile(destFile, RTL_CSS_DSL)
+    def transformFile( File source, File target) {
+        def CSS_DSL = getCSSFileDSL(source)
+        def RTL_CSS_DSL = convertCSSDSLToRTL(CSS_DSL)
+        createRTLCSSFile(target.path, RTL_CSS_DSL)
+    }
+
+
+    def getFilesToTransformMapList(dir) {
+        def files = []
+
+        dir.traverse( type: FileType.FILES, nameFilter: ~/.*\.css/, excludeNameFilter: ~/.*rtl.*\.css/ ) { source ->
+            def destPath = getRTLFileName(source)
+            File target = new File( destPath );
+            if (!target.exists() || (target.lastModified() < source.lastModified())) {
+                files << [ "source": source, "target": target]
+            }
         }
+
+        return files
     }
 
 
     public generateRTLCss(includePluginsDir = null) {
-        if (includePluginsDir) {
-            transformAllFilesUnder(BuildSettingsHolder.settings.projectPluginsDir)
-        }
-        transformAllFilesUnder(new File(BuildSettingsHolder.settings.baseDir.absolutePath + File.separator + "web-app" + File.separator + "css" + File.separator))
-        println "CSS RTL Conversion: " + cssFiles
-    }
 
+        def filesToGenerate = []
+
+        if (includePluginsDir) {
+            filesToGenerate.addAll( getFilesToTransformMapList( BuildSettingsHolder.settings.projectPluginsDir ) )
+        }
+
+        filesToGenerate.addAll( getFilesToTransformMapList( new File( "${BuildSettingsHolder.settings.baseDir.absolutePath}/web-app/css/" )))
+
+        if (filesToGenerate) {
+            filesToGenerate.each {
+                transformFile( it.source, it.target )
+            }
+
+            println "Generated RTL version${filesToGenerate.size() > 1 ? "s" : "" } of ${filesToGenerate.source.canonicalFile}"
+        }
+    }
 }

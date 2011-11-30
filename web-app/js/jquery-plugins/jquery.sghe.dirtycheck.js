@@ -51,7 +51,9 @@ jQuery.fn.dirtyCheck = function(options) {
             var events = jQuery.data(target, 'events');
             if (!events && target.href) {
                 // No handlers but we have href
-                $target.bind( type, function() {
+
+                // We'll add a click event to provide the same expected functionality as having a 'href' on a target
+                $target.bind( "click", function() {
                     document.location = target.href;
                 });
                 events = jQuery.data(target, 'events');
@@ -70,7 +72,7 @@ jQuery.fn.dirtyCheck = function(options) {
 
         var executeExistingHandlers = _.bind( function() {
             // Rebind the saved handlers.
-            if (target._handlers != undefined) {
+            if (!_.isUndefined(target._handlers)) {
 
                 // We'll remove the dirtyCheck handler in preparation to execute the existing handlers
                 $target.unbind( type, handler );
@@ -135,9 +137,6 @@ jQuery.fn.dirtyCheck = function(options) {
 
         // Remove the type.
         $target.unbind(type);
-
-        target._confirm = handler
-        target._confirmEvent = type;
 
         $target.bind( type, handler );
     });
