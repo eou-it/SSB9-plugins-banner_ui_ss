@@ -20,11 +20,8 @@ class RtlCssGenerator {
 
 
     def removeNewLineCharacter(style) {
-        println style
         def t1 = style.toString().replaceAll(" ", "");
-        println t1
         def t2 = t1.replace('\n', '')
-        println t2
     }
 
 
@@ -275,6 +272,7 @@ class RtlCssGenerator {
         return rtlFile
     }
 
+    def cssFiles = []
 
     def transformAllFilesUnder(dir) {
         dir.traverse(
@@ -282,7 +280,7 @@ class RtlCssGenerator {
                 nameFilter: ~/.*\.css/,
                 excludeNameFilter: ~/.*rtl.*\.css/
         ) { srcFile ->
-            println "Converting........." + srcFile.canonicalFile
+            cssFiles.add(srcFile.name)
             def destFile = getRTLFileName(srcFile)
             def CSS_DSL = getCSSFileDSL(srcFile)
             def RTL_CSS_DSL = convertCSSDSLToRTL(CSS_DSL)
@@ -292,12 +290,11 @@ class RtlCssGenerator {
 
 
     public generateRTLCss(includePluginsDir = null) {
-        println "Start CSS RTL Transformation"
         if (includePluginsDir) {
             transformAllFilesUnder(BuildSettingsHolder.settings.projectPluginsDir)
         }
         transformAllFilesUnder(new File(BuildSettingsHolder.settings.baseDir.absolutePath + File.separator + "web-app" + File.separator + "css" + File.separator))
-        println "CSS RTL Transformation Complete"
+        println "CSS RTL Conversion: " + cssFiles
     }
 
 }
