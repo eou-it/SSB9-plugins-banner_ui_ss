@@ -379,7 +379,7 @@ $(document).ready(function() {
         initialize: function() {
             $(this.el).addClass("notification-center");
 
-            $(this.el).append( '<div class="notification-center-flyout"><ul aria-role="alert"/></div>' );
+            $(this.el).append( '<div class="notification-center-flyout"><ul role="alert"/></div>' );
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $( this.el.selector + " .notification-center-flyout" ), model: this.model, parent: this.el });
 
             $(this.el).append( '<div class="notification-center-anchor"></div>' );
