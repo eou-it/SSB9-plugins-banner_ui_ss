@@ -104,6 +104,10 @@ jQuery.fn.dirtyCheck = function(options) {
     
                     n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.cancelActionButton"), function() {
                         options.notifications.remove( n );
+
+                        if (options.cancelCallback) {
+                            options.cancelCallback();
+                        }
                     });
     
                     n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.doNotSaveActionButton"), function() {
