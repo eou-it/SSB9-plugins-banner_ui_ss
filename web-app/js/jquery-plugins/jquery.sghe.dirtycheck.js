@@ -61,7 +61,10 @@ jQuery.fn.dirtyCheck = function(options) {
                 // There are no handlers to save.
                 return;
             }
-            target._handlers = new Array();
+
+            if (!target._handlers) {
+                target._handlers = new Array();
+            }
 
             if (events[type]) {
                 for (var i = 0; i < events[type].length; i++) {
