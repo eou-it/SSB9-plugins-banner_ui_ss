@@ -349,7 +349,13 @@ $(document).ready(function() {
                 $(this.el.selector + ' ul').append( view.render().el );
             }, this);
 
-            $(this.el.selector + ' ul>li').find('.notification-item-prompts button:first').focus();
+            if($(this.el.selector + ' ul>li').find('.notification-item-prompts').length ){
+                $(this.el.selector + ' ul').attr('role','alertdialog');
+                $(this.el.selector + ' ul>li').find('.notification-item-prompts button:first').focus();
+            }
+            else{
+                $(this.el.selector + ' ul').attr('role','alert');
+            }
 
             return this;
         },
