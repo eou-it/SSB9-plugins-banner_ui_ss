@@ -22,7 +22,7 @@ class BannerUiSsGrailsPlugin {
     
     String groupId = "com.sungardhe"
 
-    def version = "0.1.47"
+    def version = "0.1.48"
 
     def grailsVersion = "1.3.7 > *"
 
