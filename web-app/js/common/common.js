@@ -207,6 +207,7 @@ $(document).ready(function() {
         header : true,
         footer : true,
         showHelp: false,
+        langDir: $.i18n.prop( "default.language.direction" ),
         resourceMap : {
             areas_label_browse :                    $.i18n.prop( "aurora.areas_label_browse" ),
             areas_label_opened :                    $.i18n.prop( "aurora.areas_label_opened" ),
