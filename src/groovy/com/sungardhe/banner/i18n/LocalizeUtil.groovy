@@ -17,6 +17,7 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 import com.sungardhe.banner.exceptions.ApplicationException
 import java.text.NumberFormat
 import java.text.ParseException
+import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.MessageSource
 
@@ -62,11 +63,21 @@ class LocalizeUtil {
 
 
     def static formatDate = {
+        def pattern = getDateFormat()
         def value = it
         try {
-            value = it.format(getDateFormat())
+            try {
+                value = it?.format(pattern)
+            }
+            catch (IllegalArgumentException x) {
+                Logger.getLogger( LocalizeUtil ).error "Invalid default.date.format=${pattern} in locale: ${LCH.getLocale()}"
+                // return an unusual format to highlight the error
+                // but not Java default format because it is locale-specific and breaks JSON rendering in Arabic.
+                value = it?.format('yyyy-MM-dd')
+            }
         }
         catch (Exception x) {
+            Logger.getLogger( LocalizeUtil ).debug( "Unexpected exception formatting date", x )
             // Eat the exception and do nothing
         }
 
