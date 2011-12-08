@@ -38,7 +38,10 @@ class WebTailorUtility {
 	   
 		def infoText = ""
 		sql.rows(sqlQueryString).each {t -> infoText += t.text + "\n"}
-		return infoText
+		if(infoText == "null\n") {
+            infoText = ""
+        }
+        return infoText
     }
 
 }

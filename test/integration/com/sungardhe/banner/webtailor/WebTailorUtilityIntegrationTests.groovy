@@ -33,4 +33,9 @@ class WebTailorUtilityIntegrationTests extends BaseIntegrationTestCase {
         
     }
 
+     def testGetNullInfoText(){
+         def infoText = WebTailorUtility.getInfoText('bwckctlg.catalog_label_text', 'ATTRIBUTE_SUFFIX')
+         assertEquals "", infoText
+     }
+
 }
