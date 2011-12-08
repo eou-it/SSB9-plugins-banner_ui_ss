@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
-<html lang="${message(code: 'default.language.direction')}">
+<html lang="${message(code: 'default.language.locale')}">
     <head>
         <r:require module="bannerSelfService"/>
 
