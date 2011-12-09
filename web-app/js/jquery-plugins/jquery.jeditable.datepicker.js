@@ -18,6 +18,16 @@ jQuery.expr[':'].focus = function( elem ) {
   return elem === document.activeElement && ( elem.type || elem.href );
 };
 
+$.datepicker._doKeyDown = _.wrap( $.datepicker._doKeyDown, function(func, event) {
+    if ( !this._pressedKeys && event.keyCode == 13 ) {
+        // if ENTER is the first keypress in the open datepicker, just close it
+        $.datepicker._hideDatepicker();
+    } else {
+        this._pressedKeys = true;
+        return func( event );
+    }
+});
+
 $.editable.addInputType( 'datepicker', {
 
     /* create input element */
