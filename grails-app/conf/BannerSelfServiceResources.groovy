@@ -21,7 +21,7 @@ modules = {
         dependsOn "jquery, jquery-ui, aurora"
         defaultBundle environment == "development" ? false : "bannerSelfService"
 
-        resource url: 'http://html5shim.googlecode.com/svn/trunk/html5.js',
+        resource url:[plugin: 'banner-ui-ss', file: 'js/html5shim.js'],
             disposition: 'head',
             wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
 
