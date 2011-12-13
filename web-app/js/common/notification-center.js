@@ -127,7 +127,12 @@ $(document).ready(function() {
                             var notification = new Notification( {message: message.message, type: message.type, model: model, attribute: message.field } );
 
                             if (message.type === "success") {
-                                notification.set( { flash: true, message: $.i18n.prop("js.notification.success"), ignoreForGroupBy: ["model"] } );
+                                notification.set( {
+                                    flash: true,
+                                    message: $.i18n.prop("js.notification.success"),
+                                    ignoreForGroupBy: ["model"],
+                                    model:null // Clear model so success message doesn't disappear immediately while moving to another data set
+                                } ); 
                             }
 
                             this.addNotification( notification );
