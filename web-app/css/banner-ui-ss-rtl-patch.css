@@ -9,3 +9,11 @@
 .ui-button {
     margin-right: 0;
 }
+
+.ui-icon-circle-triangle-e {
+    background-position: -80px -192px;
+}
+
+.ui-icon-circle-triangle-w {
+    background-position: -48px -192px;
+}
