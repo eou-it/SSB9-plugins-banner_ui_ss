@@ -12,5 +12,5 @@
 eventCompileEnd = {
     Class RtlCssGenerator = classLoader.loadClass("com.sungardhe.banner.common.RtlCssGenerator", true)
     def rtlCssGenerator = RtlCssGenerator.newInstance()
-    rtlCssGenerator.generateRTLCss();
+    rtlCssGenerator.generateRTLCss(true);
 }
