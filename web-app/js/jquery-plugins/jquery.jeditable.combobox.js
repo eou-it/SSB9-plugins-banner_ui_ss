@@ -14,7 +14,6 @@
 
             this.button = $( "<button type='button'>&nbsp;</button>" )
                 .attr( "tabIndex", -1 )
-                .attr( "title", "Show All Items" )
                 .insertAfter( input )
                 .button({
 		    icons: {
@@ -150,6 +149,6 @@
                 }
             });
             input.combobox(combobox);
-        },
+        }
     });
 })( jQuery );
