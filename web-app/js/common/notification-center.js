@@ -53,7 +53,7 @@ $(document).ready(function() {
                 if (notification.has( "model" ) && notification.get( "model" )) {
                     var model = notification.get( "model" );
 
-                    model.collection.bind( "reset", function(models) {
+                    notification.get("flash") || model.collection.bind( "reset", function(models) {
                         if (_.isUndefined( model.collection )) {
                             this.remove( notification );
                         }
@@ -147,7 +147,7 @@ $(document).ready(function() {
                                 });
 
                                 _.each( associatedNotifications, function( n ) {
-                                    notifications.remove( n );
+                                     n.get( "flash" ) || notifications.remove( n );
                                 });
                             }, this );
                         }, this);
