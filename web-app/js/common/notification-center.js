@@ -79,6 +79,10 @@ $(document).ready(function() {
             if (model) {
                 // Remove all notifications that are bound to the model
                 var notificationsToRemove = this.filter( function( n ) {
+                    if (n.get( "flash" )) {
+                        return false; // allow flash notifications to persist until they time out or are explicitly removed
+                    }
+
                     var notificationModel = n.get( "model" );
                     if (notificationModel && notificationModel.id === model.id) {
                         if (attributes) {
@@ -130,8 +134,7 @@ $(document).ready(function() {
                                 notification.set( {
                                     flash: true,
                                     message: $.i18n.prop("js.notification.success"),
-                                    ignoreForGroupBy: ["model"],
-                                    model:null // Clear model so success message doesn't disappear immediately while moving to another data set
+                                    ignoreForGroupBy: ["model"]
                                 } ); 
                             }
 
