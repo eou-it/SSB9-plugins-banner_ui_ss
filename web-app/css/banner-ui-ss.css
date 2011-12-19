@@ -293,7 +293,6 @@ table.display tr.odd.row_selected td {
     color: white;
 }
 
-table.cellselect td.focus,
 table.rowselect tr.focus {
     border: 1px solid green;
     background-color: #ccffcc !important;
@@ -488,6 +487,11 @@ table.display tr.even.row_hover td.sorting_1 {
     padding: 0px !important;
 }
 
+#content .inner-south.ui-layout-pane-south {
+    background: -moz-linear-gradient(49.9999% 0 -90deg, #F1F1F3 0%, #E5E7EA 100%) repeat scroll 0 0 transparent !important;
+    padding: 0 10px 0 0 !important;
+}
+
 .ui-widget-section {
     padding: 10px;
 }
@@ -521,7 +525,7 @@ div.spinner-img {
 	background: -webkit-gradient(linear, left top, left bottom, from(#999999),to(#575757));
     background-image: -ms-linear-gradient(90deg, #999999, #575757);
   	background-image: -o-linear-gradient(90deg, #999999, #575757);
-    
+
 	border-radius: .6em;
 	-moz-border-radius: .6em;
 	-webkit-border-radius: .6em;
@@ -544,7 +548,7 @@ div.spinner-img {
 		#AAAAAA 0%,
 		#676767);
 	background: -webkit-gradient(
-		linear, left top, left bottom, 
+		linear, left top, left bottom,
 		from(#AAAAAA),
 		to(#676767));
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#AAAAAA', endColorstr='#676767');
@@ -586,7 +590,7 @@ div.spinner-img {
 		#999999 0%,
 		#575757);
 	background: -webkit-gradient(
-		linear, left top, left bottom, 
+		linear, left top, left bottom,
 		from(#999999),
 		to(#575757));
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#575757');
@@ -594,12 +598,6 @@ div.spinner-img {
 	-moz-border-radius: .6em;
 	-webkit-border-radius: .6em;
 	border: .1em solid #333333;
-	-moz-box-shadow:
-		0px 1px 2px rgba(000,000,000,0.6),
-		inset 0px 1px 0px rgba(237,237,237,0.7);
-	-webkit-box-shadow:
-		0px 1px 2px rgba(000,000,000,0.6),
-		inset 0px 1px 0px rgba(237,237,237,0.7);
 	text-shadow:
 		0px -.1em 0px rgba(51,51,51,1);
         -moz-transition: all 0.25s linear;
@@ -616,7 +614,7 @@ div.spinner-img {
 		#AAAAAA 0%,
 		#676767);
 	background: -webkit-gradient(
-		linear, left top, left bottom, 
+		linear, left top, left bottom,
 		from(#AAAAAA),
 		to(#676767));
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#AAAAAA', endColorstr='#676767');
@@ -624,12 +622,9 @@ div.spinner-img {
 	-moz-border-radius: .6em;
 	-webkit-border-radius: .6em;
 	border: .1em solid #333333;
-	-moz-box-shadow:
-		0px 1px 2px rgba(000,000,000,0.6),
-		inset 0px 1px 0px rgba(237,237,237,0.7);
-	-webkit-box-shadow:
-		0px 1px 2px rgba(000,000,000,0.6),
-		inset 0px 1px 0px rgba(237,237,237,0.7);
+	box-shadow:0 0 5px inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+	-moz-box-shadow: 0 0 5px inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+	-webkit-box-shadow: 0 0 5px inset, 0 1px 0 rgba(255, 255, 255, 0.8) inset;
 	text-shadow:
 		0px -.1em 0px rgba(51,51,51,1);
 }
@@ -649,4 +644,24 @@ div.spinner-img {
 	-moz-box-shadow: 0px 1px 2px rgba(000,000,000,0.6),inset 0px 1pxm 0px rgba(237,237,237,0.7);
 	-webkit-box-shadow:	0px 1px 2px rgba(000,000,000,0.6), inset 0px 1px 0px rgba(237,237,237,0.7);
 	text-shadow: 0px -.1em 0px rgba(0,0,0,1);
+}
+
+.ui-button.combobox{
+    background: url('../images/select-box-sprites.png') no-repeat scroll -7px 1px !important;
+}
+
+input.combobox:hover{
+    border-color:#4282B3;
+}
+
+input.combobox:focus{
+    border-color:#4282B3 !important;
+}
+
+input.combobox:hover + .ui-button.combobox, .ui-button.combobox:hover{
+    background-position:-7px -49px !important;
+}
+
+input.combobox:focus + .ui-button.combobox{
+    background-position:-7px -87px;
 }
