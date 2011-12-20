@@ -647,21 +647,25 @@ div.spinner-img {
 }
 
 .ui-button.combobox{
-    background: url('../images/select-box-sprites.png') no-repeat scroll -7px 1px !important;
+    background: url('../images/select-box-sprites.png') no-repeat scroll -7px 1px transparent!important;
 }
 
-input.combobox:hover{
+input.hasDatepicker + button{
+    background: url('../images/date-picker-sprites.png') no-repeat scroll -7px 1px transparent!important;
+}
+
+input.combobox:hover , input.hasDatepicker:hover{
     border-color:#4282B3;
 }
 
-input.combobox:focus{
+input.combobox:focus,input.hasDatepicker:focus{
     border-color:#4282B3 !important;
 }
 
-input.combobox:hover + .ui-button.combobox, .ui-button.combobox:hover{
+input.combobox:hover + .ui-button.combobox, .ui-button.combobox:hover , input.hasDatepicker:hover + button, input.hasDatepicker + button:hover{
     background-position:-7px -49px !important;
 }
 
-input.combobox:focus + .ui-button.combobox{
+input.combobox:focus + .ui-button.combobox, input.hasDatepicker:focus + button{
     background-position:-7px -87px;
 }
