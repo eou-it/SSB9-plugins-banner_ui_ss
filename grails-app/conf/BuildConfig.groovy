@@ -47,7 +47,7 @@ grails.project.dependency.resolution = {
         compile ':jquery:1.6.1.1'
         compile ':jquery-ui:1.8.15'
 
-        compile ':resources:1.0.2'
+        compile ':resources:1.1.6'
         runtime ':zipped-resources:1.0'
         runtime ':cached-resources:1.0'
 

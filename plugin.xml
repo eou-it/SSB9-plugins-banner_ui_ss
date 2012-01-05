@@ -24,7 +24,7 @@
     <resource>com.sungardhe.banner.webtailor.WebTailorUtility</resource>
   </resources>
   <dependencies>
-    <plugin name='resources' version='1.0.2 =&gt; *' />
+    <plugin name='resources' version='1.1.6 =&gt; *' />
     <plugin name='cacheHeaders' version='1.1.5 =&gt; *' />
     <plugin name='csv' version='0.3 =&gt; *' />
     <plugin name='feeds' version='1.5 =&gt; *' />
