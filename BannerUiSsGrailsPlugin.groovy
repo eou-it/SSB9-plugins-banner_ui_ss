@@ -27,7 +27,7 @@ class BannerUiSsGrailsPlugin {
     def grailsVersion = "1.3.7 > *"
 
     def dependsOn = [
-        resources:'1.1.6 => *',
+        resources:'1.0.2 => *',
         cacheHeaders:'1.1.5 => *',
         csv:'0.3 => *',
         feeds:'1.5 => *',

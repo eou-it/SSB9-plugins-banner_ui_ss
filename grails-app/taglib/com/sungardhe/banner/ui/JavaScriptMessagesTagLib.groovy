@@ -17,14 +17,13 @@ import org.springframework.web.servlet.support.RequestContextUtils as RCU
 /**
  * This class is built off the knowledge provided within the ResourceTagLib from
  * the resources plug-in.  It's goal is to scan the files that have been processed
- * for localization call outs and provide them in the i18n map on the client.
+ * for localication call outs and provide them in the i18n map on the client.
  */
 class JavaScriptMessagesTagLib {
 
     static LOCALE_KEYS_ATTRIBUTE = "localeKeys"
 
     def resourceService
-    def grailsResourceProcessor
 
     def encodeHTML( msg ) {
         msg.replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;")
@@ -32,15 +31,15 @@ class JavaScriptMessagesTagLib {
 
     def i18nJavaScript = { attrs ->
 
-        if (request.resourceModuleTracker) {
+        if (request.resourceDependencyTracker) {
             Set keys = []
 
             // Search for any place where we are referencing message codes
             def regex = ~/\(*\.i18n.prop\(.*?[\'\"](.*?)[\'\"].*?\)/
 
-            grailsResourceProcessor.getAllModuleNamesRequired( request.resourceModuleTracker ).each { name ->
+            request.resourceDependencyTracker.each { name ->
                 resourceService.getModule(name)?.resources?.findAll { it.sourceUrlExtension == "js" }?.each {
-                
+
                     if (!it.attributes.containsKey( LOCALE_KEYS_ATTRIBUTE )) {
                         it.attributes[LOCALE_KEYS_ATTRIBUTE] = new HashSet()
 
