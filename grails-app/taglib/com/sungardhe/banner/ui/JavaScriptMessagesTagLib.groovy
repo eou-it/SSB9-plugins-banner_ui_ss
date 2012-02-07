@@ -29,15 +29,34 @@ class JavaScriptMessagesTagLib {
         msg.replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;")
     }
 
-    def i18nJavaScript = { attrs ->
+    private def resourceModuleNames(request) {
+        def names = []
 
-        if (request.resourceDependencyTracker) {
+        if (request.resourceDependencyTracker != null) {
+            // resources plugin <= 1.0.2
+            request.resourceDependencyTracker.each { names << it }
+        } else if (request.resourceModuleTracker != null) {
+            // resources plugin >= 1.0.3
+            request.resourceModuleTracker.each {
+                if (it.value) { // todo what does 'false' for this property mean? validate usage
+                    names << it.key
+                }
+            }
+        }
+
+        names
+    }
+
+    def i18nJavaScript = { attrs ->
+        def names = resourceModuleNames(request)
+
+        if (names.size() > 0) {
             Set keys = []
 
             // Search for any place where we are referencing message codes
             def regex = ~/\(*\.i18n.prop\(.*?[\'\"](.*?)[\'\"].*?\)/
 
-            request.resourceDependencyTracker.each { name ->
+            names.each { name ->
                 resourceService.getModule(name)?.resources?.findAll { it.sourceUrlExtension == "js" }?.each {
 
                     if (!it.attributes.containsKey( LOCALE_KEYS_ATTRIBUTE )) {

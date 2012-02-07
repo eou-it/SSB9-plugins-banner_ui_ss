@@ -19,6 +19,7 @@ modules = {
 
     'bannerSelfService' {
         dependsOn "jquery, jquery-ui, aurora"
+
         defaultBundle environment == "development" ? false : "bannerSelfService"
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/html5shim.js'],

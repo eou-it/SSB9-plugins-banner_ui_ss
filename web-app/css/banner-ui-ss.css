@@ -363,7 +363,7 @@ div.ui-widget div.ui-widget-header {
     padding-left: 0.75em;
 }
 
-div.inner-center div.ui-widget div.ui-widget-header {
+div.ui-widget div.ui-widget-header {
     background-image: url( '../images/section-hdr-bg.png');
     background-repeat: repeat-x;
     background-color: transparent;
@@ -668,4 +668,329 @@ input.combobox:hover + .ui-button.combobox, .ui-button.combobox:hover , input.ha
 
 input.combobox:focus + .ui-button.combobox, input.hasDatepicker:focus + button{
     background-position:-7px -87px;
+}
+
+ul.ui-tabs-nav {
+    background: #CCDFE9 none;
+    height:25px;
+    bottom-border: 1px solod #7F9AAD;
+}
+
+.bottom {
+    padding: 0 15px 2px;
+}
+
+.dataTables_paginate {
+    float: left;
+    text-align: left;
+    padding-top: 6px;
+    line-height: 1.5em;
+}
+
+.dataTables_length {
+    float: left;
+    text-align: left;
+    padding-top: 8px;
+    line-height: 1.5em;
+}
+
+.notvisible {
+    visibility: hidden;
+    display: none;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+/* SimpleModal jQuery plugin */
+
+#simplemodal-overlay {background-color:#000;}
+#simplemodal-container {
+    background-color:#87b4d0;
+    border: 6px solid #87b4d0;
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    -moz-box-shadow: 3px 3px 5px #444444;
+    -webkit-box-shadow: 3px 3px 5px #444444;
+    box-shadow: 3px 3px 5px #444444;
+    /*filter:alpha(opacity=50);*/
+    /*opacity:0.5;*/
+}
+
+.simplemodal-wrap {
+    /*filter:alpha(opacity=100);*/
+    /*opacity:1.0;*/
+}
+
+.buttons {
+    float: right;
+}
+
+.buttons button {
+    float: right;
+    clear: none;
+    margin-right: .5em;
+}
+
+.buttons button:first-child {
+    float: right;
+    clear: none;
+    margin-right: 0px;
+}
+
+.development {
+    display: none;
+    visibility: hidden;
+}
+
+.ui-lazy-load {
+    display: none;
+    visibility: hidden;
+}
+
+.ui-widget-content {
+    border-style:  none;
+}
+
+div.ui-widget div.ui-widget-header {
+    border-style:  none;
+    border: 0;
+}
+
+.ui-widget-header {
+    height: 2.5em;
+    min-height: 2.5em;
+    line-height: 2.5em;
+    padding-left: 0.75em;
+    text-align: left;
+}
+
+.ui-widget-hidden {
+    visibility: hidden;
+    display: none;
+}
+
+/* sidebar tab skinning */
+
+.ui-tabs .ui-corner-top {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+.ui-tabs, .ui-tabs .ui-tabs-panel {
+    padding:  0;
+}
+
+#sidebar ul.ui-tabs-nav {
+    background: url(../images/tab-bg.jpg) repeat-x 0px bottom transparent;
+    padding: 0 0 0 15px;
+    z-index: 0;
+}
+
+div#sidebar ul.ui-tabs-nav li.ui-state-default {
+    background:none;
+    margin:0px;
+    border-width:0px;
+    /*TODO cannot get padding & top border to work with heights
+    padding-top: 3px;
+    border-top:1px solid #fff;
+    */
+    border-left:2px solid #c1c1c1;
+}
+
+div#sidebar ul.ui-tabs-nav li.ui-state-default:last-child {
+    border-right:2px solid #c1c1c1;
+}
+
+div#sidebar ul.ui-tabs-nav,
+div#sidebar ul.ui-tabs-nav li {
+    height:2em;
+    min-height:2em;
+    line-height:2em;
+}
+
+div#sidebar ul.ui-tabs-nav li.ui-state-default.ui-state-active,
+div#sidebar ul.ui-tabs-nav li.ui-state-default.ui-state-active.ui-state-hover,
+div#sidebar ul.ui-tabs-nav li.ui-state-default.ui-state-hover {
+    background-image:none;
+    background-color:#f7f7f7;
+    top:0px;
+}
+
+div#sidebar ul.ui-tabs-nav li.ui-state-default.ui-state-active a,
+div#sidebar ul.ui-tabs-nav li.ui-state-default.ui-state-active.ui-state-hover a,
+div#sidebar ul.ui-tabs-nav li.ui-state-default.ui-state-hover a {
+    color:#333333;
+    background-image: none;
+}
+
+table.cellselect td.focus,
+table.rowselect tr.focus {
+    border: none;
+    background-color: inherit;
+}
+table.rowselect tr.focus td {
+    background-color: inherit; /*#ccffcc !important;*/
+}
+table.keytable td {
+    border-left-width: 0px;
+    border-right-width: 0px;
+}
+
+table.cellselect td {
+    padding:0 1em; /*override from before*/
+}
+
+input.combobox {
+    width:100%;
+    margin:0 -1.9em 0 0; /* leave space for button width */
+    padding:0 0;
+    height:1.7em;
+    border:1px solid #778FA0;
+}
+
+input.hasDatepicker {
+    width:100%;
+    margin:0 -1.9em 0 0; /* leave space for button width */
+    padding:0 0;
+    height:1.7em;
+    border:1px solid #778FA0;
+}
+/*this should be in themeroller theme?*/
+input.combobox + button {
+    height: 2.2em;
+    margin: 0;
+    padding: 0;
+    width: 2.2em;
+}
+input.hasDatepicker + button {
+    height: 2.2em;
+    margin: 0;
+    padding: 0;
+    width: 2.2em;
+}
+.combobox+button .ui-button-text {
+    margin:0;
+    padding:0;
+}
+.combobox .ui-icon {
+    left:0; /* position arrow, overriding themeroller?*/
+    background:none;
+}
+
+
+table {
+    border-spacing:0px;
+    border: 1px solid #DDDDDD;
+}
+
+ul.ui-autocomplete {
+    border:1px solid #4282b3;
+    height:10em;
+    overflow-y:auto;
+}
+
+ul.ui-autocomplete a.ui-state-hover {
+    background-color: #778fa1;
+}
+
+
+
+/* Tools Menu in Aurora */
+#toolsCanvas .menu-item {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #333333;
+}
+
+#toolsCanvas .menu-item.disabled {
+    color: #CCCCCC;
+}
+
+#toolsCanvas .menu-item:hover {
+    background: none repeat scroll 0 0 #D8E6EE;
+    color: #333333;
+}
+
+#toolsCanvas .menu-item.disabled:hover {
+    color: #CCCCCC;
+}
+
+.loading {
+    opacity:0.4;
+    filter:alpha(opacity=40); /* IE8 */
+    background:#000 url('../images/loading-animation.gif') no-repeat center;
+
+    z-index:99999;
+
+    position:absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
+}
+.loading-pending {
+    visibility:hidden;
+}
+
+.dataTables_paginate div,
+.dataTables_paginate span,
+.dataTables_paginate input {
+    float: left;
+}
+
+.dataTables_paginate .paginate_page,
+.dataTables_paginate .paginate_of {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.dataTables_paginate .paginate_of,
+.dataTables_paginate .paginate_page,
+.dataTables_paginate .paginate_total {
+    margin-top: 2px;
+}
+
+.dataTables_paginate,
+.dataTables_info {
+    cursor: default;
+}
+
+.dataTables_paginate .paginate_button.enabled {
+    cursor: pointer;
+}
+
+.bottom .dataTables_info {
+    float: right;
+    padding-top: 0px;
+    width: auto;
+}
+
+.bottom .bottom-divider {
+    border-left: 1px solid #000000;
+    float: left;
+    height: 17px;
+    margin-right: 10px;
+    margin-left: auto;
+    margin-top: 9px;
+    width: 1px;
+}
+
+div.infoicon {
+    padding-left: 22px;
+    background: url("../images/icon-info.png") no-repeat left center;
+}
+
+.ui-datepicker{
+    height:16.5em;
+}
+
+.ui-datepicker .ui-datepicker-header {
+    background-color: #ECF0F4;
 }

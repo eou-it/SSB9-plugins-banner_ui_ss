@@ -19,8 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder
 class PersonIdentificationTagLib {
     def fullName = {
         def user = SecurityContextHolder?.context?.authentication?.principal
-        if (user?.fullName) {
-            out << user.fullName
-        }
+        try {
+            if (user?.fullName) {
+                out << user.fullName
+            }
+        } catch (MissingPropertyException e) { /* no-op */ }
     }
 }

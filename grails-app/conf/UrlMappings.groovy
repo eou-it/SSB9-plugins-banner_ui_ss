@@ -40,7 +40,6 @@ class UrlMappings {
 			}
 		}
 
-        "/" (view: "/index")
         "500"(controller: 'errors', action: 'serverError')
     }
 }
