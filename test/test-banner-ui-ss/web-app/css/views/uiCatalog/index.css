@@ -33,7 +33,9 @@ ul {
     list-style-type: none;
 }
 
-.date-picker-demo, .auto-complete-demo {
+.date-picker-demo,
+.auto-complete-demo,
+.combobox-demo {
     white-space: nowrap;
     width: 15em;
 }

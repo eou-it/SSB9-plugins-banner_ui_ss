@@ -18,6 +18,7 @@ modules = {
 
         resource url:[file: 'css/views/uiCatalog/index.css'], attrs:[media:'screen, projection']
         resource url:[file: 'js/views/uiCatalog/index.js']
+        resource url:[file: 'js/views/uiCatalog/autoComplete.comboBox.jeditable.js']
         resource url:[file: 'js/views/uiCatalog/autoComplete.comboBox.js']
         resource url:[file: 'js/views/uiCatalog/datePicker.js']
         resource url:[file: 'js/views/uiCatalog/buttons.js']

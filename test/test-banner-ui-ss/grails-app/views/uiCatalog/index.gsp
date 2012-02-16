@@ -43,6 +43,7 @@
                         <g:widgetCode template="buttons" />
                         <g:widgetCode template="tabs" />
                         <g:widgetCode template="datePicker" model="[ date: (new Date()).format(g.message( code: 'default.date.format')) ]" />
+                        <g:widgetCode template="autoComplete.comboBox.jeditable" />
                         <g:widgetCode template="autoComplete.comboBox" />
 
                     </div>

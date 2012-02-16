@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var programmingLanguages = [
+    var programmingLanguages2 = [
         "C"           ,
         "C++"         ,
         "D"           ,
@@ -21,45 +21,26 @@ $(document).ready(function() {
         "Fortran"
     ];
 
-    var autoCompleteComboBoxOptions = editableTypeDefaults({
-        name:     "autoCompleteComboBoxExample",
-        type:     "combobox",
-        combobox: {
-            appendTo: "#inner-content",
-            source:   programmingLanguages,
-            close: function(event, ui) {
-                $(this).closest('form').submit();
-            },
-            open: function(event, ui){
-                var elem = $(this);
 
-                var actualScreenHeightAvailable = $(window).height() - $('#footerApplicationBar').outerHeight();
-
-                var comboBoxOptions = $('.ui-autocomplete');
-                var comboBoxPadding = comboBoxOptions.innerWidth() - comboBoxOptions.width();
-
-                comboBoxOptions.css('width', elem.width() - comboBoxPadding);
-
-                if (comboBoxOptions.offset().top + comboBoxOptions.outerHeight() >= actualScreenHeightAvailable) {
-                    var topOfComboBox         = Math.round(elem.offset().top);
-                    var comboBoxOptionsHeight = Math.round(comboBoxOptions.outerHeight());
-                    var newOffsetTop          = topOfComboBox - comboBoxOptionsHeight;
-
-                    comboBoxOptions.offset($.extend(comboBoxOptions, { top: Math.round(newOffsetTop) }));
-                }
-            }
-        },
-        validate: function(value, settings, original) {
-            var it = $("input", original);
-            it.val($.trim(value.toUpperCase()));
-
-            return true;
-        }
+    $(".comboBox-control-demo").autocomplete({
+        source:      programmingLanguages2,
+        minLength:   0,
+        selectFirst: true,
+        autoSelect:  true
     });
 
-    $(".autoComplete-comboBox-control-demo").editable(function (value, settings) {
-            return value;
-        },
-        autoCompleteComboBoxOptions
-    );
+
+    $(".comboBox-control-button-demo").click(function() {
+        var el = $(".comboBox-control-demo");
+
+        if (el.autocomplete("widget").is(":visible")) {
+            el.autocomplete("close");
+            return;
+        }
+
+        $(this).blur();
+
+        el.autocomplete("search", "");
+        el.focus();
+    });
 });
