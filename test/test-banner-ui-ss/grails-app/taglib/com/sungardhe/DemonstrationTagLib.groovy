@@ -5,14 +5,13 @@ import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
 class DemonstrationTagLib {
 
     def widgetCode = { attrs ->
-//        attrs.containsKey('template')
-//        attrs.containsKey('js')
-//        attrs.containsKey('css')
 
-        def template = attrs.template
+        def template      = attrs.template
+        def templateClean = template.replace("/", "-").replace(".", "-")
+        def titleCode     = attrs.containsKey("title") ? attrs.title : templateClean
+        def model         = attrs.containsKey('model') ? attrs.model : [:]
 
-        def model = attrs.containsKey('model') ? attrs.model : [:]
-
+        def title         = "<h2>${g.message(code: titleCode)}</h2>"
         def actualOpen    = "<div class=\"actual\">"
         def actualClose   = "</div>"
         def jsCodeOpen    = "<div class=\"code\"><pre class=\"brush: js;\">"
@@ -26,7 +25,8 @@ class DemonstrationTagLib {
 
         def js = getJavaScriptIfExists("js/views/${controllerName}/${template}.js")
 
-        out << "<div class=\"code-demonstration\">"
+        out << "<div id=\"${templateClean}\" class=\"code-demonstration ${templateClean}\" data-component=\"${templateClean}\" data-desc=\"${g.message(code: templateClean)}\">"
+        out << title
         out << actualOpen
         out << actualHtml
         out << actualClose

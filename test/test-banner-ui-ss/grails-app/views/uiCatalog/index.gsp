@@ -17,7 +17,7 @@
         <meta name="layout" content="bannerSelfServicePage"/>
         <r:require modules="uiCatalog"/>
         <link rel="icon" href="${resource(dir: 'images/poc', file: 'events-favicon.png')}" sizes="32x32" type="image/png">
-        <title><g:message code="ui.catalog.index.title"/></title>
+        <title><g:message code="banner.self.service.ui.catalog"/></title>
 
     </head>
     <body>
@@ -36,33 +36,39 @@
                         %{--<button id="saveButton" class="primary-button"><g:message code="grades.button.save.label" /></button>--}%
                     %{--</div>--}%
                 %{--</div>--}%
-                <div class="jquery-ui-components component ui-widget catalog-entry">
+                <div class="component ui-widget catalog-entry" data-component="jquery-ui" data-desc="${g.message(code: 'jquery-ui')}">
                     <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.widgets.jqueryui" /></span></div>
                     <div class="ui-widget-content">
 
-                        <g:widgetCode template="buttons" />
-                        <g:widgetCode template="tabs" />
-                        <g:widgetCode template="datePicker" model="[ date: (new Date()).format(g.message( code: 'default.date.format')) ]" />
-                        <g:widgetCode template="autoComplete.comboBox.jeditable" />
-                        <g:widgetCode template="autoComplete.comboBox" />
+                        <g:widgetCode template="jquery-ui/buttons" />
+                        <g:widgetCode template="jquery-ui/tabs" />
+                        <g:widgetCode template="jquery-ui/datePicker" model="[ date: (new Date()).format(g.message( code: 'default.date.format')) ]" />
+                        <g:widgetCode template="jquery-ui/autoComplete.comboBox.jeditable" />
+                        <g:widgetCode template="jquery-ui/autoComplete.comboBox" />
 
                     </div>
                 </div>
-                <div class="data-tables-components component catalog-entry">
-                    <g:widgetCode template="dataTables" />
+                <div class="component ui-widget catalog-entry" data-component="backbone" data-desc="${g.message(code: 'backbone')}">
+                    <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.backbone" /></span></div>
+                    <div class="ui-widget-content">
+
+                        <g:widgetCode template="backbone/scrollable.content" />
+                        <g:widgetCode template="backbone/sidebar.navigation" />
+                        <g:widgetCode template="backbone/collection.fetch" />
+
+                    </div>
+                </div>
+                <div class="component ui-widget catalog-entry" data-component="data-tables" data-desc="${g.message(code: 'data-tables')}">
+                    <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.jqueryui.dataEntryGrid" /></span></div>
+                    <div class="ui-widget-content">
+
+                        <g:widgetCode template="jquery-ui/dataTables" />
+
+                    </div>
                 </div>
             </div>
             <div class="ui-layout-east" id="sidebar">
-                <ul class="ui-catalog-index-list">
-                    <li>
-                        <span>${g.message(code: 'ui.catalog.jqueryui.widgets')}</span>
-                        <ul class="ui-catalog-index-list-sub">
-                            <li><span>${g.message(code: 'ui.catalog.jqueryui.buttons')}</span></li>
-                            <li><span>${g.message(code: 'ui.catalog.jqueryui.tabs')}</span></li>
-                        </ul>
-                    </li>
-                    <li><span>${g.message(code: 'ui.catalog.jqueryui.dataEntryGrid')}</span></li>
-                </ul>
+                <ul class="ui-catalog-navigation-list"></ul>
             </div>
         </div>
     </body>

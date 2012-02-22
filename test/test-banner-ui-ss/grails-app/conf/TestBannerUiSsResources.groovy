@@ -18,12 +18,15 @@ modules = {
 
         resource url:[file: 'css/views/uiCatalog/index.css'], attrs:[media:'screen, projection']
         resource url:[file: 'js/views/uiCatalog/index.js']
-        resource url:[file: 'js/views/uiCatalog/autoComplete.comboBox.jeditable.js']
-        resource url:[file: 'js/views/uiCatalog/autoComplete.comboBox.js']
-        resource url:[file: 'js/views/uiCatalog/datePicker.js']
-        resource url:[file: 'js/views/uiCatalog/buttons.js']
-        resource url:[file: 'js/views/uiCatalog/tabs.js']
-        resource url:[file: 'js/views/uiCatalog/dataTables.js']
+        resource url:[file: 'js/views/uiCatalog/jquery-ui/autoComplete.comboBox.jeditable.js']
+        resource url:[file: 'js/views/uiCatalog/jquery-ui/autoComplete.comboBox.js']
+        resource url:[file: 'js/views/uiCatalog/jquery-ui/datePicker.js']
+        resource url:[file: 'js/views/uiCatalog/jquery-ui/buttons.js']
+        resource url:[file: 'js/views/uiCatalog/jquery-ui/tabs.js']
+        resource url:[file: 'js/views/uiCatalog/jquery-ui/dataTables.js']
+        resource url:[file: 'js/views/uiCatalog/backbone/collection.fetch.js']
+        resource url:[file: 'js/views/uiCatalog/backbone/scrollable.content.js']
+        resource url:[file: 'js/views/uiCatalog/backbone/sidebar.navigation.js']
     }
 
     'syntaxHighlighter' {

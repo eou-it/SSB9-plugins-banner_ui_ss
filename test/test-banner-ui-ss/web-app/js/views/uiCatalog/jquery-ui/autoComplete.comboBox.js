@@ -26,7 +26,8 @@ $(document).ready(function() {
         source:      programmingLanguages2,
         minLength:   0,
         selectFirst: true,
-        autoSelect:  true
+        autoSelect:  true,
+        someOtherPropertyThatShouldDoSomething: false
     });
 
 

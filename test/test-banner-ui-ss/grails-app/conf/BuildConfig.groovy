@@ -61,7 +61,7 @@ grails.project.dependency.resolution = {
         compile 'com.sungardhe:banner-accountsreceivable-validation-common:1.0.0'
         compile 'com.sungardhe:banner-db-main:1.0.4'
         compile 'com.sungardhe:sghe-aurora:1.0.0'
-        compile 'com.sungardhe:banner-ui-ss:1.0.2'
+        compile 'com.sungardhe:banner-ui-ss:1.0.3'
 
         compile ':resources:1.1.6'
         compile ':zipped-resources:1.0'
@@ -146,6 +146,19 @@ coverage {
 	               "**/*RepresentationHandler*",
 	               "**/*ParamsExtractor*"
 	             ]
+}
+
+reportMessages {
+	// put all keys here, that should not show as unused, even if no code reference could be found
+	// note that it is sufficient to provide an appropriate prefix to match a group of keys
+	exclude = ["default", "typeMismatch"]
+
+	// put all variable names here, that are used in dynamic keys and have a defined set of values
+	// e.g. if you have a call like <c:message code="show.${prod}" /> and "prod" is used in many
+	// pages to distinguish between "orange" and "apple" add a map to the list below:
+	//     prod: ["orange", "apple"]
+	dynamicKeys = [
+	]
 }
 
 reportMessages {

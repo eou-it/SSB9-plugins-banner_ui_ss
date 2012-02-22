@@ -58,3 +58,38 @@ div.code {
     display: none;
     font-size: 1.3em;
 }
+
+ul.ui-catalog-navigation-list li {
+    font-family: monospace;
+    font-size: 1.5em;
+    cursor: pointer;
+    margin-bottom: 1em;
+}
+
+ul.ui-catalog-navigation-list li li {
+    font-size: 1em;
+}
+
+ul.ui-catalog-navigation-list li:last-child {
+    margin-bottom: 0em;
+}
+
+ul.ui-catalog-navigation-list > li > span {
+    font-weight: bold;
+    font-size: 1.1em;
+    display: block;
+    margin-bottom: 1em;
+    margin-top: 2em;
+}
+
+ul.ui-catalog-navigation-list > li:first-child > span {
+    margin-top: 0px;
+}
+
+ul.ui-catalog-navigation-list li span:hover {
+    color: #556b2f;
+}
+
+ul.ui-catalog-navigation-list li ul {
+    padding-left: 0px;
+}
