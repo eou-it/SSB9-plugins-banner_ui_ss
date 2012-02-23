@@ -29,7 +29,15 @@ def preparePlugin = { name, prepare ->
         def pluginInfo = plugins.find { info -> info.name == name }
 
         if (pluginInfo) {
-            prepare( pluginInfo.name, pluginInfo.version, "${grailsSettings.projectPluginsDir}/${pluginInfo.name}-${pluginInfo.version}" )
+            def location = "${grailsSettings.projectPluginsDir}/${pluginInfo.name}-${pluginInfo.version}";
+            def file = new File(location)
+
+            if (!file.exists() || !file.canRead())
+                location = pluginInfo.pluginDir.getPath()
+
+            println "preparing plugin ${pluginInfo.name}-${pluginInfo.version} @ ${location}"
+
+            prepare( pluginInfo.name, pluginInfo.version, location )
         }
         else {
             throw new RuntimeException( "Plugin '$name' not found as a supported plugin." )

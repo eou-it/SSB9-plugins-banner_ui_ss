@@ -22,7 +22,7 @@ grails.war.resources = { stagingDir ->
     delete(file: "${stagingDir}/WEB-INF/lib/ojdbc6.jar")
 }
 
-//grails.plugin.location.'banner-ui-ss' = '../../../banner_ui_ss'
+grails.plugin.location.'banner-ui-ss' = '../../../banner_ui_ss'
 //grails.plugin.location.'banner-core' = '../banner_core'
 //grails.plugin.location.'sghe-aurora' = '../sghe_aurora'
 //grails.plugin.location.'banner-student-common' = '../banner_student_common'
