@@ -308,7 +308,7 @@ $(document).ready(function() {
 
             $(this.el).append( '<div class="notification-center-count"><span/></div>' ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
 
-            _.bindAll(this, "render", "display", "hide" );
+            _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
             this.model.bind("add", this.render);
             this.model.bind("remove", this.render);
@@ -319,13 +319,13 @@ $(document).ready(function() {
             var displayedNotifications = this.model.grouped();
 
             if (displayedNotifications.length > 0) {
-                $( this.el.selector + " .notification-center-count" ).removeClass( "notification-center-count-nil");
+                $(".notification-center-count", this.el).removeClass( "notification-center-count-nil");
             }
             else {
-                $( this.el.selector + " .notification-center-count" ).addClass( "notification-center-count-nil");
+                $(".notification-center-count", this.el).addClass( "notification-center-count-nil");
             }
 
-            $( this.el.selector + " .notification-center-count span" ).html( displayedNotifications.length );
+            $(".notification-center-count span", this.el).html( displayedNotifications.length );
             return this;
         },
         isDisplayed: function() {
@@ -350,19 +350,19 @@ $(document).ready(function() {
             this.model.bind("all", this.render);
         },
         render: function() {
-            $(this.el.selector + ' ul').empty();
+            $("ul", this.el).empty();
 
             _.each(this.model.grouped(), function(notification) {
                 var view = new NotificationView( {model:notification} );
-                $(this.el.selector + ' ul').append( view.render().el );
+                $("ul", this.el).append( view.render().el );
             }, this);
 
-            if($(this.el.selector + ' ul>li').find('.notification-item-prompts').length ){
-                $(this.el.selector + ' ul').attr('role','alertdialog');
-                $(this.el.selector + ' ul>li').find('.notification-item-prompts button:first').focus();
+            if($("ul>li", this.el).find('.notification-item-prompts').length ){
+                $("ul", this.el).attr('role','alertdialog');
+                $("ul>li", this.el).find('.notification-item-prompts button:first').focus();
             }
             else{
-                $(this.el.selector + ' ul').attr('role','alert');
+                $("ul", this.el).attr('role','alert');
             }
 
             return this;
@@ -374,7 +374,7 @@ $(document).ready(function() {
             $(this.el).position({
                 my: "left top",
                 at: "left bottom",
-                of: this.options.parent.selector
+                of: this.options.parent
             });
 
             return this;
@@ -394,10 +394,10 @@ $(document).ready(function() {
             $(this.el).addClass("notification-center");
 
             $(this.el).append( '<div class="notification-center-flyout"><ul role="alert"/></div>' );
-            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $( this.el.selector + " .notification-center-flyout" ), model: this.model, parent: this.el });
+            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
 
             $(this.el).append( '<div class="notification-center-anchor"></div>' );
-            this.notificationCenterAnchor = new NotificationCenterAnchor({el: $( this.el.selector + " .notification-center-anchor" ), model: this.model });
+            this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle' );
             this.model.bind("add", this.addNotification);
@@ -448,12 +448,12 @@ $(document).ready(function() {
             }
 
             if (this.model.find( function( n ) { return n.hasPrompts(); } )) {
-                if ($(target.selector + " .notification-center-shim").length === 0) {
+                if ($(".notification-center-shim", target).length === 0) {
                     target.append( '<div class="notification-center-shim"></div>' );
                 }
             }
             else {
-                $(target.selector + " .notification-center-shim").remove();
+                $(".notification-center-shim", target).remove();
             }
         }
     });

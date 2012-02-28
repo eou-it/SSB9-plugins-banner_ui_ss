@@ -55,6 +55,7 @@
                         <g:widgetCode template="backbone/scrollable.content" />
                         <g:widgetCode template="backbone/sidebar.navigation" />
                         <g:widgetCode template="backbone/collection.fetch" />
+                        <g:widgetCode template="backbone/data.bind.form" />
 
                     </div>
                 </div>
@@ -63,6 +64,14 @@
                     <div class="ui-widget-content">
 
                         <g:widgetCode template="jquery-ui/dataTables" />
+
+                    </div>
+                </div>
+                <div class="component ui-widget catalog-entry" data-component="notification-center" data-desc="${g.message(code: 'notification-center')}">
+                    <div class="ui-widget-header content-container-header"><span><g:message code="notification-center" /></span></div>
+                    <div class="ui-widget-content">
+
+                        <g:widgetCode template="internal/notification.center.flash" />
 
                     </div>
                 </div>

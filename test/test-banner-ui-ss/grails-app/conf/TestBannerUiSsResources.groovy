@@ -27,6 +27,8 @@ modules = {
         resource url:[file: 'js/views/uiCatalog/backbone/collection.fetch.js']
         resource url:[file: 'js/views/uiCatalog/backbone/scrollable.content.js']
         resource url:[file: 'js/views/uiCatalog/backbone/sidebar.navigation.js']
+        resource url:[file: 'js/views/uiCatalog/backbone/data.bind.form.js']
+        resource url:[file: 'js/views/uiCatalog/internal/notification.center.flash.js']
     }
 
     'syntaxHighlighter' {

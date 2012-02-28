@@ -32,6 +32,7 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.modelbinding.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/yepnope.1.0.1-min.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/log4javascript.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/backbone-custom.js']
