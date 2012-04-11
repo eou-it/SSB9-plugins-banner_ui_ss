@@ -29,6 +29,12 @@
     padding: 0.5em;
 }
 
+.ul-container {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
 ul {
     list-style-type: none;
 }

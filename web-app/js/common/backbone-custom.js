@@ -245,10 +245,11 @@ _.extend(Backbone.Collection.prototype, {
     },
     paginate:      false,
     page:          1,
-    pageMaxSize:   20,
+    pageMaxSize:   50,
     pageOffset:    0,
-    sortColumn:    "",
-    sortDirection: "",
+    sortColumn:    null,
+    sortColumnIdx: null,
+    sortDirection: "asc",
     totalCount:    0,
     pagingCriteria: function() {
         var self = this;
@@ -350,6 +351,50 @@ _.extend(Backbone.Collection.prototype, {
         return false;
     }
 });
+
+
+Backbone.PagedCollectionInternal = Backbone.Collection.extend({
+    parse: function(response, xhr) {
+        this.totalCount = response.totalCount
+
+        return response.data;
+    },
+    fetch: function(options) {
+        typeof(options) != 'undefined' || (options = {});
+
+        this.trigger("fetching");
+
+        if (typeof(options.page) == 'number') {
+            this.page = options.page;
+        }
+
+        var self = this;
+        var success = options.success;
+        self.loading = true;
+
+        options.success = function(response) {
+            self.loading = false;
+            self.trigger("fetched");
+
+            var info = self.pageInfo();
+
+            if (self.page > info.pages) {
+                self.fetch({ page: 1, success: success });
+            }
+
+            if(success) { success(response); }
+        };
+
+        options.error = function(response) {
+            self.loading = false;
+        };
+
+        return Backbone.Collection.prototype.fetch.call(this, options);
+    }
+});
+
+var PagedCollection = Backbone.PagedCollection = Backbone.PagedCollectionInternal.extend({});
+
 
 function createBatchModel(model) {
     if (model.isDirty()) {

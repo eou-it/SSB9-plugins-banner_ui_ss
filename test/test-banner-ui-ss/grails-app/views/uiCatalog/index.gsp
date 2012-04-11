@@ -77,7 +77,9 @@
                 </div>
             </div>
             <div class="ui-layout-east" id="sidebar">
-                <ul class="ui-catalog-navigation-list"></ul>
+                <div class="ul-container">
+                    <ul class="ui-catalog-navigation-list"></ul>
+                </div>
             </div>
         </div>
     </body>

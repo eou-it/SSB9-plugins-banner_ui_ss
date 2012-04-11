@@ -17,6 +17,8 @@ modules = {
         //defaultBundle false
 
         resource url:[file: 'css/views/uiCatalog/index.css'], attrs:[media:'screen, projection']
+        resource url:[file: 'css/views/uiCatalog/jquery-ui/dataTables.css']
+
         resource url:[file: 'js/views/uiCatalog/index.js']
         resource url:[file: 'js/views/uiCatalog/jquery-ui/autoComplete.comboBox.jeditable.js']
         resource url:[file: 'js/views/uiCatalog/jquery-ui/autoComplete.comboBox.js']
