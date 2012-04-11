@@ -354,6 +354,7 @@ _.extend(Backbone.Collection.prototype, {
 
 
 Backbone.PagedCollectionInternal = Backbone.Collection.extend({
+    paginate: true,
     parse: function(response, xhr) {
         this.totalCount = response.totalCount
 

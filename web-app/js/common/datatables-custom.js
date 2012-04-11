@@ -62,30 +62,40 @@ $.fn.dataTableExt.oPagination.selfServiceDefaultPagination = {
         $(nNext).click( function() { pageChange("next") });
         $(nLast).click( function() { pageChange("last") });
 
+        var collection = oSettings.oInit.aoBackboneCollection;
+        var view = oSettings.oInit.oBackboneView;
+
+        var saveCallback = function( options ) {
+            var callback = options.callback;
+
+            var success = function(saved) {
+                if (typeof(view.options.success) == 'function') {
+                    view.options.success(saved);
+                }
+                callback(saved);
+            }
+
+            if (typeof(collection) != 'undefined') {
+                collection.save({ success: success, error: view.options.error });
+            }
+        }
+
+        var doNotSaveCallback = function( options ) {
+            var callback = options.callback || function() {}
+            callback();
+        }
+
         var inputIsDirty = function() {
             $.data(nInput, 'entered', $(nInput).val());
 
-            if (typeof(oSettings.oInit.aoBackboneCollection) != 'undefined') {
-                var collection = oSettings.oInit.aoBackboneCollection;
+            if (typeof(collection) != 'undefined') {
                 return collection.isDirty();
             }
             return false;
         };
         var pagingInputDirtyCheck = {
-            save: function( options ) {
-                var callback = options.callback;
-
-//                saveGrades( {
-//                    success: function() {
-//                        if ( !inputIsDirty() ) { callback(); }
-//                    }
-//                });
-            },
-            no: function( options ) {
-                if (typeof(options.callback) == 'function') {
-                    options.callback();
-                }
-            },
+            save:    saveCallback,
+            no:      doNotSaveCallback,
             isDirty: inputIsDirty
         };
 
@@ -136,19 +146,8 @@ $.fn.dataTableExt.oPagination.selfServiceDefaultPagination = {
             }
 
             var pagingButtonDirtyCheck = {
-                save: function( options ) {
-                    var callback = options.callback;
-
-//                    saveGrades( {
-//                        success: function() {
-//                            if ( !buttonIsDirty() ) { callback(); }
-//                        }
-//                    });
-                },
-                no: function( options ) {
-                    var callback = options.callback || function() {}
-                    callback();
-                },
+                save:    saveCallback,
+                no:      doNotSaveCallback,
                 isDirty: buttonIsDirty
             };
 
@@ -425,13 +424,13 @@ var getEditableTypeDef = function( column ) {
 }
 
 var updateData = function (property, value, settings, el, datatable) {
-    datatable = datatable || demoPersonTable;
+    datatable = datatable || { };
     var data = datatable.fnGetData(el.parentNode);
 
     if (value === "")
         value = null;
 
-    var model = bioDemCollection.get(data.id)
+    var model = datatable.fnSettings().oInit.aoBackboneCollection.get(data.id)
 
     if (!model) {
         // handle it
@@ -446,9 +445,14 @@ var updateData = function (property, value, settings, el, datatable) {
     return value;
 };
 
-var createRowCallback = function( editableColumns, fnRowCallback ) {
+var createRowCallback = function( settings ) {
+    var editableColumns = settings.editableColumns || [];
+    var fnRowCallback   = settings.fnRowCallback;
+
     var out = function (row, data, displayIndex, displayIndexFull) {
         var tableInstance = this;
+
+        editableColumns = editableColumns || []
 
         _.each(editableColumns, function (column) {
             var editableTypeDef = getEditableTypeDef(column);
@@ -463,7 +467,7 @@ var createRowCallback = function( editableColumns, fnRowCallback ) {
                         _.defer(function() {
 //                                        getKeyTable().block = false;
                         });
-                        return encodeHTML(updateData(column.name, value, settings, this));
+                        return encodeHTML(updateData(column.name, value, settings, this, tableInstance));
                     },
                     editableTypeDef
                 );
@@ -481,6 +485,10 @@ var createRowCallback = function( editableColumns, fnRowCallback ) {
 }
 
 /**
+ * @depreciated
+ *
+ *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *
  * This function will create a data table with default settings.
  *
  * @param settings
@@ -494,7 +502,7 @@ function createDataTable( settings ) {
         bInfo:           false,
         bLengthChange:   false,
         bPaginate:       false,
-        sPaginationType: "selfServiceDefaultPagination",
+        sPaginationType: "full_numbers",
         iDisplayLength:  50,
         aLengthMenu:     [50, 100, 250, 500],
         sDom:            'rt<"bottom ui-widget-header"p<"bottom-divider">l<"dataTables_info"><"clear">',
@@ -508,12 +516,6 @@ function createDataTable( settings ) {
         }
     };
     settings = $.extend(defaults, settings);
-
-    settings.fnRowCallback = createRowCallback(settings.editableColumns || [], settings.fnRowCallback );
-
-    var tableId = settings.id || settings.target.attr("id");
-
-    settings.aaData = createDataTablesJSON(settings.aoBackboneCollection, tableId);
 
     // TODO:  Determine why this can't be done via a CSS class as opposed to manually setting the element.style.
     var table = settings.target.dataTable( settings ).width( "100%" );
@@ -535,52 +537,205 @@ function createDataTable( settings ) {
 
     listenForRemovingFocusOnEditableCell();
 
-    var selectEl = $(table).parent().find(".bottom .dataTables_length select");
-
-    preparePagingSelect(selectEl, table.fnSettings().oInit.aoBackboneCollection);
-
-    replaceDataTablesSortListeners(table);
-
     return table;
 }
 
+/**
+ * @el jQuery object the element to associate with this view
+ * @collection Backbone.Collection the collection to associate with this view
+ * @editableColumns array list of columns to make editable
+ * @settings object any custom grid settings
+ */
 Backbone.DataTablesViewInternal = Backbone.View.extend({
+    table: undefined,
+    defaultPageLengths: [50, 100, 250, 500],
     initialize: function () {
-        _.bindAll(this, 'render' );
+        _.bindAll(this, 'render', 'reload', 'success', 'error', 'generateDataIdentifier', 'determinePageLengths', 'getSelectedRows', 'getColumnSelector', 'notificationAdded', 'notificationRemoved');
+        
+        if (typeof(this.collection) != 'undefined') {
+            this.collection.bind( "reset", this.render );
+            this.collection.bind( "change", function(model) {
+                model.makeDirty();
+            });
+        }
 
-        if (typeof(this.collection) != 'undefined')
-            this.collection.bind( 'reset', this.render );
+        if (typeof(notifications) != 'undefined' && typeof(notifications.bind) == 'function') {
+            notifications.bind('add',    this.notificationAdded );
+            notifications.bind('remove', this.notificationRemoved );
+        }
+    },
+    success: function(model, resp) {
+        if (typeof(this.options.success) == "function")
+            this.options.success.call(this, model, resp);
+    },
+    error: function(model, resp) {
+        if (typeof(this.options.error) == "function")
+            this.options.error.call(this, model, resp);
     },
     render: function() {
-        var tableId = $(this.el).attr("id");
-        if (window[tableId] !== null && window[tableId] != undefined) {
-            window[tableId].fnDestroy();
+        if (!_.isNull(this.table) && !_.isUndefined(this.table)) {
+            this.table.fnDestroy();
         }
 
         if (_.isNull(this.collection.sortColumn)) {
-            var column = _.first(this.options.columns);
+            var column = _.first(this.options.aoColumnDefs);
 
             this.collection.sortColumn = column.mDataProp
         }
 
         if (_.isNull(this.collection.sortColumnIdx)) {
-            for (var x = 0; x < this.options.columns.length; x++) {
-                if (this.options.columns[x].mDataProp == this.collection.sortColumn) {
+            for (var x = 0; x < this.options.aoColumnDefs.length; x++) {
+                if (this.options.aoColumnDefs[x].mDataProp == this.collection.sortColumn) {
                     this.collection.sortColumnIdx = x;
                     break;
                 }
             }
         }
 
-        window[tableId] = createDataTable( {
+        var blacklist = ['el', 'collection', 'editableColumns'];
+
+        var settings = _.pick(this.options, _.without(_.keys(this.options), blacklist));
+
+        settings = _.defaults(settings, {
             target:               $(this.el),
-            bLengthChange:        this.paginate || true,
-            bPaginate:            this.paginate || true,
+            bLengthChange:        this.collection.paginate,
+            bPaginate:            this.collection.paginate,
             aaSorting:            [ [this.collection.sortColumnIdx, this.collection.sortDirection] ],
             aoBackboneCollection: this.collection,
-            aoColumnDefs:         this.options.columns || [],
-            editableColumns:      this.options.editableColumns || []
+            oBackboneView:        this,
+            editableColumns:      this.options.editableColumns || [],
+            iDisplayLength:       this.collection.pageInfo().pageMaxSize
         });
+
+        this.table = this.createDataTable( settings )
+    },
+    save: function() {
+        if (typeof(this.collection) != 'undefined' && this.collection.isDirty()) {
+            this.collection.save({ success: this.success, error: this.error });
+        }
+    },
+    reload: function() {
+        this.table.fnClearTable(0);
+        this.table.fnAddData( createDataTablesJSON( this.collection, this.generateDataIdentifier() ) );
+    },
+    generateDataIdentifier: function() {
+        return $(this.el).attr("id") || "dataTable";
+    },
+    determinePageLengths: function ( settings ) {
+        var size = this.collection.pageInfo().pageMaxSize;
+
+        if (!_.find(this.defaultPageLengths, function (it) { return it == size })) {
+            var arr = this.defaultPageLengths.concat(size);
+            this.defaultPageLengths = _.sortBy(arr, function (it) { return it; });
+        }
+        
+        return this.defaultPageLengths;
+    },
+    createDataTable: function ( settings ) {
+        var pageLengths
+
+        // set up settings
+        var defaults = {
+            bJQueryUI:       true,
+            bAutoWidth:      false,
+            bInfo:           false,
+            bLengthChange:   false,
+            bPaginate:       false,
+            sPaginationType: "selfServiceDefaultPagination",
+            iDisplayLength:  50,
+            aLengthMenu:     this.determinePageLengths(),
+            sDom:            'rt<"bottom ui-widget-header"p<"bottom-divider">l<"dataTables_info"><"clear">',
+            oLanguage: {
+                sLengthMenu:   $.i18n.prop('js.dataTable.sLengthMenu'),
+                sZeroRecords:  $.i18n.prop('js.dataTable.sZeroRecords'),
+                sInfo:         $.i18n.prop('js.dataTable.sInfo'),
+                sInfoEmpty:    $.i18n.prop('js.dataTable.sInfoEmpty'),
+                sInfoFiltered: $.i18n.prop('js.dataTable.sInfoFiltered'),
+                sEmptyTable:   $.i18n.prop('js.dataTable.sEmptyTable')
+            }
+        };
+        settings = $.extend(defaults, settings);
+
+        settings.fnRowCallback = createRowCallback( settings );
+
+        var tableId = this.generateDataIdentifier();
+
+        settings.aaData = createDataTablesJSON(settings.aoBackboneCollection, tableId);
+
+        // TODO:  Determine why this can't be done via a CSS class as opposed to manually setting the element.style.
+        var table = settings.target.dataTable( settings ).width( "100%" );
+
+        // enable row selection
+        $(table.selector + " tbody tr").live("click", function(event) {
+            $(this).parent().find("tr").removeClass("row_selected");
+            $(this).addClass( "row_selected" );
+        });
+
+        // enable mouse over styling support
+        $( table.selector + ' tbody tr').live('mouseover mouseout', function(event) {
+            if (event.type == 'mouseover') {
+                $(this).addClass('row_hover');
+            } else {
+                $(this).removeClass('row_hover');
+            }
+        });
+
+        listenForRemovingFocusOnEditableCell();
+
+        var selectEl = $(table).parent().find(".bottom .dataTables_length select");
+
+        preparePagingSelect(selectEl, table.fnSettings().oInit.aoBackboneCollection);
+
+        replaceDataTablesSortListeners(table);
+
+        return table;
+    },
+    getSelectedRows: function() {
+        var selected = _.filter(this.table.fnGetNodes(), function(it) {
+            return $(it).hasClass('row_selected');
+        });
+
+        return selected;
+    },
+    getColumnSelector: function( propertyName ) {
+        var idx = getColumnDivIndexByProperty( this.table, propertyName );
+
+        if (!_.isUndefined(idx))
+            return this.$el.selector + ' tbody tr td:nth-child(' + idx + ')';
+
+        return false;
+    },
+    notificationAdded: function( notification ) {
+        var model = this.collection.find( function( m ) {
+            if (notification.get( "model" )) {
+                return m.get( "id" ) === notification.get( "model" ).id;
+            }
+        });
+
+        if (model) {
+            var id       = model.get("id"),
+                types    = { success:'notification-success', warning:'notification-warning' },
+                clz      = types[notification.get( "type" )] || "notification-error",
+                selector = "#" + this.generateDataIdentifier() + "-" + id;
+
+
+            $(selector).stop(true,true).addClass(clz);
+        }
+    },
+    notificationRemoved: function( notification ) {
+        var model = this.collection.find( function( m ) {
+            return m === notification.get( "model" );
+        });
+
+        if (model) {
+            var id       = model.get("id"),
+                types    = { success:'notification-success', warning:'notification-warning' },
+                clz      = types[notification.get( "type" )] || "notification-error",
+                selector = "#" + this.generateDataIdentifier() + "-" + id;
+
+
+            $(selector).removeClass(clz, 1000);
+        }
     }
 });
 

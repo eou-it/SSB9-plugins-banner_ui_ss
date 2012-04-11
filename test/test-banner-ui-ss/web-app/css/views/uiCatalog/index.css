@@ -46,6 +46,10 @@ ul {
     width: 15em;
 }
 
+.demo-person-save-button {
+    margin-top: 5px;
+}
+
 .inner-content {
     overflow: auto;
 }
