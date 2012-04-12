@@ -27,7 +27,6 @@
     <plugin name='csv' version='0.3 =&gt; *' />
     <plugin name='feeds' version='1.5 =&gt; *' />
     <plugin name='selenium' version='0.6 =&gt; *' />
-    <plugin name='bannerCore' version='1.0.17 =&gt; *' />
   </dependencies>
   <behavior />
 </plugin>
