@@ -63,6 +63,20 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/fnFilterClearPlugin.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/KeyTable.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/datatables-custom.js']
+
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.js']
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.plus.js']
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.picker.js']
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.picker.ext.js']
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.islamic.js']
+
+        resource url:[plugin: 'i18n-core', file: 'js/jquery.multi.calendars.picker.js']
+        resource url:[plugin: 'i18n-core', file: 'js/jquery.jeditable.multi.datepicker.js']
+        resource url:[plugin: 'i18n-core', file: 'js/jquery.multi.calendars.picker.ext.js']
+
+        resource url:[plugin: 'i18n-core', file: 'js/multi.calendar.init.js']
+
+        resource url:[plugin: 'i18n-core', file: 'css/multiCalendar.css']
     }
 
     'bannerSelfServiceRTL' {

@@ -37,6 +37,7 @@ grails.project.dependency.resolution = {
         compile 'com.sungardhe:spring-security-core:1.0.1'
         compile 'com.sungardhe:banner-codenarc:0.1.3'
         compile 'com.sungardhe:sghe-aurora:0.0.6'
+        compile 'com.sungardhe:i18n-core:0.0.4'
 
         compile ':cache-headers:1.1.5'
         compile ':codenarc:0.8'
