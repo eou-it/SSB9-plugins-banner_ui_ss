@@ -573,6 +573,9 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
             this.options.error.call(this, model, resp);
     },
     render: function() {
+        if (_.isFunction(this.options.beforeRender))
+            this.options.beforeRender.call(this);
+
         if (!_.isNull(this.table) && !_.isUndefined(this.table)) {
             this.table.fnDestroy();
         }
@@ -608,6 +611,9 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
         });
 
         this.table = this.createDataTable( settings )
+
+        if (_.isFunction(this.options.afterRender))
+            this.options.afterRender.call(this);
     },
     save: function() {
         if (typeof(this.collection) != 'undefined' && this.collection.isDirty()) {
