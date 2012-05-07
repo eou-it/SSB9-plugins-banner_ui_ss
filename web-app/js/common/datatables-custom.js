@@ -307,11 +307,8 @@ function sortTable(el, table) {
                 collection.sortColumnIdx = columnIdx;
 
                 collection.fetch();
-// TODO                facultyIncompleteRegistrationCollection.fetch();
-            }
+            };
 
-// TODO       rather then farming out the 'isDirty' callback find a better way to integrate multiple datatables - FGE req
-//            if (typeof(settings.oInit.isDirty) == 'function' && settings.oInit.isDirty()) {
             if (collection.isDirty()) {
                 setTimeout( function() {
                     var n = new Notification( {message: $.i18n.prop("js.notification.dirtyCheck.message"), type:"warning", promptMessage: $.i18n.prop("js.notification.dirtyCheck.promptMessage")} );
@@ -347,11 +344,10 @@ function sortTable(el, table) {
             }
          }
     }
-};
+}
 
-// TODO:  Some of these functions can be injected into the datatable by looking at the jQuery or Underscore.js $.extend, _.extend function.
-function getColumnIndexByProperty( table, mDataProp ) {
-    var columns = table.fnSettings().aoColumns;
+$.fn.dataTableExt.oApi.getColumnIndexByProperty = function ( oSettings, mDataProp ) {
+    var columns = oSettings.aoColumns;
 
     var j = 0;
     for (var i = 0; i < columns.length; i++) {
@@ -361,10 +357,10 @@ function getColumnIndexByProperty( table, mDataProp ) {
 
         j++;
     }
-}
+};
 
-function getColumnDivIndexByProperty( table, mDataProp ) {
-    var columns = table.fnSettings().aoColumns;
+$.fn.dataTableExt.oApi.getColumnDivIndexByProperty = function ( oSettings, mDataProp ) {
+    var columns = oSettings.aoColumns;
 
     var j = 1;
     for (var i = 0; i < columns.length; i++) {
@@ -376,7 +372,7 @@ function getColumnDivIndexByProperty( table, mDataProp ) {
             j++;
         }
     }
-}
+};
 
 /**
  * Provides a simplfied way to build a selector for a column on a given table given a mDataProp.
@@ -385,7 +381,7 @@ function getColumnDivIndexByProperty( table, mDataProp ) {
  * @param table
  */
 function getColumnSelector( table, mDataProp ) {
-    return table.selector + ' tbody tr td:nth-child(' + getColumnDivIndexByProperty( table, mDataProp ) + ')';
+    return table.selector + ' tbody tr td:nth-child(' + table.getColumnDivIndexByProperty( table, mDataProp ) + ')';
 }
 
 function listenForRemovingFocusOnEditableCell() {
@@ -409,18 +405,6 @@ function removeFocusOnEditableField () {
     //Perform any other clean up if needed.
     //Hide calendar
     $('#ui-datepicker-div').css('display','none');
-};
-
-/*
- * Add common options for all our editable column types.
- */
-var getEditableTypeDef = function( column ) {
-    return _.extend( {}, column, {
-        onblur: function(val, settings) {
-            $('form', this).submit();
-        },
-        placeholder: ""
-    });
 }
 
 var updateData = function (property, value, settings, el, datatable) {
@@ -449,14 +433,22 @@ var createRowCallback = function( settings ) {
     var editableColumns = settings.editableColumns || [];
     var fnRowCallback   = settings.fnRowCallback;
 
-    var out = function (row, data, displayIndex, displayIndexFull) {
+    var getEditableTypeDef = function ( column ) {
+        return _.extend( {}, column, {
+            onblur: function(val, settings) {
+                $('form', this).submit();
+            },
+            placeholder: ""
+        });
+    };
+
+    return function (row, data, displayIndex, displayIndexFull) {
         var tableInstance = this;
 
-        editableColumns = editableColumns || []
+        editableColumns = editableColumns || [ ];
 
         _.each(editableColumns, function (column) {
-            var editableTypeDef = getEditableTypeDef(column);
-            var elements = $('td:nth-child(' + getColumnDivIndexByProperty( tableInstance, column.name ) + ')', row);
+            var elements = $('td:nth-child(' + tableInstance.getColumnDivIndexByProperty( column.name ) + ')', row);
 
             _.each(elements, function (el) {
                 var aPos  = tableInstance.fnGetPosition( el );
@@ -465,11 +457,11 @@ var createRowCallback = function( settings ) {
                 $(el).editable(
                     function (value, settings) {
                         _.defer(function() {
-//                                        getKeyTable().block = false;
+//                            getKeyTable().block = false;
                         });
                         return encodeHTML(updateData(column.name, value, settings, this, tableInstance));
                     },
-                    editableTypeDef
+                    getEditableTypeDef(column)
                 );
             });
         });
@@ -480,9 +472,7 @@ var createRowCallback = function( settings ) {
 
         return row;
     };
-
-    return out;
-}
+};
 
 /**
  * @depreciated
@@ -610,7 +600,7 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
             iDisplayLength:       this.collection.pageInfo().pageMaxSize
         });
 
-        this.table = this.createDataTable( settings )
+        this.table = this.createDataTable( settings );
 
         if (_.isFunction(this.options.afterRender))
             this.options.afterRender.call(this);
@@ -638,7 +628,6 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
         return this.defaultPageLengths;
     },
     createDataTable: function ( settings ) {
-        var pageLengths
 
         // set up settings
         var defaults = {
@@ -660,6 +649,7 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
                 sEmptyTable:   $.i18n.prop('js.dataTable.sEmptyTable')
             }
         };
+
         settings = $.extend(defaults, settings);
 
         settings.fnRowCallback = createRowCallback( settings );
@@ -697,14 +687,12 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
         return table;
     },
     getSelectedRows: function() {
-        var selected = _.filter(this.table.fnGetNodes(), function(it) {
+        return _.filter(this.table.fnGetNodes(), function(it) {
             return $(it).hasClass('row_selected');
         });
-
-        return selected;
     },
     getColumnSelector: function( propertyName ) {
-        var idx = getColumnDivIndexByProperty( this.table, propertyName );
+        var idx = this.table.getColumnDivIndexByProperty( propertyName );
 
         if (!_.isUndefined(idx))
             return this.$el.selector + ' tbody tr td:nth-child(' + idx + ')';
