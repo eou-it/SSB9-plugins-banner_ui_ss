@@ -375,6 +375,10 @@ $.fn.dataTableExt.oApi.getColumnDivIndexByProperty = function ( oSettings, mData
 };
 
 /**
+ * @depreciated
+ *
+ *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *
  * Provides a simplfied way to build a selector for a column on a given table given a mDataProp.
  * @param id
  * @param mDataProp
@@ -407,6 +411,11 @@ function removeFocusOnEditableField () {
     $('#ui-datepicker-div').css('display','none');
 }
 
+/**
+ * @depreciated
+ *
+ *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ */
 var updateData = function (property, value, settings, el, datatable) {
     datatable = datatable || { };
     var data = datatable.fnGetData(el.parentNode);
@@ -427,51 +436,6 @@ var updateData = function (property, value, settings, el, datatable) {
     }
 
     return value;
-};
-
-var createRowCallback = function( settings ) {
-    var editableColumns = settings.editableColumns || [];
-    var fnRowCallback   = settings.fnRowCallback;
-
-    var getEditableTypeDef = function ( column ) {
-        return _.extend( {}, column, {
-            onblur: function(val, settings) {
-                $('form', this).submit();
-            },
-            placeholder: ""
-        });
-    };
-
-    return function (row, data, displayIndex, displayIndexFull) {
-        var tableInstance = this;
-
-        editableColumns = editableColumns || [ ];
-
-        _.each(editableColumns, function (column) {
-            var elements = $('td:nth-child(' + tableInstance.getColumnDivIndexByProperty( column.name ) + ')', row);
-
-            _.each(elements, function (el) {
-                var aPos  = tableInstance.fnGetPosition( el );
-                var aData = tableInstance.fnGetData( aPos[0] );
-
-                $(el).editable(
-                    function (value, settings) {
-                        _.defer(function() {
-//                            getKeyTable().block = false;
-                        });
-                        return encodeHTML(updateData(column.name, value, settings, this, tableInstance));
-                    },
-                    getEditableTypeDef(column)
-                );
-            });
-        });
-
-        if (typeof(fnRowCallback) == 'function') {
-            fnRowCallback();
-        }
-
-        return row;
-    };
 };
 
 /**
@@ -540,7 +504,7 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
     table: undefined,
     defaultPageLengths: [50, 100, 250, 500],
     initialize: function () {
-        _.bindAll(this, 'render', 'reload', 'success', 'error', 'generateDataIdentifier', 'determinePageLengths', 'getSelectedRows', 'getColumnSelector', 'notificationAdded', 'notificationRemoved');
+        _.bindAll(this, 'render', 'reload', 'success', 'error', 'generateDataIdentifier', 'determinePageLengths', 'getSelectedRows', 'getColumnSelector', 'notificationAdded', 'notificationRemoved', 'createRowCallback', 'updateData', 'preparePagingSelect');
         
         if (typeof(this.collection) != 'undefined') {
             this.collection.bind( "reset", this.render );
@@ -627,6 +591,70 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
         
         return this.defaultPageLengths;
     },
+    updateData: function (property, value, settings, el) {
+
+        var data = this.table.fnGetData(el.parentNode);
+
+        if (value === "")
+            value = null;
+
+        var model = this.collection.get(data.id);
+
+        if (model) {
+            var map = { };
+            map[property] = value;
+
+            if (model.get(property) != value)
+                model.set(map);
+        }
+
+        return value;
+    },
+    createRowCallback: function ( settings ) {
+        var view = this;
+        var editableColumns = settings.editableColumns || [];
+        var fnRowCallback   = settings.fnRowCallback;
+
+        var getEditableTypeDef = function ( column ) {
+            return _.extend( {}, column, {
+                onblur: function(val, settings) {
+                    $('form', this).submit();
+                },
+                placeholder: ""
+            });
+        };
+
+        return function (row, data, displayIndex, displayIndexFull) {
+            var tableInstance = this;
+
+            editableColumns = editableColumns || [ ];
+
+            _.each(editableColumns, function (column) {
+                var elements = $('td:nth-child(' + tableInstance.getColumnDivIndexByProperty( column.name ) + ')', row);
+
+                _.each(elements, function (el) {
+                    var aPos  = tableInstance.fnGetPosition( el );
+                    var aData = tableInstance.fnGetData( aPos[0] );
+
+                    $(el).editable(
+                        function (value, settings) {
+                            _.defer(function() {
+//                                getKeyTable().block = false;
+                            });
+                            return encodeHTML(view.updateData(column.name, value, settings, this));
+                        },
+                        getEditableTypeDef(column)
+                    );
+                });
+            });
+
+            if (typeof(fnRowCallback) == 'function') {
+                fnRowCallback();
+            }
+
+            return row;
+        };
+    },
     createDataTable: function ( settings ) {
 
         // set up settings
@@ -652,14 +680,14 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
 
         settings = $.extend(defaults, settings);
 
-        settings.fnRowCallback = createRowCallback( settings );
+        settings.fnRowCallback = this.createRowCallback( settings );
 
         var tableId = this.generateDataIdentifier();
 
         settings.aaData = createDataTablesJSON(settings.aoBackboneCollection, tableId);
 
         // TODO:  Determine why this can't be done via a CSS class as opposed to manually setting the element.style.
-        var table = settings.target.dataTable( settings ).width( "100%" );
+        var table = this.$el.dataTable( settings ).width( "100%" );
 
         // enable row selection
         $(table.selector + " tbody tr").live("click", function(event) {
@@ -678,13 +706,58 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
 
         listenForRemovingFocusOnEditableCell();
 
-        var selectEl = $(table).parent().find(".bottom .dataTables_length select");
-
-        preparePagingSelect(selectEl, table.fnSettings().oInit.aoBackboneCollection);
+        this.preparePagingSelect();
 
         replaceDataTablesSortListeners(table);
 
         return table;
+    },
+    preparePagingSelect: function () {
+        var collection = this.collection,
+            el = this.$el.parent().find(".bottom .dataTables_length select"),
+            dirtyCheckDefaultsForPagingSelect = {
+            save: function( options ) {
+                var callback = options.callback;
+
+                // This probably can be improved by using a 'promise' object from jQuery.  Will investigate at a later date.
+        //        saveGrades( {
+        //            success: function() {
+        //                if ( !isDirty() ) { callback(); }
+        //            }
+        //        });
+                collection.fetch()
+            },
+            no: function( options ) {
+                collection.fetch()
+            },
+            isDirty: function() {
+                return collection.isDirty();
+            }
+        };
+
+        el.change(function(e) {
+            var size = el.find("option:selected").val();
+            collection.setPageSize(parseInt(size, 10));
+        });
+
+        // A select statement will changed its selected value even if the 'onChange' event returns false.  If
+        // the record is dirty, and the user cancels the request to save we want to have the initial value of the
+        // select available to reset it to what it was prior to them changing the paging length.
+        el.focus(function(e) {
+            $.data( this, 'initial', this.value );
+        });
+
+
+        el.dirtyCheck( _.defaults( {
+                eventType: "change",
+                cancelCallback: function() {
+                    var target = $( selectorString );
+                    if (target.data().initial) {
+                        target.val( target.data().initial );
+                    }
+                }
+            }, dirtyCheckDefaultsForPagingSelect )
+        );
     },
     getSelectedRows: function() {
         return _.filter(this.table.fnGetNodes(), function(it) {
