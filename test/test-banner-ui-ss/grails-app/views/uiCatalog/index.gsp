@@ -15,7 +15,11 @@
 <html>
     <head>
         <meta name="layout" content="bannerSelfServicePage"/>
+        <meta name="menuEndPoint" content="/TestBannerUiSs/ssb/menu"/>
+        <meta name="menuBaseURL" content="/TestBannerUiSs/ssb"/>
+        
         <r:require modules="uiCatalog"/>
+
         <link rel="icon" href="${resource(dir: 'images/poc', file: 'events-favicon.png')}" sizes="32x32" type="image/png">
         <title><g:message code="banner.self.service.ui.catalog"/></title>
 
@@ -36,45 +40,59 @@
                         %{--<button id="saveButton" class="primary-button"><g:message code="grades.button.save.label" /></button>--}%
                     %{--</div>--}%
                 %{--</div>--}%
-                <div class="component ui-widget catalog-entry" data-component="jquery-ui" data-desc="${g.message(code: 'jquery-ui')}">
-                    <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.widgets.jqueryui" /></span></div>
-                    <div class="ui-widget-content">
 
-                        <g:widgetCode template="jquery-ui/buttons" />
-                        <g:widgetCode template="jquery-ui/tabs" />
-                        <g:widgetCode template="jquery-ui/datePicker" model="[ date: (new Date()).format(g.message( code: 'default.date.format')) ]" />
-                        <g:widgetCode template="jquery-ui/autoComplete.comboBox.jeditable" />
-                        <g:widgetCode template="jquery-ui/autoComplete.comboBox" />
+                <g:if test="${widget != null}">
+                    <div class="component ui-widget catalog-entry" data-component="jquery-ui" data-desc="${g.message(code: 'jquery-ui')}">
+                        <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.widgets.jqueryui" /></span></div>
+                        <div class="ui-widget-content">
 
+                            <g:widgetCode template="${widget}" />
+
+                        </div>
                     </div>
-                </div>
-                <div class="component ui-widget catalog-entry" data-component="backbone" data-desc="${g.message(code: 'backbone')}">
-                    <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.backbone" /></span></div>
-                    <div class="ui-widget-content">
+                </g:if>
+                <g:else>
 
-                        <g:widgetCode template="backbone/scrollable.content" />
-                        <g:widgetCode template="backbone/sidebar.navigation" />
-                        <g:widgetCode template="backbone/collection.fetch" />
-                        <g:widgetCode template="backbone/data.bind.form" />
+                    <div class="component ui-widget catalog-entry" data-component="jquery-ui" data-desc="${g.message(code: 'jquery-ui')}">
+                        <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.widgets.jqueryui" /></span></div>
+                        <div class="ui-widget-content">
 
+                            <g:widgetCode template="jquery-ui/buttons" />
+                            <g:widgetCode template="jquery-ui/tabs" />
+                            <g:widgetCode template="jquery-ui/datePicker" model="[ date: (new Date()).format(g.message( code: 'default.date.format')) ]" />
+                            <g:widgetCode template="jquery-ui/autoComplete.comboBox.jeditable" />
+                            <g:widgetCode template="jquery-ui/autoComplete.comboBox" />
+
+                        </div>
                     </div>
-                </div>
-                <div class="component ui-widget catalog-entry" data-component="data-tables" data-desc="${g.message(code: 'data-tables')}">
-                    <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.jqueryui.dataEntryGrid" /></span></div>
-                    <div class="ui-widget-content">
+                    <div class="component ui-widget catalog-entry" data-component="backbone" data-desc="${g.message(code: 'backbone')}">
+                        <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.backbone" /></span></div>
+                        <div class="ui-widget-content">
 
-                        <g:widgetCode template="jquery-ui/dataTables" />
+                            <g:widgetCode template="backbone/scrollable.content" />
+                            <g:widgetCode template="backbone/sidebar.navigation" />
+                            <g:widgetCode template="backbone/collection.fetch" />
+                            <g:widgetCode template="backbone/data.bind.form" />
 
+                        </div>
                     </div>
-                </div>
-                <div class="component ui-widget catalog-entry" data-component="notification-center" data-desc="${g.message(code: 'notification-center')}">
-                    <div class="ui-widget-header content-container-header"><span><g:message code="notification-center" /></span></div>
-                    <div class="ui-widget-content">
+                    <div class="component ui-widget catalog-entry" data-component="data-tables" data-desc="${g.message(code: 'data-tables')}">
+                        <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.jqueryui.dataEntryGrid" /></span></div>
+                        <div class="ui-widget-content">
 
-                        <g:widgetCode template="internal/notification.center.flash" />
+                            <g:widgetCode template="jquery-ui/dataTables" />
 
+                        </div>
                     </div>
-                </div>
+                    <div class="component ui-widget catalog-entry" data-component="notification-center" data-desc="${g.message(code: 'notification-center')}">
+                        <div class="ui-widget-header content-container-header"><span><g:message code="notification-center" /></span></div>
+                        <div class="ui-widget-content">
+
+                            <g:widgetCode template="internal/notification.center.flash" />
+
+                        </div>
+                    </div>
+                </g:else>
             </div>
             <div class="ui-layout-east" id="sidebar">
                 <div class="ul-container">
