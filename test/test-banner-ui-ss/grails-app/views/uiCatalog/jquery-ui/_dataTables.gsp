@@ -17,6 +17,7 @@
             <tbody></tbody>
         </table>
 
+        <button class="demo-person-refresh-button"><g:message code="default.button.refresh.label" /></button>
         <button class="demo-person-save-button"><g:message code="default.button.save.label" /></button>
     </div>
 </div>

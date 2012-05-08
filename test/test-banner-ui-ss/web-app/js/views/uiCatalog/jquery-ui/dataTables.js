@@ -54,8 +54,7 @@ $(document).ready(function() {
 
     demoPersonTableView.render();
 
-    $(".demo-person-save-button").button().click(function(e) {
-        demoPersonTableView.save();
-    });
+    $(".demo-person-save-button").button().click(    function() { demoPersonTableView.save(); } );
+    $(".demo-person-refresh-button").button().click( function() { demoPersonTableView.collection.fetch(); } );
 
 });
