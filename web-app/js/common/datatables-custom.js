@@ -501,10 +501,14 @@ function createDataTable( settings ) {
  * @settings object any custom grid settings
  */
 Backbone.DataTablesViewInternal = Backbone.View.extend({
+    styles: {
+        hover:    "row_hover",
+        selected: "row_selected"
+    },
     table: undefined,
     defaultPageLengths: [50, 100, 250, 500],
     initialize: function () {
-        _.bindAll(this, 'render', 'reload', 'success', 'error', 'generateDataIdentifier', 'determinePageLengths', 'getSelectedRows', 'getColumnSelector', 'notificationAdded', 'notificationRemoved', 'createRowCallback', 'updateData', 'preparePagingSelect');
+        _.bindAll(this, 'render', 'reload', 'success', 'error', 'generateDataIdentifier', 'determinePageLengths', 'getSelectedRows', 'getColumnSelector', 'notificationAdded', 'notificationRemoved', 'createRowCallback', 'updateData', 'preparePagingSelect', 'createDataTablesJSON');
         
         if (typeof(this.collection) != 'undefined') {
             this.collection.bind( "reset", this.render );
@@ -576,7 +580,7 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
     },
     reload: function() {
         this.table.fnClearTable(0);
-        this.table.fnAddData( createDataTablesJSON( this.collection, this.generateDataIdentifier() ) );
+        this.table.fnAddData( this.createDataTablesJSON() );
     },
     generateDataIdentifier: function() {
         return $(this.el).attr("id") || "dataTable";
@@ -615,10 +619,13 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
         var editableColumns = settings.editableColumns || [];
         var fnRowCallback   = settings.fnRowCallback;
 
-        var getEditableTypeDef = function ( column ) {
+        var getEditableTypeDef = function ( column, row ) {
             return _.extend( {}, column, {
                 onblur: function(val, settings) {
                     $('form', this).submit();
+                },
+                onedit: function() {
+                    $(row).addClass( view.styles.selected ).siblings().removeClass( view.styles.selected );
                 },
                 placeholder: ""
             });
@@ -643,7 +650,7 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
                             });
                             return encodeHTML(view.updateData(column.name, value, settings, this));
                         },
-                        getEditableTypeDef(column)
+                        getEditableTypeDef( column, row )
                     );
                 });
             });
@@ -655,10 +662,23 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
             return row;
         };
     },
+    createDataTablesJSON: function () {
+        var json = this.collection.toJSON(),
+            prefix = this.generateDataIdentifier();
+
+        _.each( json, function( o ) {
+            o[ "DT_RowId" ]    = prefix + "-" + o.id;
+            o[ "DT_RowClass" ] = prefix + "-row";
+        });
+
+        return json;
+    },
     createDataTable: function ( settings ) {
+        var view = this;
 
         // set up settings
         var defaults = {
+            aaData:          this.createDataTablesJSON(),
             bJQueryUI:       true,
             bAutoWidth:      false,
             bInfo:           false,
@@ -678,31 +698,16 @@ Backbone.DataTablesViewInternal = Backbone.View.extend({
             }
         };
 
-        settings = $.extend(defaults, settings);
+        settings = $.extend( defaults, settings );
 
         settings.fnRowCallback = this.createRowCallback( settings );
-
-        var tableId = this.generateDataIdentifier();
-
-        settings.aaData = createDataTablesJSON(settings.aoBackboneCollection, tableId);
 
         // TODO:  Determine why this can't be done via a CSS class as opposed to manually setting the element.style.
         var table = this.$el.dataTable( settings ).width( "100%" );
 
-        // enable row selection
-        $(table.selector + " tbody tr").live("click", function(event) {
-            $(this).parent().find("tr").removeClass("row_selected");
-            $(this).addClass( "row_selected" );
-        });
-
-        // enable mouse over styling support
-        $( table.selector + ' tbody tr').live('mouseover mouseout', function(event) {
-            if (event.type == 'mouseover') {
-                $(this).addClass('row_hover');
-            } else {
-                $(this).removeClass('row_hover');
-            }
-        });
+        $( table.selector + ' tbody tr').live('click',     function(event) { $(this).addClass( view.styles.selected ).siblings().removeClass( view.styles.selected ); } );
+        $( table.selector + ' tbody tr').live('mouseover', function(event) { $(this).addClass( view.styles.hover );    } );
+        $( table.selector + ' tbody tr').live('mouseout',  function(event) { $(this).removeClass( view.styles.hover ); } );
 
         listenForRemovingFocusOnEditableCell();
 
@@ -820,6 +825,10 @@ function markDataTablePopups(){
 }
 
 /**
+ * @depreciated
+ *
+ *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *
  * Use this to create json based off a table that is prepared for usage in DataTables
  * @param collection a backbone collection.
  * @param prefix is the prefix you want to set to each tr in the table.  E.g. 'grades-roster' will create a class of 'grades-roster-1234' if
