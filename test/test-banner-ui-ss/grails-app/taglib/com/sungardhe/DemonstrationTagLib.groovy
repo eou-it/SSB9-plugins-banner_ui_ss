@@ -10,6 +10,7 @@ class DemonstrationTagLib {
         def templateClean = template.replace("/", "-").replace(".", "-")
         def titleCode     = attrs.containsKey("title") ? attrs.title : templateClean
         def model         = attrs.containsKey('model') ? attrs.model : [:]
+        def quiet         = attrs.containsKey('quiet') ? attrs.quiet : false
 
         def title         = "<h2>${g.message(code: titleCode)}</h2>"
         def actualOpen    = "<div class=\"actual\">"
@@ -30,13 +31,17 @@ class DemonstrationTagLib {
         out << actualOpen
         out << actualHtml
         out << actualClose
-        out << showCode + hideCode
-        out << jsCodeOpen
-        out << js
-        out << jsCodeClose
-        out << htmlCodeOpen
-        out << actualHtml
-        out << htmlCodeClose
+
+        if (!quiet) {
+            out << showCode + hideCode
+            out << jsCodeOpen
+            out << js
+            out << jsCodeClose
+            out << htmlCodeOpen
+            out << actualHtml
+            out << htmlCodeClose
+        }
+
         out << "</div>"
     }
 

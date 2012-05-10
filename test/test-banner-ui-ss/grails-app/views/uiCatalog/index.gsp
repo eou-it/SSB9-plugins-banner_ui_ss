@@ -46,7 +46,7 @@
                         <div class="ui-widget-header content-container-header"><span><g:message code="ui.catalog.widgets.jqueryui" /></span></div>
                         <div class="ui-widget-content">
 
-                            <g:widgetCode template="${widget}" />
+                            <g:widgetCode template="${widget}" quiet="${quiet}"/>
 
                         </div>
                     </div>

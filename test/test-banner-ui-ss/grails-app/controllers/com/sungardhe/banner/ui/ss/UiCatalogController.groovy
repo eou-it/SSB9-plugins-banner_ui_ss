@@ -5,7 +5,7 @@ import grails.converters.JSON
 class UiCatalogController {
 
     def index = {
-        [ widget: params.widget ?: params.w]
+        [ widget: params.widget ?: params.w, quiet: params.zombie ?: params.z ?: params.quiet ?: params.q ?: false ]
     }
 
     def echo = {
