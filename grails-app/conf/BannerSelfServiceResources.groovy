@@ -38,7 +38,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/log4javascript.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/backbone-custom.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/activity-timer.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/modernizr-2.0.6.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/modernizr-2.5.3.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/logging.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/common.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.sghe.dirtycheck.js']
