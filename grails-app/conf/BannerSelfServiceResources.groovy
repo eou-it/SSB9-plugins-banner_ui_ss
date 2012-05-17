@@ -87,5 +87,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center-rtl.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl-patch.css'],       attrs:[media:'screen, projection']
+        resource url:[plugin: 'i18n-core', file: 'css/multiCalendar-rtl-patch.css'],         attrs:[media:'screen, projection']
     }
 }
