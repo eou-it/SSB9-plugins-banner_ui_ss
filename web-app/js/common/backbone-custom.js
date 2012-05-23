@@ -252,10 +252,15 @@ _.extend(Backbone.Collection.prototype, {
     sortDirection: "asc",
     totalCount:    0,
     pagingCriteria: function() {
-        var self = this;
+        var self = this,
+            offset = self.pageMaxSize * (self.page - 1);
 
-        if (!self.paginate) {
+        if ( !self.paginate ) {
             return { };
+        }
+
+        if ( offset > self.totalCount ) {
+            self.page = Math.ceil( self.totalCount / self.pageMaxSize );
         }
 
         return {
@@ -268,7 +273,7 @@ _.extend(Backbone.Collection.prototype, {
     pageInfo: function() {
         var self = this;
         var ceil = Math.ceil(self.totalCount / self.pageMaxSize);
-        var pageRanges = []
+        var pageRanges = [];
 
         for (var x = 1; x <= ceil; x++) {
             pageRanges.push(self.pageMaxSize * x);

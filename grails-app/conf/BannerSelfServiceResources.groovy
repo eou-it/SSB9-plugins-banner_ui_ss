@@ -17,8 +17,20 @@ modules = {
         }
     }
 
+    'jasmine' {
+        dependsOn 'bannerSelfServiceWithoutAurora'
+
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jasmine/lib/jasmine-1.2.0/jasmine.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jasmine/lib/jasmine-1.2.0/jasmine.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jasmine/lib/jasmine-1.2.0/jasmine-html.js']
+    }
+
     'bannerSelfService' {
-        dependsOn "jquery, jquery-ui, aurora"
+        dependsOn "bannerSelfServiceWithoutAurora, aurora"
+    }
+
+    'bannerSelfServiceWithoutAurora' {
+        dependsOn "jquery, jquery-ui"
 
         defaultBundle environment == "development" ? false : "bannerSelfService"
 
