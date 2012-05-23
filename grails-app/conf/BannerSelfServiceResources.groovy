@@ -17,8 +17,20 @@ modules = {
         }
     }
 
+    'jasmine' {
+        dependsOn 'bannerSelfServiceWithoutAurora'
+
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jasmine/lib/jasmine-1.2.0/jasmine.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jasmine/lib/jasmine-1.2.0/jasmine.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jasmine/lib/jasmine-1.2.0/jasmine-html.js']
+    }
+
     'bannerSelfService' {
-        dependsOn "jquery, jquery-ui, aurora"
+        dependsOn "bannerSelfServiceWithoutAurora, aurora"
+    }
+
+    'bannerSelfServiceWithoutAurora' {
+        dependsOn "jquery, jquery-ui"
 
         defaultBundle environment == "development" ? false : "bannerSelfService"
 
@@ -33,11 +45,12 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.modelbinding.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.datagridview.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/yepnope.1.0.1-min.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/log4javascript.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/backbone-custom.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/activity-timer.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/modernizr-2.0.6.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/modernizr-2.5.3.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/logging.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/common.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.sghe.dirtycheck.js']

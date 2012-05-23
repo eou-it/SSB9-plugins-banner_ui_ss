@@ -138,12 +138,12 @@ div.dataTables_wrapper .ui-widget-header {
 	background-image: url('images/datatables/forward_enabled.jpg');
 }
 
-
 table.display {
 	margin: 0 auto;
 	width: 100%;
 	clear: both;
 	border-collapse: collapse;
+    table-layout: fixed;
 }
 
 table.display thead th {
@@ -180,6 +180,10 @@ table.display tr.heading2 td {
 
 table.display td {
 	padding: 3px 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
 }
 
 table.display td.center {
@@ -935,8 +939,23 @@ ul.ui-autocomplete a.ui-state-hover {
     height:100%;
     width:100%;
 }
+
 .loading-pending {
     visibility:hidden;
+}
+
+.dataTables_wrapper table tbody tr td form {
+    /*margin:1px -1em; *//*push margin out to use full cell*/
+    /*margin-top: -2px;*/
+    /*height: 1.8em;*/
+}
+.dataTables_wrapper table tbody tr td form input {
+    vertical-align: top;
+    /*margin-top: 2px;*/
+    width: 98% !important;
+    padding-left: 5px;
+    height: 100% !important;
+    border: 1px solid #778FA0;
 }
 
 .dataTables_paginate div,
@@ -993,4 +1012,44 @@ div.infoicon {
 
 .ui-datepicker .ui-datepicker-header {
     background-color: #ECF0F4;
+}
+
+/* notification/datatables integration classes */
+
+.dataTables_wrapper tr td:first-child {
+    padding-left:30px;
+}
+
+.dataTables_wrapper tr.notification-error td:first-child {
+    background:url("../images/icon-error-16x16-plus7.png") no-repeat left center
+}
+
+.dataTables_wrapper tr.notification-success td:first-child {
+    background:url("../images/icon-success-16x16-plus7.png") no-repeat left center
+}
+
+.dataTables_wrapper tr.notification-warning td:first-child {
+    background:url("../images/icon-warning-16x16-plus7.png") no-repeat left center
+}
+
+.dataTables_wrapper tr.notification-success {
+    background-color: #DDF4C9;
+}
+
+.dataTables_wrapper tr.notification-error {
+    background-color: #EBCFCF;
+}
+
+.dataTables_wrapper tr.notification-error {
+    border: 1px solid #FF3F3F;
+    background-color: #EBCFCF;
+}
+
+.dataTables_wrapper tr.notification-warning {
+    background-color: #FFF6B3;
+}
+
+.dataTables_wrapper tr.notification-warning {
+    border: 1px solid #f9dc87;
+    background-color: #FFF6B3;
 }

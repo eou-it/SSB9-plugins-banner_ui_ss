@@ -43,7 +43,7 @@
                nope : '${resource(plugin: 'banner-ui-ss', file: 'js/json2.js')}'
             });
 
-            $(document).ready(function() {
+            $(window).load(function() {
                 _.defer( function() {
                     $( "#splash" ).remove();
                 });

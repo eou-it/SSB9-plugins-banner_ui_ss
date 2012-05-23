@@ -61,7 +61,7 @@ grails.project.dependency.resolution = {
         compile 'com.sungardhe:banner-accountsreceivable-validation-common:1.0.0'
         compile 'com.sungardhe:banner-db-main:1.0.4'
         compile 'com.sungardhe:sghe-aurora:1.0.0'
-        compile 'com.sungardhe:banner-ui-ss:1.0.4'
+        compile 'com.sungardhe:banner-ui-ss:1.0.5'
 
         compile ':resources:1.1.6'
         compile ':zipped-resources:1.0'

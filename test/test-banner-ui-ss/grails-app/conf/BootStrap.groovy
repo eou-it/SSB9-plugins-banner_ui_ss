@@ -92,6 +92,17 @@ class BootStrap {
         registerJSONMarshallers()
 
         resourceService.reloadAll()
+
+        List.metaClass.sortAndPaginate = { max, offset = 0, sortColumn, sortDirection = "asc" ->
+            def sorted = delegate.sort { a, b ->
+                a[sortColumn].compareToIgnoreCase b[sortColumn]
+            }
+
+            if (sortDirection == "desc")
+               sorted = sorted.reverse()
+
+            sorted.subList( offset, Math.min( offset + max, delegate.size() ) )
+        }
     }
 
 

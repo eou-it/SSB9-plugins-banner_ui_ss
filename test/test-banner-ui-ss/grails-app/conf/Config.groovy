@@ -143,7 +143,7 @@ dataOrigin = "Banner"
 // connection is attained and the user has the necessary role, the role is enabled
 // for that user and Banner object.
 formControllerMap = [
-    'uiCatalog' : ['SELFSERVICE']
+    'uiCatalog' : ['SPAIDEN']
 ]
 
 grails.plugins.springsecurity.useRequestMapDomainClass = false
