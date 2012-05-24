@@ -22,3 +22,5 @@ test/**/release_info.groovy
 test/**/release_info.groovy.old
 plugin.xml
 *-rtl.css
+test/test-banner-ui-ss/web-app/WEB-INF/i18n-core-lang-addon.xml
+web-app/WEB-INF/i18n-core-lang-addon.xml
