@@ -310,6 +310,9 @@ class RtlCssGenerator {
 
         if (includePluginsDir) {
             filesToGenerate.addAll( getFilesToTransformMapList( BuildSettingsHolder.settings.projectPluginsDir ) )
+            if(new File("${BuildSettingsHolder.settings.baseDir.absolutePath}/plugins/").exists()) {            
+            	filesToGenerate.addAll( getFilesToTransformMapList( new File("${BuildSettingsHolder.settings.baseDir.absolutePath}/plugins/")) )
+            }
         }
 
         filesToGenerate.addAll( getFilesToTransformMapList( new File( "${BuildSettingsHolder.settings.baseDir.absolutePath}/web-app/css/" )))
@@ -322,4 +325,3 @@ class RtlCssGenerator {
             println "Generated RTL version${filesToGenerate.size() > 1 ? "s" : "" } of ${filesToGenerate.source.canonicalFile}"
         }
     }
-}
