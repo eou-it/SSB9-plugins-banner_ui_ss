@@ -285,7 +285,8 @@
                 return false;
             }
 
-            var self       = el,
+            var view       = this,
+                self       = el,
                 settings   = this.table.fnSettings(),
                 column     = "",
                 direction  = "asc",
@@ -298,10 +299,10 @@
                     direction = settings.aaSorting[0][2] == 0 ? "desc" : "asc";
 
                 var innerSortTable = function () {
-                    this.collection.sortColumn    = column;
-                    this.collection.sortDirection = direction;
-                    this.collection.sortColumnIdx = $(self).index();
-                    this.collection.fetch();
+                    view.collection.sortColumn    = column;
+                    view.collection.sortDirection = direction;
+                    view.collection.sortColumnIdx = $(self).index();
+                    view.collection.fetch();
                 };
 
                 if (this.collection.sortColumn    != column
