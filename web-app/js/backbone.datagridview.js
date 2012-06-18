@@ -193,7 +193,7 @@
                 sPaginationType: "selfServiceDefaultPagination",
                 iDisplayLength:  50,
                 aLengthMenu:     this.determinePageLengths(),
-                sDom:            'rt<"bottom ui-widget-header"p<"bottom-divider">l<"dataTables_info"><"clear">',
+                sDom:            'Rrt<"bottom ui-widget-header"p<"bottom-divider">l<"dataTables_info"><"clear">',
                 oLanguage: {
                     sLengthMenu:   $.i18n.prop('js.dataTable.sLengthMenu'),
                     sZeroRecords:  $.i18n.prop('js.dataTable.sZeroRecords'),
@@ -295,7 +295,7 @@
             if (obj) {
                 column = obj.mDataProp;
 
-                if (settings.aaSorting.length == 1 && settings.aaSorting[0][0] == obj.iDataSort)
+                if (settings.aaSorting.length == 1)
                     direction = settings.aaSorting[0][2] == 0 ? "desc" : "asc";
 
                 var innerSortTable = function () {

@@ -71,10 +71,11 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.form.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ajaxmanager.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/ajax-manager.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/jquery.dataTables.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/fnReloadAjaxPlugin.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/fnFilterClearPlugin.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables-1.8.2/KeyTable.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/jquery.dataTables.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/fnReloadAjaxPlugin.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/fnFilterClearPlugin.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/KeyTable.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/ColReorderWithResize.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/datatables-custom.js']
     }
 
