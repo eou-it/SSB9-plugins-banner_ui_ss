@@ -77,6 +77,20 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/KeyTable.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/ColReorderWithResize.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/datatables-custom.js']
+
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.js']
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.plus.js']
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.picker.js']
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.picker.ext.js']
+        resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.islamic.js']
+
+        resource url:[plugin: 'i18n-core', file: 'js/jquery.multi.calendars.picker.js']
+        resource url:[plugin: 'i18n-core', file: 'js/jquery.jeditable.multi.datepicker.js']
+        resource url:[plugin: 'i18n-core', file: 'js/jquery.multi.calendars.picker.ext.js']
+
+        resource url:[plugin: 'i18n-core', file: 'js/multi.calendar.init.js']
+
+        resource url:[plugin: 'i18n-core', file: 'css/multiCalendar.css']
     }
 
     'bannerSelfServiceRTL' {
@@ -87,5 +101,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center-rtl.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl-patch.css'],       attrs:[media:'screen, projection']
+
+        resource url:[plugin: 'i18n-core', file: 'css/multiCalendar-rtl-patch.css']
     }
 }

@@ -12,6 +12,7 @@
 
 import org.apache.commons.logging.LogFactory
 import org.apache.log4j.Logger
+import com.sungardhe.banner.i18n.DateConverterService
 
 /**
  * A Grails Plugin providing core UI framework for Self Service Banner application.
@@ -83,6 +84,52 @@ class BannerUiSsGrailsPlugin {
                  }
              }
         }
+
+       application.controllerClasses.each { controller ->
+            def originalMap = controller.metaClass.getMetaMethod("render",[Map] as Class[])
+            def originalString = controller.metaClass.getMetaMethod("render",[String] as Class[])
+
+            if(originalMap) {
+                controller.metaClass.originalRenderMap = originalMap.getClosure()
+
+                controller.metaClass.render = { Map args ->
+                    if(args?.model) {
+                        def dateFields = controller.getPropertyValue("dateFields")
+
+                        if(dateFields && !dateFields.isEmpty()) {
+
+                            def dateConverterService = new DateConverterService()
+                            args?.model.each { key, value ->
+                                if(value != null) {
+                                    args.model[key] =  dateConverterService.formatDateInObjectsToDefaultCalendar(key, value, dateFields);
+                                }
+                            }
+                        }
+                    }
+                    originalRenderMap(args)
+                }
+            }
+
+            if(originalString) {
+                controller.metaClass.originalRenderString = originalString.getClosure()
+
+                controller.metaClass.render = { String txt ->
+                   try {
+                       def dateConverterService = new DateConverterService()
+                       def json = JSON.parse(txt);
+                       def dateFields = controller.getPropertyValue("dateFields")
+                       if(dateFields && !dateFields.isEmpty() && json != JSONObject.NULL) {
+                            json = dateConverterService.JSONDateMarshaller(json, dateFields)
+                            txt = json.toString()
+                       }
+                   }
+                   catch(Exception e) {
+                       println e
+                   }
+                   originalRenderString(txt)
+                }
+            }
+       }
     }
 
 
