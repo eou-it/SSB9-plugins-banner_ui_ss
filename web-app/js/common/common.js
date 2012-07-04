@@ -32,10 +32,20 @@ function getUrl(name) {
 
 
 function validateDate( dateString ) {
-    var dateFormat = $.i18n.prop("js.datepicker.dateFormat");
+    /*var dateFormat = $.i18n.prop("js.datepicker.dateFormat");
     var result = false;
     try {
         if (dateString == $.datepicker.formatDate( dateFormat, $.datepicker.parseDate( dateFormat, dateString))){
+            result = true;
+        }
+    } catch (e) {
+      result = false;
+    } */
+
+    var defaultCalendar = $.i18n.prop("default.calendar");
+    var result = false;
+    try {
+        if($.multicalendar.isValidDateFormat(defaultCalendar, dateString)) {
             result = true;
         }
     } catch (e) {
