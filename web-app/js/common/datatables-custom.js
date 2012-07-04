@@ -514,7 +514,7 @@ function createDataTable( settings ) {
 markDataTablePopups();
 
 function markDataTablePopups(){
-    $('#ui-datepicker-div, .ui-datepicker-header').live('mousedown' , function(){
+    $('#ui-datepicker-div, .ui-datepicker-header, .ui-datepicker-calendar').live('mousedown' , function(){
         $(this).addClass('keytable-popup');
     });
 }
