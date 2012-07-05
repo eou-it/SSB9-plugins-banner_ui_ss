@@ -89,7 +89,9 @@ class DateFormattingFilters {
                             keys.each { key ->
                                 String newValue = paramsMap.get(key)
                                 if(dateFields.contains(key)) {
-                                    newValue = dateConverterService.parseDefaultCalendarToGregorian(newValue)
+                                    if(newValue != null && !newValue.equals("")) {
+                                        newValue = dateConverterService.parseDefaultCalendarToGregorian(newValue)
+                                    }
                                 }
 
                                 paramsMap.put(key, newValue)
