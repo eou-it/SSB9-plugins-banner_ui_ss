@@ -33,18 +33,37 @@
                 tooltip = [ ],
                 el      = $( this.element );
 
-            el.addClass( this.options.styles.container );
+            el.addClass( this.options.styles.container ).attr( "tabindex", 0 );
 
-            var toggleSelectedClass = function ( event ) {
-                var el = $( event.target ).is( "li" ) ? $( event.target ) : $( event.target ).closest( "li" );
+            var toggleSelected = function ( el ) {
+                el = $( el );
 
                 if ( !el.hasClass( self.options.styles.disabled ) ) {
                     el.toggleClass( self.options.styles.highlight );
                     self.updateTooltipText();
                 }
+            };
 
-                event.preventDefault();
-                event.stopPropagation();
+            var onClick = function ( e ) {
+                var el = $( e.target ).is( "li" ) ? $( e.target ) : $( e.target ).closest( "li" );
+
+                toggleSelected( el );
+
+                e.preventDefault();
+                e.stopPropagation();
+            };
+
+            var onKeypress = function ( e ) {
+                var key = e.keyCode ? e.keyCode : e.which;
+
+                if ( key == 32 || key == 13 ) {
+                    var el = $( e.target ).is( "li" ) ? $( e.target ) : $( e.target ).closest( "li" );
+
+                    toggleSelected( el );
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
             };
 
             _.each( this.options.items, function ( it ) {
@@ -64,8 +83,13 @@
 
                 item.append( $( self.elements.div ).text( it.abbreviation ) );
 
-                if ( self.options.editable )
-                    item.click( toggleSelectedClass );
+                if ( self.options.editable ) {
+                    item.attr( "tabindex", 0 );
+
+                    item.click( onClick );
+                    item.keypress( onKeypress );
+                }
+
 
                 list.append( item );
             });
