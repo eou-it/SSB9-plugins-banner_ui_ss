@@ -1066,7 +1066,7 @@ div.infoicon {
 
 .ui-pillbox li {
     float: left;
-    width: 14px;
+    min-width: 14px;
     height: 16px;
     font-size: 10px;
     font-family: Arial;
@@ -1081,6 +1081,7 @@ div.infoicon {
     background: #fff;
     border-top: 0;
     border-bottom: 0;
+    border-right: 0px;
     border-left:1px solid #ddd;
     opacity: 100;
     filter: Alpha(Opacity=100);
@@ -1089,7 +1090,10 @@ div.infoicon {
 .ui-pillbox li.ui-state-highlight {
     background: #9fbed4;
     color: #333;
-    border: 0;
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 0px;
+    border-left:1px solid #ddd;
 }
 
 .ui-pillbox li:first-child {
@@ -1102,7 +1106,8 @@ div.infoicon {
 
 .ui-pillbox li div {
     height: 16px;
-    width: 14px;
+    min-width: 14px;
     line-height: 16px;
     text-align: center;
+    padding: 0 3px;
 }
