@@ -1048,3 +1048,61 @@ div.infoicon {
     border: 1px solid #f9dc87;
     background-color: #FFF6B3;
 }
+
+/* pill box */
+
+.ui-pillbox {
+    cursor: default;
+    display: inline-block
+}
+
+.ui-pillbox ul {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    height: 16px;
+    border: 1px solid #ddd;
+}
+
+.ui-pillbox li {
+    float: left;
+    width: 14px;
+    height: 16px;
+    font-size: 10px;
+    font-family: Arial;
+    font-weight: bold;
+    color: #bcbec0;
+    background:#fff;
+}
+
+.ui-pillbox li.ui-state-default,
+.ui-pillbox li.ui-state-disabled {
+    color: #bcbec0;
+    background: #fff;
+    border-top: 0;
+    border-bottom: 0;
+    border-left:1px solid #ddd;
+    opacity: 100;
+    filter: Alpha(Opacity=100);
+}
+
+.ui-pillbox li.ui-state-highlight {
+    background: #9fbed4;
+    color: #333;
+    border: 0;
+}
+
+.ui-pillbox li:first-child {
+    border-left:0;
+}
+
+.ui-pillbox li:last-child {
+    border-right: 0;
+}
+
+.ui-pillbox li div {
+    height: 16px;
+    width: 14px;
+    line-height: 16px;
+    text-align: center;
+}
