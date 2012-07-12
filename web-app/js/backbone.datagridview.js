@@ -8,8 +8,11 @@
      */
     Backbone.DataTablesViewInternal = Backbone.View.extend({
         styles: {
-            hover:    "row_hover",
-            selected: "row_selected"
+            hover:              "row_hover",
+            selected:           "row_selected",
+            sortIconNorthSouth: "ui-icon-carat-2-n-s",
+            sortIconNorth:      "ui-icon-triangle-1-n",
+            sortIconSouth:      "ui-icon-triangle-1-s"
         },
         table: undefined,
         defaultPageLengths: [50, 100, 250, 500],
@@ -29,6 +32,8 @@
             }
         },
         render: function() {
+            var view = this;
+
             if (_.isFunction(this.options.beforeRender))
                 this.options.beforeRender.call(this);
 
@@ -68,8 +73,13 @@
 
             this.table = this.createDataTable( settings );
 
-            if (_.isFunction(this.options.afterRender))
-                this.options.afterRender.call(this);
+            // set sort icon
+            var columnDef = _.find( this.options.aoColumnDefs, function ( it ) { return it.mDataProp == view.collection.sortColumn; });
+            this.$el.find( "th .DataTables_sort_icon" ).removeClass( this.styles.sortIconNorth + " " + this.styles.sortIconSouth ).addClass( this.styles.sortIconNorthSouth );
+            this.$el.find( "th." + columnDef.sClass + " .DataTables_sort_icon" ).removeClass( view.styles.sortIconNorthSouth ).addClass( view.collection.sortDirection == "asc" ? view.styles.sortIconSouth : view.styles.sortIconNorth );
+
+            if ( _.isFunction(this.options.afterRender ) )
+                this.options.afterRender.call( this );
         },
         success: function(model, resp) {
             if (typeof(this.options.success) == "function")
@@ -179,6 +189,7 @@
 
             return json;
         },
+        hiddenColumns: [ ],
         createDataTable: function ( settings ) {
             var view = this;
 
@@ -193,7 +204,20 @@
                 sPaginationType: "selfServiceDefaultPagination",
                 iDisplayLength:  50,
                 aLengthMenu:     this.determinePageLengths(),
-                sDom:            'Rrt<"bottom ui-widget-header"p<"bottom-divider">l<"dataTables_info"><"clear">',
+                sDom:            'Rrt<"bottom ui-widget-header"p<"bottom-divider">lC<"dataTables_info"><"clear">',
+                oColVis: {
+                   iOverlayFade:  100,
+                   buttonText:    "&nbsp;",
+                   sAlign:        "right",
+                   fnStateChange: function ( idx, visible ) {
+                       var prop = view.$el.fnSettings().aoColumns[ idx ].mDataProp;
+
+                       if ( visible )
+                           view.hiddenColumns = _.without( view.hiddenColumns, prop );
+                       else
+                           view.hiddenColumns.push( prop );
+                   }
+                },
                 oLanguage: {
                     sLengthMenu:   $.i18n.prop('js.dataTable.sLengthMenu'),
                     sZeroRecords:  $.i18n.prop('js.dataTable.sZeroRecords'),
@@ -201,12 +225,26 @@
                     sInfoEmpty:    $.i18n.prop('js.dataTable.sInfoEmpty'),
                     sInfoFiltered: $.i18n.prop('js.dataTable.sInfoFiltered'),
                     sEmptyTable:   $.i18n.prop('js.dataTable.sEmptyTable')
+                },
+                fnDrawCallback: function ( oSettings ) {
+                    // Position the ColVis button
+//                    var nColVis = $( 'div.ColVis', oSettings.nTableWrapper )[0];
+//                    nColVis.style.width  = oSettings.oScroll.iBarWidth+"px";
+//                    nColVis.style.top    = ( $( 'div.dataTables_scroll', oSettings.nTableWrapper ).position().top ) + "px";
+//                    nColVis.style.height = ( $( 'div.dataTables_scrollHead table', oSettings.nTableWrapper ).height() ) + "px";
                 }
             };
 
             settings = $.extend( defaults, settings );
 
             settings.fnRowCallback = this.createRowCallback( settings );
+ 
+            _.each( settings.aoColumnDefs, function ( it ) {
+                if ( _.indexOf( view.hiddenColumns, it.mDataProp ) != -1 )
+                    it.bVisible = false;
+                else
+                    it.bVisible = true;
+            });
 
             // TODO:  Determine why this can't be done via a CSS class as opposed to manually setting the element.style.
             var table = this.$el.dataTable( settings ).width( "100%" );

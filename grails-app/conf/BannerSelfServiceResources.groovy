@@ -41,6 +41,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.js']
@@ -78,6 +79,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/fnFilterClearPlugin.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/KeyTable.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/ColReorderWithResize.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/ColVis.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/datatables-custom.js']
 
         resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.js']
