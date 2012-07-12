@@ -336,15 +336,15 @@
                 if (settings.aaSorting.length == 1)
                     direction = settings.aaSorting[0][2] == 0 ? "desc" : "asc";
 
-                var innerSortTable = function () {
-                    view.collection.sortColumn    = column;
-                    view.collection.sortDirection = direction;
-                    view.collection.sortColumnIdx = $(self).index();
-                    view.collection.fetch();
-                };
+            var innerSortTable = function () {
+                view.collection.sortColumn    = column;
+                view.collection.sortDirection = direction;
+                view.collection.sortColumnIdx = $(self).index();
+                view.collection.fetch();
+            };
 
-                if (this.collection.sortColumn    != column
-                 || this.collection.sortDirection != direction) {
+            if (this.collection.sortColumn    != column
+             || this.collection.sortDirection != direction) {
 
                     if (this.collection.isDirty()) {
                         setTimeout( function() {
