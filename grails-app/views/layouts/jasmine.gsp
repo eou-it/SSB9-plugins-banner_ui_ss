@@ -87,7 +87,7 @@
         <g:customStylesheetIncludes/>
 
     </head>
-    <body>
+    <body data-spec="${ pageProperty( name: 'body.data-spec' ) }">
         <div id="splash"></div>
         <div id="spinner" class="spinner spinner-img" style="display:none;">
 
@@ -98,5 +98,7 @@
         <r:layoutResources/>
 
         <g:customJavaScriptIncludes/>
+
+        <g:specScriptIncludes name="${ pageProperty( name: 'body.data-spec' ) }"/>
     </body>
 </html>

@@ -222,29 +222,31 @@ $(document).ready(function() {
     });
 
     // Initialize Aurora
-    CommonPlatform.initialize( {
-        standalone : true,
-        globalNav : true,
-        header : true,
-        footer : true,
-        showHelp: false,
-        langDir: $.i18n.prop( "default.language.direction" ),
-        resourceMap : {
-            areas_label_browse :                    $.i18n.prop( "aurora.areas_label_browse" ),
-            areas_label_opened :                    $.i18n.prop( "aurora.areas_label_opened" ),
-            areas_label_tools :                     $.i18n.prop( "aurora.areas_label_tools" ),
-            areas_label_browse_shortcut :           $.i18n.prop( "aurora.areas_label_browse_shortcut" ),
-            areas_label_home_shortcut :             $.i18n.prop( "aurora.areas_label_home_shortcut" ),
-            areas_label_opened_shortcut :           $.i18n.prop( "aurora.areas_label_opened_shortcut" ),
-            areas_label_tools_shortcut :            $.i18n.prop( "aurora.areas_label_tools_shortcut" ),
-            openitems_label_closeSelected :         $.i18n.prop( "aurora.openitems_label_closeSelected" ),
-            openitems_label_closeAll :              $.i18n.prop( "aurora.openitems_label_closeAll" ),
-            preferences_label :                     $.i18n.prop( "aurora.preferences_label" ),
-            userdetails_signin :                    $.i18n.prop( "aurora.userdetails_signin" ),
-            userdetails_signout :                   $.i18n.prop( "aurora.userdetails_signout" ),
-            userdetails_help :                      $.i18n.prop( "aurora.userdetails_help" )
-        },
-        handler : function( data ) {
-        }
-    } );
+    if ( !_.isUndefined( window[ "CommonPlatform" ] ) && _.isFunction( CommonPlatform.initialize ) ) {
+        CommonPlatform.initialize( {
+            standalone : true,
+            globalNav : true,
+            header : true,
+            footer : true,
+            showHelp: false,
+            langDir: $.i18n.prop( "default.language.direction" ),
+            resourceMap : {
+                areas_label_browse :                    $.i18n.prop( "aurora.areas_label_browse" ),
+                areas_label_opened :                    $.i18n.prop( "aurora.areas_label_opened" ),
+                areas_label_tools :                     $.i18n.prop( "aurora.areas_label_tools" ),
+                areas_label_browse_shortcut :           $.i18n.prop( "aurora.areas_label_browse_shortcut" ),
+                areas_label_home_shortcut :             $.i18n.prop( "aurora.areas_label_home_shortcut" ),
+                areas_label_opened_shortcut :           $.i18n.prop( "aurora.areas_label_opened_shortcut" ),
+                areas_label_tools_shortcut :            $.i18n.prop( "aurora.areas_label_tools_shortcut" ),
+                openitems_label_closeSelected :         $.i18n.prop( "aurora.openitems_label_closeSelected" ),
+                openitems_label_closeAll :              $.i18n.prop( "aurora.openitems_label_closeAll" ),
+                preferences_label :                     $.i18n.prop( "aurora.preferences_label" ),
+                userdetails_signin :                    $.i18n.prop( "aurora.userdetails_signin" ),
+                userdetails_signout :                   $.i18n.prop( "aurora.userdetails_signout" ),
+                userdetails_help :                      $.i18n.prop( "aurora.userdetails_help" )
+            },
+            handler : function( data ) {
+            }
+        } );
+    }
 });

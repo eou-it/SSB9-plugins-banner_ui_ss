@@ -1,9 +1,9 @@
 /*
 var column = {
-	name:     "String",
-	title:    "String",
-	width:    "Percentage",
-	editable: "Boolean",
+  name:     "String",
+  title:    "String",
+  width:    "Percentage",
+  editable: "Boolean",
   render:   "Function" // not implemented
 }
 
@@ -36,34 +36,105 @@ var data = {
   };
 
   Backbone.ButtonMenu = Backbone.View.extend({
+    name: "",
     items: [ ],
+    callback: null,
     css: {
-      visibilityCheckbox: "visibility-checkbox"
+      buttonMenuItemCheckbox: "button-menu-item-checkbox",
+      buttonMenuIcon:         "button-menu-icon",
+      buttonMenuButton:       "button-menu-button",
+      buttonMenuContainer:    "button-menu-container",
+      buttonMenuOverlay:      "button-menu-overlay"
     },
     elements: {
+      div:      "<div></div",
       ul:       "<ul></ul>",
       li:       "<li></li",
       label:    "<label></label",
-      checkbox: "<input type='checkbox'/>"
+      checkbox: "<input type='checkbox'/>",
+      button:   "<button></button>"
     },
-    initialize: function () { 
-      this.items = this.options.items || [ ];
+    events: {
+      "click .button-menu-item-checkbox": "toggleItem",
+      "click .button-menu-button":        "toggleMenu"
     },
-    render: function () {
+    strings: {
+      buttonLabel:  "Columns",
+      itemIdPrefix: "menuItemId"
+    },
+    toggleMenu: function ( e ) {
+      var view = this;
+
+      if ( $( "." + this.css.buttonMenuContainer ).is( ":visible" ) ) {
+        $( "." + this.css.buttonMenuOverlay ).unbind( "click" ).remove();
+      } else {
+        var overlay = $( this.elements.div ).addClass( this.css.buttonMenuOverlay )
+                                            .height( $( document ).height() )
+                                            .click( function ( e ) { view.toggleMenu(); } );
+        $( "body" ).append( overlay );
+      }
+
+      if ( $( "." + this.css.buttonMenuContainer ).is( ":visible" ) ) {
+        this.removeMenu();
+      } else {
+        this.renderMenu();
+      }
+    },
+    toggleItem: function ( e ) {
+      if ( _.isFunction( this.callback ) )
+        this.callback.call( this, e );
+    },
+    initialize: function () {
+      this.items    = this.options.items    || [ ];
+      this.callback = this.options.callback || null;
+    },
+
+    removeMenu: function () {
+      $( "." + this.css.buttonMenuContainer + " input[type=checkbox]" ).unbind( "click" );
+      $( "." + this.css.buttonMenuContainer ).remove();
+    },
+
+    renderMenu: function () {
       var view = this,
-          ul  = $( this.elements.ul );
+          ul   = $( this.elements.ul );
 
-      _.each( this.items, function ( it ) {
+      _.each( this.items, function ( it, idx ) {
         var label = $( view.elements.label ),
-            input = $( view.elements.checkbox ).addClass( view.css.visibilityCheckbox ),
-            li    = $( view.elements.li );
+            input = $( view.elements.checkbox ).addClass( view.css.buttonMenuItemCheckbox ),
+            li    = $( view.elements.li ),
+            id    = _.string.camelize( view.strings.itemIdPrefix + view.name + idx );
 
-        label.text( it.title ).append( input );
-        li.append( label );
+        if ( it.checked )
+          input.attr( "checked", "checked" );
+
+        if ( !_.isUndefined( it.name ) )
+          input.attr( "data-id", it.id );
+
+        if ( !_.isUndefined( it.name ) )
+          input.attr( "data-name", it.name );
+
+        input.click( function ( e ) {
+          view.toggleItem.call( view, e );
+        });
+
+        input.attr( "id", id );
+        label.attr( "for", id ).text( it.title );
+
+        li.append( input ).append( label );
         ul.append( li );
       });
 
-      view.$el.append( ul );
+      $( "body" ).append( $( this.elements.div ).addClass( this.css.buttonMenuContainer ).append( ul ) );
+
+      $( "." + this.css.buttonMenuContainer ).position({
+        of: $( "." + this.css.buttonMenuButton ),
+        my: "right top",
+        at: "right bottom"
+      });
+    },
+
+    render: function () {
+      this.$el.append( $( this.elements.button ).text( this.strings.buttonLabel ).addClass( this.css.buttonMenuButton ) );
     }
   });
 
@@ -89,6 +160,7 @@ var data = {
       hover:                  "hover",
       header:                 "header",
       bottom:                 "bottom",
+      columnVisibilityMenu:   "column-visibility-menu",
       pageSizeSelect:         "page-size-select",
       title:                  "title",
       pagingControl:          "paging-control",
@@ -119,7 +191,10 @@ var data = {
       uiIcon:                 "ui-icon",
       uiIconNorthSouth:       "ui-icon-carat-2-n-s",
       uiIconNorth:            "ui-icon-triangle-1-n",
-      uiIconSouth:            "ui-icon-triangle-1-s"
+      uiIconSouth:            "ui-icon-triangle-1-s",
+      notificationSuccess:    "notification-success",
+      notificationWarning:    "notification-warning",
+      notificationError:      "notification-error"
     },
     elements: {
       table:  "<table></table>",
@@ -194,12 +269,12 @@ var data = {
       tr.addClass( this.css.selected );
       td.addClass( this.css.selected );
     },
-    gotoFirstPage:    function (e) { 
+    gotoFirstPage:    function (e) {
       this.log( "requested first page" );
 
       this.collection.firstPage();
     },
-    gotoLastPage:     function (e) { 
+    gotoLastPage:     function (e) {
       this.log( "requested last page" );
 
       this.collection.lastPage();
@@ -262,7 +337,7 @@ var data = {
       };
 
       // TODO: convert to vaidate Backbone.PagedCollection
-      // if ( !_.isBoolean( this.options.data.success ) ) 
+      // if ( !_.isBoolean( this.options.data.success ) )
       //   result.errors.push( this.strings.errorSuccessProperty );
 
       // if ( !this.options.data.totalCount
@@ -279,7 +354,7 @@ var data = {
       //   || !_.isNumber( this.options.data.pageOffset )
       //   || this.options.data.pageOffset < 0 )
       //   result.errors.push( this.strings.errorPageOffsetProperty );
-      
+
       // if ( !this.options.data.pageMaxSize
       //   || !_.isNumber( this.options.data.pageMaxSize )
       //   || this.options.data.pageMaxSize < 0 )
@@ -290,7 +365,7 @@ var data = {
 
         if ( !c.name || _.string.isBlank( c.name ) )
           errors.push( this.strings.errorColumnNameBlank );
-         
+
         if ( !c.title )
           errors.push( this.strings.errorColumnTitleUndefined );
 
@@ -324,14 +399,16 @@ var data = {
       return result;
     },
     initialize: function () {
+      _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
+
       var view  = this,
           valid = this.validateOptions(),
           savedState = this.retrieveState();
-      
+
       if ( !valid.success ) {
         _.each( valid.errors, function ( err ) { view.log( err ); });
       }
-      
+
       this.columns = !_.isNull( savedState ) && _.isObject( savedState ) ? savedState : this.options.columns;
       this.title   = this.options.title;
 
@@ -349,23 +426,38 @@ var data = {
 
       if ( _.isObject( this.options.features ) ) {
         _.each( _.keys( this.options.features ), function (it) {
-        
+
         if ( !_.isUndefined( this.features[ it ] ) )
           this.features[ it ] = this.options.features[ it ];
         });
       }
 
+      if( typeof( window.notifications ) != 'undefined' && typeof( window.notifications.bind ) == 'function' ) {
+        window.notifications.bind('add',    this.notificationAdded );
+        window.notifications.bind('remove', this.notificationRemoved );
+      }
+
       this.render();
     },
     setupKeyTable: function () {
- 			if (window.KeyTable)
- 				this.keyTable = new KeyTable( { table: this.table[0] } );
+      this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
+
+      if ( window.KeyTable ) {
+        if ( !_.isUndefined( this.keyTable ) && !_.isNull( this.keyTable ) ) {
+          $( document ).unbind( "keypress", this.keyTable._fnKey );
+          $( document ).unbind( "keydown",  this.keyTable._fnKey );
+
+          this.$el.find( "td" ).die( 'click', this.keyTable._fnClick );
+        }
+
+        this.keyTable = new KeyTable( { table: this.table[0] } );
+      }
     },
     render: function () {
       this.generateTable();
-    	this.generateWrapper();
+      this.generateWrapper();
 
-    	this.setupKeyTable();
+      this.setupKeyTable();
 
       dragtable.init();
       window.ResizableColumns( this.table );
@@ -383,11 +475,45 @@ var data = {
 
       this.$el.empty();
     },
+
     log: function ( msg ) {
-      console.log( "backbone.grid ( " +  this.$el.attr( "id" ) + " ): " + msg );
+      if ( _.isBoolean( window.debug ) && window.debug == true )
+        console.log( "backbone.grid ( " +  this.$el.attr( "id" ) + " ): " + msg );
     },
-    refresh: function () {
-      this.log( "executing refresh" );
+
+    updateData: function ( id, name, value ) {
+      var map   = { },
+          model = this.collection.get( parseInt( id ) );
+
+      map[ name ] = value;
+
+      model.set( map );
+
+      return value;
+    },
+
+    toggleColumnVisibility: function ( name ) {
+        var column = _.find( this.columns, function ( it ) { return it.name == name; } );
+
+        column.visible = column.visible ? false : true;
+
+        this.refresh( true );
+    },
+
+    refresh: function ( fullRefresh ) {
+      fullRefresh = ( _.isBoolean( fullRefresh ) ? fullRefresh : false );
+
+      this.log( "executing " + ( fullRefresh ? "full " : "" ) + "refresh" );
+
+      if ( fullRefresh ) {
+        this.$el.find( "table" ).empty();
+
+        this.generateHead();
+        this.generateBody();
+
+        dragtable.init();
+        window.ResizableColumns( this.table );
+      }
 
       var view  = this,
           tbody = this.$el.find( "tbody" ),
@@ -404,6 +530,9 @@ var data = {
         clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
 
         _.each( view.getColumnState(), function (col) {
+          if ( _.isBoolean( col.visible ) && !col.visible )
+            return;
+
           // todo: it would be cool to try and invoke a callback here, if defined on the column def
           var piece = it[col.name] || view.defaults.display,
               td    = $( view.elements.td ).text( piece );
@@ -414,6 +543,18 @@ var data = {
           if ( col.width )
             td.css( "width", col.width );
 
+          var editableSubmitCallback = function ( value, settings ) {
+              return view.updateData.call( view, $( this ).attr( "data-id" ), $( this ).attr( "data-property" ), value );
+          };
+
+          if ( col.editable && _.isFunction( td.editable ) )
+            td.editable( editableSubmitCallback, {
+                onblur: function ( val, settings ) {
+                  $( 'form', this ).submit();
+              },
+              placeholder: ""
+            });
+
           tr.append( td );
         });
 
@@ -422,10 +563,12 @@ var data = {
 
       this.setSortDirectionVisual();
       this.generatePagingControls();
+
+      this.setupKeyTable();
     },
     redraw: function () {
       this.log( "executing redraw" );
-      
+
       delete this.keyTable;
 
       this.$el.empty();
@@ -442,27 +585,35 @@ var data = {
         return Math.floor( ( it / parentWidth ) * 100 );
       };
 
-      var cols =  _.map( this.$el.find( "th" ), function (it) {
-        return {
-          name:  $( it ).attr( "data-property" ),
-          width: percentageOfParent( $( it ).outerWidth( true ) )
-        };
+      var cols = _.map ( this.columns, function ( it ) {
+        var th = view.$el.find( "th[data-property=" + it.name + "]" );
+
+        return _.extend( _.clone( it ), {
+          width: percentageOfParent( $( th ).outerWidth( true ) )
+        });
       });
 
-      var totalCalcWidth = _.reduce( cols, function( one, two ){ 
+      if ( cols.length == 0 )
+        return [ ];
+
+      var totalCalcWidth = _.reduce( cols, function( one, two ){
         one = _.isObject( one ) ? one.width : one;
         return one + two.width;
       });
 
       var leftOvers = 100 - totalCalcWidth;
 
-      cols[0].width = cols[0].width + leftOvers;
+      var firstNoneZero = _.find( cols, function ( it ) { return it.width > 0; } );
+
+      if ( !_.isUndefined( firstNoneZero ) )
+        firstNoneZero.width = firstNoneZero.width + leftOvers;
 
       _.each( cols, function (it) {
         var c = _.find( view.columns, function (column) { return it.name == column.name; });
         it.editable = c.editable;
         it.title    = c.title;
         it.width    = it.width + "%";
+        it.visible  = c.visible;
       });
 
       return cols;
@@ -492,8 +643,11 @@ var data = {
           thead = $( this.elements.thead ),
           tr    = $( this.elements.tr );
 
-      _.each( this.columns, function (it) {
-      	var th       = $( view.elements.th ),
+      _.each( this.columns, function ( it ) {
+        if ( _.isBoolean( it.visible ) && !it.visible )
+          return;
+
+        var th       = $( view.elements.th ),
             title    = $( view.elements.span ).addClass( view.css.title ).text( it.title ),
             sortIcon = $( view.elements.span ).addClass( view.css.sortIcon + " "+ view.css.uiIcon );
 
@@ -544,9 +698,12 @@ var data = {
     generateWrapper: function () {
       this.$el.addClass( this.css.uiWidget );
 
-    	this.table.before( $( this.elements.div ).addClass( this.css.header + " " + this.css.uiWidgetHeader + " " + this.css.contentContainerHeader )
-                                               .append( $(this.elements.span ).addClass( this.css.title ).text( this.title ) ) );
-    	this.table.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
+      this.table.before( $( this.elements.div ).addClass( this.css.header + " " + this.css.uiWidgetHeader + " " + this.css.contentContainerHeader )
+                                               .append( $( this.elements.span ).addClass( this.css.title ).text( this.title ) ) );
+
+      this.table.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
+
+      this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
 
       this.generatePagingControls();
     },
@@ -571,10 +728,10 @@ var data = {
 
       _.each( this.pageLengths, function (it) {
         var option = $( view.elements.option ).val( it ).text( it );
-        
+
         if ( it == pageInfo.pageMaxSize )
           option.attr( "selected", "selected" );
-        
+
         select.append( option );
       });
 
@@ -604,6 +761,36 @@ var data = {
                                             .append( perPage )
                                             .append( select )
                                             .append( records );
+    },
+
+    notificationAdded: function( notification ) {
+      if ( !notification.get( "model" ) )
+        return;
+
+      var model = this.collection.find( function( it ) {
+        return it.get( "id" ) === notification.get( "model" ).id;
+      });
+
+      if ( model ) {
+        var types = { success: this.css.notificationSuccess, warning: this.css.notificationWarning },
+            clz   = types[ notification.get( "type" ) ] || this.css.notificationError;
+
+        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).stop( true, true ).addClass( clz );
+      }
+    },
+
+    notificationRemoved: function( notification ) {
+        var model = this.collection.find( function( it ) {
+            return it.get( "id" ) === notification.get( "model" ).id;
+        });
+
+        if (model) {
+            var types = { success: this.css.notificationSuccess, warning: this.css.notificationWarning },
+                clz   = types[ notification.get( "type" ) ] || this.css.notificationError;
+
+
+            this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( clz, 1000 );
+        }
     }
   });
 }).call (this, $, _, Backbone);

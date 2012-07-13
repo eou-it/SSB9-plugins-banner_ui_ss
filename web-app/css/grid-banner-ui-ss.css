@@ -240,7 +240,7 @@ table.grid tr.heading2 td {
 }
 
 table.grid td {
-    padding: 3px 10px;
+    padding: 0px 10px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -976,30 +976,7 @@ ul.ui-autocomplete a.ui-state-hover {
     color: #CCCCCC;
 }
 
-.loading {
-    opacity:0.4;
-    filter:alpha(opacity=40); /* IE8 */
-    background:#000 url('../images/loading-animation.gif') no-repeat center;
-
-    z-index:99999;
-
-    position:absolute;
-    top:0;
-    left:0;
-    height:100%;
-    width:100%;
-}
-
-.loading-pending {
-    visibility:hidden;
-}
-
-.dataTables_wrapper table tbody tr td form {
-    /*margin:1px -1em; *//*push margin out to use full cell*/
-    /*margin-top: -2px;*/
-    /*height: 1.8em;*/
-}
-.dataTables_wrapper table tbody tr td form input {
+.grid-container table tbody tr td form input {
     vertical-align: top;
     /*margin-top: 2px;*/
     width: 98% !important;
@@ -1008,20 +985,14 @@ ul.ui-autocomplete a.ui-state-hover {
     border: 1px solid #778FA0;
 }
 
-.dataTables_paginate .paginate_of,
-.dataTables_paginate .paginate_page,
-.dataTables_paginate .paginate_total {
-    margin-top: 2px;
-}
-
-.dataTables_paginate,
-.dataTables_info {
+.grid-container .paging-text {
     cursor: default;
 }
 
-.dataTables_paginate .paginate_button.enabled {
+.grid-container .paging-control.enabled {
     cursor: pointer;
 }
+
 
 .bottom .dataTables_info {
     float: right;
@@ -1090,4 +1061,9 @@ div.infoicon {
 .dataTables_wrapper tr.notification-warning {
     border: 1px solid #f9dc87;
     background-color: #FFF6B3;
+}
+
+/* TODO overlay issue */
+.ui-layout-center {
+    /*z-index: auto !important;*/
 }

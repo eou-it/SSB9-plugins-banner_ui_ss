@@ -1,5 +1,4 @@
-$(document).ready(function() {
-
+(function () {
     window.Notification = Backbone.Model.extend({
         save: function() {
             throw new Error("A notification object cannot be persisted.  Save Not Supported");
@@ -135,7 +134,7 @@ $(document).ready(function() {
                                     flash: true,
                                     message: $.i18n.prop("js.notification.success"),
                                     ignoreForGroupBy: ["model"]
-                                } ); 
+                                } );
                             }
 
                             this.addNotification( notification );
@@ -457,13 +456,17 @@ $(document).ready(function() {
             }
         }
     });
+}).call( this );
 
-    EventDispatcher.addEventListener( Application.events.initialized, function() {
-        var nc = $("<div><div id='notification-center'></div></div>" );
-        ControlBar.append( nc );
-        window.notificationCenter = new NotificationCenter({
-            el: $("#notification-center"),
-            model: notifications
+if ( !_.isUndefined( window[ "EventDispatcher" ] ) && _.isFunction( EventDispatcher.addEventListener ) ) {
+    $(document).ready(function() {
+        EventDispatcher.addEventListener( Application.events.initialized, function() {
+            var nc = $("<div><div id='notification-center'></div></div>" );
+            ControlBar.append( nc );
+            window.notificationCenter = new NotificationCenter({
+                el: $("#notification-center"),
+                model: notifications
+            });
         });
     });
-});
+}
