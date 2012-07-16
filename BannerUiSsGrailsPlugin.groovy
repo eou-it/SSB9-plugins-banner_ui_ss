@@ -12,7 +12,7 @@
 
 import org.apache.commons.logging.LogFactory
 import org.apache.log4j.Logger
-import com.sungardhe.banner.i18n.DateConverterService
+import net.hedtech.banner.i18n.DateConverterService
 import grails.converters.JSON
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -23,7 +23,7 @@ class BannerUiSsGrailsPlugin {
 
     def log = Logger.getLogger( this.getClass() )
     
-    String groupId = "com.sungardhe"
+    String groupId = "net.hedtech"
 
     def version = "1.0.6"
 
@@ -40,7 +40,7 @@ class BannerUiSsGrailsPlugin {
     def pluginExcludes = [
         "grails-app/views/error.gsp",
         // exclude UI catalog stuff
-        "grails-app/controllers/com/sungardhe/banner/ui/ss/**",
+        "grails-app/controllers/net/hedtech/banner/ui/ss/**",
         "grails-app/views/index.gsp",
         "grails-app/views/layouts/mainManual.gsp",
         "grails-app/views/uiCatalog/**",

@@ -9,9 +9,16 @@
  Banner and Luminis are either registered trademarks or trademarks of SunGard Higher 
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
+package net.hedtech.banner.ui
 
-eventCompileEnd = {
-    Class RtlCssGenerator = classLoader.loadClass("net.hedtech.banner.common.RtlCssGenerator", true)
-    def rtlCssGenerator = RtlCssGenerator.newInstance()
-    rtlCssGenerator.generateRTLCss(true);
+/**
+ * A simple controller that can be called to keep the session alive on the server.
+ */
+class KeepAliveController {
+
+    static defaultAction = "index"
+
+    def index = {
+        render "1"
+    }
 }

@@ -9,9 +9,34 @@
  Banner and Luminis are either registered trademarks or trademarks of SunGard Higher 
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
+package net.hedtech.banner.webtailor
 
-eventCompileEnd = {
-    Class RtlCssGenerator = classLoader.loadClass("net.hedtech.banner.common.RtlCssGenerator", true)
-    def rtlCssGenerator = RtlCssGenerator.newInstance()
-    rtlCssGenerator.generateRTLCss(true);
+import net.hedtech.banner.testing.BaseIntegrationTestCase
+
+/**
+ * This is a helper class that is used to access Web Tailor
+ *
+ */
+
+
+class WebTailorUtilityIntegrationTests extends BaseIntegrationTestCase {
+
+    protected void setUp() {
+        formContext = ['SFAALST']
+        super.setUp()
+    }
+
+
+    def testGetInfoText() {
+        
+        def infoText = WebTailorUtility.getInfoText('twbkwbis.P_ValLogin', 'WELCOME')
+        assertTrue infoText.contains('Welcome')
+        
+    }
+
+     def testGetNullInfoText(){
+         def infoText = WebTailorUtility.getInfoText('bwckctlg.catalog_label_text', 'ATTRIBUTE_SUFFIX')
+         assertEquals "", infoText
+     }
+
 }

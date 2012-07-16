@@ -1,4 +1,4 @@
-import com.sungardhe.banner.i18n.DateConverterService
+import net.hedtech.banner.i18n.DateConverterService
 import org.codehaus.groovy.grails.commons.ControllerArtefactHandler
 import org.codehaus.groovy.grails.web.servlet.mvc.SimpleGrailsControllerHelper
 import org.apache.commons.io.IOUtils

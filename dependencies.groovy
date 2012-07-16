@@ -43,7 +43,7 @@ grails.project.dependency.resolution = {
     //More info on JIRA: https://cvs.codehaus.org/browse/GRAILS-6420
     //This should be removed as soon as this JIRA is resolved
     //def repo_sghe_zk_core = new org.apache.ivy.plugins.resolver.URLResolver(name: "horizon-sghe-zk-core", m2compatible: true)
-    //repo_sghe_zk_core.addArtifactPattern("http://m038083.sungardhe.com:8081/nexus/content/repositories/releases/com/sungardhe/sghe-zk-core/0.1.0/sghe-zk-core-0.1.0.zip")
+    //repo_sghe_zk_core.addArtifactPattern("http://m038083.sungardhe.com:8081/nexus/content/repositories/releases/net/hedtech/sghe-zk-core/0.1.0/sghe-zk-core-0.1.0.zip")
     //resolver(repo_sghe_zk_core)
 
     mavenRepo "http://m038083.sungardhe.com:8081/nexus/content/repositories/releases/"

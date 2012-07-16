@@ -10,7 +10,7 @@
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
 
-import com.sungardhe.banner.configuration.ApplicationConfigurationUtils as ConfigFinder
+import net.hedtech.banner.configuration.ApplicationConfigurationUtils as ConfigFinder
 import grails.plugins.springsecurity.SecurityConfigType
 
 
@@ -38,7 +38,7 @@ def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
 ].each { envName, defaultFileName -> locationAdder(envName, defaultFileName) }
 
 
-grails.project.groupId = "com.sungardhe" // used when deploying to a maven repo
+grails.project.groupId = "net.hedtech" // used when deploying to a maven repo
 
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
@@ -410,4 +410,4 @@ codenarc.reportName="target/CodeNarcReport.html"
 codenarc.propertiesFile="grails-app/conf/codenarc.properties"
 codenarc.extraIncludeDirs=["grails-app/composers"]
 
-grails.validateable.packages=['com.sungardhe.banner.student.registration']
+grails.validateable.packages=['net.hedtech.banner.student.registration']

@@ -9,9 +9,28 @@
  Banner and Luminis are either registered trademarks or trademarks of SunGard Higher 
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
+package net.hedtech.banner.ui
 
-eventCompileEnd = {
-    Class RtlCssGenerator = classLoader.loadClass("net.hedtech.banner.common.RtlCssGenerator", true)
-    def rtlCssGenerator = RtlCssGenerator.newInstance()
-    rtlCssGenerator.generateRTLCss(true);
+import org.apache.commons.logging.LogFactory
+
+/**
+ * Class that helps with client side logging.
+ */
+class ClientLoggingTagLib {
+    def logLevel = { attrs ->
+        def logger = LogFactory.getLog( "${grailsApplication.getArtefactByLogicalPropertyName( "Controller", attrs.name ?: controllerName ).clazz.name}.${actionName}").logger.logger
+        out << getLevel( logger )
+    }
+
+
+    private def getLevel( logger ) {
+        if (logger == null) {
+            return "OFF"
+        } else if (logger.level) {
+            return logger.level
+        }
+        else {
+            return getLevel( logger.parent )
+        }
+    }
 }

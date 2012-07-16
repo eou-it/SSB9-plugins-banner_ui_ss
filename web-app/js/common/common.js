@@ -210,12 +210,12 @@ $(document).ready(function() {
         if (jqXHR.getResponseHeader( "X-Login-Page" ) === "true") {
 
             var n = new Notification( {
-                message: $.i18n.prop("js.com.sungardhe.banner.logout.timeout.message"),
+                message: $.i18n.prop("js.net.hedtech.banner.logout.timeout.message"),
                 type:"warning",
-                promptMessage: $.i18n.prop("js.com.sungardhe.banner.logout.timeout.promptMessage")
+                promptMessage: $.i18n.prop("js.net.hedtech.banner.logout.timeout.promptMessage")
             });
 
-            n.addPromptAction( $.i18n.prop("js.com.sungardhe.banner.logout.timeout.acknowledgement"), function() { window.location.reload() } );
+            n.addPromptAction( $.i18n.prop("js.net.hedtech.banner.logout.timeout.acknowledgement"), function() { window.location.reload() } );
 
             notifications.addNotification( n );
         }

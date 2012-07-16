@@ -9,9 +9,20 @@
  Banner and Luminis are either registered trademarks or trademarks of SunGard Higher 
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
+package net.hedtech.banner.ui
 
-eventCompileEnd = {
-    Class RtlCssGenerator = classLoader.loadClass("net.hedtech.banner.common.RtlCssGenerator", true)
-    def rtlCssGenerator = RtlCssGenerator.newInstance()
-    rtlCssGenerator.generateRTLCss(true);
+import org.springframework.security.core.context.SecurityContextHolder
+
+/**
+ * Tags to used to provide person based information.
+ */
+class PersonIdentificationTagLib {
+    def fullName = {
+        def user = SecurityContextHolder?.context?.authentication?.principal
+        try {
+            if (user?.fullName) {
+                out << user.fullName
+            }
+        } catch (MissingPropertyException e) { /* no-op */ }
+    }
 }
