@@ -15,6 +15,7 @@ import org.apache.log4j.Logger
 import net.hedtech.banner.i18n.DateConverterService
 import grails.converters.JSON
 import org.codehaus.groovy.grails.web.json.JSONObject
+import javax.servlet.http.HttpServletRequest
 
 /**
  * A Grails Plugin providing core UI framework for Self Service Banner application.
@@ -47,6 +48,8 @@ class BannerUiSsGrailsPlugin {
         "web-app/css/views/**",
         "web-app/js/views/**"
     ]
+
+    def loadAfter = ["controllers", "converters"]
 
     def author = "SunGard Higher Education"
     def authorEmail = "horizon-support@sungardhe.com"
@@ -86,6 +89,25 @@ class BannerUiSsGrailsPlugin {
                  }
              }
         }
+
+        def getNewJSONMethod = { ->
+            def json
+            def request = (HttpServletRequest) delegate
+            json = request.getAttribute("JSON")
+            if(json == null || json == JSONObject.NULL) {
+                try {
+                    json = JSON.parse(request)
+                } catch(Exception e) {
+                    log.info "Error when parsing the JSON"
+                    json = JSONObject.NULL
+                }
+            }
+            return json
+        }
+        def requestMc = GroovySystem.metaClassRegistry.getMetaClass(HttpServletRequest)
+
+        requestMc.getJSON = getNewJSONMethod
+
 
        application.controllerClasses.each { controller ->
             def originalMap = controller.metaClass.getMetaMethod("render",[Map] as Class[])
