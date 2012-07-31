@@ -53,8 +53,6 @@ class CustomResourcesTagLib {
     def specScriptIncludes = { attrs ->
         def name = attrs.name
 
-        println "js/specs/${name}.spec.js"
-
         writeJavaScriptIfExists( out, "js/specs/${name}.spec.js" )
     }
 

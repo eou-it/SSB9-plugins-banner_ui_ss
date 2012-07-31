@@ -17,17 +17,6 @@ modules = {
         }
     }
 
-    'jasmine' {
-        dependsOn 'bannerSelfServiceWithoutAurora'
-
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jasmine/lib/jasmine-1.2.0/jasmine.css'], attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jasmine/lib/jasmine-1.2.0/jasmine.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jasmine/lib/jasmine-1.2.0/jasmine-html.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/sinon-1.4.2.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/testing-support/people-data.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/testing-support/mockSortAndPageService.js']
-    }
-
     'bannerSelfService' {
         dependsOn "bannerSelfServiceWithoutAurora, aurora"
     }
