@@ -72,6 +72,11 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.form.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ajaxmanager.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.simulate.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/backbone-ui-min.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/laconic.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ui.textbox.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/happy.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/happy.methods.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/ajax-manager.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/jquery.dataTables.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/fnReloadAjaxPlugin.js']
@@ -97,6 +102,7 @@ modules = {
 
         resource url:[plugin: 'i18n-core', file: 'js/multi.calendar.init.js']
 
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone-ui-min.css']
         resource url:[plugin: 'i18n-core', file: 'css/multiCalendar.css']
     }
 
