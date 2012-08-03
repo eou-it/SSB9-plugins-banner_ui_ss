@@ -1,4 +1,4 @@
-(function ( window ){
+$(document).ready(function() {
 
     window.Notification = Backbone.Model.extend({
         save: function() {
@@ -457,11 +457,8 @@
             }
         }
     });
-}).call( this, window );
 
-$(document).ready(function() {
-
-    if ( !_.isUndefined( window[ "EventDispatcher" ])) {
+    if ( !_.isUndefined( window[ "EventDispatcher" ] ) ) {
         EventDispatcher.addEventListener( Application.events.initialized, function() {
             var nc = $("<div><div id='notification-center'></div></div>" );
             ControlBar.append( nc );
