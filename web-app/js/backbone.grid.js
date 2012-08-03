@@ -768,6 +768,9 @@ var data = {
         return;
 
       var model = this.collection.find( function( it ) {
+        if ( _.isUndefined( notification.get( "model" ) ) )
+          return false;
+
         return it.get( "id" ) === notification.get( "model" ).id;
       });
 
@@ -780,17 +783,20 @@ var data = {
     },
 
     notificationRemoved: function( notification ) {
-        var model = this.collection.find( function( it ) {
-            return it.get( "id" ) === notification.get( "model" ).id;
-        });
+      var model = this.collection.find( function( it ) {
+        if ( _.isUndefined( notification.get( "model" ) ) )
+          return false;
 
-        if (model) {
-            var types = { success: this.css.notificationSuccess, warning: this.css.notificationWarning },
-                clz   = types[ notification.get( "type" ) ] || this.css.notificationError;
+        return it.get( "id" ) === notification.get( "model" ).id;
+      });
+
+      if (model) {
+        var types = { success: this.css.notificationSuccess, warning: this.css.notificationWarning },
+            clz   = types[ notification.get( "type" ) ] || this.css.notificationError;
 
 
-            this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( clz, 1000 );
-        }
+        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( clz, 1000 );
+      }
     }
   });
 }).call (this, $, _, Backbone);

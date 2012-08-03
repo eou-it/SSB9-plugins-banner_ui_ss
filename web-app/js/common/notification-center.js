@@ -1,4 +1,4 @@
-$(document).ready(function() {
+(function ( window ){
 
     window.Notification = Backbone.Model.extend({
         save: function() {
@@ -457,13 +457,18 @@ $(document).ready(function() {
             }
         }
     });
+}).call( this, window );
 
-    EventDispatcher.addEventListener( Application.events.initialized, function() {
-        var nc = $("<div><div id='notification-center'></div></div>" );
-        ControlBar.append( nc );
-        window.notificationCenter = new NotificationCenter({
-            el: $("#notification-center"),
-            model: notifications
+$(document).ready(function() {
+
+    if ( !_.isUndefined( window[ "EventDispatcher" ])) {
+        EventDispatcher.addEventListener( Application.events.initialized, function() {
+            var nc = $("<div><div id='notification-center'></div></div>" );
+            ControlBar.append( nc );
+            window.notificationCenter = new NotificationCenter({
+                el: $("#notification-center"),
+                model: notifications
+            });
         });
-    });
+    }
 });
