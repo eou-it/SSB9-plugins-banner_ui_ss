@@ -154,6 +154,7 @@ body {
 
 .paging-container {
     padding-top: 4px;
+    display: inline-block;
 }
 
 .paging-container .paging-text {
@@ -166,8 +167,19 @@ body {
     line-height: 1.5em;
 }
 
+.paging-container .divider {
+    border-left: 1px solid #000000;
+    float: left;
+    height: 17px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 3px;
+    width: 1px;
+}
+
 .page-size-select {
     margin-left: 5px;
+    margin-top: 4px;
 }
 
 th > span.title {
