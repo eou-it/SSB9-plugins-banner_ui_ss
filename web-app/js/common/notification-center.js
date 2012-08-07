@@ -125,8 +125,8 @@ $(document).ready(function() {
                 function evaluateModel(model) {
                     this.clearNotifications( model );
 
-                    if (model.has("messages")) {
-                        _.each( model.get("messages"), function( message ) {
+                    if (model.has && model.has("messages")) {
+                        _.each(model.get("messages"), function(message) {
 
                             var notification = new Notification( {message: message.message, type: message.type, model: model, attribute: message.field } );
 
@@ -151,6 +151,13 @@ $(document).ready(function() {
                                 });
                             }, this );
                         }, this);
+                    } else {
+                        var notification = new Notification({message: $.i18n.prop("js.notification.NoChangesToSave"), type: "warning", model: model, attribute: "" });
+                        notification.set({
+                            flash: true,
+                            ignoreForGroupBy: ["model"]
+                        });
+                        this.addNotification(notification);
                     }
                 }
 
@@ -158,6 +165,9 @@ $(document).ready(function() {
 
                 if (!model.models) {
                     evaluateModel(model);
+                }
+                else if (model.models.length === 0) {
+                    evaluateModel(model.models);
                 }
                 else {
                     _.each(model.models, function(m) {
