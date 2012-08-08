@@ -30,6 +30,9 @@
                 notifications.bind('add',    this.notificationAdded );
                 notifications.bind('remove', this.notificationRemoved );
             }
+
+            if ( !_.isUndefined( this.options.defaultPageLengths ) && _.isArray( this.options.defaultPageLengths ) )
+                this.defaultPageLengths = this.options.defaultPageLengths;
         },
         render: function() {
             var view = this;
@@ -238,7 +241,7 @@
             settings = $.extend( defaults, settings );
 
             settings.fnRowCallback = this.createRowCallback( settings );
- 
+
             _.each( settings.aoColumnDefs, function ( it ) {
                 if ( _.indexOf( view.hiddenColumns, it.mDataProp ) != -1 )
                     it.bVisible = false;
