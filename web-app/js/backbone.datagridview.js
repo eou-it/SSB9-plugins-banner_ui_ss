@@ -207,7 +207,7 @@
                 sPaginationType: "selfServiceDefaultPagination",
                 iDisplayLength:  50,
                 aLengthMenu:     this.determinePageLengths(),
-                sDom:            'Rrt<"bottom ui-widget-header"p<"bottom-divider">lC<"dataTables_info"><"clear">',
+                sDom:            'Rrt<"bottom ui-widget-header"p<"bottom-divider">l<"dataTables_info"><"clear">',
                 oColVis: {
                    iOverlayFade:  100,
                    buttonText:    "&nbsp;",
