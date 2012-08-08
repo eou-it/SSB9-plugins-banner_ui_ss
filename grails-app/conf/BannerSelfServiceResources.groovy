@@ -35,8 +35,8 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
 
-        resource url:[plugin: 'banner-ui-ss', file: 'css/grid-banner-ui-ss.css'], attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/grid-grid.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'], attrs:[media:'screen, projection']
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.string.js']

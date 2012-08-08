@@ -1,0 +1,188 @@
+.grid {
+    margin: 0 auto;
+    width: 100%;
+    clear: both;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border-spacing: 0;
+}
+
+.grid .bottom {
+    padding: 0 15px 15px;
+    background-color: #F5F5F5;
+    border: 1px solid #CCCCCC;
+}
+
+.grid thead th {
+    background-color: #EDF0F4 !important;
+    border-bottom: 2px solid #AAAAAA;
+    cursor: pointer;
+    padding: 3px 0 3px 10px;
+    height: 25px;
+    line-height: 25px;
+    text-align: left;
+}
+
+.grid thead th span.title {
+    float: left;
+}
+
+.grid tr.odd {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #DDDDDD;
+    border-color: #DDDDDD;
+    height: 25px;
+}
+.grid tr.even {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #DDDDDD;
+    border-color: #DDDDDD;
+    height: 25px;
+}
+
+.grid tr.selected {
+  background: #DDDDDD !important;
+}
+
+.grid tr:hover {
+    background-color: #B2CEDF;
+}
+
+.grid td {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    padding: 0px 10px;
+    border-left: 1px solid #DDDDDD;
+}
+
+.grid td.focus {
+  background: #e4e4e4;
+}
+
+.grid tbody tr td form input {
+    vertical-align: top;
+    /*margin-top: 2px;*/
+    width: 98% !important;
+    padding-left: 5px;
+    height: 100% !important;
+    border: 1px solid #778FA0;
+}
+
+.grid-container {
+  position: relative;
+}
+
+
+
+.sort-icon {
+    float: right;
+    margin-top: 4px;
+}
+
+.sort-handle {
+    position: absolute;
+    height: 100%;
+    width: 5px;
+    margin-right: -5px;
+    left: 100%;
+    top: 0px;
+    cursor: w-resize;
+    z-index: 10;
+}
+
+/*
+ *
+ * Visibility Menu
+ *
+ */
+
+.grid-button-menu-icon {
+  background: url('../images/datatables-colvis-button.png') no-repeat;
+  height: 20px;
+  width: 15px;
+}
+
+.column-visibility-menu {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  z-index: 1101;
+}
+
+.column-visibility-menu .button-menu-button {
+  float: right;
+  clear: both;
+}
+
+.button-menu-container {
+  position: absolute;
+  z-index: 1101;
+  display: inline-block;
+  background: none repeat scroll 0 0 white;
+  padding: 10px;
+  margin-top: 4px;
+  border: 1px solid #DDDDDD;
+  border-top: 1px solid #CCCCCC;
+  box-shadow:2px 2px 2px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow:2px 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow:2px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.button-menu-container ul {
+  float: left;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.button-menu-overlay {
+  opacity: 0.0;
+  filter:alpha(opacity=0);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: #000000;
+  width: 100%;
+  z-index: 1100;
+}
+
+/* notification/datatables integration classes */
+
+.grid tr td:first-child {
+    padding-left:30px;
+}
+
+.grid tr.notification-error td:first-child {
+    background:url("../images/icon-error-16x16-plus7.png") no-repeat left center
+}
+
+.grid tr.notification-success td:first-child {
+    background:url("../images/icon-success-16x16-plus7.png") no-repeat left center
+}
+
+.grid tr.notification-warning td:first-child {
+    background:url("../images/icon-warning-16x16-plus7.png") no-repeat left center
+}
+
+.grid tr.notification-success {
+    background-color: #DDF4C9;
+}
+
+.grid tr.notification-error {
+    background-color: #EBCFCF;
+}
+
+.grid tr.notification-error {
+    background-color: #EBCFCF;
+}
+
+.grid tr.notification-warning {
+    background-color: #FFF6B3;
+}
+
+.grid tr.notification-warning {
+    border: 1px solid #f9dc87;
+    background-color: #FFF6B3;
+}

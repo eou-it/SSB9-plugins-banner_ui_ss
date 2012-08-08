@@ -1,3 +1,14 @@
+/** *******************************************************************************
+ Copyright 2012 SunGard Higher Education. All Rights Reserved.
+ This copyrighted software contains confidential and proprietary information of
+ SunGard Higher Education and its subsidiaries. Any use of this software is limited
+ solely to SunGard Higher Education licensees, and is further subject to the terms
+ and conditions of one or more written license agreements between SunGard Higher
+ Education and the licensee in question. SunGard is either a registered trademark or
+ trademark of SunGard Data Systems in the U.S.A. and/or other regions and/or countries.
+ Banner and Luminis are either registered trademarks or trademarks of SunGard Higher
+ Education in the U.S.A. and/or other regions and/or countries.
+ ********************************************************************************* */
 
 (function ( $, _, Backbone ) {
   Backbone.PagingControls = Backbone.View.extend({
@@ -18,21 +29,22 @@
       "change .page-number.enabled":            "gotoSpecificPage"
     },
     css: {
-      pagingContainer: "paging-container",
-      enabled:         "enabled",
-      pageSizeSelect:  "page-size-select",
-      pagingControl:   "paging-control",
-      pagingText:      "paging-text",
-      first:           "first",
-      last:            "last",
-      previous:        "previous",
-      next:            "next",
-      pageNumber:      "page-number",
-      divider:         "divider",
-      totalPages:      "total-pages",
-      page:            "page",
-      pageOf:          "page-of",
-      pagePer:         "page-per"
+      pagingContainer:       "paging-container",
+      enabled:               "enabled",
+      pageSizeSelect:        "page-size-select",
+      pageSizeSelectWrapper: "page-size-select-wrapper",
+      pagingControl:         "paging-control",
+      pagingText:            "paging-text",
+      first:                 "first",
+      last:                  "last",
+      previous:              "previous",
+      next:                  "next",
+      pageNumber:            "page-number",
+      divider:               "divider",
+      totalPages:            "total-pages",
+      page:                  "page",
+      pageOf:                "page-of",
+      pagePer:               "page-per"
     },
     elements: {
       div:    "<div></div>",
@@ -101,7 +113,8 @@
           input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ),
           divider  = $( this.elements.div ).addClass( this.css.divider ),
           perPage  = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pagePer ).text( this.strings.perPage ),
-          select   = $( this.elements.select ).addClass( this.css.pageSizeSelect );
+          select   = $( this.elements.select ).addClass( this.css.pageSizeSelect ),
+          selWrap  = $( this.elements.div ).addClass( this.css.pageSizeSelectWrapper ).append( select );
 
       _.each( this.pageLengths, function (it) {
         var option = $( view.elements.option ).val( it ).text( it );
@@ -112,8 +125,7 @@
         select.append( option );
       });
 
-      var pagingContainer = $( this.elements.div ).addClass( this.css.pagingContainer ),
-          countContainer  = $( this.elements.div ).addClass( this.css.pagingContainer );
+      this.$el.addClass( this.css.pagingContainer );
 
       if ( pageInfo.pages == 1 ) {
           input.hide();
@@ -129,11 +141,9 @@
           }
       }
 
-      _.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, select ], function (it) {
-        pagingContainer.append( it );
+      _.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap ], function (it) {
+        view.$el.append( it );
       });
-
-      this.$el.append( pagingContainer );
     }
   });
 }).call (this, $, _, Backbone);

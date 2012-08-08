@@ -162,6 +162,7 @@ var data = {
       bottom:                 "bottom",
       columnVisibilityMenu:   "column-visibility-menu",
       pageSizeSelect:         "page-size-select",
+      pageSizeSelectWrapper:  "page-size-select-wrapper",
       title:                  "title",
       pagingControl:          "paging-control",
       pagingContainer:        "paging-container",
@@ -707,59 +708,21 @@ var data = {
 
       this.generatePagingControls();
     },
+
     generatePagingControls: function () {
       if ( this.$el.find( "." + this.css.bottom ).length > 0 )
         this.$el.find( "." + this.css.bottom ).empty();
 
-      var view     = this,
-          pageInfo = this.collection.pageInfo(),
-          first    = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.first ), //.text( "First" ),
-          last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last ), //.text( "Last" ),
-          next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next ), //.text( "Next" ),
-          prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous ), //.text( "Previous" ),
-          page     = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
-          of       = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? this.strings.pageOfOne : this.strings.of ),
-          pages    = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.totalPages ).text( pageInfo.pages ),
-          input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ),
-          divider  = $( this.elements.div ).addClass( this.css.bottomDivider ),
-          perPage  = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pagePer ).text( this.strings.perPage ),
-          select   = $( this.elements.select ).addClass( this.css.pageSizeSelect ),
-          records  = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.recordsInfo).text( this.strings.recordsFound + this.strings.labelSeperator + this.collection.totalCount );
+      var records = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.recordsInfo).text( this.strings.recordsFound + this.strings.labelSeperator + this.collection.totalCount ),
+          paging  = $( this.elements.div ).addClass( this.css.pagingContainer );
 
-      _.each( this.pageLengths, function (it) {
-        var option = $( view.elements.option ).val( it ).text( it );
+      new Backbone.PagingControls({
+        el:          paging,
+        collection:  this.collection,
+        pageLengths: this.pageLengths
+      }).render();
 
-        if ( it == pageInfo.pageMaxSize )
-          option.attr( "selected", "selected" );
-
-        select.append( option );
-      });
-
-      var pagingContainer = $( this.elements.div ).addClass( this.css.pagingContainer ),
-          countContainer  = $( this.elements.div ).addClass( this.css.pagingContainer );
-
-      if ( pageInfo.pages == 1 ) {
-          input.hide();
-      } else {
-          input.show();
-
-          if (pageInfo.page == 1) {
-              _.each( [ next, last ], function (it) { it.addClass("enabled"); } );
-          } else if (pageInfo.page == pageInfo.pages) {
-              _.each( [ first, prev ], function (it) { it.addClass("enabled"); } );
-          } else {
-              _.each( [ first, last, prev, next, input ], function (it) { it.addClass( view.css.enabled ) });
-          }
-      }
-
-      _.each( [ first, prev, page, input, of, pages, next, last ], function (it) {
-        pagingContainer.append( it );
-      });
-
-      this.$el.find( "." + this.css.bottom ).append( pagingContainer )
-                                            .append( divider )
-                                            .append( perPage )
-                                            .append( select )
+      this.$el.find( "." + this.css.bottom ).append( paging )
                                             .append( records );
     },
 
