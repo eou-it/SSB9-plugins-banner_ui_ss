@@ -42,6 +42,7 @@
 
             if (!_.isNull(this.table) && !_.isUndefined(this.table)) {
                 this.table.fnDestroy();
+                this.$el.data('placeholder',''); // prevents an undefined error on IE.
             }
 
             if (_.isNull(this.collection.sortColumn)) {
@@ -265,7 +266,7 @@
         },
         preparePagingSelect: function () {
             var collection = this.collection,
-                el = this.$el.parent().find(".bottom .dataTables_length select"),
+                el = this.$el.closest(".dataTables_wrapper").find(".bottom .dataTables_length select"),
                 dirtyCheckDefaultsForPagingSelect = {
                 save: function( options ) {
                     var callback = options.callback;
