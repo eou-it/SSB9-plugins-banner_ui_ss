@@ -1,6 +1,9 @@
 .paging-container {
     float: left;
     margin-right: 5px;
+    height: 2.5em;
+    line-height: 2.5em;
+    min-height: 2.5em;
 }
 
 .paging-control {
