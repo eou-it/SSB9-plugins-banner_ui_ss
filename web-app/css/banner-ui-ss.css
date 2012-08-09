@@ -1062,6 +1062,7 @@ div.infoicon {
     padding: 0;
     height: 16px;
     border: 1px solid #ddd;
+    list-style-type: none;
 }
 
 .ui-pillbox li {

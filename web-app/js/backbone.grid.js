@@ -39,6 +39,7 @@ var data = {
     name: "",
     items: [ ],
     callback: null,
+
     css: {
       buttonMenuItemCheckbox: "button-menu-item-checkbox",
       buttonMenuIcon:         "button-menu-icon",
@@ -46,6 +47,7 @@ var data = {
       buttonMenuContainer:    "button-menu-container",
       buttonMenuOverlay:      "button-menu-overlay"
     },
+
     elements: {
       div:      "<div></div",
       ul:       "<ul></ul>",
@@ -54,14 +56,17 @@ var data = {
       checkbox: "<input type='checkbox'/>",
       button:   "<button></button>"
     },
+
     events: {
       "click .button-menu-item-checkbox": "toggleItem",
       "click .button-menu-button":        "toggleMenu"
     },
+
     strings: {
       buttonLabel:  "Columns",
       itemIdPrefix: "menuItemId"
     },
+
     toggleMenu: function ( e ) {
       var view = this;
 
@@ -80,10 +85,12 @@ var data = {
         this.renderMenu();
       }
     },
+
     toggleItem: function ( e ) {
       if ( _.isFunction( this.callback ) )
         this.callback.call( this, e );
     },
+
     initialize: function () {
       this.items    = this.options.items    || [ ];
       this.callback = this.options.callback || null;
@@ -156,6 +163,7 @@ var data = {
     },
     css: {
       grid:                   "grid",
+      gridContainer:          "grid-container",
       selected:               "selected",
       hover:                  "hover",
       header:                 "header",
@@ -401,6 +409,8 @@ var data = {
     },
     initialize: function () {
       _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
+
+      this.$el.addClass( this.css.gridContainer );
 
       var view  = this,
           valid = this.validateOptions(),
