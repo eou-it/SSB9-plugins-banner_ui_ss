@@ -322,6 +322,7 @@ $(document).ready(function() {
 
             this.model.bind("add", this.render);
             this.model.bind("remove", this.render);
+            this.model.bind("reset", this.render);
 
             this.render();
         },
