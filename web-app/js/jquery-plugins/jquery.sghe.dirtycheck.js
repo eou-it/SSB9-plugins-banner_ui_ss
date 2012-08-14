@@ -47,6 +47,17 @@ jQuery.fn.dirtyCheck = function(options) {
         var target = this;
         var $target = jQuery(target);
 
+        if ( type == "beforeunload" || type == "unload" ) {
+            $target.bind( "beforeunload", function ( e ) {
+                if ( options.isDirty() == true )
+                    return $.i18n.prop( "notification.dirtyCheck.beforeUnload.promptMessage" );
+
+                return undefined;
+            });
+
+            return; // beforeunload is handled differently then all other events b/c of browser behavior
+        }
+
         var saveHandlers = function() {
             var events = jQuery.data(target, 'events');
             if (!events && target.href) {
@@ -101,7 +112,7 @@ jQuery.fn.dirtyCheck = function(options) {
             setTimeout( function() { // let blur handlers proceed before checking dirty
                 if (!jQuery.data( target, 'ignoreDirtyCheckOneTime' ) && options.isDirty()) {
                     var n = new Notification( {message: $.i18n.prop("js.notification.dirtyCheck.message"), type:"warning", promptMessage: $.i18n.prop("js.notification.dirtyCheck.promptMessage")} );
-    
+
                     n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.cancelActionButton"), function() {
                         options.notifications.remove( n );
 
@@ -109,12 +120,12 @@ jQuery.fn.dirtyCheck = function(options) {
                             options.cancelCallback();
                         }
                     });
-    
+
                     n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.doNotSaveActionButton"), function() {
                         options.notifications.remove( n );
                         options.no( { callback:executeExistingHandlers });
                     });
-    
+
                     n.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.saveActionButton"), function() {
                         options.save( {
                             callback: function() {
@@ -135,7 +146,7 @@ jQuery.fn.dirtyCheck = function(options) {
                     delete jQuery.data().ignoreDirtyCheckOneTime;
                 }
             }, 200);
-                     
+
             // We'll always return false and let the handling of the notification and existing handlers do their thing.
             return false;
         };
