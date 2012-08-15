@@ -143,7 +143,7 @@ table.display {
 	width: 100%;
 	clear: both;
 	border-collapse: collapse;
-    table-layout: auto;
+    table-layout: fixed;
 }
 
 table.display thead th {
@@ -158,6 +158,9 @@ table.display thead th div.DataTables_sort_wrapper {
 	position: relative;
 	padding-right: 20px;
 	padding-right: 20px;
+    overflow: hidden;
+    position: relative;
+    text-overflow: ellipsis;
 }
 
 table.display thead th div.DataTables_sort_wrapper span {
