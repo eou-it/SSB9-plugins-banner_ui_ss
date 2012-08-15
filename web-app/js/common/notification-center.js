@@ -189,6 +189,16 @@ $(document).ready(function() {
                 prefix = "2";
             }
 
+            if ( notification.has( "model" ) && notification.get( "model" ) ) {
+                var model = notification.get( "model" );
+
+                if ( !_.isUndefined( model.collection ) ) {
+                    var idx = model.collection.indexOf( model );
+
+                    prefix += "-" + model.collection.getCid() + "-" + idx;
+                }
+            }
+
             return prefix + "-" + notification.get("type") + notification.get( "message" );
         },
         hasErrors: function() {
