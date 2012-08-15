@@ -143,7 +143,7 @@ table.display {
 	width: 100%;
 	clear: both;
 	border-collapse: collapse;
-    table-layout: auto;
+    table-layout: fixed;
 }
 
 table.display thead th {
