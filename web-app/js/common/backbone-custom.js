@@ -109,9 +109,14 @@ _.extend(Backbone.Model.prototype, {
     _dirty: false
 });
 
-
 // Extend Backbone.Collection to include 'save' which will inspect all dirty models and attempt to save them.
 _.extend(Backbone.Collection.prototype, {
+    cid: undefined,
+    getCid: function () {
+        if ( _.isUndefined( this.cid ) )
+            this.cid = _.uniqueId( 'c' );
+        return this.cid;
+    },
     save: function(options) {
         options || (options = {});
 

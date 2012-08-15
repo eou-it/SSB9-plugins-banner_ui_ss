@@ -135,7 +135,7 @@ $(document).ready(function() {
                                     flash: true,
                                     message: $.i18n.prop("js.notification.success"),
                                     ignoreForGroupBy: ["model"]
-                                } ); 
+                                } );
                             }
 
                             this.addNotification( notification );
@@ -187,6 +187,16 @@ $(document).ready(function() {
             }
             else {
                 prefix = "2";
+            }
+
+            if ( notification.has( "model" ) && notification.get( "model" ) ) {
+                var model = notification.get( "model" );
+
+                if ( !_.isUndefined( model.collection ) ) {
+                    var idx = model.collection.indexOf( model );
+
+                    prefix += "-" + model.collection.getCid() + "-" + idx;
+                }
             }
 
             return prefix + "-" + notification.get("type") + notification.get( "message" );
