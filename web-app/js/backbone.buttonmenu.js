@@ -52,7 +52,10 @@
     },
 
     toggleItem: function ( e ) {
-      var name = $( e.target ).attr( "data-name" );
+      var name = $( e.target ).attr( "data-name" ),
+          item = _.find( this.items, function ( it ) { return it.name == name; } );
+
+      item.checked = ( item.checked == true ? false : true );
 
       if ( _.isFunction( this.callback ) )
         this.callback.call( this, item, e );
