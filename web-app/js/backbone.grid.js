@@ -35,117 +35,6 @@ var data = {
     }
   };
 
-  Backbone.ButtonMenu = Backbone.View.extend({
-    name: "",
-    items: [ ],
-    callback: null,
-
-    css: {
-      buttonMenuItemCheckbox: "button-menu-item-checkbox",
-      buttonMenuIcon:         "button-menu-icon",
-      buttonMenuButton:       "button-menu-button",
-      buttonMenuContainer:    "button-menu-container",
-      buttonMenuOverlay:      "button-menu-overlay"
-    },
-
-    elements: {
-      div:      "<div></div",
-      ul:       "<ul></ul>",
-      li:       "<li></li",
-      label:    "<label></label",
-      checkbox: "<input type='checkbox'/>",
-      button:   "<button></button>"
-    },
-
-    events: {
-      "click .button-menu-item-checkbox": "toggleItem",
-      "click .button-menu-button":        "toggleMenu"
-    },
-
-    strings: {
-      buttonLabel:  "Columns",
-      itemIdPrefix: "menuItemId"
-    },
-
-    toggleMenu: function ( e ) {
-      var view = this;
-
-      if ( $( "." + this.css.buttonMenuContainer ).is( ":visible" ) ) {
-        $( "." + this.css.buttonMenuOverlay ).unbind( "click" ).remove();
-      } else {
-        var overlay = $( this.elements.div ).addClass( this.css.buttonMenuOverlay )
-                                            .height( $( document ).height() )
-                                            .click( function ( e ) { view.toggleMenu(); } );
-        $( "body" ).append( overlay );
-      }
-
-      if ( $( "." + this.css.buttonMenuContainer ).is( ":visible" ) ) {
-        this.removeMenu();
-      } else {
-        this.renderMenu();
-      }
-    },
-
-    toggleItem: function ( e ) {
-      if ( _.isFunction( this.callback ) )
-        this.callback.call( this, e );
-    },
-
-    initialize: function () {
-      this.items    = this.options.items    || [ ];
-      this.callback = this.options.callback || null;
-    },
-
-    removeMenu: function () {
-      $( "." + this.css.buttonMenuContainer + " input[type=checkbox]" ).unbind( "click" );
-      $( "." + this.css.buttonMenuContainer ).remove();
-    },
-
-    renderMenu: function () {
-      var view = this,
-          ul   = $( this.elements.ul );
-
-      _.each( this.items, function ( it, idx ) {
-        var label = $( view.elements.label ),
-            input = $( view.elements.checkbox ).addClass( view.css.buttonMenuItemCheckbox ),
-            li    = $( view.elements.li ),
-            id    = _.string.camelize( view.strings.itemIdPrefix + view.name + idx );
-
-        if ( it.checked )
-          input.attr( "checked", "checked" );
-
-        if ( !_.isUndefined( it.name ) )
-          input.attr( "data-id", it.id );
-
-        if ( !_.isUndefined( it.name ) )
-          input.attr( "data-name", it.name );
-
-        input.click( function ( e ) {
-          view.toggleItem.call( view, e );
-        });
-
-        input.attr( "id", id );
-        label.attr( "for", id ).text( it.title );
-
-        li.append( input ).append( label );
-        ul.append( li );
-      });
-
-      $( "body" ).append( $( this.elements.div ).addClass( this.css.buttonMenuContainer ).append( ul ) );
-
-      $( "." + this.css.buttonMenuContainer ).position({
-        of: $( "." + this.css.buttonMenuButton ),
-        my: "right top",
-        at: "right bottom"
-      });
-    },
-
-    render: function () {
-      this.$el.append( $( this.elements.button ).text( this.strings.buttonLabel ).addClass( this.css.buttonMenuButton ) );
-    }
-  });
-
-
   Backbone.Grid = Backbone.View.extend({
     columns:     [],
     data:        [],
@@ -169,25 +58,9 @@ var data = {
       header:                 "header",
       bottom:                 "bottom",
       columnVisibilityMenu:   "column-visibility-menu",
-      pageSizeSelect:         "page-size-select",
-      pageSizeSelectWrapper:  "page-size-select-wrapper",
       title:                  "title",
-      pagingControl:          "paging-control",
-      pagingContainer:        "paging-container",
-      pagingText:             "paging-text",
-      first:                  "first",
-      last:                   "last",
-      previous:               "previous",
-      next:                   "next",
-      pageNumber:             "page-number",
-      bottomDivider:          "bottom-divider",
-      totalPages:             "total-pages",
-      page:                   "page",
-      pageOf:                 "page-of",
-      pagePer:                "page-per",
       totalRecords:           "total-records",
       recordsInfo:            "records-info",
-      enabled:                "enabled",
       mousedown:              "mousedown",
       resizable:              "resizable",
       draggable:              "draggable",
@@ -203,8 +76,10 @@ var data = {
       uiIconSouth:            "ui-icon-triangle-1-s",
       notificationSuccess:    "notification-success",
       notificationWarning:    "notification-warning",
-      notificationError:      "notification-error"
+      notificationError:      "notification-error",
+      pagingText:            "paging-text" // TODO: remove -> Backbone.PagingControls
     },
+
     elements: {
       table:  "<table></table>",
       thead:  "<thead></thead>",
@@ -214,7 +89,6 @@ var data = {
       td:     "<td></td>",
       div:    "<div></div>",
       span:   "<span></span>",
-      text:   "<input type='text'></input>",
       anchor: "<a href='#'></a>",
       select: "<select></select>",
       option: "<option></option>",
@@ -223,12 +97,9 @@ var data = {
       label:    "<label></label",
       checkbox: "<input type='checkbox'/>"
     },
+
     strings: {
       storagePrefix:               "grid-column-state-",
-      page:                        "Page",
-      of:                          "of",
-      pageOfOne:                   "1 of",
-      perPage:                     "Per Page",
       none:                        "none",
       asc:                         "asc",
       desc:                        "desc",
@@ -247,29 +118,19 @@ var data = {
       errorColumnEditableProperty: "invalid column editable property",
       errorColumnRenderFunction:   "invalid column render callback"
     },
+
     features: {
       resizable: true,
       draggable: true
     },
+
     events: {
       "click td":                               "selectCell",
-      "change .page-size-select":               "selectPageSize",
-      "click .paging-control.first.enabled":    "gotoFirstPage",
-      "click .paging-control.last.enabled":     "gotoLastPage",
-      "click .paging-control.previous.enabled": "gotoPreviousPage",
-      "click .paging-control.next.enabled":     "gotoNextPage",
-      "change .page-number.enabled":            "gotoSpecificPage",
       "click th":                               "sort",
       "click span.sort-icon":                   "sort",
       "click span.span.title":                  "sort"
     },
-    selectPageSize: function (e) {
-      var val = parseInt( $( e.target ).find( "option:eq(" + e.target.selectedIndex + ")" ).val() );
 
-      this.log( "new page size selected: " + val  );
-
-      this.collection.setPageSize( val );
-    },
     selectCell: function (e) {
       var td = $(e.target),
           tr = td.closest ( "tr" );
@@ -278,32 +139,7 @@ var data = {
       tr.addClass( this.css.selected );
       td.addClass( this.css.selected );
     },
-    gotoFirstPage:    function (e) {
-      this.log( "requested first page" );
 
-      this.collection.firstPage();
-    },
-    gotoLastPage:     function (e) {
-      this.log( "requested last page" );
-
-      this.collection.lastPage();
-    },
-    gotoPreviousPage: function (e) {
-      this.log( "requested previous page" );
-
-      this.collection.previousPage();
-    },
-    gotoNextPage:     function (e) {
-      this.log( "requested next page" );
-
-      this.collection.nextPage();
-    },
-    gotoSpecificPage: function (e) {
-      var num = $( e.target ).val();
-      this.log( "requested specific page: " + num );
-
-      this.collection.goToPage( num );
-    },
     sort: function (e) {
       if ( $( e.target ).data( "just-sorted" ) == "true" ) {
         // skip
@@ -573,7 +409,7 @@ var data = {
       });
 
       this.setSortDirectionVisual();
-      this.generatePagingControls();
+      this.updateRecordCount();
 
       this.setupKeyTable();
     },
@@ -719,21 +555,34 @@ var data = {
       this.generatePagingControls();
     },
 
+    updateRecordCount: function () {
+      $( "." + this.css.recordsInfo ).remove();
+
+      var records = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.recordsInfo).text( this.strings.recordsFound + this.strings.labelSeperator + this.collection.totalCount );
+
+      this.$el.find( "." + this.css.bottom ).append( records );
+    },
+
     generatePagingControls: function () {
-      if ( this.$el.find( "." + this.css.bottom ).length > 0 )
-        this.$el.find( "." + this.css.bottom ).empty();
+      $( "." + this.css.pagingContainer ).remove();
 
-      var records = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.recordsInfo).text( this.strings.recordsFound + this.strings.labelSeperator + this.collection.totalCount ),
-          paging  = $( this.elements.div ).addClass( this.css.pagingContainer );
+      var paging = $( this.elements.div ).addClass( this.css.pagingContainer );
 
-      new Backbone.PagingControls({
+      this.$el.find( "." + this.css.bottom ).append( paging );
+
+      var pagingControls = new Backbone.PagingControls({
         el:          paging,
         collection:  this.collection,
         pageLengths: this.pageLengths
       }).render();
 
-      this.$el.find( "." + this.css.bottom ).append( paging )
-                                            .append( records );
+          paging  = $( this.elements.div ).addClass( this.css.pagingContainer );
+
+      var pagingControls =new Backbone.PagingControls({
+        el:          paging,
+        collection:  this.collection,
+        pageLengths: this.pageLengths
+      }).render();
     },
 
     notificationAdded: function( notification ) {

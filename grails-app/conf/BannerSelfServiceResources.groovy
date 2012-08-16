@@ -81,6 +81,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/ColVis.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/FixedColumns.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/datatables-custom.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.buttonmenu.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.pagingcontrols.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.grid.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/grid-support/resizable.js']
