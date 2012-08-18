@@ -18,6 +18,7 @@
 
             var self = this;
             var success = options.success;
+            var error = options.error;
             self.loading = true;
 
             options.success = function(response) {
@@ -30,11 +31,13 @@
                     self.fetch({ page: 1, success: success });
                 }
 
-                if(success) { success(response); }
+                if ( _.isFunction( success ) )  { success( response ); }
             };
 
-            options.error = function(response) {
+            options.error = function( originalModel, response, options ) {
                 self.loading = false;
+                self.trigger("failed");
+                if ( _.isFunction( error ) ) { error( originalModel, response, options ); }
             };
 
             return Backbone.Collection.prototype.fetch.call(this, options);
