@@ -1090,14 +1090,19 @@ function KeyTable ( oInit )
         jQuery(document).click( function(e) {
             var nTarget = e.target;
             var bTableClick = false;
-            while ( nTarget )
-            {
-                if ( nTarget == oInit.table )
+            if($(e.target).parents('.keytable-popup').length) {
+                bTableClick = true;
+            }
+            else {
+                while ( nTarget )
                 {
-                    bTableClick = true;
-                    break;
+                    if ( nTarget == oInit.table )
+                    {
+                        bTableClick = true;
+                        break;
+                    }
+                    nTarget = nTarget.parentNode;
                 }
-                nTarget = nTarget.parentNode;
             }
             if ( !bTableClick )
             {
