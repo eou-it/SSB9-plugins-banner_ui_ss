@@ -131,7 +131,13 @@ _.extend(Backbone.Collection.prototype, {
         if (this.batch) {
             var collection = this;
 
-            var success = function(batch) {
+            var success = function( batch, textStatus, jqXHR ) {
+                // Non-fatal server errors return a HTTP 200 with { success: false, ... }, not a HTTP 500
+                if ( _.isBoolean( batch.success ) && !batch.success ) {
+                    if ( _.isFunction( options.error ) ) options.error.call( this, collection, batch, jqXHR );
+                    return;
+                }
+
                 // The model that comes down is the batch that was sent up.
                 // Loop through the model and update the collection.
                 _.each((batch.data.create || []).concat(batch.data.update || []), function(updatedModel) {
@@ -154,12 +160,16 @@ _.extend(Backbone.Collection.prototype, {
                     }
                 });
 
-                if (options.success) options.success(collection);
+                if (options.success) options.success( collection, batch, jqXHR );
             };
 
-            // TODO:  For now, we handle successes and errors the same.
-            // Typically these are going to be system errors.  May need an error handler.
-            var error = success;
+            // This is the HTTP 500 response error handler. we pass through the success callback to get single access to the
+            // error callback which is also invoked for HTTP 200 { success: false } responses.
+            var error = function ( jqXHR, textStatus, errorThrown ) {
+                var response = JSON.parse( jqXHR.responseText );
+
+                success.call( this, response, textStatus, jqXHR );
+            };
 
             var batchModel = createBatchModel(this);
 

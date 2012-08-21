@@ -1,4 +1,4 @@
-/* dependent upon Collection enhancements in backbone-common.js */
+/* dependent upon Collection enhancements in backbone-custom.js */
 (function () {
     Backbone.PagedCollectionInternal = Backbone.Collection.extend({
         paginate: true,
