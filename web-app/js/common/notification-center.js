@@ -176,8 +176,7 @@ $(document).ready(function() {
                 }
             }
         },
-        comparator: function(notification) {
-
+        generateCompareHash: function ( notification ) {
             var prefix;
 
             if (notification.get("type") === "success") {
@@ -200,6 +199,36 @@ $(document).ready(function() {
             }
 
             return prefix + "-" + notification.get("type") + notification.get( "message" );
+        },
+        comparator: function( a, b ) {
+            var aHash = this.generateCompareHash( a ),
+                bHash = this.generateCompareHash( b );
+
+            var x = aHash.split( "/" );
+            var y = bHash.split( "/" );
+            x = x[ x.length - 1 ].replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
+            y = y[ y.length - 1 ].replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
+
+            for ( var i in x ) {
+                if ( x[ i ] && !y[ i ] || isFinite( x[ i ] ) && !isFinite( y[ i ] ) ) {
+                    return -1;
+                } else if ( !x[ i ] && y[ i ] || !isFinite(y[ i ] ) && isFinite( y[ i ] ) ) {
+                    return 1;
+                } else if ( !isFinite( x[ i ] ) && !isFinite( y[ i ] ) ) {
+                    x[ i ] = x[ i ].toLowerCase(); y[ i ] = y[ i ].toLowerCase();
+
+                    if ( x[ i ] < y[ i ]) return -1;
+                    if ( x[ i ] > y[ i ]) return 1;
+                } else {
+                    x[ i ] = parseFloat( x[ i ] );
+                    y[ i ] = parseFloat( y[ i ] );
+
+                    if ( x[ i ] < y[ i ] ) return -1;
+                    if ( x[ i ] > y[ i ] ) return 1;
+                }
+            }
+
+            return 0;
         },
         hasErrors: function() {
             return this.find( function(model) { return model.get( "type" ) === "error" } );
