@@ -59,7 +59,11 @@
     var numericTypeSettings = $.extend( {}, validatedTypeSettings, {
         element: function( settings, original ) {
             settings.validate = settings.validate || validateNumber;
-            return validatedTypeSettings.element.call( this, settings, original );
+            //return validatedTypeSettings.element.call( this, settings, original );
+            var el = validatedTypeSettings.element.call( this, settings, original );
+            el[0].type = "number";
+            $( el ).attr( "step", "any" );
+            return el;
         }
     });
     $.editable.addInputType( 'numeric', numericTypeSettings );
@@ -82,6 +86,9 @@
             var ele = $(settings.element || '<input />');
             $(this).append(ele);
             $(ele).numeric(settings.numberOptions);
+
+            $( ele )[0].type = "number";
+            $( ele ).attr( "step", "any" );
 
             // return the input that holds the value and
             // controls onblur, etc.
