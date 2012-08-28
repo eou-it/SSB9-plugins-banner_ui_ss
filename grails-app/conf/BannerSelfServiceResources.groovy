@@ -87,6 +87,9 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/grid-support/resizable.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/grid-support/dragtable.js']
 
+        resource url:[plugin: 'banner-ui-ss', file: 'js/detectmobilebrowser.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/detecttabletbrowser.js']
+
         resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.js']
         resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.plus.js']
         resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.picker.js']
