@@ -13,8 +13,14 @@
                 throw 'Validated input element requires a validate function';
             }
 
+            var ele;
+
+            if ( settings.type === "numeric" || settings.type === "number" )
+                ele = $( "<input type='number' step='any' />" );
+            else
+                ele = $( "<input />" );
+
             // add our input field markup
-            var ele = $('<input />');
             $(this).append(ele);
 
             // return the input that holds the value and
@@ -61,8 +67,6 @@
             settings.validate = settings.validate || validateNumber;
             //return validatedTypeSettings.element.call( this, settings, original );
             var el = validatedTypeSettings.element.call( this, settings, original );
-            el[0].type = "number";
-            $( el ).attr( "step", "any" );
             return el;
         }
     });
@@ -83,12 +87,9 @@
             );
 
             // add our input field markup
-            var ele = $(settings.element || '<input />');
+            var ele = $( settings.element || "<input type='number' step='any'/>" );
             $(this).append(ele);
             $(ele).numeric(settings.numberOptions);
-
-            $( ele )[0].type = "number";
-            $( ele ).attr( "step", "any" );
 
             // return the input that holds the value and
             // controls onblur, etc.
@@ -101,7 +102,7 @@
             // monkey patch $.numeric to position the cursor
             // after the decimal if keyup prepends a 0
             var oldkeyup = $.fn.numeric.keyup;
-            
+
             $.fn.numeric.keyup = function(e) {
                 var decimal = $.data( this, "numeric.decimal" );
                 var dot = this.value.indexOf( decimal );
