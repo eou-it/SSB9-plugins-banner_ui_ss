@@ -17,3 +17,11 @@
 .ui-icon-circle-triangle-w {
     background-position: -48px -192px;
 }
+
+.ui-layout-toggler-west-open  {
+    background:url('../images/ui-layout-divider-arrow-w.png') no-repeat scroll center center !important;
+}
+
+.ui-layout-toggler-west-closed  {
+    background:url('../images/ui-layout-divider-arrow-e.png') no-repeat scroll center center !important;
+}
