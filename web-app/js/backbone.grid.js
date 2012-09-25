@@ -41,6 +41,7 @@ var data = {
     title:       null,
     keyTable:    null,
     pageLengths: [5, 50, 250, 500],
+
     defaults: {
       display:     "",
       id:          "id",
@@ -50,6 +51,7 @@ var data = {
       keyTable:    null,
       pageLengths: [5, 50, 250, 500],
     },
+
     css: {
       grid:                   "grid",
       gridContainer:          "grid-container",
@@ -175,6 +177,7 @@ var data = {
         e.stopPropagation();
       }
     },
+
     validateOptions:  function () {
       var result = {
         success: true,
@@ -243,6 +246,7 @@ var data = {
 
       return result;
     },
+
     initialize: function () {
       _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
 
@@ -286,6 +290,7 @@ var data = {
 
       this.render();
     },
+
     setupKeyTable: function () {
       this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
 
@@ -300,6 +305,7 @@ var data = {
         this.keyTable = new KeyTable( { table: this.table[0] } );
       }
     },
+
     render: function () {
       this.generateTable();
       this.generateWrapper();
@@ -309,6 +315,7 @@ var data = {
       dragtable.init();
       window.ResizableColumns( this.table );
     },
+
     destroy: function () {
       delete this.columns;
       delete this.title;
@@ -368,6 +375,8 @@ var data = {
 
       tbody.empty();
 
+      var columnState = view.getColumnState();
+
       _.each( view.getDataAsJson(), function (it) {
         var tr = $( view.elements.tr );
 
@@ -376,13 +385,18 @@ var data = {
 
         clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
 
-        _.each( view.getColumnState(), function (col) {
+        _.each( columnState, function (col) {
           if ( _.isBoolean( col.visible ) && !col.visible )
             return;
 
-          // todo: it would be cool to try and invoke a callback here, if defined on the column def
-          var piece = it[col.name] || view.defaults.display,
-              td    = $( view.elements.td ).text( piece );
+          var piece,
+              td = $( view.elements.td );
+
+          if ( _.isFunction( col.render ) )
+            td.append( col.render.call( this, it ) );
+          else {
+            td.text( it[col.name] || view.defaults.display );
+          }
 
           td.attr( "data-id", it.id );
           td.attr( "data-property", col.name );
@@ -413,6 +427,7 @@ var data = {
 
       this.setupKeyTable();
     },
+
     redraw: function () {
       this.log( "executing redraw" );
 
@@ -421,9 +436,11 @@ var data = {
       this.$el.empty();
       this.render();
     },
+
     setColumnState: function ( columns ) {
       var state = this.retrieveState();
     },
+
     getColumnState: function () {
       var view        = this,
           parentWidth = this.$el.find( "table" ).width();
@@ -432,7 +449,13 @@ var data = {
         return Math.floor( ( it / parentWidth ) * 100 );
       };
 
-      var cols = _.map ( this.columns, function ( it ) {
+      var currentOrder = _.sortBy( _.reject( this.columns, function ( it ) {
+        return _.isBoolean( it.visible ) && it.visible == false;
+      }), function ( it ) {
+        return view.$el.find( "th[data-property=" + it.name + "]" ).index();
+      });
+
+      var cols = _.map ( currentOrder, function ( it ) {
         var th = view.$el.find( "th[data-property=" + it.name + "]" );
 
         return _.extend( _.clone( it ), {
@@ -465,6 +488,7 @@ var data = {
 
       return cols;
     },
+
     generateTable: function () {
       this.table = $( this.elements.table ).addClass( this.css.grid + " " + this.css.uiWidgetContent );
 
@@ -479,12 +503,14 @@ var data = {
       this.generateHead();
       this.generateBody();
     },
+
     columnSortIcon: function ( column ) {
       if (this.collection.sortColumn != column.name )
         return this.css.uiIconNorthSouth;
 
       return this.collection.sortDirection == this.strings.asc ? this.css.uiIconSouth : this.css.uiIconNorth;
     },
+
     generateHead: function () {
       var view  = this,
           thead = $( this.elements.thead ),
@@ -516,6 +542,7 @@ var data = {
       thead.append ( tr );
       view.table.append ( thead );
     },
+
     setSortDirectionVisual: function () {
       var view = this;
 
@@ -529,19 +556,24 @@ var data = {
         $( th ).attr( "data-sort-direction", ( prop == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
       });
     },
+
     getDataAsJson: function () {
       return this.collection.toJSON();
     },
+
     storeState: function () {
       window.Storage.setObject( this.strings.storagePrefix + _.string.dasherize( this.$el.attr( "id" ) ), this.getColumnState() );
     },
+
     retrieveState: function () {
       var state = window.Storage.getObject( this.strings.storagePrefix + _.string.dasherize( this.$el.attr( "id" ) ) );
       return state;
     },
+
     generateBody: function () {
       this.table.append( $( this.elements.tbody ) );
     },
+
     generateWrapper: function () {
       this.$el.addClass( this.css.uiWidget );
 
