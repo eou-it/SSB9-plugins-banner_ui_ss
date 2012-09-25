@@ -23,6 +23,10 @@
     text-align: left;
 }
 
+.grid th.sort-disabled {
+  cursor: default;
+}
+
 .grid thead th span.title {
     float: left;
 }

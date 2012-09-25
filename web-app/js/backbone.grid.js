@@ -72,6 +72,7 @@ var data = {
       uiStateDefault:         "ui-state-default",
       contentContainerHeader: "content-container-header",
       sortIcon:               "sort-icon",
+      sortDisabled:           "sort-disabled",
       uiIcon:                 "ui-icon",
       uiIconNorthSouth:       "ui-icon-carat-2-n-s",
       uiIconNorth:            "ui-icon-triangle-1-n",
@@ -152,6 +153,13 @@ var data = {
             el        = $( e.target ).is( "th" ) ? $( e.target ) : $( e.target ).closest( "th" );
             column    = $( el ).attr( "data-property" ),
             direction = $( el ).attr( "data-sort-direction" );
+
+        if ( direction == "disabled" ) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          return;
+        }
 
         if ( direction == this.strings.none )
           direction = this.strings.asc;
@@ -527,11 +535,18 @@ var data = {
         sortIcon.addClass( view.columnSortIcon( it ) );
 
         th.append( title );
-        th.append( sortIcon );
+
+        if ( _.isBoolean( it.sortable ) && !it.sortable ) {
+          th.attr( "data-sort-direction", "disabled" );
+          th.addClass( view.css.sortDisabled );
+        }
+        else {
+          th.append( sortIcon );
+          th.attr( "data-sort-direction", ( it.name == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
+        }
 
         th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
         th.attr( "data-property", it.name );
-        th.attr( "data-sort-direction", ( it.name == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
 
         if ( it.width )
           th.css( "width", it.width );
@@ -547,6 +562,9 @@ var data = {
       var view = this;
 
       _.each( this.$el.find( "th" ), function ( th ) {
+        if ( $( th ).attr( "data-sort-direction" ) == "disabled" )
+          return;
+
         var prop = $( th ).attr( "data-property" ),
             iconClz = view.columnSortIcon({ name: prop });
 
