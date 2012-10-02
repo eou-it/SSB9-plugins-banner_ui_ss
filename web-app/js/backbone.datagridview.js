@@ -175,8 +175,8 @@
                     });
                 });
 
-                if (typeof(fnRowCallback) == 'function') {
-                    fnRowCallback();
+                if ( _.isFunction( fnRowCallback ) ) {
+                    fnRowCallback.call( view, row, data, displayIndex, displayIndexFull );
                 }
 
                 return row;

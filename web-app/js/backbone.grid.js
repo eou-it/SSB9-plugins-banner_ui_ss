@@ -49,7 +49,7 @@ var data = {
       data:        [],
       title:       null,
       keyTable:    null,
-      pageLengths: [5, 50, 250, 500],
+      pageLengths: [5, 50, 250, 500]
     },
 
     css: {
