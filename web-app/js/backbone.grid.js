@@ -7,6 +7,12 @@ var column = {
   render:   "Function"
 }
 
+var features = {
+  resizable: "Boolean",
+  draggable: "Boolean",
+  freeze:    "Array"
+}
+
 var events = {
   beforeRender:  "Function",
   afterRender:   "Function",
@@ -43,25 +49,31 @@ var data = {
   };
 
   Backbone.Grid = Backbone.View.extend({
-    columns:     [],
-    data:        [],
-    title:       null,
-    keyTable:    null,
-    pageLengths: [5, 50, 250, 500],
+    columns:       [],
+    frozenColumns: [],
+    data:          [],
+    title:         null,
+    keyTable:      null,
+    pageLengths:   [ 5, 50, 250, 500 ],
 
     defaults: {
-      display:     "",
-      id:          "id",
-      columns:     [],
-      data:        [],
-      title:       null,
-      keyTable:    null,
-      pageLengths: [5, 50, 250, 500]
+      display:       "",
+      id:            "id",
+      columns:       [],
+      frozenColumns: [],
+      data:          [],
+      title:         null,
+      keyTable:      null,
+      pageLengths:   [ 5, 50, 250, 500 ]
     },
 
     css: {
       grid:                   "grid",
       gridContainer:          "grid-container",
+      gridWrapper:            "grid-wrapper",
+      gridMainWrapper:        "grid-main-wrapper",
+      gridFrozen:             "grid-frozen",
+      gridFrozenWrapper:      "grid-frozen-wrapper",
       selected:               "selected",
       hover:                  "hover",
       header:                 "header",
@@ -87,21 +99,21 @@ var data = {
       notificationSuccess:    "notification-success",
       notificationWarning:    "notification-warning",
       notificationError:      "notification-error",
-      pagingText:            "paging-text" // TODO: remove -> Backbone.PagingControls
+      pagingText:             "paging-text" // TODO: remove -> Backbone.PagingControls
     },
 
     elements: {
-      table:  "<table></table>",
-      thead:  "<thead></thead>",
-      tbody:  "<tbody></tbody>",
-      tr:     "<tr></tr>",
-      th:     "<th></th>",
-      td:     "<td></td>",
-      div:    "<div></div>",
-      span:   "<span></span>",
-      anchor: "<a href='#'></a>",
-      select: "<select></select>",
-      option: "<option></option>",
+      table:    "<table></table>",
+      thead:    "<thead></thead>",
+      tbody:    "<tbody></tbody>",
+      tr:       "<tr></tr>",
+      th:       "<th></th>",
+      td:       "<td></td>",
+      div:      "<div></div>",
+      span:     "<span></span>",
+      anchor:   "<a href='#'></a>",
+      select:   "<select></select>",
+      option:   "<option></option>",
       ul:       "<ul></ul>",
       li:       "<li></li",
       label:    "<label></label",
@@ -131,7 +143,8 @@ var data = {
 
     features: {
       resizable: true,
-      draggable: true
+      draggable: true,
+      freeze:    false
     },
 
     events: {
@@ -278,12 +291,27 @@ var data = {
       this.columns = !_.isNull( savedState ) && _.isObject( savedState ) ? savedState : this.options.columns;
       this.title   = this.options.title;
 
+      if ( _.isArray( this.options.freeze ) ) {
+        this.features.freeze = true;
+
+        var nonFrozenColumns = _.reject( this.options.columns, function ( it ) {
+          return _.contains( view.options.freeze, it.name );
+        });
+
+        var frozenColumns = _.reject( this.options.columns, function ( it ) {
+          return !_.contains( view.options.freeze, it.name );
+        });
+
+        this.columns       = nonFrozenColumns;
+        this.frozenColumns = frozenColumns;
+      }
+
       this.collection.bind( "reset", function () {
         view.refresh();
       });
 
       if ( _.isNull( this.collection.sortColumn ) ) {
-        var column = _.first(this.options.columns);
+        var column = _.first( this.options.columns );
         this.collection.sortColumn = column.name
       }
 
@@ -328,6 +356,20 @@ var data = {
       this.generateTable();
       this.generateWrapper();
 
+      if( this.features.freeze ) {
+        this.generateFrozenTable();
+
+        var widthReducer = function ( memo, it ) {
+          return memo + parseInt( it.width.replace( "%", "" ) );
+        };
+
+        var frozenWidth = _.reduce( this.frozenColumns, widthReducer, 0 ),
+            restWidth   = 100 - frozenWidth;
+
+        this.$el.find( "." + this.css.gridFrozenWrapper ).css( "width", frozenWidth + "%" );
+        this.$el.find( "." + this.css.gridMainWrapper   ).css( "width", restWidth + "%" );
+      }
+
       this.setupKeyTable();
 
       dragtable.init();
@@ -370,7 +412,7 @@ var data = {
     toggleColumnVisibility: function ( name ) {
         var column = _.find( this.columns, function ( it ) { return it.name == name; } );
 
-        column.visible = column.visible ? false : true;
+        column.visible = ( _.isUndefined( column.visible ) || column.visible ? false : true );
 
         this.refresh( true );
     },
@@ -389,12 +431,17 @@ var data = {
         this.generateHead();
         this.generateBody();
 
+        if ( this.features.freeze ) {
+          this.generateFrozenHead();
+          this.generateFrozenBody();
+        }
+
         dragtable.init();
         window.ResizableColumns( this.table );
       }
 
       var view  = this,
-          tbody = this.$el.find( "tbody" ),
+          tbody = this.table.find( "tbody" ),
           clz   = this.strings.odd;
 
       tbody.empty();
@@ -456,8 +503,54 @@ var data = {
 
       this.setupKeyTable();
 
+      if ( this.features.freeze )
+        this.refreshFrozen();
+
       if ( _.isFunction( this.options.afterRefresh ) )
           this.options.afterRefresh.call( this );
+    },
+
+    refreshFrozen: function () {
+      var view  = this,
+          tbody = this.frozenTable.find( "tbody" ),
+          clz   = this.strings.odd;
+
+      tbody.empty();
+
+      var columnState = this.frozenColumns;
+
+      _.each( view.getDataAsJson(), function ( it ) {
+        var tr = $( view.elements.tr );
+
+        tr.attr( "data-id", it.id );
+        tr.addClass ( clz );
+
+        clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
+
+        _.each( columnState, function ( col ) {
+          if ( _.isBoolean( col.visible ) && !col.visible )
+            return;
+
+          var piece,
+              td = $( view.elements.td );
+
+          if ( _.isFunction( col.render ) )
+            td.append( col.render.call( this, it ) );
+          else {
+            td.text( it[ col.name ] || view.defaults.display );
+          }
+
+          td.attr( "data-id", it.id );
+          td.attr( "data-property", col.name );
+
+          if ( col.width )
+            td.css( "width", col.width );
+
+          tr.append( td );
+        });
+
+        tbody.append( tr );
+      });
     },
 
     redraw: function () {
@@ -530,7 +623,10 @@ var data = {
       if ( this.features.draggable )
         this.table.addClass( this.css.draggable );
 
-      this.$el.append( this.table );
+      var mainGridWrapper = $( this.elements.div ).addClass( this.css.gridMainWrapper ).append( this.table ),
+          overallWrapper  = $( this.elements.div ).addClass( this.css.gridWrapper ).append( mainGridWrapper );
+
+      this.$el.append( overallWrapper );
 
       this.generateHead();
       this.generateBody();
@@ -619,10 +715,12 @@ var data = {
     generateWrapper: function () {
       this.$el.addClass( this.css.uiWidget );
 
-      this.table.before( $( this.elements.div ).addClass( this.css.header + " " + this.css.uiWidgetHeader + " " + this.css.contentContainerHeader )
+      var gridWrapper = this.$el.find( "." + this.css.gridWrapper );
+
+      gridWrapper.before( $( this.elements.div ).addClass( this.css.header + " " + this.css.uiWidgetHeader + " " + this.css.contentContainerHeader )
                                                .append( $( this.elements.span ).addClass( this.css.title ).text( this.title ) ) );
 
-      this.table.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
+      gridWrapper.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
 
       this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
 
@@ -657,6 +755,51 @@ var data = {
         collection:  this.collection,
         pageLengths: this.pageLengths
       }).render();
+    },
+
+    generateFrozenTable: function () {
+      var frozenTableWrapper = $( this.elements.div ).addClass( this.css.gridFrozenWrapper );
+
+      this.frozenTable = $( this.elements.table ).addClass( this.css.grid + " " + this.css.gridFrozen + " " + this.css.uiWidgetContent );
+
+      this.$el.find( "." + this.css.gridMainWrapper ).before( frozenTableWrapper.append( this.frozenTable ) );
+
+      this.generateFrozenHead();
+      this.generateFrozenBody();
+    },
+
+    generateFrozenHead: function () {
+      var view  = this,
+          thead = $( this.elements.thead ),
+          tr    = $( this.elements.tr );
+
+      _.each( this.frozenColumns, function ( it ) {
+        if ( _.isBoolean( it.visible ) && !it.visible )
+          return;
+
+        var th    = $( view.elements.th ),
+            title = $( view.elements.span ).addClass( view.css.title ).text( it.title );
+
+        th.append( title );
+
+        th.attr( "data-sort-direction", "disabled" );
+        th.addClass( view.css.sortDisabled );
+
+        th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
+        th.attr( "data-property", it.name );
+
+        if ( it.width )
+          th.css( "width", it.width );
+
+        tr.append( th );
+      });
+
+      thead.append ( tr );
+      view.frozenTable.append ( thead );
+    },
+
+    generateFrozenBody: function () {
+      this.frozenTable.append( $( this.elements.tbody ) );
     },
 
     notificationAdded: function( notification ) {

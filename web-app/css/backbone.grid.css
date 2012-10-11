@@ -1,16 +1,31 @@
 .grid {
     margin: 0 auto;
     width: 100%;
-    clear: both;
+    float: left;
+    clear: none;
     border-collapse: collapse;
     table-layout: fixed;
     border-spacing: 0;
 }
 
-.grid .bottom {
+.grid-container .bottom {
     padding: 0 15px 15px;
     background-color: #F5F5F5;
     border: 1px solid #CCCCCC;
+    clear: both;
+}
+
+.grid-frozen-wrapper {
+  clear: both;
+  float: left;
+  position: relative;
+  box-shadow: 3px 0 5px #E4E4E4;
+}
+
+.grid-main-wrapper {
+  clear: none;
+  float: left;
+  overflow-x: scroll;
 }
 
 .grid thead th {
@@ -155,7 +170,11 @@
 /* notification/datatables integration classes */
 
 .grid tr td:first-child {
-    padding-left:30px;
+    padding-left: 30px;
+}
+
+.grid.grid-frozen tr td:first-child {
+    padding-left: 10px;
 }
 
 .grid tr.notification-error td:first-child {
