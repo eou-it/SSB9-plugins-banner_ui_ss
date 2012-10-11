@@ -4,7 +4,14 @@ var column = {
   title:    "String",
   width:    "Percentage",
   editable: "Boolean",
-  render:   "Function" // not implemented
+  render:   "Function"
+}
+
+var events = {
+  beforeRender:  "Function",
+  afterRender:   "Function",
+  beforeRefresh: "Function",
+  afterRefresh:  "Function"
 }
 
 var data = {
@@ -315,6 +322,9 @@ var data = {
     },
 
     render: function () {
+      if ( _.isFunction( this.options.beforeRender ) )
+        this.options.beforeRender.call( this );
+
       this.generateTable();
       this.generateWrapper();
 
@@ -322,6 +332,9 @@ var data = {
 
       dragtable.init();
       window.ResizableColumns( this.table );
+
+      if ( _.isFunction( this.options.afterRender ) )
+        this.options.afterRender.call( this );
     },
 
     destroy: function () {
@@ -366,6 +379,9 @@ var data = {
       fullRefresh = ( _.isBoolean( fullRefresh ) ? fullRefresh : false );
 
       this.log( "executing " + ( fullRefresh ? "full " : "" ) + "refresh" );
+
+      if ( _.isFunction( this.options.beforeRefresh ) )
+          this.options.beforeRefresh.call( this );
 
       if ( fullRefresh ) {
         this.$el.find( "table" ).empty();
@@ -427,6 +443,11 @@ var data = {
           tr.append( td );
         });
 
+        if ( _.isFunction( view.options.processRow ) ) {
+          var processedRow = view.options.processRow.call( view, tr, it );
+          tr = ( !_.isUndefined( processedRow ) ? processedRow : tr );
+        }
+
         tbody.append( tr );
       });
 
@@ -434,6 +455,9 @@ var data = {
       this.updateRecordCount();
 
       this.setupKeyTable();
+
+      if ( _.isFunction( this.options.afterRefresh ) )
+          this.options.afterRefresh.call( this );
     },
 
     redraw: function () {
