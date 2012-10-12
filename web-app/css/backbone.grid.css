@@ -25,6 +25,9 @@
 .grid-main-wrapper {
   clear: none;
   float: left;
+}
+
+.grid-scroll-x {
   overflow-x: scroll;
 }
 

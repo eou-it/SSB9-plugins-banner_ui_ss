@@ -74,6 +74,7 @@ var data = {
       gridMainWrapper:        "grid-main-wrapper",
       gridFrozen:             "grid-frozen",
       gridFrozenWrapper:      "grid-frozen-wrapper",
+      gridScrollX:            "grid-scroll-x",
       selected:               "selected",
       hover:                  "hover",
       header:                 "header",
@@ -306,6 +307,11 @@ var data = {
         this.frozenColumns = frozenColumns;
       }
 
+      var firstColumn = _.first( this.options.columns );
+
+      this.options.widthType = _.string.endsWith( firstColumn.width, "%" ) ? "percentage" : "fixed";
+      this.options.widthUnit = ( this.options.gridwidthType == "precentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
+
       this.collection.bind( "reset", function () {
         view.refresh();
       });
@@ -350,6 +356,8 @@ var data = {
     },
 
     render: function () {
+      var view = this;
+
       if ( _.isFunction( this.options.beforeRender ) )
         this.options.beforeRender.call( this );
 
@@ -360,15 +368,22 @@ var data = {
         this.generateFrozenTable();
 
         var widthReducer = function ( memo, it ) {
-          return memo + parseInt( it.width.replace( "%", "" ) );
+          return memo + parseInt( it.width.replace( view.options.widthUnit, "" ) );
         };
 
-        var frozenWidth = _.reduce( this.frozenColumns, widthReducer, 0 ),
-            restWidth   = 100 - frozenWidth;
+        var frozenWidth = _.reduce( this.frozenColumns, widthReducer, 0 );
+
+        if ( view.options.widthType != "percentage" ) {
+          frozenWidth = Math.ceil( ( ( frozenWidth + ( this.frozenColumns.length * 10 ) ) / this.$el.outerWidth() ) * 100 );
+        }
 
         this.$el.find( "." + this.css.gridFrozenWrapper ).css( "width", frozenWidth + "%" );
-        this.$el.find( "." + this.css.gridMainWrapper   ).css( "width", restWidth + "%" );
+        this.$el.find( "." + this.css.gridMainWrapper   ).css( "width", ( 100 - frozenWidth )   + "%" );
       }
+      else
+        this.$el.find( "." + this.css.gridMainWrapper ).css( "width", "100%" );
+
+      this.setupScrolling();
 
       this.setupKeyTable();
 
@@ -377,6 +392,17 @@ var data = {
 
       if ( _.isFunction( this.options.afterRender ) )
         this.options.afterRender.call( this );
+    },
+
+    setupScrolling: function () {
+      if ( this.options.widthType != "percentage" ) {
+        var widths = _.reduce( $( "th", this.table ), function ( memo, it ) { return memo + $( it ).width() }, 0 );
+
+        if ( widths > this.$el.find( "." + this.css.gridMainWrapper ).outerWidth() )
+          this.$el.find( "." + this.css.gridMainWrapper ).addClass( this.css.gridScrollX );
+        else
+          this.$el.find( "." + this.css.gridMainWrapper ).removeClass( this.css.gridScrollX );
+      }
     },
 
     destroy: function () {
@@ -435,6 +461,8 @@ var data = {
           this.generateFrozenHead();
           this.generateFrozenBody();
         }
+
+        this.setupScrolling();
 
         dragtable.init();
         window.ResizableColumns( this.table );
@@ -594,7 +622,7 @@ var data = {
       var totalCalcWidth = _.reduce( cols, function( one, two ){
         one = _.isObject( one ) ? one.width : one;
         return one + two.width;
-      });
+      }, 0);
 
       var leftOvers = 100 - totalCalcWidth;
 
@@ -615,6 +643,8 @@ var data = {
     },
 
     generateTable: function () {
+      var view = this;
+
       this.table = $( this.elements.table ).addClass( this.css.grid + " " + this.css.uiWidgetContent );
 
       if ( this.features.resizable )
@@ -627,6 +657,13 @@ var data = {
           overallWrapper  = $( this.elements.div ).addClass( this.css.gridWrapper ).append( mainGridWrapper );
 
       this.$el.append( overallWrapper );
+
+
+      mainGridWrapper.mutate( 'width', function ( element, info ) {
+        console.log('width resize, ' + element + ', ' + info );
+        view.setupScrolling();
+      });
+
 
       this.generateHead();
       this.generateBody();
