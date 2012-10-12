@@ -276,10 +276,23 @@ var data = {
       return result;
     },
 
+    defaultColumnValues: function () {
+      _.each( this.options.columns, function ( it ) {
+        _.defaults( it, {
+          editable: false,
+          freeze:   false,
+          sortable: true,
+          visible:  true
+        })
+      });
+    },
+
     initialize: function () {
       _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
 
       this.$el.addClass( this.css.gridContainer );
+
+      this.defaultColumnValues();
 
       var view  = this,
           valid = this.validateOptions(),
@@ -292,25 +305,20 @@ var data = {
       this.columns = !_.isNull( savedState ) && _.isObject( savedState ) ? savedState : this.options.columns;
       this.title   = this.options.title;
 
-      if ( _.isArray( this.options.freeze ) ) {
-        this.features.freeze = true;
-
-        var nonFrozenColumns = _.reject( this.options.columns, function ( it ) {
-          return _.contains( view.options.freeze, it.name );
-        });
-
-        var frozenColumns = _.reject( this.options.columns, function ( it ) {
-          return !_.contains( view.options.freeze, it.name );
-        });
-
-        this.columns       = nonFrozenColumns;
-        this.frozenColumns = frozenColumns;
-      }
 
       var firstColumn = _.first( this.options.columns );
 
       this.options.widthType = _.string.endsWith( firstColumn.width, "%" ) ? "percentage" : "fixed";
       this.options.widthUnit = ( this.options.gridwidthType == "precentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
+
+
+      this.columns       = _.where( this.options.columns, { freeze: false } );
+      this.frozenColumns = _.where( this.options.columns, { freeze: true  } );
+
+
+      if ( this.frozenColumns.length > 0 )
+        this.features.freeze = true;
+
 
       this.collection.bind( "reset", function () {
         view.refresh();
