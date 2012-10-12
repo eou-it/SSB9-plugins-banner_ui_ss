@@ -73,6 +73,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.ajaxmanager.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.mutate.events.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.mutate.min.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery-plugins/jquery.simulate.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/common/ajax-manager.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/jquery.dataTables.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/datatables/fnReloadAjaxPlugin.js']

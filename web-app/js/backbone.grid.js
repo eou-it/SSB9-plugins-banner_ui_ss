@@ -685,11 +685,10 @@ var data = {
         if ( _.isBoolean( it.visible ) && !it.visible )
           return;
 
-        var th       = $( view.elements.th ),
-            title    = $( view.elements.span ).addClass( view.css.title ).text( it.title ),
-            sortIcon = $( view.elements.span ).addClass( view.css.sortIcon + " "+ view.css.uiIcon );
-
-        sortIcon.addClass( view.columnSortIcon( it ) );
+        var th          = $( view.elements.th ),
+            title       = $( view.elements.span ).addClass( view.css.title ).text( it.title ),
+            sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
+            sortIcon    = $( view.elements.span ).addClass( sortClasses );
 
         th.append( title );
 
@@ -814,13 +813,21 @@ var data = {
         if ( _.isBoolean( it.visible ) && !it.visible )
           return;
 
-        var th    = $( view.elements.th ),
-            title = $( view.elements.span ).addClass( view.css.title ).text( it.title );
+        var th          = $( view.elements.th ),
+            title       = $( view.elements.span ).addClass( view.css.title ).text( it.title ),
+            sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
+            sortIcon    = $( view.elements.span ).addClass( sortClasses );
 
         th.append( title );
 
-        th.attr( "data-sort-direction", "disabled" );
-        th.addClass( view.css.sortDisabled );
+        if ( _.isBoolean( it.sortable ) && !it.sortable ) {
+          th.attr( "data-sort-direction", "disabled" );
+          th.addClass( view.css.sortDisabled );
+        }
+        else {
+          th.append( sortIcon );
+          th.attr( "data-sort-direction", ( it.name == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
+        }
 
         th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
         th.attr( "data-property", it.name );
