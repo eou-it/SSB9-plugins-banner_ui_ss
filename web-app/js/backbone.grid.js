@@ -143,6 +143,7 @@ var data = {
     },
 
     features: {
+      visbility: true,
       resizable: true,
       draggable: true,
       freeze:    false
@@ -287,12 +288,25 @@ var data = {
       });
     },
 
+    determineFeatures: function () {
+      if( _.isBoolean( this.options.visbility ) )
+        this.features.visbility = this.options.visbility;
+
+      if( _.isBoolean( this.options.resizable ) )
+        this.features.resizable = this.options.resizable;
+
+      if( _.isBoolean( this.options.draggable ) )
+        this.features.draggable = this.options.draggable;
+    },
+
     initialize: function () {
       _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
 
       this.$el.addClass( this.css.gridContainer );
 
       this.defaultColumnValues();
+
+      this.determineFeatures();
 
       var view  = this,
           valid = this.validateOptions(),
@@ -363,6 +377,31 @@ var data = {
       }
     },
 
+    generateColumnVisibilityControls: function() {
+      var view = this;
+
+      var toggleColumnVisibility = function ( item, e ) {
+          view.toggleColumnVisibility( $( e.target ).attr( "data-name" ) );
+      };
+
+      var map = _.map( this.columns, function ( it ) {
+          return {
+              name:    it.name,
+              title:   it.title,
+              checked: _.isBoolean( it.visible ) ? it.visible : true
+           };
+       });
+
+      this.columnVisibilityControls = new Backbone.ButtonMenu({
+          el:         $( "." + this.css.columnVisibilityMenu ),
+          items:      map,
+          callback:   toggleColumnVisibility,
+          buttonIcon: "grid-button-menu-icon"
+      });
+
+      this.columnVisibilityControls.render();
+    },
+
     render: function () {
       var view = this;
 
@@ -371,6 +410,9 @@ var data = {
 
       this.generateTable();
       this.generateWrapper();
+
+      if ( this.features.visbility )
+        this.generateColumnVisibilityControls();
 
       if( this.features.freeze ) {
         this.generateFrozenTable();
