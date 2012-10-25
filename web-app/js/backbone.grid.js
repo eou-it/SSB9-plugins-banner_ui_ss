@@ -1,16 +1,19 @@
 /*
 var column = {
-  name:     "String",
-  title:    "String",
-  width:    "Percentage",
   editable: "Boolean",
-  render:   "Function"
+  freeze:   "Boolean",
+  name:     "String",
+  render:   "Function",
+  sortable: "Booleab",
+  title:    "String",
+  width:    "Percentage | fixed"
 }
 
 var features = {
-  resizable: "Boolean",
-  draggable: "Boolean",
-  freeze:    "Array"
+  resizable:  "Boolean",
+  draggable:  "Boolean",
+  freeze:     "Boolean",
+  visibility: "Boolean"
 }
 
 var events = {
@@ -332,6 +335,16 @@ var data = {
 
       if ( this.frozenColumns.length > 0 )
         this.features.freeze = true;
+
+
+      if ( _.isArray( this.options.pageLengths ) ) {
+        var validPageLengths = _.all( this.options.pageLengths, function ( it ) {
+          return _.isNumber( it ) && it > 0;
+        });
+
+        if ( validPageLengths )
+          this.pageLengths = this.options.pageLengths;
+      }
 
 
       this.collection.bind( "reset", function () {
@@ -829,14 +842,6 @@ var data = {
       this.$el.find( "." + this.css.bottom ).append( paging );
 
       var pagingControls = new Backbone.PagingControls({
-        el:          paging,
-        collection:  this.collection,
-        pageLengths: this.pageLengths
-      }).render();
-
-          paging  = $( this.elements.div ).addClass( this.css.pagingContainer );
-
-      var pagingControls =new Backbone.PagingControls({
         el:          paging,
         collection:  this.collection,
         pageLengths: this.pageLengths

@@ -13,8 +13,22 @@
 (function ( $, _, Backbone ) {
   Backbone.PagingControls = Backbone.View.extend({
     pageLengths: [5, 50, 250, 500],
+
+    defaults: {
+      pageLengths: [5, 50, 250, 500]
+    },
+
     initialize: function () {
       var view = this;
+
+      if ( _.isArray( this.options.pageLengths ) ) {
+        var validPageLengths = _.all( this.options.pageLengths, function ( it ) {
+          return _.isNumber( it ) && it > 0;
+        });
+
+        if ( validPageLengths )
+          this.pageLengths = this.options.pageLengths;
+      }
 
       this.collection.bind( "reset", function ( models ) {
         view.render();
