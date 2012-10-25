@@ -422,8 +422,8 @@ $(document).ready(function() {
 
             // This really should be encapsulated in the notificationCenter
             $(this.el).position({
-                my: "left top",
-                at: "left bottom",
+                my: "right top",
+                at: "right bottom",
                 of: this.options.parent
             });
 
