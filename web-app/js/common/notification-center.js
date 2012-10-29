@@ -508,7 +508,7 @@ $(document).ready(function() {
         }
     });
 
-    if ( !_.isUndefined( window[ "EventDispatcher" ] ) ) {
+    if ( !_.isUndefined( window[ "EventDispatcher" ] ) && !_.isUndefined( window[ "Application" ] ) ) {
         EventDispatcher.addEventListener( Application.events.initialized, function() {
             var nc = $("<div><div id='notification-center'></div></div>" );
             ControlBar.append( nc );

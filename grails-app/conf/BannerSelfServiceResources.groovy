@@ -17,6 +17,14 @@ modules = {
         }
     }
 
+    'magellanIntegration' {
+        dependsOn "jquery"
+
+        resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.string.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/cuip/common-integration.js']
+    }
+
     'bannerSelfService' {
         dependsOn "bannerSelfServiceWithoutAurora, aurora"
     }
