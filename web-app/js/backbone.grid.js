@@ -1,12 +1,18 @@
 /*
 var column = {
-  editable: "Boolean",
+  editable: "Boolean | String | Object",
   freeze:   "Boolean",
   name:     "String",
   render:   "Function",
   sortable: "Booleab",
   title:    "String",
   width:    "Percentage | fixed"
+}
+
+column.editable = {
+  type:     "String",
+  validate: "Function",
+  typeSpecificProperties: "0-N"
 }
 
 var features = {
@@ -57,7 +63,7 @@ var data = {
     data:          [],
     title:         null,
     keyTable:      null,
-    pageLengths:   [ 5, 50, 250, 500 ],
+    pageLengths:   [ 50, 100, 250, 500 ],
 
     defaults: {
       display:       "",
@@ -67,7 +73,7 @@ var data = {
       data:          [],
       title:         null,
       keyTable:      null,
-      pageLengths:   [ 5, 50, 250, 500 ]
+      pageLengths:   [ 50, 100, 250, 500 ]
     },
 
     css: {
@@ -212,10 +218,8 @@ var data = {
     },
 
     validateOptions:  function () {
-      var result = {
-        success: true,
-        errors:  []
-      };
+      var view   = this,
+          result = { success: true, errors: [ ] };
 
       // TODO: convert to vaidate Backbone.PagedCollection
       // if ( !_.isBoolean( this.options.data.success ) )
@@ -245,24 +249,25 @@ var data = {
         var errors = [];
 
         if ( !c.name || _.string.isBlank( c.name ) )
-          errors.push( this.strings.errorColumnNameBlank );
+          errors.push( view.strings.errorColumnNameBlank );
 
         if ( !c.title )
-          errors.push( this.strings.errorColumnTitleUndefined );
+          errors.push( view.strings.errorColumnTitleUndefined );
 
         if ( !c.width
          || (!_.string.endsWith( c.width, "%"  )
           && !_.string.endsWith( c.width, "em" )
           && !_.string.endsWith( c.width, "px" ) ) )
-          errors.push( this.strings.errorColumnWidth );
+          errors.push( view.strings.errorColumnWidth );
 
         if ( !_.isUndefined( c.editable )
          && ( _.isNull( c.editable )
-          || !_.isBoolean( c.editable ) ) )
-          errors.push( this.strings.errorColumnEditableProperty );
+          || ( !_.isBoolean( c.editable ) && !_.isString( c.editable ) && !_.isObject( c.editable ) ) ) ) {
+          errors.push( view.strings.errorColumnEditableProperty );
+        }
 
         if ( !_.isUndefined( c.render ) && !_.isFunction( c.render ) )
-          errors.push( this.strings.errorColumnRenderFunction );
+          errors.push( view.strings.errorColumnRenderFunction );
 
         if ( errors.length > 0 ) {
           result.errors = result.errors.concat( errors );
@@ -566,17 +571,7 @@ var data = {
           if ( col.width )
             td.css( "width", col.width );
 
-          var editableSubmitCallback = function ( value, settings ) {
-              return view.updateData.call( view, $( this ).attr( "data-id" ), $( this ).attr( "data-property" ), value );
-          };
-
-          if ( col.editable && _.isFunction( td.editable ) )
-            td.editable( editableSubmitCallback, {
-                onblur: function ( val, settings ) {
-                  $( 'form', this ).submit();
-              },
-              placeholder: ""
-            });
+          td = view.determineColumnEditability( col, td );
 
           tr.append( td );
         });
@@ -600,6 +595,38 @@ var data = {
       if ( _.isFunction( this.options.afterRefresh ) )
           this.options.afterRefresh.call( this );
     },
+
+
+    determineColumnEditability: function ( column, el ) {
+      var view = this,
+          editableSubmitCallback = function ( value, settings ) {
+            return view.updateData.call( view, $( this ).attr( "data-id" ), $( this ).attr( "data-property" ), value );
+          };
+
+        if ( !_.isUndefined( column.editable ) && _.isFunction( el.editable ) ) {
+          var options  = undefined,
+              defaults = {
+                height: "none",
+                onblur: function ( val, settings ) {
+                  $( 'form', this ).submit();
+                },
+                placeholder: ""
+              };
+
+          if ( _.isBoolean( column.editable ) && column.editable )
+            options = { };
+          else if ( _.isString( column.editable ) )
+            options = { type: column.editable };
+          else if ( _.isObject( column.editable ) )
+            options = column.editable;
+
+          if ( !_.isUndefined( options ) )
+            el.editable( editableSubmitCallback, _.extend( defaults, options ) );
+        }
+
+        return el;
+    },
+
 
     refreshFrozen: function () {
       var view  = this,

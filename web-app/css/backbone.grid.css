@@ -77,10 +77,11 @@
     -o-text-overflow: ellipsis;
     padding: 0px 10px;
     border-left: 1px solid #DDDDDD;
+    min-height: 20px;
 }
 
 .grid td.focus {
-  background: #e4e4e4;
+  /*background: #e4e4e4;*/
 }
 
 .grid tbody tr td form input {
@@ -88,7 +89,7 @@
     /*margin-top: 2px;*/
     width: 98% !important;
     padding-left: 5px;
-    height: 100% !important;
+    height: 20px;
     border: 1px solid #778FA0;
 }
 
@@ -211,4 +212,14 @@
 .grid tr.notification-warning {
     border: 1px solid #f9dc87;
     background-color: #FFF6B3;
+}
+
+/* editable component specific integration classes */
+
+.grid .hasMultiCalendarPicker {
+    border: 1px solid #778FA0;
+    border-radius: 0 3px 3px 0;
+    height: 20px !important;
+    margin: 0 -22px 0 0 !important;
+    padding: 0 0 0 0 !important;
 }
