@@ -924,44 +924,46 @@ var data = {
       view.frozenTable.append ( thead );
     },
 
+
     generateFrozenBody: function () {
       this.frozenTable.append( $( this.elements.tbody ) );
     },
 
-    notificationAdded: function( notification ) {
-      if ( !notification.get( "model" ) )
-        return;
+
+    getModelFromNotification: function( notification ) {
+      var m = notification.get( "model" );
+      if( _.isNull( m ) || _.isUndefined( m ) || _.isUndefined( m.id ) )
+        return false;
 
       var model = this.collection.find( function( it ) {
-        if ( _.isUndefined( notification.get( "model" ) ) )
-          return false;
-
-        return it.get( "id" ) === notification.get( "model" ).id;
+        return it.get( "id" ) === m.id;
       });
 
-      if ( model ) {
-        var types = { success: this.css.notificationSuccess, warning: this.css.notificationWarning },
-            clz   = types[ notification.get( "type" ) ] || this.css.notificationError;
-
-        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).stop( true, true ).addClass( clz );
-      }
+      return ( _.isNull( model ) ? false : model );
     },
 
-    notificationRemoved: function( notification ) {
-      var model = this.collection.find( function( it ) {
-        if ( _.isUndefined( notification.get( "model" ) ) )
-          return false;
 
-        return it.get( "id" ) === notification.get( "model" ).id;
-      });
-
-      if (model) {
+    getStyleForNotificationType: function( notification ) {
         var types = { success: this.css.notificationSuccess, warning: this.css.notificationWarning },
             clz   = types[ notification.get( "type" ) ] || this.css.notificationError;
 
+        return clz;
+    },
 
-        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( clz, 1000 );
-      }
+
+    notificationAdded: function( notification ) {
+      var model = this.getModelFromNotification( notification );
+
+      if ( model )
+        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).stop( true, true ).addClass( this.getStyleForNotificationType( notification ) );
+    },
+
+
+    notificationRemoved: function( notification ) {
+      var model = this.getModelFromNotification( notification );
+
+      if ( model )
+        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
     }
   });
 }).call (this, $, _, Backbone);
