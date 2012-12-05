@@ -202,3 +202,21 @@ var peoples = [
     { "id": 200, "bannerId": "SYSTEST07", "firstName": "Cynthia", "lastName": "Bunte", "phone": "4425243", "email": "CYNDY@PERSONAL.COM", "birthDate": "08/11/1965" }
 ];
 
+var nestedPeoples = _.map( peoples, function( it ) {
+    return {
+        "id": it.id,
+        "system": {
+            "bannerId": it.bannerId
+        },
+        "biodem": {
+            "firstName": it.firstName,
+            "lastName":  it.lastName,
+            "birthDate": it.birthDate
+        },
+        "communication": {
+            "phone": it.phone,
+            "email": it.email
+        }
+    };
+});
+

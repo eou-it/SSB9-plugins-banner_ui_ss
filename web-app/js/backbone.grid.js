@@ -512,6 +512,17 @@ var data = {
         this.refresh( true );
     },
 
+
+    resolveProperty: function ( obj, property ) {
+      property = property.split( '.' );
+
+      while( obj && property[ 0 ] )
+          obj = obj[ property.shift() ] || undefined;
+
+      return obj;
+    },
+
+
     refresh: function ( fullRefresh ) {
       fullRefresh = ( _.isBoolean( fullRefresh ) ? fullRefresh : false );
 
@@ -545,8 +556,9 @@ var data = {
 
       var columnState = view.getColumnState();
 
-      _.each( view.getDataAsJson(), function (it) {
-        var tr = $( view.elements.tr );
+      _.each( view.collection.models, function ( model ) {
+        var tr = $( view.elements.tr ),
+            it = model.toJSON();
 
         tr.attr( "data-id", it.id );
         tr.addClass ( clz );
@@ -563,7 +575,7 @@ var data = {
           if ( _.isFunction( col.render ) )
             td.append( col.render.call( this, it ) );
           else {
-            td.text( it[col.name] || view.defaults.display );
+            td.text( view.resolveProperty( it, col.name ) || view.defaults.display );
           }
 
           td.attr( "data-id", it.id );
@@ -711,11 +723,11 @@ var data = {
       var currentOrder = _.sortBy( _.reject( this.columns, function ( it ) {
         return _.isBoolean( it.visible ) && it.visible == false;
       }), function ( it ) {
-        return view.$el.find( "th[data-property=" + it.name + "]" ).index();
+        return view.$el.find( "th[data-property='" + it.name + "']" ).index();
       });
 
       var cols = _.map ( currentOrder, function ( it ) {
-        var th = view.$el.find( "th[data-property=" + it.name + "]" );
+        var th = view.$el.find( "th[data-property='" + it.name + "']" );
 
         return _.extend( _.clone( it ), {
           width: percentageOfParent( $( th ).outerWidth( true ) )
