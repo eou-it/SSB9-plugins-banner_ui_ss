@@ -1,6 +1,6 @@
 /*
 var column = {
-  editable: "Boolean | String | Object",
+  editable: "Boolean | String | Object | Function",
   freeze:   "Boolean",
   name:     "String",
   render:   "Function",
@@ -10,8 +10,9 @@ var column = {
 }
 
 column.editable = {
-  type:     "String",
-  validate: "Function",
+  type:      "String",
+  validate:  "Function",
+  condition: "Function",
   typeSpecificProperties: "0-N"
 }
 
@@ -262,7 +263,7 @@ var data = {
 
         if ( !_.isUndefined( c.editable )
          && ( _.isNull( c.editable )
-          || ( !_.isBoolean( c.editable ) && !_.isString( c.editable ) && !_.isObject( c.editable ) ) ) ) {
+          || ( !_.isBoolean( c.editable ) && !_.isString( c.editable ) && !_.isObject( c.editable ) && !_.isFunction( c.editable ) ) ) ) {
           errors.push( view.strings.errorColumnEditableProperty );
         }
 
@@ -571,7 +572,7 @@ var data = {
           if ( col.width )
             td.css( "width", col.width );
 
-          td = view.determineColumnEditability( col, td );
+          td = view.determineColumnEditability( col, td, it );
 
           tr.append( td );
         });
@@ -597,7 +598,7 @@ var data = {
     },
 
 
-    determineColumnEditability: function ( column, el ) {
+    determineColumnEditability: function ( column, el, data ) {
       var view = this,
           editableSubmitCallback = function ( value, settings ) {
             return view.updateData.call( view, $( this ).attr( "data-id" ), $( this ).attr( "data-property" ), value );
@@ -617,8 +618,23 @@ var data = {
             options = { };
           else if ( _.isString( column.editable ) )
             options = { type: column.editable };
-          else if ( _.isObject( column.editable ) )
-            options = column.editable;
+          else if ( _.isFunction( column.editable ) ) {
+            var isEditable = column.editable.call( this, column, el, data );
+
+            if ( _.isBoolean( isEditable ) && isEditable )
+              options = { };
+          }
+          else if ( _.isObject( column.editable ) ) {
+            if ( _.isFunction( column.editable.condition ) ) {
+              var isEditable = column.editable.condition.call( this, column, el, data );
+
+              if ( _.isBoolean( isEditable ) && isEditable )
+                options = _.without( column.editable, "condition" );
+            }
+            else
+              options = column.editable;
+          }
+
 
           if ( !_.isUndefined( options ) )
             el.editable( editableSubmitCallback, _.extend( defaults, options ) );
@@ -750,7 +766,8 @@ var data = {
 
 
       mainGridWrapper.mutate( 'width', function ( element, info ) {
-        console.log('width resize, ' + element + ', ' + info );
+        //console.log('width resize, ' + element + ', ' + info );
+
         view.setupScrolling();
       });
 
