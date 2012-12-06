@@ -297,7 +297,16 @@ var data = {
       });
     },
 
+    defaultFeatureValues: function () {
+      this.features.visbility = true;
+      this.features.resizable = true;
+      this.features.draggable = true;
+      this.features.freeze    = false;
+    },
+
     determineFeatures: function () {
+      this.defaultFeatureValues();
+
       if( _.isBoolean( this.options.visbility ) )
         this.features.visbility = this.options.visbility;
 
@@ -879,7 +888,8 @@ var data = {
 
       this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
 
-      this.generatePagingControls();
+      if ( this.collection.paginate )
+        this.generatePagingControls();
     },
 
     updateRecordCount: function () {
