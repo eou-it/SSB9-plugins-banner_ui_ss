@@ -650,10 +650,10 @@ var data = {
               var isEditable = column.editable.condition.call( this, column, el, data );
 
               if ( _.isBoolean( isEditable ) && isEditable )
-                options = _.without( column.editable, "condition" );
+                options = _.omit( column.editable, "condition" );
             }
             else
-              options = column.editable;
+              options = _.clone( column.editable );
           }
 
 
