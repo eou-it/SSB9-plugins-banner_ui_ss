@@ -37,6 +37,8 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/select2/select2.css'], attrs: [media: 'screen, projection']
+
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.string.js']
@@ -91,6 +93,9 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/detectmobilebrowser.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/detecttabletbrowser.js']
+
+        resource url: [plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
+
 
         resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.js']
         resource url:[plugin: 'i18n-core', file: 'js/calendars/jquery.calendars.plus.js']
