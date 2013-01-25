@@ -346,7 +346,7 @@ _.extend(Backbone.Collection.prototype, {
         return this.fetch();
     },
     goToPage: function(page) {
-        if (typeof(page) == 'undefined' || typeof(page) != 'number') {
+        if ( typeof(page) != 'number' || isNaN( page )) {
             return false;
         }
 

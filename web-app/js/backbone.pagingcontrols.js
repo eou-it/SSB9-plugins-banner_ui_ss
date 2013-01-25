@@ -107,7 +107,7 @@
       this.collection.nextPage();
     },
     gotoSpecificPage: function (e) {
-      var num = $( e.target ).val();
+      var num = parseInt( $( e.target ).val() );
       this.log( "requested specific page: " + num );
 
       this.collection.goToPage( num );
@@ -146,13 +146,15 @@
       } else {
           input.show();
 
+          var enabled = [input];
           if (pageInfo.page == 1) {
-              _.each( [ next, last ], function (it) { it.addClass("enabled"); } );
+              enabled = enabled.concat( [ next, last ] );
           } else if (pageInfo.page == pageInfo.pages) {
-              _.each( [ first, prev ], function (it) { it.addClass("enabled"); } );
+              enabled = enabled.concat( [ first, prev ] );
           } else {
-              _.each( [ first, last, prev, next, input ], function (it) { it.addClass( view.css.enabled ) });
+              enabled = enabled.concat( [ first, last, prev, next ] );
           }
+          _.each( enabled, function (it) { it.addClass( view.css.enabled ) });
       }
 
       _.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap ], function (it) {
