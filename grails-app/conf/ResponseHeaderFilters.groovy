@@ -17,6 +17,7 @@ class ResponseHeaderFilters {
                     response.setHeader('Expires', '-1')
                     response.setHeader('Cache-Control', 'no-cache')
                     response.addHeader('Cache-Control', 'no-store')
+                    response.setHeader( 'X-UA-Compatible', 'IE=edge' )
                 }
             }
         }
