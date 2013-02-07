@@ -421,7 +421,7 @@ var data = {
        });
 
       this.columnVisibilityControls = new Backbone.ButtonMenu({
-          el:         $( "." + this.css.columnVisibilityMenu ),
+          el:         this.$el.find( "." + this.css.columnVisibilityMenu ),
           items:      map,
           callback:   toggleColumnVisibility,
           buttonIcon: "grid-button-menu-icon"
@@ -893,7 +893,7 @@ var data = {
     },
 
     updateRecordCount: function () {
-      $( "." + this.css.recordsInfo ).remove();
+      this.$el.find( "." + this.css.recordsInfo ).remove();
 
       var records = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.recordsInfo).text( this.strings.recordsFound + this.strings.labelSeperator + this.collection.totalCount );
 
