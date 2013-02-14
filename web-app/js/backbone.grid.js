@@ -39,7 +39,7 @@ var data = {
 };
 */
 
-(function ( $, _, Backbone ) {
+(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
     getObject: function ( name ) {
       var value = window.localStorage.getItem( name );
@@ -56,6 +56,38 @@ var data = {
       //     ((secure) ? "; secure" : "");
       // }
     }
+  };
+
+  var generateBackboneCollection = function( config ) {
+
+    _.defaults( config, {
+      pageMaxSize:   5,
+      sortColumn:    _.first( config.columns ).name,
+      sortDirection: "asc",
+      batch:         true
+    });
+
+    var ajaxManager    = window.ajaxManager || new AjaxManager(),
+        ajaxId         = _.uniqueId( "gridAjaxManager" ),
+        GridModel      = Backbone.Model.extend({ }),
+        GridCollection = Backbone.PagedCollection.extend({
+          model:         GridModel,
+          url:           config.url,
+          batch:         config.batch,
+          sortColumn:    config.sortColumn,
+          sortDirection: config.sortDirection,
+          pageMaxSize:   config.pageMaxSize,
+          ajaxCallback:  function( params ) {
+            return ajaxManager.create( ajaxId, { abortOld: true } ).add( params );
+          }
+        });
+
+    var collection = new GridCollection;
+    collection.bind( "change", function ( model ) { model.makeDirty(); } );
+    collection.fetch();
+
+    return collection
+
   };
 
   Backbone.Grid = Backbone.View.extend({
@@ -359,6 +391,37 @@ var data = {
 
         if ( validPageLengths )
           this.pageLengths = this.options.pageLengths;
+      }
+
+      // TODO add initial config validation to that a valid collection, or a config object in this.options.collection
+      // or the required properties are passed in on the main options object.. if not, log it and don't instantiate
+      if ( this.options.collection instanceof Backbone.Collection ) {
+        this.collection = this.options.collection;
+      }
+      else {
+        if ( _.isObject( this.options.collection ) ) {
+
+          this.collection = generateBackboneCollection({
+            columns:       this.options.columns, 
+            url:           this.collection.url,
+            pageMaxSize:   this.collection.pageMaxSize,
+            sortColumn:    this.collection.sortColumn,
+            sortDirection: this.collection.sortDirection,
+            batch:         this.collection.batch
+          });
+
+        } else {
+
+          this.collection = generateBackboneCollection({
+            columns:       this.options.columns, 
+            url:           this.options.url,
+            pageMaxSize:   this.options.pageMaxSize,
+            sortColumn:    this.options.sortColumn,
+            sortDirection: this.options.sortDirection,
+            batch:         this.options.batch
+          });
+
+        }
       }
 
 
@@ -1005,4 +1068,4 @@ var data = {
         this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
     }
   });
-}).call (this, $, _, Backbone);
+}).call (this, $, _, Backbone, JSON, AjaxManager );
