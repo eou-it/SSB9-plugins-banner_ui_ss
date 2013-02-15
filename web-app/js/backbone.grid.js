@@ -28,6 +28,7 @@ var events = {
   afterRender:   "Function",
   beforeRefresh: "Function",
   afterRefresh:  "Function"
+  rowSelected:   "Function"
 }
 
 var data = {
@@ -205,6 +206,12 @@ var data = {
       this.$el.find( "." + this.css.selected ).removeClass( this.css.selected );
       tr.addClass( this.css.selected );
       td.addClass( this.css.selected );
+
+      if ( _.isFunction( this.options.rowSelected ) ) {
+        var data = this.collection.get( parseInt( tr.attr( "data-id" ) ) );
+
+        this.options.rowSelected.call( this, tr, data );
+      }
     },
 
     sort: function (e) {
