@@ -249,4 +249,15 @@ $(document).ready(function() {
             }
         } );
     }
+
+    if ($.browser.msie && 8 == parseInt($.browser.version)) {
+        // make text zoom on ie8 trigger resize event, like other browsers
+        var deviceXDPI = screen.deviceXDPI;
+        setInterval( function() {
+            if ( deviceXDPI != screen.deviceXDPI ) {
+                deviceXDPI = screen.deviceXDPI;
+                $(window).resize();
+            }
+        }, 200);
+    }
 });
