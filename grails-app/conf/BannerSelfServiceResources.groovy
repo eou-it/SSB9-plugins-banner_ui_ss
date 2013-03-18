@@ -21,6 +21,18 @@ modules = {
         dependsOn "bannerSelfServiceWithoutAurora, aurora"
     }
 
+    'bootstrap' {
+        dependsOn "jquery"
+
+        defaultBundle environment == "development" ? false : "bootstrap"
+
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap.css'],            attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap-responsive.css'], attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/bootstrap-fixes.css'],                attrs: [media: 'screen, projection']
+
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
+    }
+
     'bannerSelfServiceWithoutAurora' {
         dependsOn "jquery, jquery-ui"
 
