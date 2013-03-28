@@ -263,21 +263,21 @@
         return sizer.width();
     }
 
-    function markMatch(text, term, markup) {
-        var match=text.toUpperCase().indexOf(term.toUpperCase()),
-        tl=term.length;
+   function markMatch(text, term, markup, escapeMarkup) {
+       var match=text.toUpperCase().indexOf(term.toUpperCase()),
+           tl=term.length;
 
-        if (match<0) {
-            markup.push(text);
-            return;
-        }
+       if (match<0) {
+           markup.push(escapeMarkup(text));
+           return;
+       }
 
-        markup.push(text.substring(0, match));
-        markup.push("<span class='select2-match'>");
-        markup.push(text.substring(match, match + tl));
-        markup.push("</span>");
-        markup.push(text.substring(match + tl, text.length));
-    }
+       markup.push(escapeMarkup(text.substring(0, match)));
+       markup.push("<span class='select2-match'>");
+       markup.push(escapeMarkup(text.substring(match, match + tl)));
+       markup.push("</span>");
+       markup.push(escapeMarkup(text.substring(match + tl, text.length)));
+   }
 
     /**
      * Produces an ajax-based query function
@@ -718,9 +718,9 @@
                             label=$("<div></div>");
                             label.addClass("select2-result-label");
 
-                            formatted=opts.formatResult(result, label, query);
+                            formatted=opts.formatResult(result, label, query, self.opts.escapeMarkup);
                             if (formatted!==undefined) {
-                                label.html(self.opts.escapeMarkup(formatted));
+                                label.html(formatted);
                             }
 
                             node.append(label);
@@ -1223,7 +1223,7 @@
             }
 
             function render(html) {
-                results.html(self.opts.escapeMarkup(html));
+                results.html(html);
                 postRender();
             }
 
@@ -2385,9 +2385,9 @@
         dropdownCss: {},
         containerCssClass: "",
         dropdownCssClass: "",
-        formatResult: function(result, container, query) {
+        formatResult: function(result, container, query, escapeMarkup) {
             var markup=[];
-            markMatch(result.text, query.term, markup);
+            markMatch(result.text, query.term, markup, escapeMarkup);
             return markup.join("");
         },
         formatSelection: function (data, container) {
@@ -2410,10 +2410,19 @@
         tokenSeparators: [],
         tokenizer: defaultTokenizer,
         escapeMarkup: function (markup) {
-            if (markup && typeof(markup) === "string") {
-                return markup.replace(/&/g, "&amp;");
-            }
-            return markup;
+            var replace_map = {
+                '\\': '&#92;',
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&apos;',
+                "/": '&#47;'
+            };
+
+            return String(markup).replace(/[&<>"'\/\\]/g, function (match) {
+                    return replace_map[match[0]];
+            });
         },
         blurOnChange: false
     };
