@@ -109,6 +109,16 @@ _.extend(Backbone.Model.prototype, {
     _dirty: false
 });
 
+// TODO This was done to support Backbone.js 1.0's change to non-reset fetch().
+// We need this behavior, currently, to support our Model.isDirty() functionality.
+
+Backbone.Collection.prototype.fetch = _.wrap( Backbone.Collection.prototype.fetch, function( original, options ) {
+    options = options || { };
+    options.reset = options.reset || true;
+
+    original.call( this, options );
+});
+
 // Extend Backbone.Collection to include 'save' which will inspect all dirty models and attempt to save them.
 _.extend(Backbone.Collection.prototype, {
     cid: undefined,
