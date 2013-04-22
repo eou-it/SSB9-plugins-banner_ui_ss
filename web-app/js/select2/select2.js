@@ -170,6 +170,23 @@
             }
         });
     }
+     $(window).bind("resize", function(e) {
+         var dropdown=$("#select2-drop");
+         if (dropdown.length>0) {
+             // there is an open dropdown
+
+             // adjust dropdown positioning so it sizes with the content
+             dropdown.data("select2").positionDropdown();
+         }
+     }).delegate("*", "scroll", function(e) {
+         var dropdown=$("#select2-drop");
+         if (dropdown.length>0) {
+             // there is an open dropdown
+
+             // adjust dropdown positioning so it scrolls with the content
+             dropdown.data("select2").positionDropdown();
+         }
+     });
 
     $document.bind("mousemove", function (e) {
         lastMousePosition = {x: e.pageX, y: e.pageY};
@@ -257,6 +274,7 @@
                 textTransform: style.textTransform,
                 whiteSpace: "nowrap"
             });
+            sizer.attr("class","select2-sizer");
             $("body").append(sizer);
         }
         sizer.text(e.val());
@@ -987,28 +1005,32 @@
             var cid = this.containerId, selector = this.containerSelector,
             scroll = "scroll." + cid, resize = "resize." + cid;
 
-            this.container.parents().each(function() {
-                $(this).bind(scroll, function() {
-                    var s2 = $(selector);
-                    if (s2.length == 0) {
-                        $(this).unbind(scroll);
-                    }
-                    s2.select2("close");
-                });
-            });
+             if (this.opts.closeOnScroll){
+                 this.container.parents().each(function() {
+                     $(this).bind(scroll, function() {
+                         var s2 = $(selector);
+                         if (s2.length == 0) {
+                             $(this).unbind(scroll);
+                         }
+                         s2.select2("close");
+                     });
+                 });
+             }
 
-            window.setTimeout(function() {
-                // this is done inside a timeout because IE will sometimes fire a resize event while opening
-                // the dropdown and that causes this handler to immediately close it. this way the dropdown
-                // has a chance to fully open before we start listening to resize events
-                $(window).bind(resize, function() {
-                    var s2 = $(selector);
-                    if (s2.length == 0) {
-                        $(window).unbind(resize);
-                    }
-                    s2.select2("close");
-                })
-            }, 10);
+            if (this.opts.closeOnResize){
+                window.setTimeout(function() {
+                    // this is done inside a timeout because IE will sometimes fire a resize event while opening
+                    // the dropdown and that causes this handler to immediately close it. this way the dropdown
+                    // has a chance to fully open before we start listening to resize events
+                    $(window).bind(resize, function() {
+                        var s2 = $(selector);
+                        if (s2.length == 0) {
+                            $(window).unbind(resize);
+                        }
+                        s2.select2("close");
+                    })
+                }, 10);
+            }
 
             this.clearDropdownAlignmentPreference();
 
@@ -2380,6 +2402,8 @@
     $.fn.select2.defaults = {
         width: "copy",
         closeOnSelect: true,
+        closeOnResize: true,
+        closeOnScroll: true,
         openOnEnter: true,
         containerCss: {},
         dropdownCss: {},
