@@ -441,6 +441,7 @@ $(document).ready(function() {
             "click .notification-center-anchor":"toggle"
         },
         initialize: function() {
+            var self  = this;
             $(this.el).addClass("notification-center");
 
             $(this.el).append( '<div class="notification-center-flyout"><ul role="alert"/></div>' );
@@ -449,7 +450,8 @@ $(document).ready(function() {
             $(this.el).append( '<div class="notification-center-anchor"></div>' );
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
-            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle' );
+            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle',
+                      'clickOutsideToClose' );
             this.model.bind("add", this.addNotification);
             this.model.bind("remove", this.removeNotification);
         },
@@ -457,36 +459,40 @@ $(document).ready(function() {
             return this;
         },
         addNotification: function(notification) {
-            this.notificationCenterAnchor.display();
-            this.notificationCenterFlyout.display();
-
+            this.toggle(true);
             this.configNotificationShim();
 
             return this;
         },
         removeNotification: function(notification) {
             if (this.model.length == 0) {
-                this.notificationCenterAnchor.hide();
-                this.notificationCenterFlyout.hide();
+                this.toggle(false);
             }
 
             this.configNotificationShim();
 
             return this;
         },
-        toggle: function() {
-            if (this.model.length > 0) {
-                if (this.notificationCenterAnchor.isDisplayed()) {
-                    this.notificationCenterAnchor.hide();
-                    this.notificationCenterFlyout.hide();
-                }
-                else {
-                    this.notificationCenterAnchor.display();
-                    this.notificationCenterFlyout.display();
-                }
+        toggle: function(arg1) {
+            var showOrHide = _.isBoolean(arg1) ? arg1 : false;
+            if (showOrHide == false && this.notificationCenterAnchor.isDisplayed()) {
+                this.notificationCenterAnchor.hide();
+                this.notificationCenterFlyout.hide();
+                $("body").off( "click", this.clickOutsideToClose );
+            }
+            else if (this.model.length > 0) {
+                this.notificationCenterAnchor.display();
+                this.notificationCenterFlyout.display();
+                $("body").on( "click", this.clickOutsideToClose );
             }
 
             return this;
+        },
+        clickOutsideToClose: function(e) {
+            var outside = $(e.target).closest(".notification-center").length == 0;
+            if ( outside ) {
+                this.toggle(false);
+            }
         },
         configNotificationShim: function() {
             // Check to see if any prompts exist.  If there is a prompt, the user must be forced to address the prompt prior
