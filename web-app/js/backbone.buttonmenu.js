@@ -14,10 +14,10 @@
     },
 
     elements: {
-      div:      "<div></div",
+      div:      "<div></div>",
       ul:       "<ul></ul>",
-      li:       "<li></li",
-      label:    "<label></label",
+      li:       "<li></li>",
+      label:    "<label></label>",
       checkbox: "<input type='checkbox'/>",
       button:   "<button></button>"
     },

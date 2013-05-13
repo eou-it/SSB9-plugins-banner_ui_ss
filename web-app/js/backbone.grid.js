@@ -159,8 +159,8 @@ var data = {
       select:   "<select></select>",
       option:   "<option></option>",
       ul:       "<ul></ul>",
-      li:       "<li></li",
-      label:    "<label></label",
+      li:       "<li></li>",
+      label:    "<label></label>",
       checkbox: "<input type='checkbox'/>"
     },
 
