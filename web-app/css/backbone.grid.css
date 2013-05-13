@@ -160,6 +160,14 @@
   padding: 0;
 }
 
+.button-menu-container ul li {
+    padding: 4px 0;
+}
+
+.button-menu-container ul li input {
+    height:auto;
+}
+
 .button-menu-overlay {
   opacity: 0.0;
   filter:alpha(opacity=0);
