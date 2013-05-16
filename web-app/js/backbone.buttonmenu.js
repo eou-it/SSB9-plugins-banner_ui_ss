@@ -106,7 +106,8 @@
       $( "." + this.css.buttonMenuContainer ).position({
         of: this.$el.find( "." + this.css.buttonMenuButton ),
         my: "right top",
-        at: "right bottom"
+        at: "right bottom",
+	    collision: "fit"
       });
     },
 
