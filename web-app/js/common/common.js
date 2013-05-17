@@ -171,6 +171,54 @@ window.SaveTimer = ActivityTimer.extend({
     activityTarget: function() { return $("body"); }
 });
 
+function showLoading( target ) {
+    var t = $(target);
+
+    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
+
+    // $.offset() includes the top nav bar's height, so find position manually
+    var pos = {top:t[0].offsetTop + $(window).scrollTop(), left:t[0].offsetLeft };
+
+    loading.css(pos).height(t.outerHeight()).width(t.outerWidth());
+
+    setTimeout(
+        function() {
+            $(target).find( 'div.loading-pending' ).fadeIn( 200, function() {
+                $(this).removeClass( 'loading-pending' );
+            });
+        }, 750
+    );
+}
+
+function hideLoading( target ) {
+    $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
+}
+
+$(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
+    // This cannot detect all failures to provide an error handler, as
+    // ajaxmanager or backbone may be wrapping a missing error handler.
+    var handledError = ajaxOptions.error || ajaxOptions.complete;
+    if ( !handledError ) {
+        hideLoading( document );
+
+        var msg = $.i18n.prop("js.net.hedtech.banner.ajax.error.message", [ thrownError ]);
+        if ( thrownError == 'timeout' ) {
+            msg = $.i18n.prop("js.net.hedtech.banner.ajax.timeout.message");
+        }
+        var n = new Notification( {
+            message: msg,
+            type:"error",
+            promptMessage: $.i18n.prop("js.net.hedtech.banner.ajax.reload.prompt")
+        });
+
+        n.addPromptAction( $.i18n.prop("js.net.hedtech.banner.ajax.reload.button"),
+                           function() { window.location.reload() });
+
+        notifications.addNotification( n );
+
+        log.error( msg, jqXHR, ajaxOptions, thrownError );
+    }
+});
 
 $(document).ready(function() {
     var dir = $('meta[name=dir]').attr("content");
