@@ -27,7 +27,7 @@
         <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerToken.store( session ).currentToken}"/>
         <meta name="logLevel" content="${g.logLevel()}"/>
         <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
-        <meta name="transactionTimeout" content="${(session.transactionTimeout != null ? session.transactionTimeout : '30')}"/>
+        <meta name="transactionTimeout" content="${session.getServletContext().transactionTimeout}"/>
         <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
         <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
         <meta name="fullName" content="${g.fullName()}"/>
