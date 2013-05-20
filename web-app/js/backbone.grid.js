@@ -409,7 +409,7 @@ var data = {
         if ( _.isObject( this.options.collection ) ) {
 
           this.collection = generateBackboneCollection({
-            columns:       this.options.columns, 
+            columns:       this.options.columns,
             url:           this.collection.url,
             pageMaxSize:   this.collection.pageMaxSize,
             sortColumn:    this.collection.sortColumn,
@@ -420,7 +420,7 @@ var data = {
         } else {
 
           this.collection = generateBackboneCollection({
-            columns:       this.options.columns, 
+            columns:       this.options.columns,
             url:           this.options.url,
             pageMaxSize:   this.options.pageMaxSize,
             sortColumn:    this.options.sortColumn,
@@ -482,13 +482,15 @@ var data = {
           view.toggleColumnVisibility( $( e.target ).attr( "data-name" ) );
       };
 
-      var map = _.map( this.columns, function ( it ) {
+      var map = _.map( _.filter( this.columns, function ( it ) {
+          return it.title;
+      }), function( it ) {
           return {
               name:    it.name,
               title:   it.title,
               checked: _.isBoolean( it.visible ) ? it.visible : true
            };
-       });
+      });
 
       this.columnVisibilityControls = new Backbone.ButtonMenu({
           el:         this.$el.find( "." + this.css.columnVisibilityMenu ),
