@@ -145,6 +145,9 @@ function ColumnResize(table) {
 			'; expires=' + expire.toGMTString();
 
 		preventEvent(e);
+
+		// Adding a trigger so that instances can react.
+		$('#' + self.id).trigger('columnWidthChanged');
 	}
 
 	// ============================================================
