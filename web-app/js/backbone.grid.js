@@ -186,7 +186,7 @@ var data = {
     },
 
     features: {
-      visbility: true,
+      visibility: true,
       resizable: true,
       draggable: true,
       freeze:    false
@@ -337,7 +337,7 @@ var data = {
     },
 
     defaultFeatureValues: function () {
-      this.features.visbility = true;
+      this.features.visibility = true;
       this.features.resizable = true;
       this.features.draggable = true;
       this.features.freeze    = false;
@@ -346,8 +346,8 @@ var data = {
     determineFeatures: function () {
       this.defaultFeatureValues();
 
-      if( _.isBoolean( this.options.visbility ) )
-        this.features.visbility = this.options.visbility;
+      if( _.isBoolean( this.options.visibility ) )
+        this.features.visibility = this.options.visibility;
 
       if( _.isBoolean( this.options.resizable ) )
         this.features.resizable = this.options.resizable;
@@ -511,7 +511,7 @@ var data = {
       this.generateTable();
       this.generateWrapper();
 
-      if ( this.features.visbility )
+      if ( this.features.visibility )
         this.generateColumnVisibilityControls();
 
       if( this.features.freeze ) {
