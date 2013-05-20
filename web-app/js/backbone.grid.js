@@ -20,7 +20,8 @@ var features = {
   resizable:  "Boolean",
   draggable:  "Boolean",
   freeze:     "Boolean",
-  visibility: "Boolean"
+  visibility: "Boolean",
+  sharedVisibility: "Boolean"
 }
 
 var events = {
@@ -187,6 +188,7 @@ var data = {
 
     features: {
       visibility: true,
+      sharedVisibility: true,
       resizable: true,
       draggable: true,
       freeze:    false
@@ -338,6 +340,7 @@ var data = {
 
     defaultFeatureValues: function () {
       this.features.visibility = true;
+      this.features.sharedVisibility = true;
       this.features.resizable = true;
       this.features.draggable = true;
       this.features.freeze    = false;
@@ -348,6 +351,9 @@ var data = {
 
       if( _.isBoolean( this.options.visibility ) )
         this.features.visibility = this.options.visibility;
+
+      if( _.isBoolean( this.options.sharedVisibility ) )
+        this.features.sharedVisibility = this.options.sharedVisibility;
 
       if( _.isBoolean( this.options.resizable ) )
         this.features.resizable = this.options.resizable;
@@ -455,6 +461,12 @@ var data = {
       if( typeof( window.notifications ) != 'undefined' && typeof( window.notifications.bind ) == 'function' ) {
         window.notifications.bind('add',    this.notificationAdded );
         window.notifications.bind('remove', this.notificationRemoved );
+      }
+
+      if ( this.features.visibility && this.features.sharedVisibility ) {
+          $(document).on( 'toggle.grid-column', function( event, name, visible ) {
+              view.toggleColumnVisibility( name, visible, true );
+          });
       }
 
       this.render();
@@ -585,14 +597,19 @@ var data = {
       return value;
     },
 
-    toggleColumnVisibility: function ( name ) {
+    toggleColumnVisibility: function ( name, visible, quiet ) {
         var column = _.find( this.columns, function ( it ) { return it.name == name; } );
 
-        column.visible = ( _.isUndefined( column.visible ) || column.visible ? false : true );
+        var oldVisible = ( _.isUndefined( column.visible ) || column.visible ? true : false );
+        column.visible = ( _.isUndefined( visible ) ? !oldVisible : visible );
 
-        this.refresh( true );
+        if ( oldVisible != column.visible ) {
+            if ( !quiet ) {
+                this.$el.trigger( "toggle.grid-column", [column.name, column.visible] );
+            }
+            this.refresh( true );
+        }
     },
-
 
     resolveProperty: function ( obj, property ) {
       property = property.split( '.' );
