@@ -28,7 +28,7 @@
     },
 
     strings: {
-      buttonLabel:  "Columns",
+      buttonLabel:  null,
       itemIdPrefix: "menuItemId"
     },
 
@@ -62,6 +62,9 @@
     },
 
     initialize: function () {
+      if ( this.strings.buttonLabel === null ) {
+          this.strings.buttonLabel = $.i18n.prop( "js.grid.columns.button" );
+      }
       this.items    = this.options.items    || [ ];
       this.callback = this.options.callback || null;
     },
