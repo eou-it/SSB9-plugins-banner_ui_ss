@@ -197,8 +197,10 @@ function hideLoading( target ) {
 $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
     // This cannot detect all failures to provide an error handler, as
     // ajaxmanager or backbone may be wrapping a missing error handler.
+    log.debug( "ajaxError url=" + ajaxOptions.url + " thrownError=" + thrownError
+               + " status=" + jqXHR.status + " readyState=" + jqXHR.readyState );
     var handledError = ajaxOptions.error || ajaxOptions.complete;
-    if ( !handledError ) {
+    if ( thrownError !== 'abort' && !handledError ) {
         hideLoading( document );
 
         var msg = $.i18n.prop("js.net.hedtech.banner.ajax.error.message", [ thrownError ]);
