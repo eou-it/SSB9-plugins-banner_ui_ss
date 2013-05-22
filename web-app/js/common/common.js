@@ -215,6 +215,8 @@ $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
 
         n.addPromptAction( $.i18n.prop("js.net.hedtech.banner.ajax.reload.button"),
                            function() { window.location.reload() });
+        n.addPromptAction( $.i18n.prop("js.net.hedtech.banner.ajax.continue.button"),
+                           function() { notifications.remove( n ); });
 
         notifications.addNotification( n );
 
