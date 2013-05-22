@@ -104,7 +104,7 @@
         ul.append( li );
       });
 
-      $( "body" ).append( $( this.elements.div ).addClass( this.css.buttonMenuContainer ).append( ul ) );
+        $( "body" ).remove( this.css.buttonMenuContainer ).append( $( this.elements.div ).addClass( this.css.buttonMenuContainer ).append( ul ) );
 
       $( "." + this.css.buttonMenuContainer ).position({
         of: this.$el.find( "." + this.css.buttonMenuButton ),

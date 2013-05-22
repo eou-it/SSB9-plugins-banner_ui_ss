@@ -464,8 +464,10 @@ var data = {
       }
 
       if ( this.features.visibility && this.features.sharedVisibility ) {
-          $(document).on( 'toggle.grid-column', function( event, name, visible ) {
-              view.toggleColumnVisibility( name, visible, true );
+          $(document).on( 'toggle-grid-column', function( event, name, visible ) {
+              if ( event.target !== view.el ) {
+                  view.toggleColumnVisibility( name, visible, true );
+              }
           });
       }
 
@@ -504,6 +506,9 @@ var data = {
            };
       });
 
+      if ( this.columnVisibilityControls ) {
+          this.columnVisibilityControls.stopListening().undelegateEvents().$el.empty();
+      }
       this.columnVisibilityControls = new Backbone.ButtonMenu({
           el:         this.$el.find( "." + this.css.columnVisibilityMenu ),
           items:      map,
@@ -603,11 +608,10 @@ var data = {
         var oldVisible = ( _.isUndefined( column.visible ) || column.visible ? true : false );
         column.visible = ( _.isUndefined( visible ) ? !oldVisible : visible );
 
-        if ( oldVisible != column.visible ) {
-            if ( !quiet ) {
-                this.$el.trigger( "toggle.grid-column", [column.name, column.visible] );
-            }
-            this.refresh( true );
+        this.refresh( true );
+
+        if ( !quiet ) {
+            this.$el.trigger( "toggle-grid-column", [column.name, column.visible] );
         }
     },
 
