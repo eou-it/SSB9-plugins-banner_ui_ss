@@ -606,7 +606,12 @@ var data = {
         var column = _.find( this.columns, function ( it ) { return it.name == name; } );
 
         var oldVisible = ( _.isUndefined( column.visible ) || column.visible ? true : false );
-        column.visible = ( _.isUndefined( visible ) ? !oldVisible : visible );
+        if ( _.isUndefined( visible )) {
+            column.visible = !oldVisible;
+        } else {
+            column.visible = visible;
+            this.generateColumnVisibilityControls(); // sync menu checkboxes
+        }
 
         this.refresh( true );
 
