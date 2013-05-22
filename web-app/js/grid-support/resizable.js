@@ -102,6 +102,10 @@ function ColumnResize(table) {
 		if (dragColumns[no+1])
 			dragColumns[no+1].style.width = parseInt(dragColumns[no+1].style.width) - w + 'px';
 
+
+		// Adding a trigger so that instances can react.
+		$('#' + self.id).trigger('columnWidthChanging');
+
 		return true;
 	}
 
