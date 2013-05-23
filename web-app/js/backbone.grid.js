@@ -604,6 +604,7 @@ var data = {
 
     toggleColumnVisibility: function ( name, visible, quiet ) {
         var column = _.find( this.columns, function ( it ) { return it.name == name; } );
+        if ( _.isUndefined( column )) return;
 
         var oldVisible = ( _.isUndefined( column.visible ) || column.visible ? true : false );
         if ( _.isUndefined( visible )) {
