@@ -125,6 +125,7 @@ var data = {
       bottom:                 "bottom",
       columnVisibilityMenu:   "column-visibility-menu",
       title:                  "title",
+      gridWithoutTitle:       "grid-without-title",
       totalRecords:           "total-records",
       recordsInfo:            "records-info",
       mousedown:              "mousedown",
@@ -511,6 +512,7 @@ var data = {
       }
       this.columnVisibilityControls = new Backbone.ButtonMenu({
           el:         this.$el.find( "." + this.css.columnVisibilityMenu ),
+          container:  this.menuContainer,
           items:      map,
           callback:   toggleColumnVisibility,
           buttonIcon: "grid-button-menu-icon"
@@ -885,7 +887,7 @@ var data = {
       this.$el.append( overallWrapper );
 
 
-      mainGridWrapper.mutate( 'width', function ( element, info ) {
+        mainGridWrapper.mutate( 'width', function ( element, info ) {
         //console.log('width resize, ' + element + ', ' + info );
 
         view.setupScrolling();
@@ -980,12 +982,21 @@ var data = {
 
       var gridWrapper = this.$el.find( "." + this.css.gridWrapper );
 
-      gridWrapper.before( $( this.elements.div ).addClass( this.css.header + " " + this.css.uiWidgetHeader + " " + this.css.contentContainerHeader )
-                                               .append( $( this.elements.span ).addClass( this.css.title ).text( this.title ) ) );
+      if ( this.title ) {
+        this.menuContainer = $( this.elements.div ).
+          addClass( this.css.header + " " + this.css.uiWidgetHeader + " " + this.css.contentContainerHeader ).
+          append( $( this.elements.span ).addClass( this.css.title ).text( this.title ) );
+        gridWrapper.before( this.menuContainer );
+      } else {
+        gridWrapper.addClass( this.css.gridWithoutTitle );
+        this.menuContainer = gridWrapper.find( "thead tr" );
+      }
 
       gridWrapper.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
 
-      this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
+      if ( this.features.visibility ) {
+        this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
+      }
 
       if ( this.collection.paginate )
         this.generatePagingControls();

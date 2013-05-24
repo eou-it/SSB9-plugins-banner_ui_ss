@@ -7,8 +7,6 @@
 
     css: {
       buttonMenuItemCheckbox: "button-menu-item-checkbox",
-      buttonMenuIcon:         "button-menu-icon",
-      buttonMenuButton:       "button-menu-button",
       buttonMenuContainer:    "button-menu-container",
       buttonMenuOverlay:      "button-menu-overlay"
     },
@@ -19,12 +17,11 @@
       li:       "<li></li>",
       label:    "<label></label>",
       checkbox: "<input type='checkbox'/>",
-      button:   "<button></button>"
     },
 
     events: {
       "click .button-menu-item-checkbox": "toggleItem",
-      "click .button-menu-button":        "toggleMenu"
+      "click": "toggleMenu"
     },
 
     strings: {
@@ -67,6 +64,18 @@
       }
       this.items    = this.options.items    || [ ];
       this.callback = this.options.callback || null;
+      this.container = this.options.container || this.$el.parent();
+
+      var self = this;
+      $(self.container).mutate( 'height top width', function() {
+        self.$el.height( self.container.height() ).
+          position({
+            of: self.container,
+            my: "right top",
+            at: "right top",
+            collision: "none"
+        });
+      });
     },
 
     removeMenu: function () {
@@ -107,15 +116,15 @@
         $( "body" ).remove( this.css.buttonMenuContainer ).append( $( this.elements.div ).addClass( this.css.buttonMenuContainer ).append( ul ) );
 
       $( "." + this.css.buttonMenuContainer ).position({
-        of: this.$el.find( "." + this.css.buttonMenuButton ),
+        of: this.$el,
         my: "right top",
         at: "right bottom",
-	    collision: "fit"
+        collision: "fit"
       });
     },
 
     render: function () {
-      this.$el.append( $( this.elements.button ).text( this.strings.buttonLabel ).addClass( this.css.buttonMenuButton ) );
+        this.$el.attr( 'title', this.strings.buttonLabel );
     }
 
   });
