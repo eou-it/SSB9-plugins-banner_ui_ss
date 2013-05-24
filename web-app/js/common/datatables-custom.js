@@ -211,9 +211,9 @@ $.fn.dataTableExt.oPagination.selfServiceDefaultPagination = {
 };
 
 /**
- * @depreciated
+ * @deprecated
  *
- *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *  - This function has been deprecated with Backbone.DataGridView taking its place. -
  *
  */
 function preparePagingSelect( el, collection ) {
@@ -267,9 +267,9 @@ function preparePagingSelect( el, collection ) {
 // #################################################################################################################
 
 /**
- * @depreciated
+ * @deprecated
  *
- *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *  - This function has been deprecated with Backbone.DataGridView taking its place. -
  *
  */
 function replaceDataTablesSortListeners(table) {
@@ -285,9 +285,9 @@ function replaceDataTablesSortListeners(table) {
 }
 
 /**
- * @depreciated
+ * @deprecated
  *
- *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *  - This function has been deprecated with Backbone.DataGridView taking its place. -
  *
  */
 function sortTable(el, table) {
@@ -391,9 +391,9 @@ $.fn.dataTableExt.oApi.getColumnDivIndexByProperty = function ( oSettings, mData
 };
 
 /**
- * @depreciated
+ * @deprecated
  *
- *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *  - This function has been deprecated with Backbone.DataGridView taking its place. -
  *
  * Provides a simplfied way to build a selector for a column on a given table given a mDataProp.
  * @param mDataProp
@@ -427,9 +427,9 @@ function removeFocusOnEditableField () {
 }
 
 /**
- * @depreciated
+ * @deprecated
  *
- *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *  - This function has been deprecated with Backbone.DataGridView taking its place. -
  */
 var updateData = function (property, value, settings, el, datatable) {
     datatable = datatable || { };
@@ -454,9 +454,9 @@ var updateData = function (property, value, settings, el, datatable) {
 };
 
 /**
- * @depreciated
+ * @deprecated
  *
- *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *  - This function has been deprecated with Backbone.DataGridView taking its place. -
  *
  * This function will create a data table with default settings.
  *
@@ -520,9 +520,9 @@ function markDataTablePopups(){
 }
 
 /**
- * @depreciated
+ * @deprecated
  *
- *  - This function has been depreciated with Backbone.DataGridView taking its place. -
+ *  - This function has been deprecated with Backbone.DataGridView taking its place. -
  *
  * Use this to create json based off a table that is prepared for usage in DataTables
  * @param collection a backbone collection.
