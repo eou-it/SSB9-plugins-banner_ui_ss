@@ -59,7 +59,7 @@ jQuery.fn.dirtyCheck = function(options) {
         }
 
         var saveHandlers = function() {
-            var events = jQuery.data(target, 'events');
+            var events = jQuery( target ).data( 'events' );
             if (!events && target.href) {
                 // No handlers but we have href
 

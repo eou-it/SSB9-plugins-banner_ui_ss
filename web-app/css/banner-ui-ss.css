@@ -1,6 +1,7 @@
 body {
     background: #f8f8f8;
     font: 10px Arial,Helvetica,sans-serif;
+    overflow-y: hidden !important;
 }
 
 td.invalid-input-value {

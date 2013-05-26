@@ -59,7 +59,9 @@ $.fn.dataTableExt.oPagination.selfServiceDefaultPagination = {
 
         $(nFirst).click(function() { pageChange("first") });
         $(nPrev).click( function() { pageChange("previous") });
-        $(nNext).click( function() { pageChange("next") });
+        $(nNext).on( "click", function() {
+            pageChange("next");
+        });
         $(nLast).click( function() { pageChange("last") });
 
         var collection = oSettings.oInit.aoBackboneCollection;
@@ -70,7 +72,7 @@ $.fn.dataTableExt.oPagination.selfServiceDefaultPagination = {
 
             var success = function(saved) {
                 if (typeof(view.options.success) == 'function') {
-                    view.options.success(saved);
+                    view.options.success.call( view, saved );
                 }
                 callback(saved);
             }
