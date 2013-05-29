@@ -483,7 +483,9 @@ $(document).ready(function() {
             else if (this.model.length > 0) {
                 this.notificationCenterAnchor.display();
                 this.notificationCenterFlyout.display();
-                $("body").on( "click", this.clickOutsideToClose );
+                _.delay( function() {
+                    $("body").on( "click", this.clickOutsideToClose );
+                }, 50 );
             }
 
             return this;
