@@ -11,7 +11,7 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-1.10.0.js'], disposition: 'head', nominify: true
         // resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-migrate-mute.js'], disposition: 'head', nominify: true
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-migrate-1.2.1.min.js'], disposition: 'head', nominify: true
+        resource url:[plugin: 'banner-ui-ss', file: ( environment == "development" ? 'js/jquery/jquery-migrate-1.2.1.js' : 'js/jquery/jquery-migrate-1.2.1.min.js' )], disposition: 'head', nominify: true
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-ui-1.10.3.custom.js'], disposition: 'head', nominify: true
     }
 
