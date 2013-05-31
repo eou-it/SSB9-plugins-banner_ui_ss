@@ -7,12 +7,10 @@ modules = {
     }
 
     'jquery' {
-        resource url:[plugin: 'banner-ui-ss', file: 'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme/jquery-ui-1.8.13.custom.css'], attrs:[media:'screen, projection'], disposition: 'head'
+        resource url:[plugin: 'banner-ui-ss', file: 'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme/jquery-ui-1.8.13.custom.css'], attrs:[media:'screen, projection']
 
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-1.10.0.js'], disposition: 'head', nominify: true
-        // resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-migrate-mute.js'], disposition: 'head', nominify: true
-        resource url:[plugin: 'banner-ui-ss', file: ( environment == "development" ? 'js/jquery/jquery-migrate-1.2.1.js' : 'js/jquery/jquery-migrate-1.2.1.min.js' )], disposition: 'head', nominify: true
-        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-ui-1.10.3.custom.js'], disposition: 'head', nominify: true
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-1.7.2.js'], disposition: 'head'
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-ui-1.8.15.custom.js'], disposition: 'head'
     }
 
     'bootstrap' {
