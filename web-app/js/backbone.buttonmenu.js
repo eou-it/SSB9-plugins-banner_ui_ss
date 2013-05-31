@@ -67,15 +67,17 @@
       this.container = this.options.container || this.$el.parent();
 
       var self = this;
-      $(self.container).mutate( 'height top width', function() {
+      var resizeButton = function() {
         self.$el.height( self.container.height() ).
           position({
             of: self.container,
             my: "right top",
             at: "right top",
             collision: "none"
-        });
-      });
+          });
+      };
+      $(self.container).mutate( 'height top width', resizeButton );
+      _.defer( resizeButton );
     },
 
     removeMenu: function () {

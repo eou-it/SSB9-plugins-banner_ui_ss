@@ -887,7 +887,7 @@ var data = {
       this.$el.append( overallWrapper );
 
 
-        mainGridWrapper.mutate( 'width', function ( element, info ) {
+      mainGridWrapper.mutate( 'width', function ( element, info ) {
         //console.log('width resize, ' + element + ', ' + info );
 
         view.setupScrolling();
