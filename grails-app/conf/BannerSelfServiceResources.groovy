@@ -41,7 +41,7 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'], attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/select2/select2.css'], attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.css'], attrs: [media: 'screen, projection']
 
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
