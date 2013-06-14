@@ -24,7 +24,7 @@
 
         <meta charset="${message(code: 'default.character.encoding')}"/>
         <meta name="dir" content="${message(code:'default.language.direction')}"/>
-        <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerToken.store( session ).currentToken}"/>
+        <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
         <meta name="logLevel" content="${g.logLevel()}"/>
         <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
         <meta name="transactionTimeout" content="${session.getServletContext().transactionTimeout}"/>
