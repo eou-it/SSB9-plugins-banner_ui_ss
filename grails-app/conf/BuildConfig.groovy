@@ -27,12 +27,17 @@ grails.project.dependency.resolution = {
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {
 
-        grailsPlugins()
-        grailsHome()
-        grailsCentral()
-
-        mavenRepo "http://repository.jboss.org/maven2/"
-        mavenRepo "http://repository.codehaus.org"
+        if (System.properties['PROXY_SERVER_NAME']) {
+            mavenRepo "${System.properties['PROXY_SERVER_NAME']}"
+        } else {
+            grailsPlugins()
+            grailsHome()
+            grailsCentral()
+            
+            mavenCentral()
+            mavenRepo "http://repository.jboss.org/maven2/"
+            mavenRepo "http://repository.codehaus.org"
+        }
     }
 
     plugins {
