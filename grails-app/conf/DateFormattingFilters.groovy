@@ -1,6 +1,6 @@
 import net.hedtech.banner.i18n.DateConverterService
 import org.codehaus.groovy.grails.commons.ControllerArtefactHandler
-import org.codehaus.groovy.grails.web.servlet.mvc.SimpleGrailsControllerHelper
+import org.codehaus.groovy.grails.web.servlet.mvc.MethodGrailsControllerHelper
 import org.apache.commons.io.IOUtils
 import org.codehaus.groovy.grails.web.converters.Converter
 import javax.servlet.http.HttpServletRequest
@@ -75,9 +75,12 @@ class DateFormattingFilters {
                 else {
 
                     if(controllerName) {
-                        org.codehaus.groovy.grails.web.servlet.mvc.GrailsControllerHelper gch = new SimpleGrailsControllerHelper(grailsApplication, applicationContext, servletContext)
+                        MethodGrailsControllerHelper mgch = new MethodGrailsControllerHelper()
                         def controllerClass = grailsApplication.getArtefactByLogicalPropertyName(ControllerArtefactHandler.TYPE, controllerName)
-                        GroovyObject groovyObject = gch.getControllerInstance(controllerClass)
+                        mgch.setApplicationContext(applicationContext)
+                        mgch.setGrailsApplication(grailsApplication)
+                        mgch.setServletContext(servletContext)
+                        GroovyObject groovyObject = mgch.getControllerInstance(controllerClass)
                         def dateFields = controllerClass.getPropertyValue("dateFields")
 
                         if(dateFields && !dateFields.isEmpty()) {
