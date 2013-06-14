@@ -28,12 +28,13 @@ package net.hedtech.banner.converters.json
 
 
 import grails.converters.JSON
+import org.codehaus.groovy.grails.commons.AnnotationDomainClassArtefactHandler
+import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
 import org.codehaus.groovy.grails.commons.GrailsClassUtils
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
 import org.codehaus.groovy.grails.support.proxy.DefaultProxyHandler
 import org.codehaus.groovy.grails.support.proxy.ProxyHandler
-import org.codehaus.groovy.grails.web.converters.ConverterUtil
 import org.codehaus.groovy.grails.web.converters.exceptions.ConverterException
 import org.codehaus.groovy.grails.web.converters.marshaller.ObjectMarshaller
 import org.codehaus.groovy.grails.web.json.JSONWriter
@@ -71,7 +72,7 @@ public class JSONDomainMarshaller implements ObjectMarshaller<JSON> {
     }
 
     public boolean supports(Object object) {
-        return ConverterUtil.isDomainClass(object.getClass())
+        return AnnotationDomainClassArtefactHandler.isDomainClass(object.getClass()) || AnnotationDomainClassArtefactHandler.isJPADomainClass(object.getClass())
     }
 
     @SuppressWarnings("unchecked")
@@ -79,7 +80,7 @@ public class JSONDomainMarshaller implements ObjectMarshaller<JSON> {
         JSONWriter writer = json.getWriter()
         value = proxyHandler.unwrapIfProxy(value)
         Class<?> clazz = value.getClass()
-        GrailsDomainClass domainClass = ConverterUtil.getDomainClass(clazz.getName())
+        GrailsDomainClass domainClass = grails.util.Holders.getGrailsApplication().getArtefact(DomainClassArtefactHandler.TYPE, ConverterUtil.trimProxySuffix(clazz.getName()))
         BeanWrapper beanWrapper = new BeanWrapperImpl(value)
 
         writer.object()
