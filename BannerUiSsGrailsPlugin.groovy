@@ -28,13 +28,13 @@ class BannerUiSsGrailsPlugin {
 
     def version = "2.2.0"
 
-    def grailsVersion = "1.3.7 > *"
+    def grailsVersion = "2.2.1 > *"
 
     def dependsOn = [
         cacheHeaders:'1.1.5 => *',
-        csv:'0.3 => *',
+        csv:'0.3.1 => *',
         feeds:'1.5 => *',
-        selenium:'0.6 => *',
+        selenium:'0.8 => *',
         bannerCore:'1.0.17 => *'
     ]
 

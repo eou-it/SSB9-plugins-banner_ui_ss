@@ -30,27 +30,21 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
         grailsCentral()
-        
+
         mavenRepo "http://repository.jboss.org/maven2/"
         mavenRepo "http://repository.codehaus.org"
     }
 
     plugins {
-        compile ':spring-security-core:1.0.1'
+        compile ':spring-security-core:1.2.7.3'
 
         compile ':cache-headers:1.1.5'
         compile ':codenarc:0.8'
-        compile ':csv:0.3'
+        compile ':csv:0.3.1'
         compile ':feeds:1.5'
-        compile ':functional-test:1.2.7'
-        compile ':hibernate:1.3.7'
 
-        compile ':selenium:0.6'
+        compile ':selenium:0.8'
         compile ':selenium-rc:1.0.2'
-
-        compile ':tomcat:1.3.7'
-
-        provided ':maven-publisher:0.8.1'
     }
 
     dependencies {
