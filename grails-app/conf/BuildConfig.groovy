@@ -56,3 +56,12 @@ grails.project.dependency.resolution = {
 
     }
 }
+
+
+// CodeNarc rulesets
+codenarc.ruleSetFiles="rulesets/banner.groovy"
+codenarc.reportName="target/CodeNarcReport.html"
+codenarc.propertiesFile="grails-app/conf/codenarc.properties"
+codenarc.extraIncludeDirs=["grails-app/composers"]
+
+grails.validateable.packages=['net.hedtech.banner.student.registration']
