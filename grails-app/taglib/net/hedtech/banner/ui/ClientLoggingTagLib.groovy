@@ -18,7 +18,7 @@ import org.apache.commons.logging.LogFactory
  */
 class ClientLoggingTagLib {
     def logLevel = { attrs ->
-        def logger = LogFactory.getLog( "${grailsApplication.getArtefactByLogicalPropertyName( "Controller", attrs.name ?: controllerName ).clazz.name}.${actionName}").logger.logger
+        def logger = LogFactory.getLog( "${grailsApplication.getArtefactByLogicalPropertyName( "Controller", attrs.name ?: controllerName ).clazz.name}.${actionName}").logger.log4jLogger
         out << getLevel( logger )
     }
 
