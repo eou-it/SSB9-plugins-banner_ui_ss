@@ -1,12 +1,12 @@
 /*********************************************************************************
  Copyright 2009-2012 SunGard Higher Education. All Rights Reserved.
- This copyrighted software contains confidential and proprietary information of 
- SunGard Higher Education and its subsidiaries. Any use of this software is limited 
- solely to SunGard Higher Education licensees, and is further subject to the terms 
- and conditions of one or more written license agreements between SunGard Higher 
+ This copyrighted software contains confidential and proprietary information of
+ SunGard Higher Education and its subsidiaries. Any use of this software is limited
+ solely to SunGard Higher Education licensees, and is further subject to the terms
+ and conditions of one or more written license agreements between SunGard Higher
  Education and the licensee in question. SunGard is either a registered trademark or
  trademark of SunGard Data Systems in the U.S.A. and/or other regions and/or countries.
- Banner and Luminis are either registered trademarks or trademarks of SunGard Higher 
+ Banner and Luminis are either registered trademarks or trademarks of SunGard Higher
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
 
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest
 class BannerUiSsGrailsPlugin {
 
     def log = Logger.getLogger( this.getClass() )
-    
+
     String groupId = "net.hedtech"
 
     def version = "2.2.0"
@@ -80,11 +80,11 @@ class BannerUiSsGrailsPlugin {
                  log.info "adding log property to $it"
 
                  // Note: weblogic throws an error if we try to inject the method if it is already present
-                 if (!it.metaClass.methods.find { m -> m.name.matches( "getLog" ) }) { 
+                 if (!it.metaClass.methods.find { m -> m.name.matches( "getLog" ) }) {
                      def name = it.name // needed as this 'it' is not visible within the below closure...
                      try {
                          it.metaClass.getLog = { LogFactory.getLog( "$name" ) }
-                     } 
+                     }
                      catch (e) { } // rare case where we'll bury it...
                  }
              }
@@ -114,7 +114,7 @@ class BannerUiSsGrailsPlugin {
             def originalString = controller.metaClass.getMetaMethod("render",[String] as Class[])
 
             if(originalMap) {
-                controller.metaClass.originalRenderMap = originalMap.getClosure()
+                controller.metaClass.originalRenderMap = originalMap
 
                 controller.metaClass.render = { Map args ->
                     if(args?.model) {
@@ -130,12 +130,12 @@ class BannerUiSsGrailsPlugin {
                             }
                         }
                     }
-                    originalRenderMap(args)
+                    originalRenderMap.invoke(delegate, args)
                 }
             }
 
             if(originalString) {
-                controller.metaClass.originalRenderString = originalString.getClosure()
+                controller.metaClass.originalRenderString = originalString
 
                 controller.metaClass.render = { String txt ->
                    try {
@@ -150,7 +150,7 @@ class BannerUiSsGrailsPlugin {
                    catch(Exception e) {
                        println e
                    }
-                   originalRenderString(txt)
+                   originalRenderString.invoke(delegate, txt)
                 }
             }
        }
