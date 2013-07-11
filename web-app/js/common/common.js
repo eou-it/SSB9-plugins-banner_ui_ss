@@ -312,4 +312,9 @@ $(document).ready(function() {
             }
         }, 200);
     }
+
+    // Prevent Firefox mis-feature of allowing copy of password masking characters.
+    $('body').on('copy', 'input[type=password]', function (event) {
+        event.preventDefault();
+    });
 });
