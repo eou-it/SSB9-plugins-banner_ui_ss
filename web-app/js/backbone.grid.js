@@ -108,7 +108,8 @@ var data = {
       data:          [],
       title:         null,
       keyTable:      null,
-      pageLengths:   [ 50, 100, 250, 500 ]
+      pageLengths:   [ 50, 100, 250, 500 ],
+      noDataMsg:     null
     },
 
     css: {
@@ -666,46 +667,50 @@ var data = {
 
       var columnState = view.getColumnState();
 
-      _.each( view.collection.models, function ( model ) {
-        var tr = $( view.elements.tr ),
-            it = model.toJSON();
-
-        tr.attr( "data-id", it.id );
-        tr.addClass ( clz );
-
-        clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
-
-        _.each( columnState, function (col) {
-          if ( _.isBoolean( col.visible ) && !col.visible )
-            return;
-
-          var piece,
-              td = $( view.elements.td );
-
-          if ( _.isFunction( col.render ) )
-            td.append( col.render.call( this, it ) );
-          else {
-            td.text( view.resolveProperty( it, col.name ) || view.defaults.display );
+      if(view.collection.length == 0){
+        view.renderNoRecordsFound();
+      } else {
+        _.each( view.collection.models, function ( model ) {
+          var tr = $( view.elements.tr ),
+              it = model.toJSON();
+  
+          tr.attr( "data-id", it.id );
+          tr.addClass ( clz );
+  
+          clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
+  
+          _.each( columnState, function (col) {
+            if ( _.isBoolean( col.visible ) && !col.visible )
+              return;
+  
+            var piece,
+                td = $( view.elements.td );
+  
+            if ( _.isFunction( col.render ) )
+              td.append( col.render.call( this, it ) );
+            else {
+              td.text( view.resolveProperty( it, col.name ) || view.defaults.display );
+            }
+  
+            td.attr( "data-id", it.id );
+            td.attr( "data-property", col.name );
+  
+            if ( col.width )
+              td.css( "width", col.width );
+  
+            td = view.determineColumnEditability( col, td, it );
+  
+            tr.append( td );
+          });
+  
+          if ( _.isFunction( view.options.processRow ) ) {
+            var processedRow = view.options.processRow.call( view, tr, it );
+            tr = ( !_.isUndefined( processedRow ) ? processedRow : tr );
           }
-
-          td.attr( "data-id", it.id );
-          td.attr( "data-property", col.name );
-
-          if ( col.width )
-            td.css( "width", col.width );
-
-          td = view.determineColumnEditability( col, td, it );
-
-          tr.append( td );
+  
+          tbody.append( tr );
         });
-
-        if ( _.isFunction( view.options.processRow ) ) {
-          var processedRow = view.options.processRow.call( view, tr, it );
-          tr = ( !_.isUndefined( processedRow ) ? processedRow : tr );
-        }
-
-        tbody.append( tr );
-      });
+      }
 
       this.setSortDirectionVisual();
       this.updateRecordCount();
@@ -719,6 +724,24 @@ var data = {
           this.options.afterRefresh.call( this );
     },
 
+    renderNoRecordsFound: function() {
+      var tr = $(this.elements.tr),
+      td = $(this.elements.td),
+      tbody = this.table.find('tbody');
+      
+      // Hide the column headers.
+      this.table.find('thead').hide();
+      
+      // Hide the pagination controls.
+      this.$el.find('.paging-container').remove();
+      
+      // Inject the row into the list.
+      td.text(this.options.noDataMsg || $.i18n.prop('js.grid.noData'))
+        .attr('colspan', '100%')
+        .addClass('noRecordsFoundMessage');
+      tr.append(td);
+      tbody.append(tr);
+    },
 
     determineColumnEditability: function ( column, el, data ) {
       var view = this,
