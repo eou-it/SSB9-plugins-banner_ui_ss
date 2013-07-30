@@ -19,6 +19,7 @@ grails.plugin.location.'banner-codenarc'="../banner_codenarc.git"
 grails.plugin.location.'sghe-aurora'="../sghe_aurora.git"
 grails.plugin.location.'spring-security-cas'="../spring_security_cas.git"
 grails.plugin.location.'i18n_core'="../i18n_core.git"
+grails.plugin.location.'banner-general-person'="../banner_general_person.git"
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
