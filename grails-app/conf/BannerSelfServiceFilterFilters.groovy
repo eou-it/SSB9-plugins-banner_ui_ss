@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationContext
 import net.hedtech.banner.loginworkflow.RaceAndEthnicityFlow
 
 import net.hedtech.banner.loginworkflow.UserAgreementFlow
+import org.springframework.web.context.request.RequestContextHolder
+import net.hedtech.banner.security.FormContext
 
 class BannerSelfServiceFilterFilters {
     def springSecurityService
@@ -23,6 +25,9 @@ class BannerSelfServiceFilterFilters {
                     if(path != null) {
                         println "request.request.strippedServletPath " + path
                         request.getSession().setAttribute("URI_ACCESSED", path)
+
+                        setFormContext()
+
                         for(int i = 0; i < listOfFlows.size(); i++) {
                             if(listOfFlows[i].showPage(request)) {
                                 redirect uri: listOfFlows[i].getControllerUri();
@@ -35,6 +40,12 @@ class BannerSelfServiceFilterFilters {
                 }
             }
         }
+    }
+
+    private setFormContext() {
+        def associatedFormsList = []
+        associatedFormsList?.add( 0, "SELFSERVICE" )
+        FormContext.set( associatedFormsList )
     }
 
     public boolean checkIgnoreUri(String path) {
