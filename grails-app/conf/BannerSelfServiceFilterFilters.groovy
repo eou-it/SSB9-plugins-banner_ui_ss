@@ -14,7 +14,7 @@ class BannerSelfServiceFilterFilters {
     List listOfFlows = []
 
     def filters = {
-        all(controller:  "selfServiceMenu|login|logout|survey", invert: true) {
+        all(controller:  "selfServiceMenu|login|logout|survey|error", invert: true) {
             before = {
                 boolean allDone = request.getSession().getAttribute("ALL_DONE")
                  if(listOfFlows.empty){
@@ -60,8 +60,8 @@ class BannerSelfServiceFilterFilters {
         return isIgnoredUri
     }
 
-    public List getListOfFlows()
-    {
+
+    public List getListOfFlows() {
         ApplicationContext ctx = (ApplicationContext) ApplicationHolder.getApplication().getMainContext()
         userAgreementFlow = (UserAgreementFlow) ctx.getBean("userAgreementFlow")
         listOfFlows = [userAgreementFlow, RaceAndEthnicityFlow]
