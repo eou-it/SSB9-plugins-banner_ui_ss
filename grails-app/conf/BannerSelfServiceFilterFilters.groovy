@@ -2,7 +2,7 @@ import net.hedtech.banner.loginworkflow.PostLoginWorkflow
 import net.hedtech.banner.mep.MultiEntityProcessingService
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.ApplicationContext
-import net.hedtech.banner.loginworkflow.RaceAndEthnicityFlow
+import net.hedtech.banner.loginworkflow.SurveyFlow
 
 import net.hedtech.banner.loginworkflow.UserAgreementFlow
 import org.springframework.web.context.request.RequestContextHolder
@@ -11,6 +11,7 @@ import net.hedtech.banner.security.FormContext
 class BannerSelfServiceFilterFilters {
     def springSecurityService
     UserAgreementFlow userAgreementFlow
+    SurveyFlow surveyFlow
     List listOfFlows = []
 
     def filters = {
@@ -64,7 +65,8 @@ class BannerSelfServiceFilterFilters {
     public List getListOfFlows() {
         ApplicationContext ctx = (ApplicationContext) ApplicationHolder.getApplication().getMainContext()
         userAgreementFlow = (UserAgreementFlow) ctx.getBean("userAgreementFlow")
-        listOfFlows = [userAgreementFlow, RaceAndEthnicityFlow]
+        surveyFlow = (SurveyFlow) ctx.getBean("surveyFlow")
+        listOfFlows = [userAgreementFlow, surveyFlow]
         return listOfFlows
     }
 }
