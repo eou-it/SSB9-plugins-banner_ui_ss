@@ -26,6 +26,17 @@ class BannerSelfServiceFilterFilters {
                      getListOfFlows()
                  }
                 String path = request.request.strippedServletPath
+                String url = request?.requestURL?.toString()
+                println "request.request.strippedServletPath " + path
+                println "reqUrl original " + url
+                if(url?.contains("grails")){
+                    url = url.substring(url.indexOf("grails/")+6, url.indexOf(".dispatch"));
+                    url = "/ssb" + url
+                }else{
+                    url =null
+                }
+                println "reqUrl " + url
+                path = url
                 if(springSecurityService.isLoggedIn() && !allDone && !checkIgnoreUri(path)) {
                     log.info("Path :" + path )
                     if(path != null) {
