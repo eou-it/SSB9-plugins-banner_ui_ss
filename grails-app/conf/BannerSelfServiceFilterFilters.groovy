@@ -1,13 +1,9 @@
-import net.hedtech.banner.loginworkflow.PostLoginWorkflow
-import net.hedtech.banner.mep.MultiEntityProcessingService
+import net.hedtech.banner.loginworkflow.SurveyFlow
+import net.hedtech.banner.loginworkflow.UserAgreementFlow
+import net.hedtech.banner.security.FormContext
 import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.ApplicationContext
-import net.hedtech.banner.loginworkflow.SurveyFlow
-
-import net.hedtech.banner.loginworkflow.UserAgreementFlow
-import org.springframework.web.context.request.RequestContextHolder
-import net.hedtech.banner.security.FormContext
 
 class BannerSelfServiceFilterFilters {
     def springSecurityService
@@ -19,35 +15,26 @@ class BannerSelfServiceFilterFilters {
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|survey|userAgreement|error", invert: true) {
             before = {
-                log.info("Inside BannerSelfServiceFilterFilters")
                 boolean allDone = request.getSession().getAttribute("ALL_DONE")
-                log.info("All Done :" + allDone )
                  if(listOfFlows.empty){
                      getListOfFlows()
                  }
                 String path = request.request.strippedServletPath
                 String url = request?.requestURL?.toString()
-                println "request.request.strippedServletPath " + path
-                println "reqUrl original " + url
                 if(url?.contains("grails")){
                     url = url.substring(url.indexOf("grails/")+6, url.indexOf(".dispatch"));
                     url = "/ssb" + url
                 }else{
                     url =null
                 }
-                println "reqUrl " + url
                 path = url
                 if(springSecurityService.isLoggedIn() && !allDone && !checkIgnoreUri(path)) {
-                    log.info("Path :" + path )
                     if(path != null) {
-                        println "request.request.strippedServletPath " + path
                         request.getSession().setAttribute("URI_ACCESSED", path)
 
                         setFormContext()
-                        log.info("Form Context set")
                         for(int i = 0; i < listOfFlows.size(); i++) {
                             if(listOfFlows[i].showPage(request)) {
-								log.info("Redirecting uri :")
                                 redirect uri: listOfFlows[i].getControllerUri()
                                 return false;
 
