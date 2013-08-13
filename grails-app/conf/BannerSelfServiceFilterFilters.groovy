@@ -1,5 +1,6 @@
 import net.hedtech.banner.loginworkflow.PostLoginWorkflow
 import net.hedtech.banner.mep.MultiEntityProcessingService
+import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.ApplicationContext
 import net.hedtech.banner.loginworkflow.SurveyFlow
@@ -13,25 +14,30 @@ class BannerSelfServiceFilterFilters {
     UserAgreementFlow userAgreementFlow
     SurveyFlow surveyFlow
     List listOfFlows = []
+    private final log = Logger.getLogger(getClass())
 
     def filters = {
-        all(controller:  "selfServiceMenu|login|logout|survey|error", invert: true) {
+        all(controller:  "selfServiceMenu|login|logout|survey|userAgreement|error", invert: true) {
             before = {
+                log.info("Inside BannerSelfServiceFilterFilters")
                 boolean allDone = request.getSession().getAttribute("ALL_DONE")
+                log.info("All Done :" + allDone )
                  if(listOfFlows.empty){
                      getListOfFlows()
                  }
                 String path = request.request.strippedServletPath
                 if(springSecurityService.isLoggedIn() && !allDone && !checkIgnoreUri(path)) {
+                    log.info("Path :" + path )
                     if(path != null) {
                         println "request.request.strippedServletPath " + path
                         request.getSession().setAttribute("URI_ACCESSED", path)
 
                         setFormContext()
-
+                        log.info("Form Context set")
                         for(int i = 0; i < listOfFlows.size(); i++) {
                             if(listOfFlows[i].showPage(request)) {
-                                redirect uri: listOfFlows[i].getControllerUri();
+								log.info("Redirecting uri :")
+                                redirect uri: listOfFlows[i].getControllerUri()
                                 return false;
 
                             }
