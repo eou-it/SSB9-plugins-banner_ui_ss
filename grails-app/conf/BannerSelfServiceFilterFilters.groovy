@@ -1,3 +1,4 @@
+import net.hedtech.banner.loginworkflow.SecurityQAFlow
 import net.hedtech.banner.loginworkflow.SurveyFlow
 import net.hedtech.banner.loginworkflow.UserAgreementFlow
 import net.hedtech.banner.security.FormContext
@@ -69,8 +70,9 @@ class BannerSelfServiceFilterFilters {
     public List getListOfFlows() {
         ApplicationContext ctx = (ApplicationContext) ApplicationHolder.getApplication().getMainContext()
         userAgreementFlow = (UserAgreementFlow) ctx.getBean("userAgreementFlow")
+        def securityQAFlow = (SecurityQAFlow) ctx.getBean("securityQAFlow")
         surveyFlow = (SurveyFlow) ctx.getBean("surveyFlow")
-        listOfFlows = [userAgreementFlow, surveyFlow]
+        listOfFlows = [userAgreementFlow, securityQAFlow, surveyFlow]
         return listOfFlows
     }
 }
