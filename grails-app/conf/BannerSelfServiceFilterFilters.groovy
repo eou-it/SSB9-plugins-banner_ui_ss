@@ -25,6 +25,9 @@ class BannerSelfServiceFilterFilters {
                 if(url?.contains("grails")){
                     url = url.substring(url.indexOf("grails/")+6, url.indexOf(".dispatch"));
                     url = "/ssb" + url
+                    if (request?.getQueryString()) {
+                        url = url + "?" + request?.getQueryString()
+                    }
                 }else{
                     url =null
                 }
