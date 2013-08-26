@@ -920,7 +920,7 @@ function KeyTable ( oInit )
              iTableHeight = _nBody.getElementsByTagName('tr').length;
          }
 
-         _log( _oDatatable.fnSettings().nTable.id + ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
+         _oDatatable && _log( _oDatatable.fnSettings().nTable.id + ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
          switch( action )
          {
              case _Action.ACTION:
