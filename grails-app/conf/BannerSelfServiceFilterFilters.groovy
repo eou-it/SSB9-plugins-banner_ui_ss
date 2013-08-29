@@ -19,7 +19,6 @@ class BannerSelfServiceFilterFilters {
                  if(listOfFlows.empty){
                      getListOfFlows()
                  }
-                String path = request.request.strippedServletPath
                 String url = request?.requestURL?.toString()
                 if(url?.contains("grails")){
                     url = url.substring(url.indexOf("grails/")+6, url.indexOf(".dispatch"));
@@ -30,7 +29,7 @@ class BannerSelfServiceFilterFilters {
                 }else{
                     url =null
                 }
-                path = url
+                String path = url
                 if(springSecurityService.isLoggedIn() && !allDone && !checkIgnoreUri(path)) {
                     if(path != null) {
                         request.getSession().setAttribute("URI_ACCESSED", path)
