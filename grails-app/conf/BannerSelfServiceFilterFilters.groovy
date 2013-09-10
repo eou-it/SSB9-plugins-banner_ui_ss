@@ -5,32 +5,23 @@ import net.hedtech.banner.security.FormContext
 import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.ApplicationContext
+import net.hedtech.banner.loginworkflow.PostLoginWorkflow
 
 class BannerSelfServiceFilterFilters {
     def springSecurityService
-    UserAgreementFlow userAgreementFlow
-    SurveyFlow surveyFlow
     List listOfFlows = []
     private final log = Logger.getLogger(getClass())
 
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|survey|userAgreement|error", invert: true) {
             before = {
+
                 boolean allDone = request.getSession().getAttribute("ALL_DONE")
-                 if(listOfFlows.empty){
-                     getListOfFlows()
-                 }
-                String url = request?.requestURL?.toString()
-                if(url?.contains("grails")){
-                    url = url.substring(url.indexOf("grails/")+6, url.indexOf(".dispatch"));
-                    url = "/ssb" + url
-                    if (request?.getQueryString()) {
-                        url = url + "?" + request?.getQueryString()
-                    }
-                }else{
-                    url =null
-                }
-                String path = url
+
+                initializeListOfFlows()
+
+                String path = getRequestPath(request)
+
                 if(springSecurityService.isLoggedIn() && !allDone && !checkIgnoreUri(path)) {
                     if(path != null) {
                         request.getSession().setAttribute("URI_ACCESSED", path)
@@ -69,12 +60,27 @@ class BannerSelfServiceFilterFilters {
     }
 
 
-    public List getListOfFlows() {
-        ApplicationContext ctx = (ApplicationContext) ApplicationHolder.getApplication().getMainContext()
-        userAgreementFlow = (UserAgreementFlow) ctx.getBean("userAgreementFlow")
-        def securityQAFlow = (SecurityQAFlow) ctx.getBean("securityQAFlow")
-        surveyFlow = (SurveyFlow) ctx.getBean("surveyFlow")
-        listOfFlows = [userAgreementFlow, securityQAFlow, surveyFlow]
-        return listOfFlows
+    private List initializeListOfFlows() {
+        if(listOfFlows.isEmpty()){
+            ApplicationContext ctx = (ApplicationContext) ApplicationHolder.getApplication().getMainContext()
+            List flows = PostLoginWorkflow.getListOfFlows();
+            for(String flow : flows) {
+                listOfFlows.add(ctx.getBean(flow))
+            }
+        }
+    }
+
+    private String getRequestPath(request) {
+        String url = request?.requestURL?.toString()
+        if(url?.contains("grails")){
+            url = url.substring(url.indexOf("grails/")+6, url.indexOf(".dispatch"));
+            url = "/ssb" + url
+            if (request?.getQueryString()) {
+                url = url + "?" + request?.getQueryString()
+            }
+        }else{
+            url = null
+        }
+        return url
     }
 }
