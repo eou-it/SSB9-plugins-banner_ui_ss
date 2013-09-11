@@ -6,14 +6,14 @@ import net.hedtech.banner.loginworkflow.PostLoginWorkflow
 
 class BannerSelfServicePostLoginFlowFilters {
     def springSecurityService
-    List listOfFlows = []
+    List<PostLoginWorkflow> listOfFlows = []
     private final log = Logger.getLogger(getClass())
 
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|survey|userAgreement|error", invert: true) {
             before = {
 
-                boolean allDone = request.getSession().getAttribute("ALL_DONE")
+                boolean allDone = request.getSession().getAttribute(PostLoginWorkflow.ALL_DONE)
 
                 log.debug "Initializing workflow classes"
                 initializeListOfFlows()
@@ -22,9 +22,10 @@ class BannerSelfServicePostLoginFlowFilters {
 
                 if(springSecurityService.isLoggedIn() && !allDone && !checkIgnoreUri(path)) {
                     if(path != null) {
-                        request.getSession().setAttribute("URI_ACCESSED", path)
+                        request.getSession().setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
 
                         setFormContext()
+
                         for(int i = 0; i < listOfFlows.size(); i++) {
                             if(listOfFlows[i].showPage(request)) {
                                 log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
@@ -33,7 +34,7 @@ class BannerSelfServicePostLoginFlowFilters {
 
                             }
                        }
-                       request.getSession().setAttribute("ALL_DONE",true)
+                       request.getSession().setAttribute(PostLoginWorkflow.ALL_DONE,true)
                     }
                 }
             }
@@ -62,7 +63,7 @@ class BannerSelfServicePostLoginFlowFilters {
     private List initializeListOfFlows() {
         if(listOfFlows.isEmpty()){
             ApplicationContext ctx = (ApplicationContext) ApplicationHolder.getApplication().getMainContext()
-            List flows = PostLoginWorkflow.getListOfFlows();
+            List<String> flows = PostLoginWorkflow.getListOfFlows();
             for(String flow : flows) {
                 listOfFlows.add(ctx.getBean(flow))
             }
