@@ -8,16 +8,16 @@ class BannerSelfServicePostLoginFlowFilters {
     def springSecurityService
     List<PostLoginWorkflow> listOfFlows = []
     private final log = Logger.getLogger(getClass())
-
+    static int lastVisitedIndex
+    static Map uriMap
     def filters = {
-        all(controller:  "selfServiceMenu|login|logout|survey|userAgreement|error", invert: true) {
+        all(controller:  "selfServiceMenu|login|logout|error", invert: true) {
             before = {
 
                 boolean allDone = request.getSession().getAttribute(PostLoginWorkflow.ALL_DONE)
 
                 log.debug "Initializing workflow classes"
                 initializeListOfFlows()
-
                 String path = getRequestPath(request)
 
                 if(springSecurityService.isLoggedIn() && !allDone && !checkIgnoreUri(path)) {
@@ -29,12 +29,22 @@ class BannerSelfServicePostLoginFlowFilters {
                         for(int i = 0; i < listOfFlows.size(); i++) {
                             if(listOfFlows[i].showPage(request)) {
                                 log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
+                                lastVisitedIndex = i
                                 redirect uri: listOfFlows[i].getControllerUri()
                                 return false;
 
                             }
                        }
                        request.getSession().setAttribute(PostLoginWorkflow.ALL_DONE,true)
+                    }
+                }
+                if (checkDisplayPage(path)){
+                    if (listOfFlows[lastVisitedIndex].showPage(request)){
+                        redirect uri: listOfFlows[lastVisitedIndex].getControllerUri()
+                        return false
+                    }else if (listOfFlows.size()>lastVisitedIndex ){
+                        redirect uri: listOfFlows[lastVisitedIndex+1].getControllerUri()
+                        return false
                     }
                 }
             }
@@ -67,6 +77,11 @@ class BannerSelfServicePostLoginFlowFilters {
             for(String flow : flows) {
                 listOfFlows.add(ctx.getBean(flow))
             }
+            uriMap = new HashMap()
+            for (int i = 0 ; i < listOfFlows.size(); i++) {
+                uriMap.put(listOfFlows[i].getControllerUri(),i);
+            }
+            return listOfFlows
         }
     }
 
@@ -82,5 +97,16 @@ class BannerSelfServicePostLoginFlowFilters {
             url = null
         }
         return url
+    }
+
+    private boolean checkDisplayPage(String path) {
+        String accessedPath
+        if (path?.contains("?"))
+        {
+            accessedPath = path.substring(0,path.indexOf("?"))
+        }else{
+            accessedPath = path
+        }
+        springSecurityService.isLoggedIn() && uriMap.containsKey(accessedPath) && uriMap.get(accessedPath) != 0 && lastVisitedIndex != uriMap.get(accessedPath)
     }
 }
