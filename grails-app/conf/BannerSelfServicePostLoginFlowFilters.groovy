@@ -27,9 +27,9 @@ class BannerSelfServicePostLoginFlowFilters {
                         setFormContext()
 
                         for(int i = 0; i < listOfFlows.size(); i++) {
+                            lastVisitedIndex = i
                             if(listOfFlows[i].showPage(request)) {
                                 log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
-                                lastVisitedIndex = i
                                 redirect uri: listOfFlows[i].getControllerUri()
                                 return false;
 
@@ -41,9 +41,6 @@ class BannerSelfServicePostLoginFlowFilters {
                 if (checkDisplayPage(path)){
                     if (listOfFlows[lastVisitedIndex].showPage(request)){
                         redirect uri: listOfFlows[lastVisitedIndex].getControllerUri()
-                        return false
-                    }else if (listOfFlows.size()>lastVisitedIndex ){
-                        redirect uri: listOfFlows[lastVisitedIndex+1].getControllerUri()
                         return false
                     }
                 }
