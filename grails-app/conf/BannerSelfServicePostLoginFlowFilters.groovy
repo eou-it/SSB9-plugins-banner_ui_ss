@@ -8,7 +8,6 @@ class BannerSelfServicePostLoginFlowFilters {
     def springSecurityService
     List<PostLoginWorkflow> listOfFlows = []
     private final log = Logger.getLogger(getClass())
-    static int lastVisitedIndex
     static Map uriMap
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|error", invert: true) {
@@ -19,15 +18,12 @@ class BannerSelfServicePostLoginFlowFilters {
                 log.debug "Initializing workflow classes"
                 initializeListOfFlows()
                 String path = getRequestPath(request)
-
-                if(springSecurityService.isLoggedIn() && !allDone && !checkIgnoreUri(path)) {
-                    if(path != null) {
+                def lastVisitedIndex = request.getSession().getAttribute("lastVisitedIndex")
+                if(springSecurityService.isLoggedIn() && path != null && !allDone && !checkIgnoreUri(path)) {
                         request.getSession().setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
-
                         setFormContext()
-
                         for(int i = 0; i < listOfFlows.size(); i++) {
-                            lastVisitedIndex = i
+                            request.getSession().setAttribute("lastVisitedIndex", i)
                             if(listOfFlows[i].showPage(request)) {
                                 log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
                                 redirect uri: listOfFlows[i].getControllerUri()
@@ -36,9 +32,8 @@ class BannerSelfServicePostLoginFlowFilters {
                             }
                        }
                        request.getSession().setAttribute(PostLoginWorkflow.ALL_DONE,true)
-                    }
                 }
-                if (checkDisplayPage(path)){
+                else if (checkDisplayPage(path,lastVisitedIndex)){
                     if (listOfFlows[lastVisitedIndex].showPage(request)){
                         redirect uri: listOfFlows[lastVisitedIndex].getControllerUri()
                         return false
@@ -96,7 +91,7 @@ class BannerSelfServicePostLoginFlowFilters {
         return url
     }
 
-    private boolean checkDisplayPage(String path) {
+    private boolean checkDisplayPage(String path,def lastVisitedIndex ) {
         String accessedPath
         if (path?.contains("?"))
         {
