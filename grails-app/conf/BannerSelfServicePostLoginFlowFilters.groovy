@@ -93,7 +93,11 @@ class BannerSelfServicePostLoginFlowFilters {
 
     private String getControllerNameFromPath(String url){
         url = getStrippedPath(url)
-        return url.substring(1)
+        url =  url.substring(1)
+        if (url.contains("/")){
+            url = url.substring(0,url.indexOf("/"))
+        }
+        return url
     }
 
     private String getStrippedPath(String url) {
