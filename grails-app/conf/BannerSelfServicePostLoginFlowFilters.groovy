@@ -33,7 +33,7 @@ class BannerSelfServicePostLoginFlowFilters {
                        }
                        request.getSession().setAttribute(PostLoginWorkflow.ALL_DONE,true)
                 }
-                else if (checkDisplayPage(path,lastVisitedIndex)){
+                else if (checkDisplayPage(request,lastVisitedIndex)){
                     if (listOfFlows[lastVisitedIndex].showPage(request)){
                         redirect uri: listOfFlows[lastVisitedIndex].getControllerUri()
                         return false
@@ -53,7 +53,7 @@ class BannerSelfServicePostLoginFlowFilters {
         boolean isIgnoredUri = false;
 
         for (int i = 0 ; i < listOfFlows.size(); i++) {
-            if(path?.contains(listOfFlows[i].getControllerUri())) {
+            if(path?.contains(listOfFlows[i].getControllerName())) {
                 isIgnoredUri = true
                 break;
             }
@@ -71,7 +71,7 @@ class BannerSelfServicePostLoginFlowFilters {
             }
             uriMap = new HashMap()
             for (int i = 0 ; i < listOfFlows.size(); i++) {
-                uriMap.put(listOfFlows[i].getControllerUri(),i);
+                uriMap.put(listOfFlows[i].getControllerName(),i);
             }
             return listOfFlows
         }
@@ -80,7 +80,7 @@ class BannerSelfServicePostLoginFlowFilters {
     private String getRequestPath(request) {
         String url = request?.requestURL?.toString()
         if(url?.contains("grails")){
-            url = url.substring(url.indexOf("grails/")+6, url.indexOf(".dispatch"));
+            url = getStrippedPath(url)
             url = "/ssb" + url
             if (request?.getQueryString()) {
                 url = url + "?" + request?.getQueryString()
@@ -91,14 +91,23 @@ class BannerSelfServicePostLoginFlowFilters {
         return url
     }
 
-    private boolean checkDisplayPage(String path,def lastVisitedIndex ) {
-        String accessedPath
-        if (path?.contains("?"))
-        {
-            accessedPath = path.substring(0,path.indexOf("?"))
+    private String getControllerNameFromPath(String url){
+        url = getStrippedPath(url)
+        return url.substring(1)
+    }
+
+    private String getStrippedPath(String url) {
+        url = url.substring(url.indexOf("grails/") + 6, url.indexOf(".dispatch"))
+        return url
+    }
+
+    private boolean checkDisplayPage(def request,def lastVisitedIndex ) {
+        String url = request?.requestURL?.toString()
+        if(url?.contains("grails")){
+            String controllerName = getControllerNameFromPath(url)
+            return springSecurityService.isLoggedIn() && uriMap.containsKey(controllerName) && uriMap.get(controllerName) != 0 && lastVisitedIndex != uriMap.get(controllerName)
         }else{
-            accessedPath = path
+            return false
         }
-        springSecurityService.isLoggedIn() && uriMap.containsKey(accessedPath) && uriMap.get(accessedPath) != 0 && lastVisitedIndex != uriMap.get(accessedPath)
     }
 }
