@@ -107,10 +107,17 @@ modules = {
         defaultBundle environment == "development" ? false : "bannerSelfServiceRTL"
 
         resource id: 'themeRTL', url:[plugin:'banner-ui-ss', dir:'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme', file:'jquery-ui-1.8.13.custom-rtl.css'], attrs:[media:'screen, projection']
+        
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center-rtl.css'],      attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl-patch.css'],       attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip-rtl.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis-rtl.css'],        attrs:[media:'screen, projection']
 
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid-rtl.css'],            attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols-rtl.css'],  attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl.css'],           attrs: [media: 'screen, projection']
+        
+        resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl-patch.css'],       attrs:[media:'screen, projection']
         resource url:[plugin: 'i18n-core', file: 'css/multiCalendar-rtl-patch.css']
     }
 }
