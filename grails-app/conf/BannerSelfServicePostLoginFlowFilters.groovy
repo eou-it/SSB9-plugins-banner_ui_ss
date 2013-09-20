@@ -8,9 +8,10 @@ import net.hedtech.banner.loginworkflow.PostLoginWorkflow
  *******************************************************************************/
 class BannerSelfServicePostLoginFlowFilters {
     def springSecurityService
-    List<PostLoginWorkflow> listOfFlows = []
+    static List<PostLoginWorkflow> listOfFlows = []
     private final log = Logger.getLogger(getClass())
     static Map uriMap
+    public static final String LAST_VISITED_INDEX =  "LAST_VISITED_INDEX"
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|error", invert: true) {
             before = {
@@ -20,12 +21,12 @@ class BannerSelfServicePostLoginFlowFilters {
                 log.debug "Initializing workflow classes"
                 initializeListOfFlows()
                 String path = getRequestPath(request)
-                def lastVisitedIndex = request.getSession().getAttribute("lastVisitedIndex")
+                def lastVisitedIndex = request.getSession().getAttribute(LAST_VISITED_INDEX)
                 if(springSecurityService.isLoggedIn() && path != null && !allDone && !checkIgnoreUri(path)) {
                         request.getSession().setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
                         setFormContext()
                         for(int i = 0; i < listOfFlows.size(); i++) {
-                            request.getSession().setAttribute("lastVisitedIndex", i)
+                            request.getSession().setAttribute(LAST_VISITED_INDEX, i)
                             if(listOfFlows[i].showPage(request)) {
                                 log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
                                 redirect uri: listOfFlows[i].getControllerUri()
@@ -34,8 +35,7 @@ class BannerSelfServicePostLoginFlowFilters {
                             }
                        }
                        request.getSession().setAttribute(PostLoginWorkflow.ALL_DONE,true)
-                }
-                else if (checkDisplayPage(request,lastVisitedIndex)){
+                }else if (checkDisplayPage(request,lastVisitedIndex)){
                     if (listOfFlows[lastVisitedIndex].showPage(request)){
                         redirect uri: listOfFlows[lastVisitedIndex].getControllerUri()
                         return false
@@ -68,12 +68,12 @@ class BannerSelfServicePostLoginFlowFilters {
         if(listOfFlows.isEmpty()){
             ApplicationContext ctx = (ApplicationContext) ApplicationHolder.getApplication().getMainContext()
             List<String> flows = PostLoginWorkflow.getListOfFlows();
-            for(String flow : flows) {
-                listOfFlows.add(ctx.getBean(flow))
-            }
+            int noOfFlows = flows.size()
             uriMap = new HashMap()
-            for (int i = 0 ; i < listOfFlows.size(); i++) {
-                uriMap.put(listOfFlows[i].getControllerName(),i);
+            for (int i = 0 ; i < noOfFlows; i++){
+                PostLoginWorkflow flowBean = ctx.getBean(flows[i]);
+                listOfFlows.add(flowBean)
+                uriMap.put(flowBean.getControllerName(),i);
             }
             return listOfFlows
         }
