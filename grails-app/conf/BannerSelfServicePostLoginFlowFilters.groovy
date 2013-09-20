@@ -3,7 +3,9 @@ import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.ApplicationContext
 import net.hedtech.banner.loginworkflow.PostLoginWorkflow
-
+/*******************************************************************************
+ Copyright 2009-2012 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 class BannerSelfServicePostLoginFlowFilters {
     def springSecurityService
     List<PostLoginWorkflow> listOfFlows = []
@@ -105,7 +107,7 @@ class BannerSelfServicePostLoginFlowFilters {
         return url
     }
 
-    private boolean checkDisplayPage(def request,def lastVisitedIndex ) {
+    private boolean checkDisplayPage(def request,int lastVisitedIndex ) {
         String url = request?.requestURL?.toString()
         if(url?.contains("grails")){
             String controllerName = getControllerNameFromPath(url)
