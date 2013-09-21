@@ -107,7 +107,7 @@ class BannerSelfServicePostLoginFlowFilters {
         return url
     }
 
-    private boolean checkDisplayPage(def request,int lastVisitedIndex ) {
+    private boolean checkDisplayPage(def request,def lastVisitedIndex ) {
         String url = request?.requestURL?.toString()
         if(url?.contains("grails")){
             String controllerName = getControllerNameFromPath(url)
