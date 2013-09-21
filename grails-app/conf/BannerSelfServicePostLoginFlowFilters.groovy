@@ -109,7 +109,7 @@ class BannerSelfServicePostLoginFlowFilters {
 
     private boolean checkDisplayPage(def request,def lastVisitedIndex ) {
         String url = request?.requestURL?.toString()
-        if(url?.contains("grails")){
+        if(url?.contains("grails") && null != lastVisitedIndex){
             String controllerName = getControllerNameFromPath(url)
             return springSecurityService.isLoggedIn() && uriMap.containsKey(controllerName) && uriMap.get(controllerName) != 0 && lastVisitedIndex != uriMap.get(controllerName)
         }else{
