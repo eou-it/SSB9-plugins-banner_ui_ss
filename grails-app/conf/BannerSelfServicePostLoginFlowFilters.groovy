@@ -13,7 +13,7 @@ class BannerSelfServicePostLoginFlowFilters {
     static Map uriMap
     public static final String LAST_VISITED_INDEX =  "LAST_VISITED_INDEX"
     def filters = {
-        all(controller:  "selfServiceMenu|login|logout|error", invert: true) {
+        all(controller:  "selfServiceMenu|login|logout|error|dateConverter", invert: true) {
             before = {
 
                 boolean allDone = request.getSession().getAttribute(PostLoginWorkflow.ALL_DONE)
@@ -35,7 +35,7 @@ class BannerSelfServicePostLoginFlowFilters {
                             }
                        }
                        request.getSession().setAttribute(PostLoginWorkflow.ALL_DONE,true)
-                }else if (checkDisplayPage(request,lastVisitedIndex)){
+                }else if (null != lastVisitedIndex && checkDisplayPage(request,lastVisitedIndex)){
                     if (listOfFlows[lastVisitedIndex].showPage(request)){
                         redirect uri: listOfFlows[lastVisitedIndex].getControllerUri()
                         return false
