@@ -208,7 +208,9 @@ var data = {
           tr = td.closest ( "tr" );
 
       this.$el.find( "." + this.css.selected ).removeClass( this.css.selected );
-      tr.addClass( this.css.selected );
+
+      this.$el.find( "tbody tr:nth-child(" + ( tr.index() + 1 ) + ")" ).addClass( this.css.selected );
+
       td.addClass( this.css.selected );
 
       if ( _.isFunction( this.options.rowSelected ) ) {
@@ -474,6 +476,17 @@ var data = {
       }
 
       this.render();
+
+      function matchHover( e ) {
+        view.$el.find( "tbody tr:nth-child(" + ( $( this ).index() + 1 ) + ")" ).addClass( view.css.hover );
+      }
+
+      function removeMatchHover( e ) {
+        view.$el.find( "tbody tr." + view.css.hover ).removeClass( view.css.hover );
+      }
+
+      this.$el.on( 'mouseenter', '.grid tr', matchHover )
+              .on( 'mouseleave', '.grid tr', removeMatchHover );
     },
 
     setupKeyTable: function () {
@@ -673,41 +686,41 @@ var data = {
         _.each( view.collection.models, function ( model ) {
           var tr = $( view.elements.tr ),
               it = model.toJSON();
-  
+
           tr.attr( "data-id", it.id );
           tr.addClass ( clz );
-  
+
           clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
-  
+
           _.each( columnState, function (col) {
             if ( _.isBoolean( col.visible ) && !col.visible )
               return;
-  
+
             var piece,
                 td = $( view.elements.td );
-  
+
             if ( _.isFunction( col.render ) )
               td.append( col.render.call( this, it ) );
             else {
               td.text( view.resolveProperty( it, col.name ) || view.defaults.display );
             }
-  
+
             td.attr( "data-id", it.id );
             td.attr( "data-property", col.name );
-  
+
             if ( col.width )
               td.css( "width", col.width );
-  
+
             td = view.determineColumnEditability( col, td, it );
-  
+
             tr.append( td );
           });
-  
+
           if ( _.isFunction( view.options.processRow ) ) {
             var processedRow = view.options.processRow.call( view, tr, it );
             tr = ( !_.isUndefined( processedRow ) ? processedRow : tr );
           }
-  
+
           tbody.append( tr );
         });
       }
@@ -728,13 +741,13 @@ var data = {
       var tr = $(this.elements.tr),
       td = $(this.elements.td),
       tbody = this.table.find('tbody');
-      
+
       // Hide the column headers.
       this.table.find('thead').hide();
-      
+
       // Hide the pagination controls.
       this.$el.find('.paging-container').remove();
-      
+
       // Inject the row into the list.
       td.text(this.options.noDataMsg || $.i18n.prop('js.grid.noData'))
         .attr('colspan', '100%')
@@ -781,8 +794,13 @@ var data = {
           }
 
 
-          if ( !_.isUndefined( options ) )
+          if ( !_.isUndefined( options ) ) {
+            el.on( 'click.onedit', function( e ) {
+              view.selectCell.call( view, e );
+            });
+
             el.editable( editableSubmitCallback, _.extend( defaults, options ) );
+          }
         }
 
         return el;
