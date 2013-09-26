@@ -1,3 +1,4 @@
+import net.hedtech.banner.configuration.HttpRequestUtils
 import net.hedtech.banner.security.FormContext
 import org.apache.log4j.Logger
 import net.hedtech.banner.loginworkflow.PostLoginWorkflow
@@ -8,7 +9,6 @@ import javax.servlet.http.HttpSession
  Copyright 2009-2012 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 class BannerSelfServicePostLoginFlowFilters {
-    private static final String SSB_BASE_URL = "ssb"
     private static final String SLASH = "/"
     private static final String QUESTION_MARK = "?"
     def springSecurityService
@@ -18,43 +18,50 @@ class BannerSelfServicePostLoginFlowFilters {
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|error|dateConverter", invert: true) {
             before = {
-                HttpSession session = request.getSession()
-                boolean isflowCompleted = session.getAttribute(PostLoginWorkflow.FLOW_COMPLETE)
-                listOfFlows = PostLoginWorkflow.getListOfFlows()
-                log.debug "Initializing workflow classes"
-                Map<String,Integer> uriMap = initializeUriMap(listOfFlows)
+                boolean isAllFlowCompleted = session.getAttribute(PostLoginWorkflow.FLOW_COMPLETE)
                 String path = getServletPath(request)
-                def lastFlowCompleted = session.getAttribute(LAST_FLOW_COMPLETED)
-                if(verifyFlowCompleted(lastFlowCompleted, path, isflowCompleted, uriMap)) {
-                    session.setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
-                    setFormContext()
-                    int noOfFlows = listOfFlows.size()
-                    for(int i = 0; i < noOfFlows; i++) {
-                        session.setAttribute(LAST_FLOW_COMPLETED, i)
-                        if(listOfFlows[i].isShowPage(request)) {
-                            log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
-                            redirect uri: listOfFlows[i].getControllerUri()
-                            return false;
+                if(springSecurityService.isLoggedIn() &&  path != null && !isAllFlowCompleted ){
+                    HttpSession session = request.getSession()
 
+                    log.debug "Initializing workflow classes"
+                    listOfFlows = PostLoginWorkflow.getListOfFlows()
+                    Map<String,Integer> uriMap = initializeUriMap(listOfFlows)
+
+                    def lastFlowCompleted = session.getAttribute(LAST_FLOW_COMPLETED)
+                    String uriRedirected = session.getAttribute(PostLoginWorkflow.URI_REDIRECTED)
+
+                    boolean uriHampered = false
+                    if(uriRedirected != null){
+                        String controllerRedirected = HttpRequestUtils.getControllerNameFromPath(uriRedirected)
+                        if(!path.contains(controllerRedirected)){
+                            uriHampered = true
                         }
-                   }
-                   session.setAttribute(PostLoginWorkflow.FLOW_COMPLETE,true)
-                }else if (null != lastFlowCompleted && checkDisplayPage(path,lastFlowCompleted,uriMap)){
-                    if (listOfFlows[lastFlowCompleted].isShowPage(request)){
-                        redirect uri: listOfFlows[lastFlowCompleted].getControllerUri()
-                        return false
+                    }
+                    if(shouldVerifyFlowCompleted(lastFlowCompleted, path, uriMap, uriHampered)) {
+                        if(lastFlowCompleted == null){
+                            lastFlowCompleted = 0
+                        }
+                        session.setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
+                        setFormContext()
+                        int noOfFlows = listOfFlows.size()
+                        for(int i = lastFlowCompleted; i < noOfFlows; i++) {
+                            session.setAttribute(LAST_FLOW_COMPLETED, i)
+                            if(listOfFlows[i].isShowPage(request)) {
+                                log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
+                                session.setAttribute(PostLoginWorkflow.URI_REDIRECTED, listOfFlows[i].getControllerUri())
+                                redirect uri: listOfFlows[i].getControllerUri()
+                                return false;
+                            }
+                       }
+                       session.setAttribute(PostLoginWorkflow.FLOW_COMPLETE,true)
                     }
                 }
             }
         }
     }
 
-    private boolean verifyFlowCompleted(def lastFlowCompleted, String path, boolean isflowCompleted, HashMap<String, Integer> uriMap) {
-        boolean checkFlow = false
-        if (springSecurityService.isLoggedIn() && path != null ){
-            checkFlow = lastFlowCompleted==null || (!isflowCompleted && !isFlowControllerURI(path, uriMap))
-        }
-        return checkFlow
+    private boolean shouldVerifyFlowCompleted(def lastFlowCompleted, String path, HashMap<String, Integer> uriMap ,boolean uriHampered) {
+         return  (!isFlowControllerURI(path, uriMap)) || lastFlowCompleted == null || uriHampered
     }
 
     private setFormContext() {
@@ -65,7 +72,7 @@ class BannerSelfServicePostLoginFlowFilters {
 
     public boolean isFlowControllerURI(String path,Map uriMap) {
         boolean isIgnoredUri = false;
-        String controllerName = getControllerNameFromPath(path)
+        String controllerName = HttpRequestUtils.getControllerNameFromPath(path)
         if(uriMap.get(controllerName)!=null)
         {
             isIgnoredUri = true
@@ -81,25 +88,6 @@ class BannerSelfServicePostLoginFlowFilters {
             uriMap.put(listOfFlows[i].getControllerName(),i);
         }
         return uriMap
-    }
-
-    private String getControllerNameFromPath(String url){
-        if (url.contains(SSB_BASE_URL)){
-            url = url.substring(url.indexOf(SSB_BASE_URL)+SSB_BASE_URL.length()+1);
-            if (url.contains(SLASH)){
-                url = url.substring(0,url.indexOf(SLASH))
-            }
-        }
-        return url
-    }
-
-    private boolean checkDisplayPage(String path,def lastFlowCompleted,Map uriMap) {
-        if(path!=null && null != lastFlowCompleted){
-            String controllerName = getControllerNameFromPath(path)
-            return springSecurityService.isLoggedIn() && uriMap.containsKey(controllerName) && uriMap.get(controllerName) != 0 && lastFlowCompleted != uriMap.get(controllerName)
-        }else{
-            return false
-        }
     }
 
     private getServletPath(request) {
