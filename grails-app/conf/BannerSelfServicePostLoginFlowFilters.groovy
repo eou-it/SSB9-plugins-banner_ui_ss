@@ -12,17 +12,17 @@ class BannerSelfServicePostLoginFlowFilters {
     private static final String SLASH = "/"
     private static final String QUESTION_MARK = "?"
     def springSecurityService
-    List<PostLoginWorkflow> listOfFlows = []
     private final log = Logger.getLogger(getClass())
     public static final String LAST_FLOW_COMPLETED =  "LAST_FLOW_COMPLETED"
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|error|dateConverter", invert: true) {
             before = {
+                HttpSession session = request.getSession()
                 boolean isAllFlowCompleted = session.getAttribute(PostLoginWorkflow.FLOW_COMPLETE)
                 String path = getServletPath(request)
-                if(springSecurityService.isLoggedIn() &&  path != null && !isAllFlowCompleted ){
-                    HttpSession session = request.getSession()
 
+                if(springSecurityService.isLoggedIn() &&  path != null && !isAllFlowCompleted ){
+                    List<PostLoginWorkflow> listOfFlows = []
                     log.debug "Initializing workflow classes"
                     listOfFlows = PostLoginWorkflow.getListOfFlows()
                     Map<String,Integer> uriMap = initializeUriMap(listOfFlows)
