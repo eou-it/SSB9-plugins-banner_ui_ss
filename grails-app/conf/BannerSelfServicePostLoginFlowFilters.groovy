@@ -37,14 +37,14 @@ class BannerSelfServicePostLoginFlowFilters {
                             uriHampered = true
                         }
                     }
-                    if(shouldVerifyFlowCompleted(lastFlowCompleted, path, uriMap, uriHampered)) {
+                    if(shouldVerifyFlowCompleted(path, uriMap, uriHampered)) {
                         if(lastFlowCompleted == null){
                             lastFlowCompleted = 0
                         }
                         session.setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
                         setFormContext()
                         int noOfFlows = listOfFlows.size()
-                        for(int i = lastFlowCompleted; i < noOfFlows; i++) {
+                        for(int i = 0; i < noOfFlows; i++) {
                             session.setAttribute(LAST_FLOW_COMPLETED, i)
                             if(listOfFlows[i].isShowPage(request)) {
                                 log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
@@ -60,8 +60,8 @@ class BannerSelfServicePostLoginFlowFilters {
         }
     }
 
-    private boolean shouldVerifyFlowCompleted(def lastFlowCompleted, String path, HashMap<String, Integer> uriMap ,boolean uriHampered) {
-         return  (!isFlowControllerURI(path, uriMap)) || lastFlowCompleted == null || uriHampered
+    private boolean shouldVerifyFlowCompleted(String path, HashMap<String, Integer> uriMap ,boolean uriHampered) {
+         return  (!isFlowControllerURI(path, uriMap)) || uriHampered
     }
 
     private setFormContext() {
