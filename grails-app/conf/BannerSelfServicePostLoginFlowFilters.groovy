@@ -20,10 +20,10 @@ class BannerSelfServicePostLoginFlowFilters {
                 HttpSession session = request.getSession()
                 boolean isAllFlowCompleted = session.getAttribute(PostLoginWorkflow.FLOW_COMPLETE)
                 String path = getServletPath(request)
-
                 if(springSecurityService.isLoggedIn() &&  path != null && !isAllFlowCompleted ){
-                    List<PostLoginWorkflow> listOfFlows = []
+
                     log.debug "Initializing workflow classes"
+                    List<PostLoginWorkflow> listOfFlows = []
                     listOfFlows = PostLoginWorkflow.getListOfFlows()
                     Map<String,Integer> uriMap = initializeUriMap(listOfFlows)
 
@@ -37,14 +37,14 @@ class BannerSelfServicePostLoginFlowFilters {
                             uriHampered = true
                         }
                     }
-                    if(shouldVerifyFlowCompleted(path, uriMap, uriHampered)) {
+                    if(shouldVerifyFlowCompleted(lastFlowCompleted, path, uriMap, uriHampered)) {
                         if(lastFlowCompleted == null){
                             lastFlowCompleted = 0
                         }
                         session.setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
                         setFormContext()
                         int noOfFlows = listOfFlows.size()
-                        for(int i = 0; i < noOfFlows; i++) {
+                        for(int i = lastFlowCompleted; i < noOfFlows; i++) {
                             session.setAttribute(LAST_FLOW_COMPLETED, i)
                             if(listOfFlows[i].isShowPage(request)) {
                                 log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
@@ -60,8 +60,8 @@ class BannerSelfServicePostLoginFlowFilters {
         }
     }
 
-    private boolean shouldVerifyFlowCompleted(String path, HashMap<String, Integer> uriMap ,boolean uriHampered) {
-         return  (!isFlowControllerURI(path, uriMap)) || uriHampered
+    private boolean shouldVerifyFlowCompleted(def lastFlowCompleted, String path, HashMap<String, Integer> uriMap ,boolean uriHampered) {
+         return  (!isFlowControllerURI(path, uriMap)) || lastFlowCompleted == null || uriHampered
     }
 
     private setFormContext() {
