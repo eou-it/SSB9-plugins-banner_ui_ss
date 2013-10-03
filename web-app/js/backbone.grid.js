@@ -146,7 +146,8 @@ var data = {
       notificationSuccess:    "notification-success",
       notificationWarning:    "notification-warning",
       notificationError:      "notification-error",
-      pagingText:             "paging-text" // TODO: remove -> Backbone.PagingControls
+      pagingText:             "paging-text",
+      pagingContainer:        "paging-container"
     },
 
     elements: {
@@ -265,7 +266,7 @@ var data = {
       var view   = this,
           result = { success: true, errors: [ ] };
 
-      // TODO: convert to vaidate Backbone.PagedCollection
+      // TODO: convert to validate Backbone.PagedCollection
       // if ( !_.isBoolean( this.options.data.success ) )
       //   result.errors.push( this.strings.errorSuccessProperty );
 
@@ -670,44 +671,45 @@ var data = {
       if(view.collection.length == 0){
         view.renderNoRecordsFound();
       } else {
+        view.toggleTableChrome( true );
         _.each( view.collection.models, function ( model ) {
           var tr = $( view.elements.tr ),
               it = model.toJSON();
-  
+
           tr.attr( "data-id", it.id );
           tr.addClass ( clz );
-  
+
           clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
-  
+
           _.each( columnState, function (col) {
             if ( _.isBoolean( col.visible ) && !col.visible )
               return;
-  
+
             var piece,
                 td = $( view.elements.td );
-  
+
             if ( _.isFunction( col.render ) )
               td.append( col.render.call( this, it ) );
             else {
               td.text( view.resolveProperty( it, col.name ) || view.defaults.display );
             }
-  
+
             td.attr( "data-id", it.id );
             td.attr( "data-property", col.name );
-  
+
             if ( col.width )
               td.css( "width", col.width );
-  
+
             td = view.determineColumnEditability( col, td, it );
-  
+
             tr.append( td );
           });
-  
+
           if ( _.isFunction( view.options.processRow ) ) {
             var processedRow = view.options.processRow.call( view, tr, it );
             tr = ( !_.isUndefined( processedRow ) ? processedRow : tr );
           }
-  
+
           tbody.append( tr );
         });
       }
@@ -724,17 +726,24 @@ var data = {
           this.options.afterRefresh.call( this );
     },
 
+    toggleTableChrome: function( visible ) {
+      this.table.find('thead').toggle( visible );
+      this.$el.find( "." + this.css.bottom ).toggle( visible );
+
+      if ( visible ) {
+        this.generatePagingControls();
+      } else {
+        this.removePagingControls();
+        }
+    },
+
     renderNoRecordsFound: function() {
       var tr = $(this.elements.tr),
       td = $(this.elements.td),
       tbody = this.table.find('tbody');
-      
-      // Hide the column headers.
-      this.table.find('thead').hide();
-      
-      // Hide the pagination controls.
-      this.$el.find('.paging-container').remove();
-      
+
+      this.toggleTableChrome( false );
+
       // Inject the row into the list.
       td.text(this.options.noDataMsg || $.i18n.prop('js.grid.noData'))
         .attr('colspan', '100%')
@@ -1020,9 +1029,6 @@ var data = {
       if ( this.features.visibility ) {
         this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
       }
-
-      if ( this.collection.paginate )
-        this.generatePagingControls();
     },
 
     updateRecordCount: function () {
@@ -1033,18 +1039,24 @@ var data = {
       this.$el.find( "." + this.css.bottom ).append( records );
     },
 
+    removePagingControls: function() {
+      this.$el.find( "." + this.css.pagingContainer ).remove();
+    },
+
     generatePagingControls: function () {
-      $( "." + this.css.pagingContainer ).remove();
+      this.removePagingControls();
 
-      var paging = $( this.elements.div ).addClass( this.css.pagingContainer );
+      if ( 1|| this.collection.paginate ) {
+        var paging = $( this.elements.div ).addClass( this.css.pagingContainer );
 
-      this.$el.find( "." + this.css.bottom ).append( paging );
+        this.$el.find( "." + this.css.bottom ).append( paging );
 
-      var pagingControls = new Backbone.PagingControls({
-        el:          paging,
-        collection:  this.collection,
-        pageLengths: this.pageLengths
-      }).render();
+        var pagingControls = new Backbone.PagingControls({
+          el:          paging,
+          collection:  this.collection,
+          pageLengths: this.pageLengths
+        }).render();
+      }
     },
 
     generateFrozenTable: function () {
