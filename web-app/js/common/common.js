@@ -197,8 +197,10 @@ function hideLoading( target ) {
 $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
     // This cannot detect all failures to provide an error handler, as
     // ajaxmanager or backbone may be wrapping a missing error handler.
+    log.debug( "ajaxError url=" + ajaxOptions.url + " thrownError=" + thrownError
+               + " status=" + jqXHR.status + " readyState=" + jqXHR.readyState );
     var handledError = ajaxOptions.error || ajaxOptions.complete;
-    if ( !handledError ) {
+    if ( thrownError !== 'abort' && !handledError ) {
         hideLoading( document );
 
         var msg = $.i18n.prop("js.net.hedtech.banner.ajax.error.message", [ thrownError ]);
@@ -213,6 +215,8 @@ $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
 
         n.addPromptAction( $.i18n.prop("js.net.hedtech.banner.ajax.reload.button"),
                            function() { window.location.reload() });
+        n.addPromptAction( $.i18n.prop("js.net.hedtech.banner.ajax.continue.button"),
+                           function() { notifications.remove( n ); });
 
         notifications.addNotification( n );
 
@@ -296,5 +300,16 @@ $(document).ready(function() {
             handler : function( data ) {
             }
         } );
+    }
+
+    if ($.browser.msie && 8 == parseInt($.browser.version)) {
+        // make text zoom on ie8 trigger resize event, like other browsers
+        var deviceXDPI = screen.deviceXDPI;
+        setInterval( function() {
+            if ( deviceXDPI != screen.deviceXDPI ) {
+                deviceXDPI = screen.deviceXDPI;
+                $(window).resize();
+            }
+        }, 200);
     }
 });

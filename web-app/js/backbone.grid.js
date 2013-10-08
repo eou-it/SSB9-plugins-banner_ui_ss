@@ -20,7 +20,8 @@ var features = {
   resizable:  "Boolean",
   draggable:  "Boolean",
   freeze:     "Boolean",
-  visibility: "Boolean"
+  visibility: "Boolean",
+  sharedVisibility: "Boolean"
 }
 
 var events = {
@@ -28,6 +29,7 @@ var events = {
   afterRender:   "Function",
   beforeRefresh: "Function",
   afterRefresh:  "Function"
+  rowSelected:   "Function"
 }
 
 var data = {
@@ -39,7 +41,7 @@ var data = {
 };
 */
 
-(function ( $, _, Backbone ) {
+(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
     getObject: function ( name ) {
       var value = window.localStorage.getItem( name );
@@ -56,6 +58,38 @@ var data = {
       //     ((secure) ? "; secure" : "");
       // }
     }
+  };
+
+  var generateBackboneCollection = function( config ) {
+
+    _.defaults( config, {
+      pageMaxSize:   5,
+      sortColumn:    _.first( config.columns ).name,
+      sortDirection: "asc",
+      batch:         true
+    });
+
+    var ajaxManager    = window.ajaxManager || new AjaxManager(),
+        ajaxId         = _.uniqueId( "gridAjaxManager" ),
+        GridModel      = Backbone.Model.extend({ }),
+        GridCollection = Backbone.PagedCollection.extend({
+          model:         GridModel,
+          url:           config.url,
+          batch:         config.batch,
+          sortColumn:    config.sortColumn,
+          sortDirection: config.sortDirection,
+          pageMaxSize:   config.pageMaxSize,
+          ajaxCallback:  function( params ) {
+            return ajaxManager.create( ajaxId, { abortOld: true } ).add( params );
+          }
+        });
+
+    var collection = new GridCollection;
+    collection.bind( "change", function ( model ) { model.makeDirty(); } );
+    collection.fetch();
+
+    return collection
+
   };
 
   Backbone.Grid = Backbone.View.extend({
@@ -91,6 +125,7 @@ var data = {
       bottom:                 "bottom",
       columnVisibilityMenu:   "column-visibility-menu",
       title:                  "title",
+      gridWithoutTitle:       "grid-without-title",
       totalRecords:           "total-records",
       recordsInfo:            "records-info",
       mousedown:              "mousedown",
@@ -126,8 +161,8 @@ var data = {
       select:   "<select></select>",
       option:   "<option></option>",
       ul:       "<ul></ul>",
-      li:       "<li></li",
-      label:    "<label></label",
+      li:       "<li></li>",
+      label:    "<label></label>",
       checkbox: "<input type='checkbox'/>"
     },
 
@@ -153,7 +188,8 @@ var data = {
     },
 
     features: {
-      visbility: true,
+      visibility: true,
+      sharedVisibility: true,
       resizable: true,
       draggable: true,
       freeze:    false
@@ -173,6 +209,12 @@ var data = {
       this.$el.find( "." + this.css.selected ).removeClass( this.css.selected );
       tr.addClass( this.css.selected );
       td.addClass( this.css.selected );
+
+      if ( _.isFunction( this.options.rowSelected ) ) {
+        var data = this.collection.get( parseInt( tr.attr( "data-id" ) ) );
+
+        this.options.rowSelected.call( this, tr, data );
+      }
     },
 
     sort: function (e) {
@@ -298,7 +340,8 @@ var data = {
     },
 
     defaultFeatureValues: function () {
-      this.features.visbility = true;
+      this.features.visibility = true;
+      this.features.sharedVisibility = true;
       this.features.resizable = true;
       this.features.draggable = true;
       this.features.freeze    = false;
@@ -307,8 +350,11 @@ var data = {
     determineFeatures: function () {
       this.defaultFeatureValues();
 
-      if( _.isBoolean( this.options.visbility ) )
-        this.features.visbility = this.options.visbility;
+      if( _.isBoolean( this.options.visibility ) )
+        this.features.visibility = this.options.visibility;
+
+      if( _.isBoolean( this.options.sharedVisibility ) )
+        this.features.sharedVisibility = this.options.sharedVisibility;
 
       if( _.isBoolean( this.options.resizable ) )
         this.features.resizable = this.options.resizable;
@@ -361,6 +407,37 @@ var data = {
           this.pageLengths = this.options.pageLengths;
       }
 
+      // TODO add initial config validation to that a valid collection, or a config object in this.options.collection
+      // or the required properties are passed in on the main options object.. if not, log it and don't instantiate
+      if ( this.options.collection instanceof Backbone.Collection ) {
+        this.collection = this.options.collection;
+      }
+      else {
+        if ( _.isObject( this.options.collection ) ) {
+
+          this.collection = generateBackboneCollection({
+            columns:       this.options.columns,
+            url:           this.collection.url,
+            pageMaxSize:   this.collection.pageMaxSize,
+            sortColumn:    this.collection.sortColumn,
+            sortDirection: this.collection.sortDirection,
+            batch:         this.collection.batch
+          });
+
+        } else {
+
+          this.collection = generateBackboneCollection({
+            columns:       this.options.columns,
+            url:           this.options.url,
+            pageMaxSize:   this.options.pageMaxSize,
+            sortColumn:    this.options.sortColumn,
+            sortDirection: this.options.sortDirection,
+            batch:         this.options.batch
+          });
+
+        }
+      }
+
 
       this.collection.bind( "reset", function () {
         view.refresh();
@@ -385,6 +462,14 @@ var data = {
       if( typeof( window.notifications ) != 'undefined' && typeof( window.notifications.bind ) == 'function' ) {
         window.notifications.bind('add',    this.notificationAdded );
         window.notifications.bind('remove', this.notificationRemoved );
+      }
+
+      if ( this.features.visibility && this.features.sharedVisibility ) {
+          $(document).on( 'toggle-grid-column', function( event, name, visible ) {
+              if ( event.target !== view.el ) {
+                  view.toggleColumnVisibility( name, visible, true );
+              }
+          });
       }
 
       this.render();
@@ -412,16 +497,22 @@ var data = {
           view.toggleColumnVisibility( $( e.target ).attr( "data-name" ) );
       };
 
-      var map = _.map( this.columns, function ( it ) {
+      var map = _.map( _.filter( this.columns, function ( it ) {
+          return it.title;
+      }), function( it ) {
           return {
               name:    it.name,
               title:   it.title,
               checked: _.isBoolean( it.visible ) ? it.visible : true
            };
-       });
+      });
 
+      if ( this.columnVisibilityControls ) {
+          this.columnVisibilityControls.stopListening().undelegateEvents().$el.empty();
+      }
       this.columnVisibilityControls = new Backbone.ButtonMenu({
-          el:         $( "." + this.css.columnVisibilityMenu ),
+          el:         this.$el.find( "." + this.css.columnVisibilityMenu ),
+          container:  this.menuContainer,
           items:      map,
           callback:   toggleColumnVisibility,
           buttonIcon: "grid-button-menu-icon"
@@ -439,7 +530,7 @@ var data = {
       this.generateTable();
       this.generateWrapper();
 
-      if ( this.features.visbility )
+      if ( this.features.visibility )
         this.generateColumnVisibilityControls();
 
       if( this.features.freeze ) {
@@ -513,14 +604,24 @@ var data = {
       return value;
     },
 
-    toggleColumnVisibility: function ( name ) {
+    toggleColumnVisibility: function ( name, visible, quiet ) {
         var column = _.find( this.columns, function ( it ) { return it.name == name; } );
+        if ( _.isUndefined( column )) return;
 
-        column.visible = ( _.isUndefined( column.visible ) || column.visible ? false : true );
+        var oldVisible = ( _.isUndefined( column.visible ) || column.visible ? true : false );
+        if ( _.isUndefined( visible )) {
+            column.visible = !oldVisible;
+        } else {
+            column.visible = visible;
+            this.generateColumnVisibilityControls(); // sync menu checkboxes
+        }
 
         this.refresh( true );
-    },
 
+        if ( !quiet ) {
+            this.$el.trigger( "toggle-grid-column", [column.name, column.visible] );
+        }
+    },
 
     resolveProperty: function ( obj, property ) {
       property = property.split( '.' );
@@ -881,19 +982,28 @@ var data = {
 
       var gridWrapper = this.$el.find( "." + this.css.gridWrapper );
 
-      gridWrapper.before( $( this.elements.div ).addClass( this.css.header + " " + this.css.uiWidgetHeader + " " + this.css.contentContainerHeader )
-                                               .append( $( this.elements.span ).addClass( this.css.title ).text( this.title ) ) );
+      if ( this.title ) {
+        this.menuContainer = $( this.elements.div ).
+          addClass( this.css.header + " " + this.css.uiWidgetHeader + " " + this.css.contentContainerHeader ).
+          append( $( this.elements.span ).addClass( this.css.title ).text( this.title ) );
+        gridWrapper.before( this.menuContainer );
+      } else {
+        gridWrapper.addClass( this.css.gridWithoutTitle );
+        this.menuContainer = gridWrapper.find( "thead tr" );
+      }
 
       gridWrapper.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
 
-      this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
+      if ( this.features.visibility ) {
+        this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
+      }
 
       if ( this.collection.paginate )
         this.generatePagingControls();
     },
 
     updateRecordCount: function () {
-      $( "." + this.css.recordsInfo ).remove();
+      this.$el.find( "." + this.css.recordsInfo ).remove();
 
       var records = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.recordsInfo).text( this.strings.recordsFound + this.strings.labelSeperator + this.collection.totalCount );
 
@@ -1005,4 +1115,4 @@ var data = {
         this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
     }
   });
-}).call (this, $, _, Backbone);
+}).call (this, $, _, Backbone, JSON, AjaxManager );

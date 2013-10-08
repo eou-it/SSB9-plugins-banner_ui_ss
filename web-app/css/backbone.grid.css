@@ -129,14 +129,17 @@
 
 .column-visibility-menu {
   position: absolute;
-  right: 10px;
-  top: 6px;
+  right: 0px;
+  top: 0px;
   z-index: 1101;
+  border-left: 1px solid #DDDDDD;
+  background: url('../images/grid_customize.png') no-repeat center center;
+  width: 30px;
+  height: 30px;
 }
 
-.column-visibility-menu .button-menu-button {
-  float: right;
-  clear: both;
+.grid-without-title th:last-child {
+    padding-right: 30px;
 }
 
 .button-menu-container {
@@ -158,6 +161,14 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.button-menu-container ul li {
+    padding: 4px 0;
+}
+
+.button-menu-container ul li input {
+    height:auto;
 }
 
 .button-menu-overlay {
