@@ -168,15 +168,13 @@ var data = {
       checkbox: "<input type='checkbox'/>"
     },
 
-    strings: {
+    strings: { /* these strings should never be visible to the end-user, but may be seen by developers */
       storagePrefix:               "grid-column-state-",
       none:                        "none",
       asc:                         "asc",
       desc:                        "desc",
       even:                        "even",
       odd:                         "odd",
-      recordsFound:                "Records Found",
-      labelSeperator:              ": ",
       errorSuccessProperty:        "invalid data.success property",
       errorTotalCountProperty:     "invalid data.totalCount property",
       errorDataProperty:           "invalid data.data property",
@@ -1053,7 +1051,11 @@ var data = {
     updateRecordCount: function () {
       this.$el.find( "." + this.css.recordsInfo ).remove();
 
-      var records = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.recordsInfo).text( this.strings.recordsFound + this.strings.labelSeperator + this.collection.totalCount );
+      var records = $( this.elements.span ).addClass(
+        this.css.pagingText + " " +
+          this.css.recordsInfo).text( $.i18n.prop( "js.grid.recordsFound", [
+            _.isUndefined( this.collection.totalCount ) ? this.collection.length : Math.max(this.collection.totalCount, this.collection.length)
+          ] ));
 
       this.$el.find( "." + this.css.bottom ).append( records );
     },
@@ -1065,7 +1067,7 @@ var data = {
     generatePagingControls: function () {
       this.removePagingControls();
 
-      if ( 1|| this.collection.paginate ) {
+      if ( this.collection.paginate ) {
         var paging = $( this.elements.div ).addClass( this.css.pagingContainer );
 
         this.$el.find( "." + this.css.bottom ).append( paging );
