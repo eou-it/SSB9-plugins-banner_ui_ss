@@ -742,6 +742,7 @@ var data = {
     toggleTableChrome: function( visible ) {
       this.table.find('thead').toggle( visible );
       this.$el.find( "." + this.css.bottom ).toggle( visible );
+      this.columnVisibilityControls.$el.toggle( visible );
 
       if ( visible ) {
         this.generatePagingControls();
