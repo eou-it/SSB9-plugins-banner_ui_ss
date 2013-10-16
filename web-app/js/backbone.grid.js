@@ -1053,9 +1053,7 @@ var data = {
 
       var records = $( this.elements.span ).addClass(
         this.css.pagingText + " " +
-          this.css.recordsInfo).text( $.i18n.prop( "js.grid.recordsFound", [
-            _.isUndefined( this.collection.totalCount ) ? this.collection.length : Math.max(this.collection.totalCount, this.collection.length)
-          ] ));
+          this.css.recordsInfo).text( $.i18n.prop( "js.grid.recordsFound", [ _.isUndefined( this.collection.totalCount ) ? this.collection.length : Math.max(this.collection.totalCount, this.collection.length) ] ));
 
       this.$el.find( "." + this.css.bottom ).append( records );
     },
