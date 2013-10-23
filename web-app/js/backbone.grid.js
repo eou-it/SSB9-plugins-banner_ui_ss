@@ -503,7 +503,14 @@ var data = {
       }
     },
 
+    getMenuContainer: function() {
+      return this.menuContainer || this.$el.find( "." + this.css.gridWrapper + " thead tr" );
+    },
+
     generateColumnVisibilityControls: function() {
+      if ( !this.features.visibility ) {
+        return;
+      }
       var view = this;
 
       var toggleColumnVisibility = function ( item, e ) {
@@ -525,7 +532,7 @@ var data = {
       }
       this.columnVisibilityControls = new Backbone.ButtonMenu({
           el:         this.$el.find( "." + this.css.columnVisibilityMenu ),
-          container:  this.menuContainer,
+          container:  this.getMenuContainer(),
           items:      map,
           callback:   toggleColumnVisibility,
           buttonIcon: "grid-button-menu-icon"
@@ -542,9 +549,7 @@ var data = {
 
       this.generateTable();
       this.generateWrapper();
-
-      if ( this.features.visibility )
-        this.generateColumnVisibilityControls();
+      this.generateColumnVisibilityControls();
 
       if( this.features.freeze ) {
         this.generateFrozenTable();
@@ -659,6 +664,7 @@ var data = {
 
         this.generateHead();
         this.generateBody();
+        this.generateColumnVisibilityControls();
 
         if ( this.features.freeze ) {
           this.generateFrozenHead();
@@ -1038,7 +1044,6 @@ var data = {
         gridWrapper.before( this.menuContainer );
       } else {
         gridWrapper.addClass( this.css.gridWithoutTitle );
-        this.menuContainer = gridWrapper.find( "thead tr" );
       }
 
       gridWrapper.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
