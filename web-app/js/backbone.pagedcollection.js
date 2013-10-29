@@ -1,5 +1,7 @@
+/* Copyright 2013 Ellucian Company L.P. and its affiliates. */
+
 /* dependent upon Collection enhancements in backbone-custom.js */
-(function () {
+;(function () {
     Backbone.PagedCollectionInternal = Backbone.Collection.extend({
         paginate: true,
         parse: function(response, xhr) {

@@ -1,4 +1,6 @@
-(function ( $, _, Backbone ) {
+/* Copyright 2013 Ellucian Company L.P. and its affiliates. */
+
+;(function ( $, _, Backbone ) {
 
   Backbone.ButtonMenu = Backbone.View.extend({
     name: "",

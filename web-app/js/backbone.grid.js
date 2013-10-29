@@ -1,10 +1,12 @@
+/* Copyright 2013 Ellucian Company L.P. and its affiliates. */
+
 /*
 var column = {
   editable: "Boolean | String | Object | Function",
   freeze:   "Boolean",
   name:     "String",
   render:   "Function",
-  sortable: "Booleab",
+  sortable: "Boolean",
   title:    "String",
   width:    "Percentage | fixed"
 }
@@ -41,7 +43,7 @@ var data = {
 };
 */
 
-(function ( $, _, Backbone, JSON, AjaxManager ) {
+;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
     getObject: function ( name ) {
       var value = window.localStorage.getItem( name );
@@ -367,6 +369,10 @@ var data = {
 
     initialize: function () {
       _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
+
+      // make sure we have an id attribute
+      if ( !this.$el.attr( 'id' ) )
+        this.$el.attr( 'id', _.uniqueId( 'grid-' ) );
 
       this.$el.addClass( this.css.gridContainer );
 
