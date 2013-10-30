@@ -580,7 +580,8 @@ var data = {
 
       this.setupKeyTable();
 
-      dragtable.init();
+      this.draggableColumns();
+
       window.ResizableColumns( this.table );
 
       if ( _.isFunction( this.options.afterRender ) )
@@ -657,6 +658,14 @@ var data = {
     },
 
 
+    draggableColumns: function() {
+      if ( this.features.draggable ) {
+        this.table.addClass( this.css.draggable );
+        window.setupColumnReordering( this.table );
+      }
+    },
+
+
     refresh: function ( fullRefresh ) {
       fullRefresh = ( _.isBoolean( fullRefresh ) ? fullRefresh : false );
 
@@ -679,7 +688,8 @@ var data = {
 
         this.setupScrolling();
 
-        dragtable.init();
+        this.draggableColumns();
+
         window.ResizableColumns( this.table );
       }
 
@@ -939,9 +949,6 @@ var data = {
       if ( this.features.resizable )
         this.table.addClass( this.css.resizable );
 
-      if ( this.features.draggable )
-        this.table.addClass( this.css.draggable );
-
       var mainGridWrapper = $( this.elements.div ).addClass( this.css.gridMainWrapper ).append( this.table ),
           overallWrapper  = $( this.elements.div ).addClass( this.css.gridWrapper ).append( mainGridWrapper );
 
@@ -953,7 +960,6 @@ var data = {
 
         view.setupScrolling();
       });
-
 
       this.generateHead();
       this.generateBody();
