@@ -132,6 +132,7 @@
 .column-visibility-menu {
   position: absolute;
   right: 0px;
+  left: auto;
   top: 0px;
   z-index: 1101;
   border-left: 1px solid #DDDDDD;

@@ -17,6 +17,7 @@
     cursor: pointer;
 }
 
+/* LTR ( default ) versions of the icons */
 .paging-control.first.enabled    { background-position: 0 0;      width: 22px; height: 23px; }
 .paging-control.last.enabled     { background-position: 0 -112px; width: 22px; height: 23px; }
 .paging-control.next.enabled     { background-position: 0 -224px; width: 22px; height: 23px; }
@@ -36,6 +37,27 @@
 .paging-control.enabled.mousedown  { background-position: 0 -168px; width: 22px; height: 23px; }
 .paging-control.enabled.mousedown  { background-position: 0 -280px; width: 22px; height: 23px; }
 .paging-control.enabled.mousedown  { background-position: 0 -392px; width: 22px; height: 23px; }
+
+/* RTL versions of the icons */
+.paging-control.first.rtl.enabled    { background-position: 0 -112px; width: 22px; height: 23px; }
+.paging-control.last.rtl.enabled     { background-position: 0 0;      width: 22px; height: 23px; }
+.paging-control.next.rtl.enabled     { background-position: 0 -336px; width: 22px; height: 23px; }
+.paging-control.previous.rtl.enabled { background-position: 0 -224px; width: 22px; height: 23px; }
+
+.paging-control.first.rtl    { background-position: 0 -140px; width: 22px; height: 23px; }
+.paging-control.last.rtl     { background-position: 0 -28px;  width: 22px; height: 23px; }
+.paging-control.next.rtl     { background-position: 0 -364px; width: 22px; height: 23px; }
+.paging-control.previous.rtl { background-position: 0 -252px; width: 22px; height: 23px; }
+
+.paging-control.first.rtl.enabled:hover    { background-position: 0 -196px; width: 22px; height: 23px; }
+.paging-control.last.rtl.enabled:hover     { background-position: 0 -84px;  width: 22px; height: 23px; }
+.paging-control.next.rtl.enabled:hover     { background-position: 0 -420px; width: 22px; height: 23px; }
+.paging-control.previous.rtl.enabled:hover { background-position: 0 -308px; width: 22px; height: 23px; }
+
+/*.paging-control.enabled.mousedown { background-position: 0 -56px;  width: 22px; height: 23px; }
+.paging-control.enabled.mousedown  { background-position: 0 -168px; width: 22px; height: 23px; }
+.paging-control.enabled.mousedown  { background-position: 0 -280px; width: 22px; height: 23px; }
+.paging-control.enabled.mousedown  { background-position: 0 -392px; width: 22px; height: 23px; }*/
 
 .records-info {
     float: right;

@@ -105,12 +105,15 @@
     render: function () {
       this.$el.empty();
 
+      var dir = $( "meta[name=dir]" ).attr( "content" );
+      dir = ( dir === void 0 || dir === "ltr" ? "ltr" : "rtl" );
+
       var view     = this,
           pageInfo = this.collection.pageInfo(),
-          first    = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.first ), //.text( "First" ),
-          last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last ), //.text( "Last" ),
-          next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next ), //.text( "Next" ),
-          prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous ), //.text( "Previous" ),
+          first    = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.first + " " + dir ), //.text( "First" ),
+          last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last + " " + dir ), //.text( "Last" ),
+          next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ), //.text( "Next" ),
+          prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ), //.text( "Previous" ),
           page     = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
           of       = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? this.strings.pageOfOne : this.strings.of ),
           pages    = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.totalPages ).text( pageInfo.pages ),
