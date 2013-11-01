@@ -209,7 +209,7 @@ $(document).ready(function() {
             x = x[ x.length - 1 ].replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
             y = y[ y.length - 1 ].replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
 
-            for ( var i in x ) {
+            for ( var i = 0; i < x.length; i++ ) {
                 if ( x[ i ] && !y[ i ] || isFinite( x[ i ] ) && !isFinite( y[ i ] ) ) {
                     return -1;
                 } else if ( !x[ i ] && y[ i ] || !isFinite(y[ i ] ) && isFinite( y[ i ] ) ) {
