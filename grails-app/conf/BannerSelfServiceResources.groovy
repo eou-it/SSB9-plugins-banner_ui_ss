@@ -24,6 +24,12 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
     }
 
+    'glyphicons' {
+        defaultBundle environment == "development" ? false : "bannerSelfService"
+
+        resource url:[plugin: 'banner-ui-ss', file: 'glyphicons/style.css'], attrs: [media: 'screen, projection']
+    }
+
     'bannerSelfServiceWithoutAurora' {
         dependsOn "jquery, i18n-core"
 

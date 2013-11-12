@@ -1,0 +1,839 @@
+<!doctype html>
+<html>
+<head>
+<title>Ellucian UXD Icons</title>
+<link rel="stylesheet" href="style.css" />
+<script src="js/modernizr-1.7.min.js"></script>
+</head>
+<body>
+<a name="top-of-page"></a>
+<h1>Core Icon Set: Implementation Guide</h1>
+<p>This page contains information and guidance for using the core icon set in software applications. Ellucian's icon font uses a custom Ellucian font face. The icon font should be implemented where 1 or 2 color icons are needed in a product. If a full-color icon is needed, it is recommended to use an svg or png file format. Sections covered:</p>
+<ul>
+  <li><a href="#list-of-icons">List of Icons</a></li>
+  <li><a href="#with-text">Icons with text</a></li>
+  <li><a href="#without-text">Icons without text</a></li>
+  <li><a href="#2-color-icons">2-color Icons</a></li>
+  <li><a href="#icon-styling">Icon Styling</a></li>
+  <li><a href="#link-styling">Icon Link Styling</a></li>
+  <li><a href="#contrast">Contrast</a></li>
+  <li><a href="#sizing">Sizing</a></li>
+  <li><a href="#accessibility">Accessibility</a></li>
+  <li><a href="download.zip"><strong>Download font icon and css</strong></a> (download.zip 35kb)</li>
+</ul>
+<hr>
+<a name="list-of-icons"></a>
+<h3>List of Icons</h3>
+<p>The table below shows the core icons in the font, the classnames needed to access them, and the private use unicode characters to avoid conflicts with actual letters.</p>
+<table class="data">
+  <tr>
+    <th scope="col">Icon</th>
+    <th scope="col">Classname</th>
+    <th scope="col">Unicode</th>
+  </tr>
+  <tr>
+    <td><span class="icon-circle icon-success" aria-hidden="true" data-icon="&#xe000;"></span></td>
+    <td>icon-success</td>
+    <td>U+E000</td>
+  </tr>
+  <tr>
+    <td><span class="icon-triangle icon-warning" aria-hidden="true" data-icon="&#xe001;"></span></td>
+    <td>icon-warning</td>
+    <td>U+E001</td>
+  </tr>
+  <tr>
+    <td><span class="icon-circle icon-error" aria-hidden="true" data-icon="&#xe002;"></span></td>
+    <td>icon-error</td>
+    <td>U+E002</td>
+  </tr>
+  <tr>
+    <td><span class="icon-circle icon-information" aria-hidden="true" data-icon="&#xe003;"></span></td>
+    <td>icon-information</td>
+    <td>U+E003</td>
+  </tr>
+  <tr>
+    <td><span class="icon-circle icon-help" aria-hidden="true" data-icon="&#xe004;"></span></td>
+    <td>icon-help</td>
+    <td>U+E004</td>
+  </tr>
+  <tr>
+    <td><span class="icon-circle icon-in-progress" aria-hidden="true" data-icon="&#xe005;"></span></td>
+    <td>icon-in-progress</td>
+    <td>U+E007</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe008;"></span></td>
+    <td>icon-circle-outline</td>
+    <td>U+E008</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe009;"></span></td>
+    <td>icon-caret-previous-silhouette</td>
+    <td>U+E009</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe010;"></span></td>
+    <td>icon-caret-next-silhouette</td>
+    <td>U+E010</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe011;"></span></td>
+    <td>icon-caret-previous</td>
+    <td>U+E011</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe012;"></span></td>
+    <td>icon-caret-next</td>
+    <td>U+E012</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe013;"></span></td>
+    <td>icon-caret-beginning</td>
+    <td>U+E013</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe014;"></span></td>
+    <td>icon-caret-end</td>
+    <td>U+E014</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe015;"></span></td>
+    <td>icon-caret-down</td>
+    <td>U+E015</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe016;"></span></td>
+    <td>icon-add-square-silhouette</td>
+    <td>U+E016</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe017;"></span></td>
+    <td>icon-add-circle-silhouette</td>
+    <td>U+E018</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe018;"></span></td>
+    <td>icon-add</td>
+    <td>U+E018</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe019;"></span></td>
+    <td>icon-remove-square-silhouette</td>
+    <td>U+E019</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe020;"></span></td>
+    <td>icon-remove-circle-silhouette</td>
+    <td>U+E020</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe021;"></span></td>
+    <td>icon-remove</td>
+    <td>U+E021</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe022;"></span></td>
+    <td>icon-close</td>
+    <td>U+E022</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe023;"></span></td>
+    <td>icon-location</td>
+    <td>U+E023</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe024;"></span></td>
+    <td>icon-twitter</td>
+    <td>U+E024</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe025;"></span></td>
+    <td>icon-facebook</td>
+    <td>U+E025</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe026;"></span></td>
+    <td>icon-phone</td>
+    <td>U+E026</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe027;"></span></td>
+    <td>icon-chat</td>
+    <td>U+E027</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe028;"></span></td>
+    <td>icon-email</td>
+    <td>U+E028</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe029;"></span></td>
+    <td>icon-book</td>
+    <td>U+E029</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe030;"></span></td>
+    <td>icon-attach</td>
+    <td>U+E030</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe031;"></span></td>
+    <td>icon-flag</td>
+    <td>U+E031</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe032;"></span></td>
+    <td>icon-star</td>
+    <td>U+E032</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe033;"></span></td>
+    <td>icon-announcement</td>
+    <td>U+E033</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe034;"></span></td>
+    <td>icon-menu-panel</td>
+    <td>U+E034</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe035;"></span></td>
+    <td>icon-list</td>
+    <td>U+E035</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe036;"></span></td>
+    <td>icon-grid</td>
+    <td>U+E036</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe037;"></span></td>
+    <td>icon-search</td>
+    <td>U+E037</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe038;"></span></td>
+    <td>icon-filter</td>
+    <td>U+E038</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe039;"></span></td>
+    <td>icon-home</td>
+    <td>U+E039</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe040;"></span></td>
+    <td>icon-settings</td>
+    <td>U+E040</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe041;"></span></td>
+    <td>icon-checklist</td>
+    <td>U+E041</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe042;"></span></td>
+    <td>icon-export</td>
+    <td>U+E042</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe043;"></span></td>
+    <td>icon-document</td>
+    <td>U+E043</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe044;"></span></td>
+    <td>icon-print</td>
+    <td>U+E044</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe045;"></span></td>
+    <td>icon-edit</td>
+    <td>U+E045</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe046;"></span></td>
+    <td>icon-secure</td>
+    <td>U+E046</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe047;"></span></td>
+    <td>icon-refresh</td>
+    <td>U+E047</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe048;"></span></td>
+    <td>icon-duplicate</td>
+    <td>U+E048</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe049;"></span></td>
+    <td>icon-calendar-month</td>
+    <td>U+E049</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe051;"></span></td>
+    <td>icon-calendar-day</td>
+    <td>U+E051</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe053;"></span></td>
+    <td>icon-photo</td>
+    <td>U+E053</td>
+  </tr>
+  <tr>
+    <td><span aria-hidden="true" data-icon="&#xe054;"></span></td>
+    <td>icon-person</td>
+    <td>U+E054</td>
+  </tr>
+</table>
+<a href="#top-of-page">Top of page</a>
+<hr>
+<a name="with-text"></a>
+<h3>Icons with text</h3>
+<p>Often, icons need the supportive accompaniment of text to help clarify meaning to the user. Icon size, font size, vertical alignment and line height need to be considered when implementing.</p>
+<hr>
+<h5>Example</h5>
+<table class="data example">
+  <tr>
+    <td><span class="icon"> <span class="icon-settings"></span> <span>User Preferences</span> </span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon"&gt;
+   &lt;span class="icon-settings">&lt;/span&gt;
+   &lt;span&gt;User Preferences&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon-settings {
+   font-family: 'ellucian';
+   speak: none;
+   font-style: normal;
+   font-weight: normal;
+   font-variant: normal;
+   text-transform: none;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   font-size: 16px;
+   font-size: 1.6rem;
+}
+.icon-settings:before {
+   content: "\e040";
+   line-height: normal;
+   vertical-align: bottom;
+}
+</code>
+</pre>
+<a href="#top-of-page">Top of page</a>
+<hr>
+<a name="without-text"></a>
+<h3>Icons without text</h3>
+<h5>Example</h5>
+<table class="data example">
+  <tr>
+    <td><span class="icon"> <span class="icon-settings"></span></span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon"&gt;
+   &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon-settings {
+   font-family: 'ellucian';
+   speak: none;
+   font-style: normal;
+   font-weight: normal;
+   font-variant: normal;
+   text-transform: none;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   font-size: 16px;
+   font-size: 1.6rem;
+}
+.icon-settings:before {
+   content: "\e040";
+   line-height: normal;
+   vertical-align: bottom;
+}
+</code>
+</pre>
+<a href="#top-of-page">Top of page</a>
+<hr>
+<a name="2-color-icons"></a>
+<h3>2-color Icons</h3>
+<p>2-color icons are achieved by stacking two glyphs on top of each other and controlling their positioning through CSS. The table below displays the bottom icon shapes and the top icons that are arranged to appear on top of them.</p>
+<table class="data">
+  <tr>
+    <th scope="col">Top Icon</th>
+    <th scope="col">Bottom Icon Shape</th>
+    <th scope="col">Combined Top &amp; Bottom Icons</th>
+  </tr>
+  <tr>
+    <td class="dark"><span class="icon"> <span class="icon-success"></span> </span></td>
+    <td class="dark"><span class="icon-shape"> <span class="icon-circle"></span> </span></td>
+    <td class="dark"><span class="icon"> <span class="icon-success icon-circle"></span> </span></td>
+  </tr>
+  <tr>
+    <td class="dark"><span class="icon"> <span class="icon-warning"></span> </span></td>
+    <td class="dark"><span class="icon-shape"> <span class="icon-triangle"></span> </span></td>
+    <td class="dark"><span class="icon"> <span class="icon-warning icon-triangle"></span> </span></td>
+  </tr>
+</table>
+<h5>Example</h5>
+<table class="data example-two-color">
+  <tr>
+    <td><span class="icon"> <span class="icon-success icon-circle"></span><span class="success-text">Save was successful.</span></span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon"&gt;
+   &lt;span class="icon-success icon-circle">&lt;/span&gt;
+   &lt;span class="success-text"&gt;Save was successful.&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon {
+   display: inline-block;
+   line-height: normal;
+   vertical-align: middle;
+   position: relative;
+}
+.icon-success, .icon-circle {
+   font-family: 'ellucian';
+   speak: none;
+   font-style: normal;
+   font-weight: normal;
+   font-variant: normal;
+   text-transform: none;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   font-size: 16px;
+   font-size: 1.6rem;
+}
+.icon-success:after {
+   color: #268D1F;
+   content: "\e000";
+   position: relative;
+}
+.icon-circle:before {
+   color: #FFFFFF;
+   content: "\e006";
+   position: absolute;
+   left: 0;
+   top: 0;
+}
+.success-text {
+   padding-left: 6px;
+   vertical-align: top;
+}
+</code>
+</pre>
+<a href="#top-of-page">Top of page</a>
+<hr>
+<a name="icon-styling"></a>
+<h3>Icon Styling</h3>
+<p>Because the icon is contained a font, there are a variety of ways in which styling can be applied with basic CSS properties. Below are examples of styling that can be applied.</p>
+<h5>Text Shadow</h5>
+<table class="data example">
+  <tr>
+    <td><span class="icon-textshadow">
+    	<span class="icon-settings"></span>
+    </span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon-textshadow"&gt;
+      &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon-textshadow .icon-settings {
+   font-size: 64px;
+   font-size: 6.4rem;
+   text-shadow: 3px 3px 3px #aaaaaa;	
+}
+</code>
+</pre>
+<hr>
+<h5>Hover Pseudo Class</h5>
+<table class="data example">
+  <tr>
+    <td><span class="icon-hover">
+    	<span class="icon-settings"></span>
+    </span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon-hover"&gt;
+      &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon-hover .icon-settings {
+   font-size: 64px;
+   font-size: 6.4rem;	
+}
+.icon-hover .icon-settings:hover {
+   font-size: 64px;
+   font-size: 6.4rem;
+   color: #cc0000;
+   cursor: pointer;	
+}
+</code>
+</pre>
+<hr>
+<h5>Hover + Transition</h5>
+<table class="data example">
+  <tr>
+    <td><span class="icon-hover-transition">
+    	<span class="icon-settings"></span>
+    </span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon-hover-transition"&gt;
+      &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon-hover-transition .icon-settings {
+   font-size: 64px;
+   font-size: 6.4rem;
+   transition: color 0.5s ease; 	
+}
+.icon-hover-transition .icon-settings:hover {
+   font-size: 64px;
+   font-size: 6.4rem;
+   color: #cc0000;
+   cursor: pointer;
+}
+</code>
+</pre>
+<hr>
+<h5>Gradient (Webkit only)</h5>
+<table class="data example">
+  <tr>
+    <td><span class="icon-gradient">
+    	<span class="icon-settings"></span>
+    </span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon-gradient"&gt;
+      &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon-gradient .icon-settings {
+   font-size: 64px;
+   font-size: 6.4rem;
+   background: -webkit-linear-gradient(#cc0000, #333);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;	
+}
+</code>
+</pre>
+<hr>
+<h5>Advanced styling (color, text-shadow, box-shadow, background gradient, border, border-radius, hover, transition)</h5>
+<table class="data example">
+  <tr>
+    <td><span class="icon-styling">
+    	<span class="icon-settings"></span>
+    </span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon-styling"&gt;
+      &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon-styling .icon-settings {
+   font-size: 64px;
+   font-size: 6.4rem;
+   color: #006699;
+   display: block;
+   padding: 12px;
+   text-shadow: 0px 1px 0px rgba(255,255,255,.7);
+   background: -moz-linear-gradient(top, #eeeeee 0%, #aaaaaa);
+   background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#aaaaaa));
+   background-image: -ms-linear-gradient(90deg, #eeeeee, #aaaaaa);
+   background-image: -o-linear-gradient(90deg, #eeeeee, #aaaaaa);
+   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#aaaaaa');
+   transition: all 0.25s linear; 
+   background-size: 1px 100px;	
+   border-radius: .25em;
+   width: 100px;
+   text-align: center;
+   border: 1px solid #ccc;
+}
+.icon-styling .icon-settings:hover {
+   font-size: 64px;
+   font-size: 6.4rem;
+   color: #003366;
+   background-position: 100px;	
+   text-shadow: 0px 1px 0px rgba(255,255,255,1);
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.24) inset;
+   cursor: pointer;
+}
+</code>
+</pre>
+<hr>
+<a href="#top-of-page">Top of page</a>
+<hr>
+<a name="link-styling"></a>
+<h3>Icon Link styling</h3>
+<h5>Example</h5>
+<table class="data example">
+  <tr>
+    <td><span class="icon">
+    <a href="">
+    	<span class="icon-settings"></span>
+    	<span>User Preferences</span>
+    </a>
+    </span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon"&gt;
+   &lt;a href=""&gt;
+      &lt;span class="icon-settings">&lt;/span&gt;
+      &lt;span&gt;User Preferences&lt;/span&gt;
+   &lt;/a&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon a {
+   color: #006699;
+   text-decoration: none;
+   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.icon a:hover {
+   color: #003366;
+   text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+}
+.icon-settings {
+   font-family: 'ellucian';
+   speak: none;
+   font-style: normal;
+   font-weight: normal;
+   font-variant: normal;
+   text-transform: none;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   font-size: 16px;
+   font-size: 1.6rem;
+}
+.icon-settings:before {
+   content: "\e040";
+   line-height: normal;
+   vertical-align: bottom;
+}
+</code>
+</pre>
+<a href="#top-of-page">Top of page</a>
+<hr>
+<a name="contrast"></a>
+<h3>Contrast</h3>
+<p>Adjust color of icons for optimum readability on varying-color backgrounds.</p>
+<table class="data example dark-background">
+  <tr>
+    <td><span class="icon">
+    	<span class="icon-settings"></span>
+    </span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon-light"&gt;
+   &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon-light .icon-settings {
+   color: #FFFFFF;	
+}
+</code>
+</pre>
+<a href="#top-of-page">Top of page</a>
+<hr>
+<a name="sizing"></a>
+<h3>Sizing</h3>
+<p>The Ellucian icon font is designed to be used at 16px, 24px, 32px, 48px, and 64px. To get the best results, you should use these sizes when using the icon font.</p>
+<table class="data">
+  <tr>
+    <th scope="col">16px</th>
+    <th scope="col">24px</th>
+    <th scope="col">32px</th>
+    <th scope="col">48px</th>
+    <th scope="col">64px</th>
+  </tr>
+  <tr>
+    <td><span class="icon">
+    	<span class="icon-settings"></span>
+    </span></td>
+    <td><span class="icon-twentyfour">
+    	<span class="icon-settings"></span>
+    </span></td>
+    <td><span class="icon-thirtytwo">
+    	<span class="icon-settings"></span>
+    </span></td>
+    <td><span class="icon-fortyeight">
+    	<span class="icon-settings"></span>
+    </span></td>
+    <td><span class="icon-sixtyfour">
+    	<span class="icon-settings"></span>
+    </span></td>
+  </tr>
+</table>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon"&gt;
+   &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;span class="icon-twentyfour"&gt;
+   &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;span class="icon-thirtytwo"&gt;
+   &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;span class="icon-fortyeight"&gt;
+   &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;span class="icon-sixtyfour"&gt;
+   &lt;span class="icon-settings">&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<h5>CSS</h5>
+<pre>
+<code>
+.icon-twentyfour .icon-settings {
+   font-size: 24px;
+   font-size: 2.4rem;	
+}
+.icon-thirtytwo .icon-settings {
+   font-size: 32px;
+   font-size: 3.2rem;	
+}
+.icon-fortyeight .icon-settings {
+   font-size: 48px;
+   font-size: 4.8rem;	
+}
+.icon-sixtyfour .icon-settings {
+   font-size: 64px;
+   font-size: 6.4rem;	
+}
+</code>
+</pre>
+<hr>
+<p>The following two calendar icons require a different glyph from their 16px version, when displayed at 32px or higher.</p>
+<table class="data-large">
+  <tr>
+    <th scope="col">Icon</th>
+    <th scope="col">Classname</th>
+    <th scope="col">Unicode</th>
+  </tr>
+  <tr>
+    <td><span class="icon-calendar-month-large" aria-hidden="true" data-icon="&#xe052;"></span></td>
+    <td>icon-calendar-month-large</td>
+    <td>U+E052</td>
+  </tr>
+  <tr>
+    <td><span class="icon-calendar-day-large" aria-hidden="true" data-icon="&#xe050;"></span></td>
+    <td>icon-calendar-day-large</td>
+    <td>U+E050</td>
+  </tr>
+ </table>
+<a href="#top-of-page">Top of page</a>
+<hr>
+<a name="accessibility"></a>
+<h3>Accessibility</h3>
+<p>Some screen readers read the content inside pseudo elements. By using the private use access unicode characters for the encoding of the glyphs, this problem is prevented.</p>
+<p>When displaying an icon without any visual text near it, use the following example to ensure accessibility.</p>
+<h5>HTML</h5>
+<pre>
+<code>
+&lt;span class="icon"&gt;
+   &lt;span class="icon-settings">&lt;/span&gt;
+   &lt;span class="visually-hidden"&gt;User Preferences&lt;/span&gt;
+&lt;/span&gt;
+</code>
+</pre>
+<p>The visually-hidden class in this example is taken from <a href="http://html5boilerplate.com/">HTML5 Boilerplate</a>.</p>
+<h5>CSS</h5>
+<pre>
+<code>
+.visually-hidden {
+   border: 0;
+   clip: rect(0 0 0 0);
+   height: 1px;
+   margin: -1px;
+   overflow: hidden;
+   padding: 0;
+   position: absolute;
+   width: 1px;
+}
+</code>
+</pre>
+<a href="#top-of-page">Top of page</a>
+<hr>
+</body>
+</html>
