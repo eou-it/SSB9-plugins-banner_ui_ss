@@ -4,6 +4,7 @@ import org.apache.log4j.Logger
 import net.hedtech.banner.loginworkflow.PostLoginWorkflow
 import org.codehaus.groovy.grails.web.servlet.GrailsUrlPathHelper
 import javax.servlet.http.HttpSession
+import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 /*******************************************************************************
  Copyright 2009-2012 Ellucian Company L.P. and its affiliates.
@@ -17,43 +18,45 @@ class BannerSelfServicePostLoginFlowFilters {
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|error|dateConverter", invert: true) {
             before = {
-                HttpSession session = request.getSession()
-                boolean isAllFlowCompleted = session.getAttribute(PostLoginWorkflow.FLOW_COMPLETE)
-                String path = getServletPath(request)
-                if(springSecurityService.isLoggedIn() &&  path != null && !isAllFlowCompleted ){
+                if(!isUriPartOfIgnoreUriConfig(request)) {
+                    HttpSession session = request.getSession()
+                    boolean isAllFlowCompleted = session.getAttribute(PostLoginWorkflow.FLOW_COMPLETE)
+                    String path = getServletPath(request)
+                    if(springSecurityService.isLoggedIn() &&  path != null && !isAllFlowCompleted ){
 
-                    log.debug "Initializing workflow classes"
-                    List<PostLoginWorkflow> listOfFlows = []
-                    listOfFlows = PostLoginWorkflow.getListOfFlows()
-                    Map<String,Integer> uriMap = initializeUriMap(listOfFlows)
+                        log.debug "Initializing workflow classes"
+                        List<PostLoginWorkflow> listOfFlows = []
+                        listOfFlows = PostLoginWorkflow.getListOfFlows()
+                        Map<String,Integer> uriMap = initializeUriMap(listOfFlows)
 
-                    def lastFlowCompleted = session.getAttribute(LAST_FLOW_COMPLETED)
-                    String uriRedirected = session.getAttribute(PostLoginWorkflow.URI_REDIRECTED)
+                        def lastFlowCompleted = session.getAttribute(LAST_FLOW_COMPLETED)
+                        String uriRedirected = session.getAttribute(PostLoginWorkflow.URI_REDIRECTED)
 
-                    boolean uriHampered = false
-                    if(uriRedirected != null){
-                        String controllerRedirected = HttpRequestUtils.getControllerNameFromPath(uriRedirected)
-                        if(!path.contains(controllerRedirected)){
-                            uriHampered = true
-                        }
-                    }
-                    if(shouldVerifyFlowCompleted(lastFlowCompleted, path, uriMap, uriHampered)) {
-                        if(lastFlowCompleted == null){
-                            lastFlowCompleted = 0
-                        }
-                        session.setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
-                        setFormContext()
-                        int noOfFlows = listOfFlows.size()
-                        for(int i = lastFlowCompleted; i < noOfFlows; i++) {
-                            session.setAttribute(LAST_FLOW_COMPLETED, i)
-                            if(listOfFlows[i].isShowPage(request)) {
-                                log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
-                                session.setAttribute(PostLoginWorkflow.URI_REDIRECTED, listOfFlows[i].getControllerUri())
-                                redirect uri: listOfFlows[i].getControllerUri()
-                                return false;
+                        boolean uriHampered = false
+                        if(uriRedirected != null){
+                            String controllerRedirected = HttpRequestUtils.getControllerNameFromPath(uriRedirected)
+                            if(!path.contains(controllerRedirected)){
+                                uriHampered = true
                             }
-                       }
-                       session.setAttribute(PostLoginWorkflow.FLOW_COMPLETE,true)
+                        }
+                        if(shouldVerifyFlowCompleted(lastFlowCompleted, path, uriMap, uriHampered)) {
+                            if(lastFlowCompleted == null){
+                                lastFlowCompleted = 0
+                            }
+                            session.setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
+                            setFormContext()
+                            int noOfFlows = listOfFlows.size()
+                            for(int i = lastFlowCompleted; i < noOfFlows; i++) {
+                                session.setAttribute(LAST_FLOW_COMPLETED, i)
+                                if(listOfFlows[i].isShowPage(request)) {
+                                    log.debug "Workflow URI " + listOfFlows[i].getControllerUri()
+                                    session.setAttribute(PostLoginWorkflow.URI_REDIRECTED, listOfFlows[i].getControllerUri())
+                                    redirect uri: listOfFlows[i].getControllerUri()
+                                    return false;
+                                }
+                           }
+                           session.setAttribute(PostLoginWorkflow.FLOW_COMPLETE,true)
+                        }
                     }
                 }
             }
@@ -62,6 +65,12 @@ class BannerSelfServicePostLoginFlowFilters {
 
     private boolean shouldVerifyFlowCompleted(def lastFlowCompleted, String path, HashMap<String, Integer> uriMap ,boolean uriHampered) {
          return  (!isFlowControllerURI(path, uriMap)) || lastFlowCompleted == null || uriHampered
+    }
+
+    private boolean isUriPartOfIgnoreUriConfig(request) {
+        String path = getServletPath(request)
+        def ssLoginWorkflowIgnoreUri = CH.config.ssLoginWorkflowIgnoreUri instanceof List ? CH.config.ssLoginWorkflowIgnoreUri : []
+        return ssLoginWorkflowIgnoreUri.any { path =~ it }
     }
 
     private setFormContext() {
