@@ -1,10 +1,11 @@
+import net.hedtech.banner.apisupport.ApiUtils
 import net.hedtech.banner.configuration.HttpRequestUtils
+import net.hedtech.banner.loginworkflow.PostLoginWorkflow
 import net.hedtech.banner.security.FormContext
 import org.apache.log4j.Logger
-import net.hedtech.banner.loginworkflow.PostLoginWorkflow
 import org.codehaus.groovy.grails.web.servlet.GrailsUrlPathHelper
+
 import javax.servlet.http.HttpSession
-import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 /*******************************************************************************
  Copyright 2009-2012 Ellucian Company L.P. and its affiliates.
@@ -13,12 +14,12 @@ class BannerSelfServicePostLoginFlowFilters {
     private static final String SLASH = "/"
     private static final String QUESTION_MARK = "?"
     def springSecurityService
-    private final log = Logger.getLogger(getClass())
+    private final log = Logger.getLogger(BannerSelfServicePostLoginFlowFilters.class)
     public static final String LAST_FLOW_COMPLETED =  "LAST_FLOW_COMPLETED"
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|error|dateConverter", invert: true) {
             before = {
-                if(!isUriPartOfIgnoreUriConfig(request)) {
+                if(!ApiUtils.isApiRequest()) {
                     HttpSession session = request.getSession()
                     boolean isAllFlowCompleted = session.getAttribute(PostLoginWorkflow.FLOW_COMPLETE)
                     String path = getServletPath(request)
@@ -65,12 +66,6 @@ class BannerSelfServicePostLoginFlowFilters {
 
     private boolean shouldVerifyFlowCompleted(def lastFlowCompleted, String path, HashMap<String, Integer> uriMap ,boolean uriHampered) {
          return  (!isFlowControllerURI(path, uriMap)) || lastFlowCompleted == null || uriHampered
-    }
-
-    private boolean isUriPartOfIgnoreUriConfig(request) {
-        String path = getServletPath(request)
-        def ssLoginWorkflowIgnoreUri = CH.config.ssLoginWorkflowIgnoreUri instanceof List ? CH.config.ssLoginWorkflowIgnoreUri : []
-        return ssLoginWorkflowIgnoreUri.any { path =~ it }
     }
 
     private setFormContext() {
