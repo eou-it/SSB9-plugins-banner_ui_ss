@@ -1,21 +1,23 @@
-import net.hedtech.banner.apisupport.ApiUtils
+/*******************************************************************************
+ Copyright 2009-2012 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 
+import net.hedtech.banner.apisupport.ApiUtils
 import net.hedtech.banner.loginworkflow.PostLoginWorkflow
 import net.hedtech.banner.security.FormContext
 import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.web.servlet.GrailsUrlPathHelper
-import net.hedtech.banner.web.SsbURLRequest
 import javax.servlet.http.HttpSession
 
-/*******************************************************************************
- Copyright 2009-2012 Ellucian Company L.P. and its affiliates.
- ****************************************************************************** */
+
 class BannerSelfServicePostLoginFlowFilters {
     private static final String SLASH = "/"
     private static final String QUESTION_MARK = "?"
     def springSecurityService
     private final log = Logger.getLogger(BannerSelfServicePostLoginFlowFilters.class)
     public static final String LAST_FLOW_COMPLETED = "LAST_FLOW_COMPLETED"
+    def ssbURLRequest
+
     def filters = {
         all(controller: "selfServiceMenu|login|logout|error|dateConverter", invert: true) {
             before = {
@@ -35,7 +37,6 @@ class BannerSelfServicePostLoginFlowFilters {
 
                         boolean uriHampered = false
                         if (uriRedirected != null) {
-                            SsbURLRequest ssbURLRequest = new SsbURLRequest()
                             String controllerRedirected = ssbURLRequest.getControllerNameFromPath(uriRedirected)
                             if (!path.contains(controllerRedirected)) {
                                 uriHampered = true
@@ -77,7 +78,6 @@ class BannerSelfServicePostLoginFlowFilters {
 
     public boolean isFlowControllerURI(String path, Map uriMap) {
         boolean isIgnoredUri = false;
-        SsbURLRequest ssbURLRequest = new SsbURLRequest()
         String controllerName = ssbURLRequest.getControllerNameFromPath(path)
         if (uriMap.get(controllerName) != null) {
             isIgnoredUri = true
