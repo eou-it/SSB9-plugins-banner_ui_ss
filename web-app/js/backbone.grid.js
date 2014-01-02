@@ -492,6 +492,12 @@ var data = {
 
       this.$el.on( 'mouseenter', '.grid tr', matchHover )
               .on( 'mouseleave', '.grid tr', removeMatchHover );
+
+      var lazyResizeHandler = _.debounce( function resizeHandler( e ) {
+        view.checkTitleWidths();
+      }, 300 );
+
+      $( window ).on( 'resize', lazyResizeHandler );
     },
 
     setupKeyTable: function () {
@@ -547,6 +553,18 @@ var data = {
       this.columnVisibilityControls.render();
     },
 
+    checkTitleWidths: function( e ) {
+      _.each( $( 'th', this.table ), function( it ) {
+        var el = $( it );
+        el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
+      });
+
+      _.each( $( 'th', this.frozenTable ), function( it ) {
+        var el = $( it );
+        el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
+      });
+    },
+
     render: function () {
       var view = this;
 
@@ -575,6 +593,8 @@ var data = {
       }
       else
         this.$el.find( "." + this.css.gridMainWrapper ).css( "width", "100%" );
+
+      this.checkTitleWidths();
 
       this.setupScrolling();
 
@@ -678,6 +698,9 @@ var data = {
         this.$el.find( "table" ).empty();
 
         this.generateHead();
+
+        this.checkTitleWidths();
+
         this.generateBody();
         this.generateColumnVisibilityControls();
 
@@ -982,9 +1005,9 @@ var data = {
           return;
 
         var th          = $( view.elements.th ),
-            title       = $( view.elements.span ).addClass( view.css.title ).text( it.title ),
+            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
             sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( view.elements.span ).addClass( sortClasses );
+            sortIcon    = $( view.elements.div ).addClass( sortClasses );
 
         th.append( title );
 
@@ -1116,9 +1139,9 @@ var data = {
           return;
 
         var th          = $( view.elements.th ),
-            title       = $( view.elements.span ).addClass( view.css.title ).text( it.title ),
+            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
             sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( view.elements.span ).addClass( sortClasses );
+            sortIcon    = $( view.elements.div ).addClass( sortClasses );
 
         th.append( title );
 
