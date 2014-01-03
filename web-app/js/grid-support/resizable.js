@@ -98,9 +98,15 @@ function ColumnResize(table) {
 		if (parseInt(dragColumns[no].style.width) <= -w) return false;
 		if (dragColumns[no+1] && parseInt(dragColumns[no+1].style.width) <= w) return false;
 
-		dragColumns[no].style.width = parseInt(dragColumns[no].style.width) + w +'px';
-		if (dragColumns[no+1])
+		$( '.title', dragColumns[no] )[ 0 ].style.width = ( parseInt(dragColumns[no].style.width) + w - 30 ) + 'px';
+
+		dragColumns[no].style.width =  parseInt(dragColumns[no].style.width) + w + 'px';
+
+		if (dragColumns[no+1]) {
+			$( '.title', dragColumns[no+1] )[ 0 ].style.width = ( parseInt(dragColumns[no+1].style.width) - w - 30 ) + 'px';
+
 			dragColumns[no+1].style.width = parseInt(dragColumns[no+1].style.width) - w + 'px';
+		}
 
 
 		// Adding a trigger so that instances can react.
@@ -163,7 +169,7 @@ function ColumnResize(table) {
 		//if (e.button != 0) return;
 
 		// remember dragging object
-		dragColumnNo = (e.target || e.srcElement).parentNode.parentNode.cellIndex;
+		dragColumnNo = (e.target || e.srcElement).parentNode.cellIndex;
 		dragX = e.clientX || e.pageX;
 
 		// set up current columns widths in their particular attributes
@@ -199,7 +205,8 @@ function ColumnResize(table) {
 		    title    = orig.find( ".title" ),
 		    sortIcon = orig.find( ".sort-icon" ),
 		    outer    = $( "<div style='position:relative;height:100%;width:100%'></div>" ),
-		    handle   = $( "<div class='sort-handle' style='position:absolute;height:100%;width:5px;margin-right:-5px;left:100%;top:0px;cursor:w-resize;z-index:10;'></div>" );
+		    // handle   = $( "<div class='sort-handle' style='position:absolute;height:100%;width:5px;margin-right:-5px;left:100%;top:0px;cursor:w-resize;z-index:10;'></div>" );
+		    handle   = $( "<div class='sort-handle' style='height:100%;width:5px;cursor:w-resize;'></div>" );
 
 		handle.mousedown( function (e) {
 		  $( e.target ).closest( "th" ).off( "click" );
@@ -207,7 +214,7 @@ function ColumnResize(table) {
 		  that.startColumnDrag( e );
 		  e.preventDefault();
 		  e.stopPropagation();
-		  
+
 		  $( e.target ).closest( "th" ).on( "click" );
 		});
 
@@ -216,11 +223,13 @@ function ColumnResize(table) {
 			e.stopPropagation();
 		});
 
-		outer.append( handle )
-		     .append( title )
-		     .append( sortIcon );
+		// outer.append( handle )
+		//      .append( title )
+		//      .append( sortIcon );
 
-		orig.empty().append( outer );
+		// orig.empty().append( outer );
+		$( '.sort-handle', dragColumns[i] ).remove();
+		$( '.sort-icon',   dragColumns[i] ).before( handle );
 	}
 }
 

@@ -1,16 +1,6 @@
-/** *******************************************************************************
- Copyright 2012 SunGard Higher Education. All Rights Reserved.
- This copyrighted software contains confidential and proprietary information of
- SunGard Higher Education and its subsidiaries. Any use of this software is limited
- solely to SunGard Higher Education licensees, and is further subject to the terms
- and conditions of one or more written license agreements between SunGard Higher
- Education and the licensee in question. SunGard is either a registered trademark or
- trademark of SunGard Data Systems in the U.S.A. and/or other regions and/or countries.
- Banner and Luminis are either registered trademarks or trademarks of SunGard Higher
- Education in the U.S.A. and/or other regions and/or countries.
- ********************************************************************************* */
+/* Copyright 2013 Ellucian Company L.P. and its affiliates. */
 
-(function ( $, _, Backbone ) {
+;(function ( $, _, Backbone ) {
   Backbone.PagingControls = Backbone.View.extend({
     pageLengths: [5, 50, 250, 500],
 
@@ -115,12 +105,15 @@
     render: function () {
       this.$el.empty();
 
+      var dir = $( "meta[name=dir]" ).attr( "content" );
+      dir = ( dir === void 0 || dir === "ltr" ? "ltr" : "rtl" );
+
       var view     = this,
           pageInfo = this.collection.pageInfo(),
-          first    = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.first ), //.text( "First" ),
-          last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last ), //.text( "Last" ),
-          next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next ), //.text( "Next" ),
-          prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous ), //.text( "Previous" ),
+          first    = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.first + " " + dir ), //.text( "First" ),
+          last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last + " " + dir ), //.text( "Last" ),
+          next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ), //.text( "Next" ),
+          prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ), //.text( "Previous" ),
           page     = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
           of       = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? this.strings.pageOfOne : this.strings.of ),
           pages    = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.totalPages ).text( pageInfo.pages ),

@@ -85,7 +85,7 @@ class RtlCssGenerator {
 
 
     def convertCSSToRTL(CSSEntry) {
-        def styles = CSSEntry.toString().split(";")
+        def styles = CSSEntry.toString().split(";(?=(?:[^()]*\\([^()]*\\))*[^()]*\$)")
         def newCSSEntry = "";
 
         styles.each { styleLine ->

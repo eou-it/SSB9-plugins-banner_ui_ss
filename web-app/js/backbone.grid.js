@@ -1,10 +1,12 @@
+/* Copyright 2013 Ellucian Company L.P. and its affiliates. */
+
 /*
 var column = {
   editable: "Boolean | String | Object | Function",
   freeze:   "Boolean",
   name:     "String",
   render:   "Function",
-  sortable: "Booleab",
+  sortable: "Boolean",
   title:    "String",
   width:    "Percentage | fixed"
 }
@@ -41,7 +43,7 @@ var data = {
 };
 */
 
-(function ( $, _, Backbone, JSON, AjaxManager ) {
+;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
     getObject: function ( name ) {
       var value = window.localStorage.getItem( name );
@@ -146,7 +148,8 @@ var data = {
       notificationSuccess:    "notification-success",
       notificationWarning:    "notification-warning",
       notificationError:      "notification-error",
-      pagingText:             "paging-text" // TODO: remove -> Backbone.PagingControls
+      pagingText:             "paging-text",
+      pagingContainer:        "paging-container"
     },
 
     elements: {
@@ -167,15 +170,13 @@ var data = {
       checkbox: "<input type='checkbox'/>"
     },
 
-    strings: {
+    strings: { /* these strings should never be visible to the end-user, but may be seen by developers */
       storagePrefix:               "grid-column-state-",
       none:                        "none",
       asc:                         "asc",
       desc:                        "desc",
       even:                        "even",
       odd:                         "odd",
-      recordsFound:                "Records Found",
-      labelSeperator:              ": ",
       errorSuccessProperty:        "invalid data.success property",
       errorTotalCountProperty:     "invalid data.totalCount property",
       errorDataProperty:           "invalid data.data property",
@@ -267,7 +268,7 @@ var data = {
       var view   = this,
           result = { success: true, errors: [ ] };
 
-      // TODO: convert to vaidate Backbone.PagedCollection
+      // TODO: convert to validate Backbone.PagedCollection
       // if ( !_.isBoolean( this.options.data.success ) )
       //   result.errors.push( this.strings.errorSuccessProperty );
 
@@ -368,6 +369,10 @@ var data = {
 
     initialize: function () {
       _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
+
+      // make sure we have an id attribute
+      if ( !this.$el.attr( 'id' ) )
+        this.$el.attr( 'id', _.uniqueId( 'grid-' ) );
 
       this.$el.addClass( this.css.gridContainer );
 
@@ -487,6 +492,12 @@ var data = {
 
       this.$el.on( 'mouseenter', '.grid tr', matchHover )
               .on( 'mouseleave', '.grid tr', removeMatchHover );
+
+      var lazyResizeHandler = _.debounce( function resizeHandler( e ) {
+        view.checkTitleWidths();
+      }, 300 );
+
+      $( window ).on( 'resize', lazyResizeHandler );
     },
 
     setupKeyTable: function () {
@@ -504,7 +515,14 @@ var data = {
       }
     },
 
+    getMenuContainer: function() {
+      return this.menuContainer || this.$el.find( "." + this.css.gridWrapper + " thead tr" );
+    },
+
     generateColumnVisibilityControls: function() {
+      if ( !this.features.visibility ) {
+        return;
+      }
       var view = this;
 
       var toggleColumnVisibility = function ( item, e ) {
@@ -526,13 +544,25 @@ var data = {
       }
       this.columnVisibilityControls = new Backbone.ButtonMenu({
           el:         this.$el.find( "." + this.css.columnVisibilityMenu ),
-          container:  this.menuContainer,
+          container:  this.getMenuContainer(),
           items:      map,
           callback:   toggleColumnVisibility,
           buttonIcon: "grid-button-menu-icon"
       });
 
       this.columnVisibilityControls.render();
+    },
+
+    checkTitleWidths: function( e ) {
+      _.each( $( 'th', this.table ), function( it ) {
+        var el = $( it );
+        el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
+      });
+
+      _.each( $( 'th', this.frozenTable ), function( it ) {
+        var el = $( it );
+        el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
+      });
     },
 
     render: function () {
@@ -543,9 +573,7 @@ var data = {
 
       this.generateTable();
       this.generateWrapper();
-
-      if ( this.features.visibility )
-        this.generateColumnVisibilityControls();
+      this.generateColumnVisibilityControls();
 
       if( this.features.freeze ) {
         this.generateFrozenTable();
@@ -566,11 +594,14 @@ var data = {
       else
         this.$el.find( "." + this.css.gridMainWrapper ).css( "width", "100%" );
 
+      this.checkTitleWidths();
+
       this.setupScrolling();
 
       this.setupKeyTable();
 
-      dragtable.init();
+      this.draggableColumns();
+
       window.ResizableColumns( this.table );
 
       if ( _.isFunction( this.options.afterRender ) )
@@ -647,6 +678,14 @@ var data = {
     },
 
 
+    draggableColumns: function() {
+      if ( this.features.draggable ) {
+        this.table.addClass( this.css.draggable );
+        window.setupColumnReordering( this.table );
+      }
+    },
+
+
     refresh: function ( fullRefresh ) {
       fullRefresh = ( _.isBoolean( fullRefresh ) ? fullRefresh : false );
 
@@ -659,7 +698,11 @@ var data = {
         this.$el.find( "table" ).empty();
 
         this.generateHead();
+
+        this.checkTitleWidths();
+
         this.generateBody();
+        this.generateColumnVisibilityControls();
 
         if ( this.features.freeze ) {
           this.generateFrozenHead();
@@ -668,7 +711,8 @@ var data = {
 
         this.setupScrolling();
 
-        dragtable.init();
+        this.draggableColumns();
+
         window.ResizableColumns( this.table );
       }
 
@@ -683,6 +727,7 @@ var data = {
       if(view.collection.length == 0){
         view.renderNoRecordsFound();
       } else {
+        view.toggleTableChrome( true );
         _.each( view.collection.models, function ( model ) {
           var tr = $( view.elements.tr ),
               it = model.toJSON();
@@ -737,16 +782,24 @@ var data = {
           this.options.afterRefresh.call( this );
     },
 
+    toggleTableChrome: function( visible ) {
+      this.table.find('thead').toggle( visible );
+      this.$el.find( "." + this.css.bottom ).toggle( visible );
+      this.columnVisibilityControls && this.columnVisibilityControls.$el.toggle( visible );
+
+      if ( visible ) {
+        this.generatePagingControls();
+      } else {
+        this.removePagingControls();
+        }
+    },
+
     renderNoRecordsFound: function() {
       var tr = $(this.elements.tr),
       td = $(this.elements.td),
       tbody = this.table.find('tbody');
 
-      // Hide the column headers.
-      this.table.find('thead').hide();
-
-      // Hide the pagination controls.
-      this.$el.find('.paging-container').remove();
+      this.toggleTableChrome( false );
 
       // Inject the row into the list.
       td.text(this.options.noDataMsg || $.i18n.prop('js.grid.noData'))
@@ -919,9 +972,6 @@ var data = {
       if ( this.features.resizable )
         this.table.addClass( this.css.resizable );
 
-      if ( this.features.draggable )
-        this.table.addClass( this.css.draggable );
-
       var mainGridWrapper = $( this.elements.div ).addClass( this.css.gridMainWrapper ).append( this.table ),
           overallWrapper  = $( this.elements.div ).addClass( this.css.gridWrapper ).append( mainGridWrapper );
 
@@ -933,7 +983,6 @@ var data = {
 
         view.setupScrolling();
       });
-
 
       this.generateHead();
       this.generateBody();
@@ -956,9 +1005,9 @@ var data = {
           return;
 
         var th          = $( view.elements.th ),
-            title       = $( view.elements.span ).addClass( view.css.title ).text( it.title ),
+            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
             sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( view.elements.span ).addClass( sortClasses );
+            sortIcon    = $( view.elements.div ).addClass( sortClasses );
 
         th.append( title );
 
@@ -1030,7 +1079,6 @@ var data = {
         gridWrapper.before( this.menuContainer );
       } else {
         gridWrapper.addClass( this.css.gridWithoutTitle );
-        this.menuContainer = gridWrapper.find( "thead tr" );
       }
 
       gridWrapper.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
@@ -1038,31 +1086,36 @@ var data = {
       if ( this.features.visibility ) {
         this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
       }
-
-      if ( this.collection.paginate )
-        this.generatePagingControls();
     },
 
     updateRecordCount: function () {
       this.$el.find( "." + this.css.recordsInfo ).remove();
 
-      var records = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.recordsInfo).text( this.strings.recordsFound + this.strings.labelSeperator + this.collection.totalCount );
+      var records = $( this.elements.span ).addClass(
+        this.css.pagingText + " " +
+          this.css.recordsInfo).text( $.i18n.prop( "js.grid.recordsFound", [ _.isUndefined( this.collection.totalCount ) ? this.collection.length : Math.max(this.collection.totalCount, this.collection.length) ] ));
 
       this.$el.find( "." + this.css.bottom ).append( records );
     },
 
+    removePagingControls: function() {
+      this.$el.find( "." + this.css.pagingContainer ).remove();
+    },
+
     generatePagingControls: function () {
-      $( "." + this.css.pagingContainer ).remove();
+      this.removePagingControls();
 
-      var paging = $( this.elements.div ).addClass( this.css.pagingContainer );
+      if ( this.collection.paginate ) {
+        var paging = $( this.elements.div ).addClass( this.css.pagingContainer );
 
-      this.$el.find( "." + this.css.bottom ).append( paging );
+        this.$el.find( "." + this.css.bottom ).append( paging );
 
-      var pagingControls = new Backbone.PagingControls({
-        el:          paging,
-        collection:  this.collection,
-        pageLengths: this.pageLengths
-      }).render();
+        var pagingControls = new Backbone.PagingControls({
+          el:          paging,
+          collection:  this.collection,
+          pageLengths: this.pageLengths
+        }).render();
+      }
     },
 
     generateFrozenTable: function () {
@@ -1086,9 +1139,9 @@ var data = {
           return;
 
         var th          = $( view.elements.th ),
-            title       = $( view.elements.span ).addClass( view.css.title ).text( it.title ),
+            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
             sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( view.elements.span ).addClass( sortClasses );
+            sortIcon    = $( view.elements.div ).addClass( sortClasses );
 
         th.append( title );
 

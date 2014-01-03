@@ -39,14 +39,20 @@
     height: 25px;
     line-height: 25px;
     text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .grid th.sort-disabled {
   cursor: default;
 }
 
-.grid thead th span.title {
+.grid thead th .title {
     float: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
 }
 
 .grid tr {
@@ -107,14 +113,10 @@
 }
 
 .sort-handle {
-    position: absolute;
+    float: right;
     height: 100%;
     width: 5px;
-    margin-right: -5px;
-    left: 100%;
-    top: 0px;
     cursor: w-resize;
-    z-index: 10;
 }
 
 /*
@@ -132,6 +134,7 @@
 .column-visibility-menu {
   position: absolute;
   right: 0px;
+  left: auto;
   top: 0px;
   z-index: 1101;
   border-left: 1px solid #DDDDDD;
