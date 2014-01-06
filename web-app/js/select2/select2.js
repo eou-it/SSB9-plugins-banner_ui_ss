@@ -3100,12 +3100,39 @@ the specific language governing permissions and limitations under the Apache Lic
         },
         formatResultCssClass: function(data) {return undefined;},
         formatSelectionCssClass: function(data, container) {return undefined;},
-        formatNoMatches: function () { return "No matches found"; },
-        formatInputTooShort: function (input, min) { var n = min - input.length; return "Please enter " + n + " more character" + (n == 1? "" : "s"); },
-        formatInputTooLong: function (input, max) { var n = input.length - max; return "Please delete " + n + " character" + (n == 1? "" : "s"); },
-        formatSelectionTooBig: function (limit) { return "You can only select " + limit + " item" + (limit == 1 ? "" : "s"); },
-        formatLoadMore: function (pageNumber) { return "Loading more results..."; },
-        formatSearching: function () { return "Searching..."; },
+        formatNoMatches: function () {
+            return $.i18n.prop("select2.no.matches");
+        },
+        formatInputTooShort: function (input, min) {
+            var n = min - input.length;
+            if (n == 1) {
+                return $.i18n.prop("select2.format.input.too.short.singular");
+            }
+            else
+                return $.i18n.prop("select2.format.input.too.short.plural", [ n ]);
+        },
+        formatInputTooLong: function (input, max) {
+            var n = input.length - max;
+            if (n == 1) {
+                return $.i18n.prop("select2.format.input.too.long.singular");
+            }
+            else
+                return $.i18n.prop("select2.format.input.too.short.plural", [ n ]);
+        },
+        formatSelectionTooBig: function (limit) {
+            if (limit == 1) {
+                return $.i18n.prop("select2.format.selection.too.big.singular");
+            }
+            else
+                return $.i18n.prop("select2.format.selection.too.big.plural", [ limit ]);
+        },
+        formatLoadMore: function (pageNumber) {
+            return $.i18n.prop("select2.format.load.more");
+        },
+        formatSearching: function () {
+            return $.i18n.prop("select2.format.searching");
+        },
+
         minimumResultsForSearch: 0,
         minimumInputLength: 0,
         maximumInputLength: null,
