@@ -1017,9 +1017,9 @@ div.infoicon {
     background: url("../images/icon-info.png") no-repeat left center;
 }
 
-.ui-datepicker{
+/*.ui-datepicker{
     height:16.5em;
-}
+}*/
 
 .ui-datepicker .ui-datepicker-header {
     background-color: #ECF0F4;
@@ -1123,4 +1123,8 @@ div.infoicon {
     line-height: 16px;
     text-align: center;
     padding: 0 3px;
+}
+
+#multiCalendarContainer  .ui-widget-header{
+    background: none repeat scroll 0 0 #ECF0F4;
 }
