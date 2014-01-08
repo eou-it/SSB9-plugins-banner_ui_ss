@@ -58,10 +58,10 @@
       option: "<option></option>"
     },
     strings: {
-      page:                        "Page",
-      of:                          "of",
-      pageOfOne:                   "1 of",
-      perPage:                     "Per Page"
+      page:                        function() { return $.i18n.prop('backbone.paging.controls.page') },
+      of:                          function() { return $.i18n.prop('backbone.paging.controls.of') },
+      pageOfOne:                   function() { return $.i18n.prop('backbone.paging.controls.oneof') },
+      perPage:                     function() { return $.i18n.prop('backbone.paging.controls.per.page') }
     },
 
     log: function ( msg ) {
