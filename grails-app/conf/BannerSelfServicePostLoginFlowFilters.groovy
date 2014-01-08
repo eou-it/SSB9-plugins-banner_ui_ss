@@ -16,7 +16,7 @@ class BannerSelfServicePostLoginFlowFilters {
     def springSecurityService
     private final log = Logger.getLogger(BannerSelfServicePostLoginFlowFilters.class)
     public static final String LAST_FLOW_COMPLETED = "LAST_FLOW_COMPLETED"
-    def ssbURLRequest
+    def ssbLoginURLRequest
 
     def filters = {
         all(controller: "selfServiceMenu|login|logout|error|dateConverter", invert: true) {
@@ -37,7 +37,7 @@ class BannerSelfServicePostLoginFlowFilters {
 
                         boolean uriHampered = false
                         if (uriRedirected != null) {
-                            String controllerRedirected = ssbURLRequest.getControllerNameFromPath(uriRedirected)
+                            String controllerRedirected = ssbLoginURLRequest.getControllerNameFromPath(uriRedirected)
                             if (!path.contains(controllerRedirected)) {
                                 uriHampered = true
                             }
@@ -78,7 +78,7 @@ class BannerSelfServicePostLoginFlowFilters {
 
     public boolean isFlowControllerURI(String path, Map uriMap) {
         boolean isIgnoredUri = false;
-        String controllerName = ssbURLRequest.getControllerNameFromPath(path)
+        String controllerName = ssbLoginURLRequest.getControllerNameFromPath(path)
         if (uriMap.get(controllerName) != null) {
             isIgnoredUri = true
         }

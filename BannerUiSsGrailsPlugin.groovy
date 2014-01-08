@@ -1,14 +1,6 @@
-/*********************************************************************************
- Copyright 2009-2012 SunGard Higher Education. All Rights Reserved.
- This copyrighted software contains confidential and proprietary information of
- SunGard Higher Education and its subsidiaries. Any use of this software is limited
- solely to SunGard Higher Education licensees, and is further subject to the terms
- and conditions of one or more written license agreements between SunGard Higher
- Education and the licensee in question. SunGard is either a registered trademark or
- trademark of SunGard Data Systems in the U.S.A. and/or other regions and/or countries.
- Banner and Luminis are either registered trademarks or trademarks of SunGard Higher
- Education in the U.S.A. and/or other regions and/or countries.
- **********************************************************************************/
+/*******************************************************************************
+ Copyright 2009-2012 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 
 import org.apache.commons.logging.LogFactory
 import org.apache.log4j.Logger
@@ -16,13 +8,14 @@ import net.hedtech.banner.i18n.DateConverterService
 import grails.converters.JSON
 import org.codehaus.groovy.grails.web.json.JSONObject
 import javax.servlet.http.HttpServletRequest
+import net.hedtech.banner.web.SsbLoginURLRequest
 
 /**
  * A Grails Plugin providing core UI framework for Self Service Banner application.
- **/
+ * */
 class BannerUiSsGrailsPlugin {
 
-    def log = Logger.getLogger( this.getClass() )
+    def log = Logger.getLogger(this.getClass())
 
     String groupId = "net.hedtech"
 
@@ -31,22 +24,22 @@ class BannerUiSsGrailsPlugin {
     def grailsVersion = "2.2.1 > *"
 
     def dependsOn = [
-        cacheHeaders:'1.1.5 => *',
-        csv:'0.3.1 => *',
-        feeds:'1.5 => *',
-        selenium:'0.8 => *',
-        bannerCore:'1.0.17 => *'
+            cacheHeaders: '1.1.5 => *',
+            csv: '0.3.1 => *',
+            feeds: '1.5 => *',
+            selenium: '0.8 => *',
+            bannerCore: '1.0.17 => *'
     ]
 
     def pluginExcludes = [
-        "grails-app/views/error.gsp",
-        // exclude UI catalog stuff
-        "grails-app/controllers/net/hedtech/banner/ui/ss/**",
-        "grails-app/views/index.gsp",
-        "grails-app/views/layouts/mainManual.gsp",
-        "grails-app/views/uiCatalog/**",
-        "web-app/css/views/**",
-        "web-app/js/views/**"
+            "grails-app/views/error.gsp",
+            // exclude UI catalog stuff
+            "grails-app/controllers/net/hedtech/banner/ui/ss/**",
+            "grails-app/views/index.gsp",
+            "grails-app/views/layouts/mainManual.gsp",
+            "grails-app/views/uiCatalog/**",
+            "web-app/css/views/**",
+            "web-app/js/views/**"
     ]
 
     def loadAfter = ["controllers", "converters"]
@@ -61,6 +54,7 @@ class BannerUiSsGrailsPlugin {
 
     def doWithWebDescriptor = { xml ->
         //no-op
+
     }
 
 
@@ -70,34 +64,37 @@ class BannerUiSsGrailsPlugin {
         //    cacheSeconds = -1
         //    propertiesPersister = new BannerPropertiesPersister()
         //}
+
+        ssbLoginURLRequest(SsbLoginURLRequest) {
+        }
     }
 
 
     def doWithDynamicMethods = { ctx ->
-         // Explicitly inject the log into the resources plugin artifacts, to circumvent NPEs
-         application.allClasses.each {
-             if (it.name?.contains( "plugin.resource" )) {
-                 log.info "adding log property to $it"
+        // Explicitly inject the log into the resources plugin artifacts, to circumvent NPEs
+        application.allClasses.each {
+            if (it.name?.contains("plugin.resource")) {
+                log.info "adding log property to $it"
 
-                 // Note: weblogic throws an error if we try to inject the method if it is already present
-                 if (!it.metaClass.methods.find { m -> m.name.matches( "getLog" ) }) {
-                     def name = it.name // needed as this 'it' is not visible within the below closure...
-                     try {
-                         it.metaClass.getLog = { LogFactory.getLog( "$name" ) }
-                     }
-                     catch (e) { } // rare case where we'll bury it...
-                 }
-             }
+                // Note: weblogic throws an error if we try to inject the method if it is already present
+                if (!it.metaClass.methods.find { m -> m.name.matches("getLog") }) {
+                    def name = it.name // needed as this 'it' is not visible within the below closure...
+                    try {
+                        it.metaClass.getLog = { LogFactory.getLog("$name") }
+                    }
+                    catch (e) { } // rare case where we'll bury it...
+                }
+            }
         }
 
-        def getNewJSONMethod = { ->
+        def getNewJSONMethod = {->
             def json
             def request = (HttpServletRequest) delegate
             json = request.getAttribute("JSON")
-            if(json == null || json == JSONObject.NULL) {
+            if (json == null || json == JSONObject.NULL) {
                 try {
                     json = JSON.parse(request)
-                } catch(Exception e) {
+                } catch (Exception e) {
                     log.info "Error when parsing the JSON"
                     json = JSONObject.NULL
                 }
@@ -109,23 +106,23 @@ class BannerUiSsGrailsPlugin {
         requestMc.getJSON = getNewJSONMethod
 
 
-       application.controllerClasses.each { controller ->
-            def originalMap = controller.metaClass.getMetaMethod("render",[Map] as Class[])
-            def originalString = controller.metaClass.getMetaMethod("render",[String] as Class[])
+        application.controllerClasses.each { controller ->
+            def originalMap = controller.metaClass.getMetaMethod("render", [Map] as Class[])
+            def originalString = controller.metaClass.getMetaMethod("render", [String] as Class[])
 
-            if(originalMap) {
+            if (originalMap) {
                 controller.metaClass.originalRenderMap = originalMap
 
                 controller.metaClass.render = { Map args ->
-                    if(args?.model) {
+                    if (args?.model) {
                         def dateFields = controller.getPropertyValue("dateFields")
 
-                        if(dateFields && !dateFields.isEmpty()) {
+                        if (dateFields && !dateFields.isEmpty()) {
 
                             def dateConverterService = new DateConverterService()
                             args?.model.each { key, value ->
-                                if(value != null) {
-                                    args.model[key] =  dateConverterService.formatDateInObjectsToDefaultCalendar(key, value, dateFields);
+                                if (value != null) {
+                                    args.model[key] = dateConverterService.formatDateInObjectsToDefaultCalendar(key, value, dateFields);
                                 }
                             }
                         }
@@ -134,26 +131,26 @@ class BannerUiSsGrailsPlugin {
                 }
             }
 
-            if(originalString) {
+            if (originalString) {
                 controller.metaClass.originalRenderString = originalString
 
                 controller.metaClass.render = { String txt ->
-                   try {
-                       def dateConverterService = new DateConverterService()
-                       def json = JSON.parse(txt);
-                       def dateFields = controller.getPropertyValue("dateFields")
-                       if(dateFields && !dateFields.isEmpty() && json != JSONObject.NULL) {
+                    try {
+                        def dateConverterService = new DateConverterService()
+                        def json = JSON.parse(txt);
+                        def dateFields = controller.getPropertyValue("dateFields")
+                        if (dateFields && !dateFields.isEmpty() && json != JSONObject.NULL) {
                             json = dateConverterService.JSONDateMarshaller(json, dateFields)
                             txt = json.toString()
-                       }
-                   }
-                   catch(Exception e) {
-                       println e
-                   }
-                   originalRenderString.invoke(delegate, txt)
+                        }
+                    }
+                    catch (Exception e) {
+                        println e
+                    }
+                    originalRenderString.invoke(delegate, txt)
                 }
             }
-       }
+        }
     }
 
 
