@@ -18,6 +18,8 @@ Apache License or the GPL Licesnse is distributed on an "AS IS" BASIS, WITHOUT W
 CONDITIONS OF ANY KIND, either express or implied. See the Apache License and the GPL License for
 the specific language governing permissions and limitations under the Apache License and the GPL License.
 */
+var requestTimeout
+
  (function ($) {
  	if(typeof $.fn.each2 == "undefined"){
  		$.fn.extend({
@@ -441,6 +443,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 });
                 handler = transport.call(self, params);
             }, quietMillis);
+        requestTimeout = timeout
         };
     }
 
@@ -3104,6 +3107,9 @@ the specific language governing permissions and limitations under the Apache Lic
             return $.i18n.prop("select2.no.matches");
         },
         formatInputTooShort: function (input, min) {
+            if (input.length == (min - 1)) {
+                window.clearTimeout(requestTimeout);
+            }
             var n = min - input.length;
             if (n == 1) {
                 return $.i18n.prop("select2.format.input.too.short.singular");
@@ -3132,7 +3138,7 @@ the specific language governing permissions and limitations under the Apache Lic
         formatSearching: function () {
             return $.i18n.prop("select2.format.searching");
         },
-
+      
         minimumResultsForSearch: 0,
         minimumInputLength: 0,
         maximumInputLength: null,
