@@ -959,6 +959,7 @@ var data = {
         it.title    = c.title;
         it.width    = it.width + "%";
         it.visible  = c.visible;
+        it.name = c.name;
       });
 
       return cols;
