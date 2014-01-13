@@ -70,11 +70,17 @@
 
       var self = this;
       var resizeButton = function() {
-        self.$el.height( self.container.height() ).
+        var my = "right top", at = "right top";
+         if ($.i18n.prop('default.language.direction') == "rtl") {
+              my = "left top";
+              at = "left top";
+         }
+
+          self.$el.height( self.container.height() ).
           position({
             of: self.container,
-            my: "right top",
-            at: "right top",
+            my:my,
+            at:at,
             collision: "none"
           });
       };

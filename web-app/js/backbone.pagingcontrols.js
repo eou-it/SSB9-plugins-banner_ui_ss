@@ -114,12 +114,12 @@
           last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last + " " + dir ), //.text( "Last" ),
           next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ), //.text( "Next" ),
           prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ), //.text( "Previous" ),
-          page     = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
-          of       = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? this.strings.pageOfOne : this.strings.of ),
+          page     = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.page ).text( $.i18n.prop("js.net.hedtech.banner.pagingControls.page.label") ),
+          of       = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? $.i18n.prop("js.net.hedtech.banner.pagingControls.firstPage.label") : $.i18n.prop("js.net.hedtech.banner.pagingControls.of.label") ),
           pages    = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.totalPages ).text( pageInfo.pages ),
           input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ),
           divider  = $( this.elements.div ).addClass( this.css.divider ),
-          perPage  = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pagePer ).text( this.strings.perPage ),
+          perPage  = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pagePer ).text( $.i18n.prop("js.net.hedtech.banner.pagingControls.perPage.label") ), select   = $( this.elements.select ).addClass( this.css.pageSizeSelect ),
           select   = $( this.elements.select ).addClass( this.css.pageSizeSelect ),
           selWrap  = $( this.elements.div ).addClass( this.css.pageSizeSelectWrapper ).append( select );
 

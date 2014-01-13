@@ -197,6 +197,8 @@ Version: @@ver@@ Timestamp: @@timestamp@@
     position: absolute;
     right: 0;
     top: 0;
+    left: auto;
+    border-right: medium none;
 
     border-left: 1px solid #aaa;
     -webkit-border-radius: 0 4px 4px 0;

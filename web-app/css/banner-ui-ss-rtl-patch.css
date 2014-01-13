@@ -88,3 +88,68 @@
     width:22px;
     height:23px;
 }
+.paging-control.first.enabled     {
+    background-position:0 331px;
+    width:22px;
+    height:23px;
+}
+.paging-control.last.enabled      {
+    background-position:0 -444px;
+    width:22px;
+    height:23px;
+}
+.paging-control.next.enabled      {
+    background-position:0 106px;
+    width:22px;
+    height:23px;
+}
+.paging-control.previous.enabled  {
+    background-position:0 -667px;
+    width:22px;
+    height:23px;
+}
+
+.paging-control.first     {
+    background-position:0 303px;
+    width:22px;
+    height:23px;
+}
+.paging-control.last      {
+    background-position:0 -471px;
+    width:22px;
+    height:23px;
+}
+.paging-control.next      {
+    background-position:0 79px;
+    width:22px;
+    height:23px;
+}
+.paging-control.previous  {
+    background-position:0 -252px;
+    width:22px;
+    height:23px;
+}
+.paging-control.first.enabled:hover     {
+    background-position:0 -196px;
+    width:22px;
+    height:23px;
+}
+.paging-control.last.enabled:hover      {
+    background-position:0 -84px;
+    width:22px;
+    height:23px;
+}
+.paging-control.next.enabled:hover      {
+    background-position:0 -420px;
+    width:22px;
+    height:23px;
+}
+.paging-control.previous.enabled:hover  {
+    background-position:0 -308px;
+    width:22px;
+    height:23px;
+}
+
+.paging-container .divider{
+    border-left : medium none;
+}

@@ -124,5 +124,6 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl-patch.css'],       attrs:[media:'screen, projection']
         resource url:[plugin: 'i18n-core', file: 'css/multiCalendar-rtl-patch.css']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl-patch.css'],     attrs: [media: 'screen, projection']
     }
 }
