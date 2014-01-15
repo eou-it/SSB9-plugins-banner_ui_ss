@@ -90,29 +90,26 @@ function ColumnResize(table) {
 	// do changes columns widths
 	// returns true if success and false otherwise
 	this.changeColumnWidth = function(no, w) {
-		if (!dragColumns) return false;
+            if (direction == 'rtl'){ // arabic
+                w = -w
+	    }
+            var lCol = parseInt(dragColumns[no].style.width)
+            var lCellWidth = (lCol + w) <= 0 ? 1 : lCol + w
+            var lTitleWidth = (lCol + w - 30) <= 0 ? 0 : lCol + w - 30
+            var sortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
 
-		if (no < 0) return false;
-		if (dragColumns.length < no) return false;
+            if (!dragColumns) return false;
+            if (no < 0) return false;
+            if (dragColumns.length < no) return false;
 
-		if (parseInt(dragColumns[no].style.width) <= -w) return false;
-		if (dragColumns[no+1] && parseInt(dragColumns[no+1].style.width) <= w) return false;
+            $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
+            $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = sortDisplay;
+            dragColumns[no].style.width =  ( lCellWidth) + 'px';
 
-		$( '.title', dragColumns[no] )[ 0 ].style.width = ( parseInt(dragColumns[no].style.width) + w - 30 ) + 'px';
+            // Adding a trigger so that instances can react.
+            $('#' + self.id).trigger('columnWidthChanging');
 
-		dragColumns[no].style.width =  parseInt(dragColumns[no].style.width) + w + 'px';
-
-		if (dragColumns[no+1]) {
-			$( '.title', dragColumns[no+1] )[ 0 ].style.width = ( parseInt(dragColumns[no+1].style.width) - w - 30 ) + 'px';
-
-			dragColumns[no+1].style.width = parseInt(dragColumns[no+1].style.width) - w + 'px';
-		}
-
-
-		// Adding a trigger so that instances can react.
-		$('#' + self.id).trigger('columnWidthChanging');
-
-		return true;
+            return true;
 	}
 
 	// ============================================================

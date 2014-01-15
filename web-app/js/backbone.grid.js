@@ -42,6 +42,13 @@ var data = {
   "pageMaxSize": "Number"
 };
 */
+var direction = "ltr";
+nodeList = document.getElementsByTagName('meta')
+    for (var i = 0; i < nodeList.length; ++i) {
+    if (nodeList[i].name == 'dir'){
+        direction = nodeList[i].content
+    }
+}
 
 ;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
