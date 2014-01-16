@@ -396,7 +396,7 @@ var direction = $('meta[name=dir]').attr('content');
       var firstColumn = _.first( this.options.columns );
 
       this.options.widthType = _.string.endsWith( firstColumn.width, "%" ) ? "percentage" : "fixed";
-      this.options.widthUnit = ( this.options.gridwidthType == "precentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
+      this.options.widthUnit = ( this.options.gridwidthType == "percentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
 
 
       this.columns       = _.where( this.options.columns, { freeze: false } );
@@ -612,10 +612,11 @@ var direction = $('meta[name=dir]').attr('content');
     },
 
     setupScrolling: function () {
+      var frozenWidth = this.frozenTable ? this.frozenTable.width() : 0
       if ( this.options.widthType != "percentage" ) {
         var widths = _.reduce( $( "th", this.table ), function ( memo, it ) { return memo + $( it ).width() }, 0 );
 
-        if ( widths > this.$el.find( "." + this.css.gridMainWrapper ).outerWidth() )
+        if ( widths + frozenWidth > this.$el.find( "." + this.css.gridMainWrapper ).outerWidth() )
           this.$el.find( "." + this.css.gridMainWrapper ).addClass( this.css.gridScrollX );
         else
           this.$el.find( "." + this.css.gridMainWrapper ).removeClass( this.css.gridScrollX );
