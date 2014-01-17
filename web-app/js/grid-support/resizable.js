@@ -101,20 +101,33 @@ function ColumnResize(table) {
             var lCol = parseInt(dragColumns[no].style.width)
             var lCellWidth = (lCol + w) <= 0 ? 1 : lCol + w
             var lTitleWidth = (lCol + w - 30) <= 0 ? 0 : lCol + w - 30
-            var sortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
+            var lSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
             var containerWidth = $('#basicGrid').find('.grid-main-wrapper').outerWidth()
 
             if (columnsWidth > containerWidth) { // resize current column only and let browser scroll
                 $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
-                $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = sortDisplay;
+                $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
                 dragColumns[no].style.width =  ( lCellWidth) + 'px';
             } else {
-                if (w < 0){ // TODO: stop reducing? or pull from adjacent cell?
-                    return true;
-                }
-                $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
-                $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = sortDisplay;
-                dragColumns[no].style.width =  ( lCellWidth) + 'px';
+                if (w < 0){
+                    $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
+                    $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
+                    dragColumns[no].style.width =  ( lCellWidth) + 'px';
+                    if (no < dragColumns.length) {
+                        w = -w
+                        var rCol = parseInt(dragColumns[dragColumns.length - 1].style.width)
+                        var rCellWidth = (rCol + w) <= 0 ? 1 : rCol + w
+                        var rTitleWidth = (rCol + w - 30) <= 0 ? 0 : rCol + w - 30
+                        var rSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
+                        $( '.title', dragColumns[dragColumns.length - 1] )[ 0 ].style.width = ( rTitleWidth ) + 'px';
+                        $( '.sort-icon', dragColumns[dragColumns.length] )[ 0 ].style.display = rSortDisplay;
+                        dragColumns[dragColumns.length - 1].style.width =  ( rCellWidth) + 'px';
+		    }
+                } else {
+                    $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
+                    $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
+                    dragColumns[no].style.width =  ( lCellWidth) + 'px';
+		}
 	    }
 
             // Adding a trigger so that instances can react.
