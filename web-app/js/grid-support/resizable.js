@@ -99,7 +99,7 @@ function ColumnResize(table) {
             if (dragColumns.length < no) return false;
 
             var lCol = parseInt(dragColumns[no].style.width)
-            var lCellWidth = (lCol + w) <= 0 ? 1 : lCol + w
+            var lCellWidth = (lCol + w) <= 5 ? 5 : lCol + w
             var lTitleWidth = (lCol + w - 30) <= 0 ? 0 : lCol + w - 30
             var lSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
             var containerWidth = $('#basicGrid').find('.grid-main-wrapper').outerWidth()

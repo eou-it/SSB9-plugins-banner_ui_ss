@@ -565,10 +565,7 @@ var direction = $('meta[name=dir]').attr('content');
         _.each( $( 'th', this.frozenTable ), function( it ) {
             var el = $( it );
             el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
-        });     
-      if ( this.features.visibility ) {
-        this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
-      } 
+        });
     },
 
     render: function () {
@@ -709,6 +706,7 @@ var direction = $('meta[name=dir]').attr('content');
         this.checkTitleWidths();
 
         this.generateBody();
+
         this.generateColumnVisibilityControls();
 
         if ( this.features.freeze ) {
@@ -1091,9 +1089,9 @@ var direction = $('meta[name=dir]').attr('content');
 
       gridWrapper.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
 
-//      if ( this.features.visibility ) {
-//        this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
-//      }
+      if ( this.features.visibility ) {
+        this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
+      }
     },
 
     updateRecordCount: function () {
