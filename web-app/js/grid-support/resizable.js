@@ -104,16 +104,12 @@ function ColumnResize(table) {
             var lSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
             var containerWidth = $('#basicGrid').find('.grid-main-wrapper').outerWidth()
 
-            if (columnsWidth > containerWidth) { // resize current column only and let browser scroll
-                $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
-                $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
-                dragColumns[no].style.width =  ( lCellWidth) + 'px';
-            } else {
+            $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
+            $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
+            dragColumns[no].style.width =  ( lCellWidth) + 'px';
+            if (columnsWidth <= containerWidth) {
                 if (w < 0){
-                    $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
-                    $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
-                    dragColumns[no].style.width =  ( lCellWidth) + 'px';
-                    if (no < dragColumns.length) {
+                    if (no < dragColumns.length - 1) {
                         w = -w
                         var rCol = parseInt(dragColumns[dragColumns.length - 1].style.width)
                         var rCellWidth = (rCol + w) <= 0 ? 1 : rCol + w
@@ -122,12 +118,10 @@ function ColumnResize(table) {
                         $( '.title', dragColumns[dragColumns.length - 1] )[ 0 ].style.width = ( rTitleWidth ) + 'px';
                         $( '.sort-icon', dragColumns[dragColumns.length] )[ 0 ].style.display = rSortDisplay;
                         dragColumns[dragColumns.length - 1].style.width =  ( rCellWidth) + 'px';
+		    } else {
+                        return false;
 		    }
-                } else {
-                    $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
-                    $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
-                    dragColumns[no].style.width =  ( lCellWidth) + 'px';
-		}
+                }
 	    }
 
             // Adding a trigger so that instances can react.
