@@ -93,7 +93,7 @@ function ColumnResize(table) {
             if (direction == 'rtl'){ // arabic
                 w = -w
 	    }
-
+            if (w < 0 && no >= dragColumns.length - 1) return false;
             if (!dragColumns) return false;
             if (no < 0) return false;
             if (dragColumns.length < no) return false;
@@ -102,26 +102,32 @@ function ColumnResize(table) {
             var lCellWidth = (lCol + w) <= 5 ? 5 : lCol + w
             var lTitleWidth = (lCol + w - 30) <= 0 ? 0 : lCol + w - 30
             var lSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
-            var containerWidth = $('#basicGrid').find('.grid-main-wrapper').outerWidth()
+            var containerWidth = $(table).parent().width()
 
             $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
-            $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
+            if ($( '.sort-icon', dragColumns[no] )[ 0 ]) {
+                $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
+            }
+
             dragColumns[no].style.width =  ( lCellWidth) + 'px';
+
             if (columnsWidth <= containerWidth) {
+                var rCol = parseInt(dragColumns[dragColumns.length - 1].style.width)
                 if (w < 0){
-                    if (no < dragColumns.length - 1) {
-                        w = -w
-                        var rCol = parseInt(dragColumns[dragColumns.length - 1].style.width)
-                        var rCellWidth = (rCol + w) <= 0 ? 1 : rCol + w
-                        var rTitleWidth = (rCol + w - 30) <= 0 ? 0 : rCol + w - 30
-                        var rSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
-                        $( '.title', dragColumns[dragColumns.length - 1] )[ 0 ].style.width = ( rTitleWidth ) + 'px';
-                        $( '.sort-icon', dragColumns[dragColumns.length] )[ 0 ].style.display = rSortDisplay;
-                        dragColumns[dragColumns.length - 1].style.width =  ( rCellWidth) + 'px';
-		    } else {
-                        return false;
-		    }
+                    w = -w
+                    var rCellWidth = (rCol + w) <= 0 ? 1 : rCol + w
+                    var rTitleWidth = (rCol + w - 30) <= 0 ? 0 : rCol + w - 30
+                    var rSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
+                } else {
+                    var rCellWidth = (rCol - w) <= 0 ? 1 : rCol - w
+                    var rTitleWidth = (rCol - w - 30) <= 0 ? 0 : rCol - w - 30
+                    var rSortDisplay = (lCol - w) <= 21 ? 'none' : 'inline'
+		}
+                $( '.title', dragColumns[dragColumns.length - 1] )[ 0 ].style.width = ( rTitleWidth ) + 'px';
+                if ($( '.sort-icon', dragColumns[no] )[ 0 ]) {
+                    $( '.sort-icon', dragColumns[dragColumns.length] )[ 0 ].style.display = rSortDisplay;
                 }
+                dragColumns[dragColumns.length - 1].style.width =  (rCellWidth) + 'px';
 	    }
 
             // Adding a trigger so that instances can react.
@@ -247,8 +253,14 @@ function ColumnResize(table) {
 		//      .append( sortIcon );
 
 		// orig.empty().append( outer );
+            if ($( '.sort-handle',   dragColumns[i] ).css('width'))
 		$( '.sort-handle', dragColumns[i] ).remove();
+
+            if ($( '.sort-icon',   dragColumns[i] ).css('width'))
 		$( '.sort-icon',   dragColumns[i] ).before( handle );
+            else
+		$( '.title',   dragColumns[i] ).after( handle );
+
 	}
 }
 
