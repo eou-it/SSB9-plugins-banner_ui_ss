@@ -1,12 +1,11 @@
 /** *****************************************************************************
- Copyright 2014 Ellucian Company L.P. and its affiliates.
+ Copyright 2013-2014 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 .select2-container .select2-choice div {
     right: auto;
     left: 0;
     border-left: medium none;
     border-right: 1px solid #aaa;
-
     -webkit-border-radius: 4px 0 0 4px;
     -moz-border-radius: 4px 0 0 4px;
     border-radius: 4px 0 0 4px;

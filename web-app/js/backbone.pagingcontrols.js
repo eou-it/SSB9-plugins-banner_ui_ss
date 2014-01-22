@@ -1,4 +1,4 @@
-/* Copyright 2013 Ellucian Company L.P. and its affiliates. */
+/* Copyright 2013-2014 Ellucian Company L.P. and its affiliates. */
 
 ;
 (function ($, _, Backbone) {
