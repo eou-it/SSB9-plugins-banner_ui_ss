@@ -555,19 +555,15 @@ var direction = $('meta[name=dir]').attr('content');
     },
 
     checkTitleWidths: function( e ) {
-        var frozenWidth = this.frozenTable ? this.frozenTable.width() : 5
-
         _.each( $( 'th', this.table ), function( it ) {
             var el = $( it );
-            var sortWidth = el.find( '.sort-handle' ).css('width') ? el.find( '.sort-handle' ).css('width') : 0
-            var resizeWidth = el.find( '.sort-icon' ).css('width') ? parseInt(el.find( '.sort-icon' ).css('width')) : 0
-            el.find( '.title' ).css( 'width', ( el.width() - sortWidth - resizeWidth - frozenWidth ) + 'px' );
+            el.find( '.title' ).css( 'width', 'auto' );
         });
 
         if (this.frozenTable) {
             _.each( $( 'th', this.frozenTable ), function( it ) {
                 var el = $( it );
-                el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
+                el.find( '.title' ).css( 'width', 'auto' );
             });
 	}
     },
