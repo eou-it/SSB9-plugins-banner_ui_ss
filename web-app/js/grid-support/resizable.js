@@ -143,7 +143,7 @@ function ColumnResize(table) {
 		var X = e.clientX || e.pageX;
 		var containerWidth = 31; // for gear icon
 		for (var i=0; i<dragColumns.length; i++) {
-		    containerWidth += parseInt( getWidth(dragColumns[i])) + 11;
+		    containerWidth += parseInt( getWidth(dragColumns[i])) + 12;
 		}
 	    if (!self.changeColumnWidth(dragColumnNo, X-dragX, containerWidth)) {
 			// stop drag!
