@@ -689,7 +689,6 @@ var direction = $('meta[name=dir]').attr('content');
       }
     },
 
-
     refresh: function ( fullRefresh ) {
       fullRefresh = ( _.isBoolean( fullRefresh ) ? fullRefresh : false );
 
@@ -1028,6 +1027,7 @@ var direction = $('meta[name=dir]').attr('content');
 
         th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
         th.attr( "data-property", it.name );
+        th.attr( "title", it.title );
 
         if ( it.width )
           th.css( "width", it.width );
@@ -1162,6 +1162,7 @@ var direction = $('meta[name=dir]').attr('content');
 
         th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
         th.attr( "data-property", it.name );
+        th.attr( "title", it.title );
 
         if ( it.width )
           th.css( "width", it.width );
