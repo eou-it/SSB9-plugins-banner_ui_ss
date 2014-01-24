@@ -93,7 +93,7 @@ function ColumnResize(table) {
             if (direction == 'rtl'){ // arabic
                 w = -w
 	    }
-            if (w < 0 && no >= dragColumns.length - 1) return false;
+            if (w < 0 && no >= dragColumns.length) return false;
             if (!dragColumns) return false;
             if (no < 0) return false;
             if (dragColumns.length < no) return false;
@@ -109,7 +109,7 @@ function ColumnResize(table) {
                 $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
             }
             dragColumns[no].style.width =  ( lCellWidth) + 'px';
-	console.log(columnsWidth + ":" + containerWidth)
+
             if (columnsWidth <= containerWidth) {
                 var rCol = parseInt(dragColumns[dragColumns.length - 1].style.width)
                 if (w < 0){
