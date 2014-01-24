@@ -108,21 +108,16 @@ function ColumnResize(table) {
             if ($( '.sort-icon', dragColumns[no] )[ 0 ]) {
                 $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
             }
-
             dragColumns[no].style.width =  ( lCellWidth) + 'px';
-
+	console.log(columnsWidth + ":" + containerWidth)
             if (columnsWidth <= containerWidth) {
                 var rCol = parseInt(dragColumns[dragColumns.length - 1].style.width)
                 if (w < 0){
                     w = -w
+		}
                     var rCellWidth = (rCol + w) <= 0 ? 1 : rCol + w
                     var rTitleWidth = (rCol + w - 30) <= 0 ? 0 : rCol + w - 30
                     var rSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
-                } else {
-                    var rCellWidth = (rCol - w) <= 0 ? 1 : rCol - w
-                    var rTitleWidth = (rCol - w - 30) <= 0 ? 0 : rCol - w - 30
-                    var rSortDisplay = (lCol - w) <= 21 ? 'none' : 'inline'
-		}
                 $( '.title', dragColumns[dragColumns.length - 1] )[ 0 ].style.width = ( rTitleWidth ) + 'px';
                 if ($( '.sort-icon', dragColumns[no] )[ 0 ]) {
                     $( '.sort-icon', dragColumns[dragColumns.length] )[ 0 ].style.display = rSortDisplay;
@@ -143,7 +138,7 @@ function ColumnResize(table) {
 		var X = e.clientX || e.pageX;
 		var containerWidth = 31; // for gear icon
 		for (var i=0; i<dragColumns.length; i++) {
-		    containerWidth += parseInt( getWidth(dragColumns[i])) + 12;
+		    containerWidth += parseInt( getWidth(dragColumns[i])) + 11;
 		}
 	    if (!self.changeColumnWidth(dragColumnNo, X-dragX, containerWidth)) {
 			// stop drag!
