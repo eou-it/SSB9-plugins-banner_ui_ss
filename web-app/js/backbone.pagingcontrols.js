@@ -53,8 +53,10 @@
     elements: {
       div:    "<div></div>",
       span:   "<span></span>",
-      text:   "<input type='text'></input>",
-      select: "<select></select>",
+      pageLabel:  "<label for='page1'></label>",
+      text:   "<input type='text' id='page1'></input>",
+      sizeLabel:  "<label for='size1'></label>",
+      select: "<select id='size1'></select>",
       option: "<option></option>"
     },
     strings: {
@@ -114,12 +116,12 @@
           last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last + " " + dir ), //.text( "Last" ),
           next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ), //.text( "Next" ),
           prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ), //.text( "Previous" ),
-          page     = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
+          page     = $( this.elements.pageLabel ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
+          input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ),
           of       = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? this.strings.pageOfOne : this.strings.of ),
           pages    = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.totalPages ).text( pageInfo.pages ),
-          input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ),
           divider  = $( this.elements.div ).addClass( this.css.divider ),
-          perPage  = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pagePer ).text( this.strings.perPage ),
+          perPage  = $( this.elements.sizeLabel ).addClass( this.css.pagingText + " " + this.css.pagePer ).text( this.strings.perPage ),
           select   = $( this.elements.select ).addClass( this.css.pageSizeSelect ),
           selWrap  = $( this.elements.div ).addClass( this.css.pageSizeSelectWrapper ).append( select );
 
@@ -150,7 +152,7 @@
           _.each( enabled, function (it) { it.addClass( view.css.enabled ) });
       }
 
-      _.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap ], function (it) {
+	_.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap], function (it) {
         view.$el.append( it );
       });
     }

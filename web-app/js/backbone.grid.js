@@ -43,6 +43,7 @@ var data = {
 };
 */
 var direction = $('meta[name=dir]').attr('content');
+direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
 
 ;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
