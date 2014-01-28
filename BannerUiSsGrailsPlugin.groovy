@@ -8,7 +8,6 @@ import net.hedtech.banner.i18n.DateConverterService
 import grails.converters.JSON
 import org.codehaus.groovy.grails.web.json.JSONObject
 import javax.servlet.http.HttpServletRequest
-import net.hedtech.banner.web.SsbLoginURLRequest
 
 /**
  * A Grails Plugin providing core UI framework for Self Service Banner application.
@@ -64,9 +63,6 @@ class BannerUiSsGrailsPlugin {
         //    cacheSeconds = -1
         //    propertiesPersister = new BannerPropertiesPersister()
         //}
-
-        ssbLoginURLRequest(SsbLoginURLRequest) {
-        }
     }
 
 
