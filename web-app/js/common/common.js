@@ -1,13 +1,5 @@
 /*********************************************************************************
- Copyright 2009-2012 SunGard Higher Education. All Rights Reserved.
- This copyrighted software contains confidential and proprietary information of
- SunGard Higher Education and its subsidiaries. Any use of this software is limited
- solely to SunGard Higher Education licensees, and is further subject to the terms
- and conditions of one or more written license agreements between SunGard Higher
- Education and the licensee in question. SunGard is either a registered trademark or
- trademark of SunGard Data Systems in the U.S.A. and/or other regions and/or countries.
- Banner and Luminis are either registered trademarks or trademarks of SunGard Higher
- Education in the U.S.A. and/or other regions and/or countries.
+ Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 //IE fix to support indexOf method on Array objects
 Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
@@ -32,16 +24,6 @@ function getUrl(name) {
 
 
 function validateDate( dateString ) {
-    /*var dateFormat = $.i18n.prop("js.datepicker.dateFormat");
-    var result = false;
-    try {
-        if (dateString == $.datepicker.formatDate( dateFormat, $.datepicker.parseDate( dateFormat, dateString))){
-            result = true;
-        }
-    } catch (e) {
-      result = false;
-    } */
-
     var defaultCalendar = $.i18n.prop("default.calendar");
     var result = false;
     try {
@@ -49,7 +31,7 @@ function validateDate( dateString ) {
             result = true;
         }
     } catch (e) {
-      result = false;
+        result = false;
     }
 
     return result;
@@ -102,7 +84,7 @@ window.InactivityTimer = ActivityTimer.extend({
                 this.logoutAction();
             }
         }, this ),
-        60 * 1000 /** 60 seconds */ );
+            60 * 1000 /** 60 seconds */ );
 
     },
     activityEvents: [ "ajaxStart" ],
@@ -198,7 +180,7 @@ $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
     // This cannot detect all failures to provide an error handler, as
     // ajaxmanager or backbone may be wrapping a missing error handler.
     log.debug( "ajaxError url=" + ajaxOptions.url + " thrownError=" + thrownError
-               + " status=" + jqXHR.status + " readyState=" + jqXHR.readyState );
+        + " status=" + jqXHR.status + " readyState=" + jqXHR.readyState );
     var handledError = ajaxOptions.error || ajaxOptions.complete;
     if ( thrownError !== 'abort' && !handledError ) {
         hideLoading( document );
@@ -214,9 +196,9 @@ $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
         });
 
         n.addPromptAction( $.i18n.prop("js.net.hedtech.banner.ajax.reload.button"),
-                           function() { window.location.reload() });
+            function() { window.location.reload() });
         n.addPromptAction( $.i18n.prop("js.net.hedtech.banner.ajax.continue.button"),
-                           function() { notifications.remove( n ); });
+            function() { notifications.remove( n ); });
 
         notifications.addNotification( n );
 
@@ -317,4 +299,30 @@ $(document).ready(function() {
     $('body').on('copy', 'input[type=password]', function (event) {
         event.preventDefault();
     });
+
+    addCssClass();
 });
+
+function addCssClass() {
+
+    if($.browser.safari) {
+        checkAndAddClass("webkit");
+    }
+    if($.browser.mozilla) {
+        checkAndAddClass("gecko");
+    }
+    if($.browser.msie) {
+        checkAndAddClass("ie");
+    }
+}
+
+function checkAndAddClass(browserName) {
+    var bodyTag = $('body');
+    var browserWithVersion = browserName + parseInt($.browser.version);
+    if(!bodyTag.hasClass(browserName)) {
+        bodyTag.addClass(browserName);
+    }
+    if(!bodyTag.hasClass(browserWithVersion)) {
+        bodyTag.addClass(browserWithVersion);
+    }
+}

@@ -3100,36 +3100,32 @@ the specific language governing permissions and limitations under the Apache Lic
         },
         formatResultCssClass: function(data) {return undefined;},
         formatSelectionCssClass: function(data, container) {return undefined;},
-        formatNoMatches: function () { return $.i18n.prop("student.advisor.term.select.term.no.matches"); },
+        formatNoMatches: function () { return $.i18n.prop("term.select.term.no.matches"); },
         formatInputTooShort: function (input, min) {
             var n = min - input.length;
-            if (n == 1) {
-                return $.i18n.prop("student.advisor.term.select.name.format.input.too.short.singular");
+            if (n ==1){
+               return $.i18n.prop("term.select.name.format.input.too.short.singular");
             }
             else
-                return $.i18n.prop("student.advisor.term.select.name.format.input.too.short.plural", [ n ]);
+                return $.i18n.prop("term.select.name.format.input.too.short.plural", n);
         },
         formatInputTooLong: function (input, max) {
             var n = input.length - max;
-            if (n == 1) {
-                return $.i18n.prop("student.advisor.term.select.name.format.input.too.long.singular");
+            if (n ==1){
+                return $.i18n.prop("term.select.name.format.input.too.long.singular");
             }
             else
-                return $.i18n.prop("student.advisor.term.select.name.format.input.too.short.plural", [ n ]);
+                return $.i18n.prop("term.select.name.format.input.too.short.plural", n);
         },
         formatSelectionTooBig: function (limit) {
-            if (limit == 1) {
-                return $.i18n.prop("student.advisor.term.select.name.format.selection.too.big.singular");
+            if (limit == 1){
+                return $.i18n.prop("term.select.name.format.selection.too.big.singular");
             }
             else
-                return $.i18n.prop("student.advisor.term.select.name.format.selection.too.big.plural", [ limit ]);
+                return $.i18n.prop("term.select.name.format.selection.too.big.plural", limit);
         },
-        formatLoadMore: function (pageNumber) {
-            return $.i18n.prop("student.advisor.term.select.name.format.load.more");
-        },
-        formatSearching: function () {
-            return $.i18n.prop("student.advisor.term.select.name.format.searching");
-        },
+        formatLoadMore: function (pageNumber) { return $.i18n.prop("term.select.name.format.load.more"); },
+        formatSearching: function () { return $.i18n.prop("term.select.name.format.searching"); },
         minimumResultsForSearch: 0,
         minimumInputLength: 0,
         maximumInputLength: null,

@@ -391,11 +391,11 @@ var data = {
       this.columns = !_.isNull( savedState ) && _.isObject( savedState ) ? savedState : this.options.columns;
       this.title   = this.options.title;
 
-
+      this.options.columns =  _.isEmpty(this.options.columns) ? [{name:'empty-grid', title:$.i18n.prop('js.grid.emptyColumnName')}] : this.options.columns
       var firstColumn = _.first( this.options.columns );
 
       this.options.widthType = _.string.endsWith( firstColumn.width, "%" ) ? "percentage" : "fixed";
-      this.options.widthUnit = ( this.options.gridwidthType == "precentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
+      this.options.widthUnit = ( this.options.gridwidthType == "percentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
 
 
       this.columns       = _.where( this.options.columns, { freeze: false } );
