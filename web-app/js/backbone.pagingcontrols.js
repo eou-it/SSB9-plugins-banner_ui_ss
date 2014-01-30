@@ -47,7 +47,6 @@
             pageNumber:"page-number",
             divider:"divider",
             totalPages:"total-pages",
-            page:"page",
             pageOf:"page-of",
             pagePer:"page-per"
         },
@@ -57,12 +56,6 @@
             text:"<input type='text'></input>",
             select:"<select></select>",
             option:"<option></option>"
-        },
-        strings:{
-            page:"Page",
-            of:"of",
-            pageOfOne:"1 of",
-            perPage:"Per Page"
         },
 
         log:function (msg) {
@@ -115,7 +108,6 @@
                 last = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.last + " " + dir), //.text( "Last" ),
                 next = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.next + " " + dir), //.text( "Next" ),
                 prev = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.previous + " " + dir), //.text( "Previous" ),
-                page = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.page).text($.i18n.prop("js.net.hedtech.banner.pagingControls.page.label")),
                 of = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.pageOf).text(pageInfo.pages == 1 ? $.i18n.prop("js.net.hedtech.banner.pagingControls.firstPage.label") : $.i18n.prop("js.net.hedtech.banner.pagingControls.of.label")),
                 pages = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.totalPages).text(pageInfo.pages),
                 input = $(this.elements.text).addClass(this.css.pageNumber).val(pageInfo.page),
@@ -153,7 +145,7 @@
                 });
             }
 
-            _.each([ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap ], function (it) {
+            _.each([ first, prev, input, of, pages, next, last, divider, perPage, selWrap ], function (it) {
                 view.$el.append(it);
             });
         }
