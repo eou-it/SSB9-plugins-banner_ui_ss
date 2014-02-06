@@ -1890,6 +1890,11 @@ var requestTimeout
                     return;
                 }
 
+                if (e.which === KEY.SPACE && this.search.val().length < 1) {
+                    killEvent(e);
+		    return;
+		}
+
                 switch (e.which) {
                     case KEY.UP:
                     case KEY.DOWN:
