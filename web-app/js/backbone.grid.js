@@ -199,9 +199,7 @@ var data = {
 
     events: {
       "click td":                               "selectCell",
-      "click th":                               "sort",
-      "click span.sort-icon":                   "sort",
-      "click span.span.title":                  "sort"
+      "click th":                               "sort"
     },
 
     selectCell: function (e) {
@@ -995,12 +993,12 @@ var data = {
       return this.collection.sortDirection == this.strings.asc ? this.css.uiIconSouth : this.css.uiIconNorth;
     },
 
-    generateHead: function () {
+    _generateHead: function( table, columns ) {
       var view  = this,
           thead = $( this.elements.thead ),
           tr    = $( this.elements.tr );
 
-      _.each( this.columns, function ( it ) {
+      _.each( columns, function ( it ) {
         if ( _.isBoolean( it.visible ) && !it.visible )
           return;
 
@@ -1016,8 +1014,18 @@ var data = {
           th.addClass( view.css.sortDisabled );
         }
         else {
+          sortIcon.attr( 'title', $.i18n.prop( 'js.grid.toggleSortBy', [it.title] ));
           th.append( sortIcon );
           th.attr( "data-sort-direction", ( it.name == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
+
+          function ariaDirection( direction ) {
+            var gridToAria = {
+              "asc": "ascending",
+              "desc": "descending"
+            };
+            return gridToAria[direction] || "none";
+          }
+          th.attr( "aria-sort", ariaDirection( th.attr( "data-sort-direction" )));
         }
 
         th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
@@ -1030,7 +1038,11 @@ var data = {
       });
 
       thead.append ( tr );
-      view.table.append ( thead );
+      table.append ( thead );
+    },
+
+    generateHead: function () {
+      this._generateHead( this.table, this.columns );
     },
 
     setSortDirectionVisual: function () {
@@ -1130,41 +1142,7 @@ var data = {
     },
 
     generateFrozenHead: function () {
-      var view  = this,
-          thead = $( this.elements.thead ),
-          tr    = $( this.elements.tr );
-
-      _.each( this.frozenColumns, function ( it ) {
-        if ( _.isBoolean( it.visible ) && !it.visible )
-          return;
-
-        var th          = $( view.elements.th ),
-            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
-            sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( view.elements.div ).addClass( sortClasses );
-
-        th.append( title );
-
-        if ( _.isBoolean( it.sortable ) && !it.sortable ) {
-          th.attr( "data-sort-direction", "disabled" );
-          th.addClass( view.css.sortDisabled );
-        }
-        else {
-          th.append( sortIcon );
-          th.attr( "data-sort-direction", ( it.name == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
-        }
-
-        th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
-        th.attr( "data-property", it.name );
-
-        if ( it.width )
-          th.css( "width", it.width );
-
-        tr.append( th );
-      });
-
-      thead.append ( tr );
-      view.frozenTable.append ( thead );
+      this._generateHead( view.frozenTable, this.frozenColumns );
     },
 
 
