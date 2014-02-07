@@ -1005,7 +1005,7 @@ var data = {
         var th          = $( view.elements.th ),
             title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
             sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( view.elements.div ).addClass( sortClasses );
+            sortIcon    = $( "<button type='button'>" ).addClass( sortClasses );
 
         th.append( title );
 
