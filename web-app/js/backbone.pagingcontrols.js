@@ -53,7 +53,7 @@
     elements: {
       div:    "<div></div>",
       span:   "<span></span>",
-      pageLabel:  "<label for='page1'></label>",
+      pageLabel:  "<div><label for='page1'></label></div>",
       text:   "<input type='text' id='page1'></input>",
       sizeLabel:  "<label for='size1'></label>",
       select: "<select id='size1'></select>",
