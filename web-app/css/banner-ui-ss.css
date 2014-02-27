@@ -1138,3 +1138,11 @@ div.infoicon {
     padding: 0 3px;
 }
 
+#multiCalendarContainer  .ui-widget-header{
+    background: none repeat scroll 0 0 #ECF0F4;
+}
+
+#multiCalendarContainer .ui-datepicker {
+    height: auto;
+    padding: 0;
+}

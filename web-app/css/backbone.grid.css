@@ -47,6 +47,11 @@
     text-overflow: ellipsis;
 }
 
+.grid button.sort-icon{
+    background-color: transparent;
+    border: 0;
+}
+
 .grid th.sort-disabled {
     cursor: default;
 }
