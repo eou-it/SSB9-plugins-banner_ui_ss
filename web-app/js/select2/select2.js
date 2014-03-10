@@ -843,7 +843,7 @@ var requestTimeout
 
                             compound=result.children && result.children.length > 0;
 
-                            node=$("<li></li>");
+                            node=$("<li role='option'></li>");
                             node.addClass("select2-results-dept-"+depth);
                             node.addClass("select2-result");
                             node.addClass(selectable ? "select2-result-selectable" : "select2-result-unselectable");
