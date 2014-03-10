@@ -70,11 +70,8 @@
 
     </head>
     <body>
-        <a href="#maincontent">"${message(code: 'skiplink.text')}"</a>
         <div id="splash"></div>
-        <div id="spinner" class="spinner spinner-img" style="display:none;">
-
-        </div>
+        <div id="spinner" class="spinner spinner-img" style="display:none;"></div>
 
         <g:layoutBody />
 

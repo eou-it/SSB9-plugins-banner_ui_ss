@@ -283,6 +283,7 @@ $(document).ready(function() {
             showHelp: false,
             langDir: $.i18n.prop( "default.language.direction" ),
             resourceMap : {
+                skip_link_text :                        $.i18n.prop( "aurora.skip_link_text" ),
                 areas_label_browse :                    $.i18n.prop( "aurora.areas_label_browse" ),
                 areas_label_opened :                    $.i18n.prop( "aurora.areas_label_opened" ),
                 areas_label_tools :                     $.i18n.prop( "aurora.areas_label_tools" ),
