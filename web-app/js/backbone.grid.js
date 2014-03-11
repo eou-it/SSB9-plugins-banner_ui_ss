@@ -393,7 +393,7 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
       this.columns = !_.isNull( savedState ) && _.isObject( savedState ) ? savedState : this.options.columns;
       this.title   = this.options.title;
 
-
+      this.options.columns =  _.isEmpty(this.options.columns) ? [{name:'empty-grid', title:$.i18n.prop('js.grid.emptyColumnName')}] : this.options.columns
       var firstColumn = _.first( this.options.columns );
 
       this.options.widthType = _.string.endsWith( firstColumn.width, "%" ) ? "percentage" : "fixed";
@@ -1001,19 +1001,19 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
       return this.collection.sortDirection == this.strings.asc ? this.css.uiIconSouth : this.css.uiIconNorth;
     },
 
-    generateHead: function () {
+    _generateHead: function( table, columns ) {
       var view  = this,
           thead = $( this.elements.thead ),
           tr    = $( this.elements.tr );
 
-      _.each( this.columns, function ( it ) {
+      _.each( columns, function ( it ) {
         if ( _.isBoolean( it.visible ) && !it.visible )
           return;
 
         var th          = $( view.elements.th ),
             title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
             sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( view.elements.div ).addClass( sortClasses );
+            sortIcon    = $( "<button type='button'>" ).addClass( sortClasses );
 
         th.append( title );
 
@@ -1022,13 +1022,22 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
           th.addClass( view.css.sortDisabled );
         }
         else {
+          sortIcon.attr( 'title', $.i18n.prop( 'js.grid.toggleSortBy', [it.title] ));
           th.append( sortIcon );
           th.attr( "data-sort-direction", ( it.name == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
+
+          function ariaDirection( direction ) {
+            var gridToAria = {
+              "asc": "ascending",
+              "desc": "descending"
+            };
+            return gridToAria[direction] || "none";
+          }
+          th.attr( "aria-sort", ariaDirection( th.attr( "data-sort-direction" )));
         }
 
         th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
         th.attr( "data-property", it.name );
-        th.attr( "title", it.title );
 
         if ( it.width )
           th.css( "width", it.width );
@@ -1037,7 +1046,11 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
       });
 
       thead.append ( tr );
-      view.table.append ( thead );
+      table.append ( thead );
+    },
+
+    generateHead: function () {
+      this._generateHead( this.table, this.columns );
     },
 
     setSortDirectionVisual: function () {
