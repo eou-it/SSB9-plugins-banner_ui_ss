@@ -176,6 +176,16 @@ function hideLoading( target ) {
     $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
 }
 
+
+/* Usage:
+     $(selector).loading();   // show loading indicator
+     $(selector).loading(false); // hide loading indicator
+*/
+$.fn.loading = function(isLoading) {
+    (isLoading||isLoading==undefined) ? showLoading( this ) : hideLoading( this );
+    return this;
+}
+
 $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
     // This cannot detect all failures to provide an error handler, as
     // ajaxmanager or backbone may be wrapping a missing error handler.
