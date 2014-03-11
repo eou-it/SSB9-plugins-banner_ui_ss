@@ -42,6 +42,8 @@ var data = {
   "pageMaxSize": "Number"
 };
 */
+var direction = $('meta[name=dir]').attr('content');
+direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
 
 ;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
@@ -199,7 +201,9 @@ var data = {
 
     events: {
       "click td":                               "selectCell",
-      "click th":                               "sort"
+      "click th":                               "sort",
+      "click span.sort-icon":                   "sort",
+      "click span.span.title":                  "sort"
     },
 
     selectCell: function (e) {
@@ -552,15 +556,17 @@ var data = {
     },
 
     checkTitleWidths: function( e ) {
-      _.each( $( 'th', this.table ), function( it ) {
-        var el = $( it );
-        el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
-      });
+        _.each( $( 'th', this.table ), function( it ) {
+            var el = $( it );
+            el.find( '.title' ).css( 'width', 'auto' );
+        });
 
-      _.each( $( 'th', this.frozenTable ), function( it ) {
-        var el = $( it );
-        el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
-      });
+        if (this.frozenTable) {
+            _.each( $( 'th', this.frozenTable ), function( it ) {
+                var el = $( it );
+                el.find( '.title' ).css( 'width', 'auto' );
+            });
+	}
     },
 
     render: function () {
@@ -607,10 +613,11 @@ var data = {
     },
 
     setupScrolling: function () {
+      var frozenWidth = this.frozenTable ? this.frozenTable.width() : 0
       if ( this.options.widthType != "percentage" ) {
         var widths = _.reduce( $( "th", this.table ), function ( memo, it ) { return memo + $( it ).width() }, 0 );
 
-        if ( widths > this.$el.find( "." + this.css.gridMainWrapper ).outerWidth() )
+        if ( widths + frozenWidth > this.$el.find( "." + this.css.gridMainWrapper ).outerWidth() )
           this.$el.find( "." + this.css.gridMainWrapper ).addClass( this.css.gridScrollX );
         else
           this.$el.find( "." + this.css.gridMainWrapper ).removeClass( this.css.gridScrollX );
@@ -683,7 +690,6 @@ var data = {
       }
     },
 
-
     refresh: function ( fullRefresh ) {
       fullRefresh = ( _.isBoolean( fullRefresh ) ? fullRefresh : false );
 
@@ -700,6 +706,7 @@ var data = {
         this.checkTitleWidths();
 
         this.generateBody();
+
         this.generateColumnVisibilityControls();
 
         if ( this.features.freeze ) {
@@ -957,6 +964,7 @@ var data = {
         it.title    = c.title;
         it.width    = it.width + "%";
         it.visible  = c.visible;
+        it.name = c.name;
       });
 
       return cols;
@@ -1142,7 +1150,42 @@ var data = {
     },
 
     generateFrozenHead: function () {
-      this._generateHead( view.frozenTable, this.frozenColumns );
+      var view  = this,
+          thead = $( this.elements.thead ),
+          tr    = $( this.elements.tr );
+
+      _.each( this.frozenColumns, function ( it ) {
+        if ( _.isBoolean( it.visible ) && !it.visible )
+          return;
+
+        var th          = $( view.elements.th ),
+            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
+            sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
+            sortIcon    = $( view.elements.div ).addClass( sortClasses );
+
+        th.append( title );
+
+        if ( _.isBoolean( it.sortable ) && !it.sortable ) {
+          th.attr( "data-sort-direction", "disabled" );
+          th.addClass( view.css.sortDisabled );
+        }
+        else {
+          th.append( sortIcon );
+          th.attr( "data-sort-direction", ( it.name == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
+        }
+
+        th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
+        th.attr( "data-property", it.name );
+        th.attr( "title", it.title );
+
+        if ( it.width )
+          th.css( "width", it.width );
+
+        tr.append( th );
+      });
+
+      thead.append ( tr );
+      view.frozenTable.append ( thead );
     },
 
 
