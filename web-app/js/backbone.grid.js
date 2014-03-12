@@ -1011,9 +1011,9 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
           return;
 
         var th          = $( view.elements.th ),
-            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
-            sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( "<button type='button'>" ).addClass( sortClasses );
+          title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ).attr( "title", it.title ),
+          sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
+          sortIcon    = $( "<button type='button'>" ).addClass( sortClasses );
 
         th.append( title );
 
