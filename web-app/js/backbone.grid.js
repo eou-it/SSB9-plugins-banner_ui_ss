@@ -83,13 +83,32 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
           sortColumn:    config.sortColumn,
           sortDirection: config.sortDirection,
           pageMaxSize:   config.pageMaxSize,
+          showSpinner: function(target) {
+            var t = $(target);
+            var loading = t.append('<div class="loading loading-pending">').find('.loading')
+            var pos = {top:$(window).scrollTop(), left:0 };
+            var height = (t[0] && t[0].scrollHeight > t.outerHeight() ? t[0].scrollHeight : t.outerHeight() );
+            height = (height <= 0 ? 100 : height)
+            loading.css(pos).height(height).width(t.outerWidth());
+
+            setTimeout(
+              function() {
+                $(target).find('div.loading-pending').fadeIn(200, function() {
+                  $(this).removeClass('loading-pending').attr("aria-label", $.i18n.prop("student.profile.loading")).attr("aria-live", "assertive").attr("aria-busy","true");
+                });
+              }, 150
+            );
+          },
+
           ajaxCallback:  function( params ) {
             return ajaxManager.create( ajaxId, { abortOld: true } ).add( params );
           }
         });
 
     var collection = new GridCollection;
+    collection.bind( "fetching", function ( ) { this.showSpinner("." + "grid-container") } ); // TODO: hard coded container
     collection.bind( "change", function ( model ) { model.makeDirty(); } );
+
     collection.fetch();
 
     return collection
@@ -370,6 +389,7 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
     },
 
     initialize: function () {
+
       _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
 
       // make sure we have an id attribute
@@ -432,6 +452,7 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
             sortColumn:    this.collection.sortColumn,
             sortDirection: this.collection.sortDirection,
             batch:         this.collection.batch
+
           });
 
         } else {
@@ -448,10 +469,9 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
         }
       }
 
-
-      this.collection.bind( "reset", function () {
-        view.refresh();
-      });
+      this.collection.bind( "reset", function () { view.refresh(); } );
+      this.collection.bind( "fetched", function () { view.hideSpinner("." + view.css.gridContainer) } );
+      this.collection.bind( "failed", function () { view.hideSpinner("." + view.css.gridContainer) } );
 
       if ( _.isNull( this.collection.sortColumn ) ) {
         var column = _.first( this.options.columns );
@@ -728,7 +748,6 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
       tbody.empty();
 
       var columnState = view.getColumnState();
-
       if(view.collection.length == 0){
         view.renderNoRecordsFound();
       } else {
@@ -1228,6 +1247,12 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
 
       if ( model )
         this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
+    },
+  
+    hideSpinner: function(target) {
+      $(target).find('div.loading').fadeOut(200, function() {
+        $(this).remove();
+      });
     }
   });
 }).call (this, $, _, Backbone, JSON, AjaxManager );
