@@ -18,6 +18,8 @@ Apache License or the GPL Licesnse is distributed on an "AS IS" BASIS, WITHOUT W
 CONDITIONS OF ANY KIND, either express or implied. See the Apache License and the GPL License for
 the specific language governing permissions and limitations under the Apache License and the GPL License.
 */
+var requestTimeout
+
  (function ($) {
  	if(typeof $.fn.each2 == "undefined"){
  		$.fn.extend({
@@ -441,6 +443,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 });
                 handler = transport.call(self, params);
             }, quietMillis);
+        requestTimeout = timeout
         };
     }
 
@@ -840,7 +843,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
                             compound=result.children && result.children.length > 0;
 
-                            node=$("<li></li>");
+                            node=$("<li role='option'></li>");
                             node.addClass("select2-results-dept-"+depth);
                             node.addClass("select2-result");
                             node.addClass(selectable ? "select2-result-selectable" : "select2-result-unselectable");
@@ -1886,6 +1889,11 @@ the specific language governing permissions and limitations under the Apache Lic
                     killEvent(e);
                     return;
                 }
+
+                if (e.which === KEY.SPACE && this.search.val().length < 1) {
+                    killEvent(e);
+		    return;
+		}
 
                 switch (e.which) {
                     case KEY.UP:
@@ -3100,32 +3108,42 @@ the specific language governing permissions and limitations under the Apache Lic
         },
         formatResultCssClass: function(data) {return undefined;},
         formatSelectionCssClass: function(data, container) {return undefined;},
-        formatNoMatches: function () { return $.i18n.prop("term.select.term.no.matches"); },
+        formatNoMatches: function () {
+            return $.i18n.prop("select2.no.matches");
+        },
         formatInputTooShort: function (input, min) {
+            if (input.length == (min - 1)) {
+                window.clearTimeout(requestTimeout);
+            }
             var n = min - input.length;
-            if (n ==1){
-               return $.i18n.prop("term.select.name.format.input.too.short.singular");
+            if (n == 1) {
+                return $.i18n.prop("select2.format.input.too.short.singular");
             }
             else
-                return $.i18n.prop("term.select.name.format.input.too.short.plural", n);
+                return $.i18n.prop("select2.format.input.too.short.plural", [ n ]);
         },
         formatInputTooLong: function (input, max) {
             var n = input.length - max;
-            if (n ==1){
-                return $.i18n.prop("term.select.name.format.input.too.long.singular");
+            if (n == 1) {
+                return $.i18n.prop("select2.format.input.too.long.singular");
             }
             else
-                return $.i18n.prop("term.select.name.format.input.too.short.plural", n);
+                return $.i18n.prop("select2.format.input.too.short.plural", [ n ]);
         },
         formatSelectionTooBig: function (limit) {
-            if (limit == 1){
-                return $.i18n.prop("term.select.name.format.selection.too.big.singular");
+            if (limit == 1) {
+                return $.i18n.prop("select2.format.selection.too.big.singular");
             }
             else
-                return $.i18n.prop("term.select.name.format.selection.too.big.plural", limit);
+                return $.i18n.prop("select2.format.selection.too.big.plural", [ limit ]);
         },
-        formatLoadMore: function (pageNumber) { return $.i18n.prop("term.select.name.format.load.more"); },
-        formatSearching: function () { return $.i18n.prop("term.select.name.format.searching"); },
+        formatLoadMore: function (pageNumber) {
+            return $.i18n.prop("select2.format.load.more");
+        },
+        formatSearching: function () {
+            return $.i18n.prop("select2.format.searching");
+        },
+      
         minimumResultsForSearch: 0,
         minimumInputLength: 0,
         maximumInputLength: null,
