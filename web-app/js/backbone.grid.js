@@ -30,7 +30,7 @@ var events = {
   beforeRender:  "Function",
   afterRender:   "Function",
   beforeRefresh: "Function",
-  afterRefresh:  "Function"
+  afterRefresh:  "Function",
   rowSelected:   "Function"
 }
 
@@ -43,7 +43,7 @@ var data = {
 };
 */
 var direction = $('meta[name=dir]').attr('content');
-direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
+direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
 ;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
@@ -83,12 +83,30 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
           sortColumn:    config.sortColumn,
           sortDirection: config.sortDirection,
           pageMaxSize:   config.pageMaxSize,
+          showSpinner: function(target) {
+            var t = $(target);
+            var loading = t.append('<div class="loading loading-pending">').find('.loading')
+            var pos = {top:$(window).scrollTop(), left:0 };
+            var height = (t[0] && t[0].scrollHeight > t.outerHeight() ? t[0].scrollHeight : t.outerHeight() );
+            height = (height <= 0 ? 100 : height)
+            loading.css(pos).height(height).width(t.outerWidth());
+
+            setTimeout(
+              function() {
+                $(target).find('div.loading-pending').fadeIn(200, function() {
+                  $(this).removeClass('loading-pending').attr("aria-label", $.i18n.prop("student.profile.loading")).attr("aria-live", "assertive").attr("aria-busy","true");
+                });
+              }, 150
+            );
+          },
           ajaxCallback:  function( params ) {
             return ajaxManager.create( ajaxId, { abortOld: true } ).add( params );
           }
         });
 
     var collection = new GridCollection;
+// FIXME: use common.js .loading/loading(false) when available
+    collection.bind( "fetching", function ( ) { this.showSpinner("." + "grid-container") } ); // TODO: hard coded container
     collection.bind( "change", function ( model ) { model.makeDirty(); } );
     collection.fetch();
 
@@ -202,8 +220,6 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
     events: {
       "click td":                               "selectCell",
       "click th":                               "sort",
-      "click span.sort-icon":                   "sort",
-      "click span.span.title":                  "sort"
     },
 
     selectCell: function (e) {
@@ -448,10 +464,10 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
         }
       }
 
+      this.collection.bind( "reset", function () { view.refresh(); } );
+      this.collection.bind( "fetched", function () { view.hideSpinner("." + view.css.gridContainer) } );
+      this.collection.bind( "failed", function () { view.hideSpinner("." + view.css.gridContainer) } );
 
-      this.collection.bind( "reset", function () {
-        view.refresh();
-      });
 
       if ( _.isNull( this.collection.sortColumn ) ) {
         var column = _.first( this.options.columns );
@@ -1011,9 +1027,9 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
           return;
 
         var th          = $( view.elements.th ),
-            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
-            sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( "<button type='button'>" ).addClass( sortClasses );
+          title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ).attr( "title", it.title ),
+          sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
+          sortIcon    = $( "<button type='button'>" ).addClass( sortClasses );
 
         th.append( title );
 
@@ -1150,42 +1166,7 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
     },
 
     generateFrozenHead: function () {
-      var view  = this,
-          thead = $( this.elements.thead ),
-          tr    = $( this.elements.tr );
-
-      _.each( this.frozenColumns, function ( it ) {
-        if ( _.isBoolean( it.visible ) && !it.visible )
-          return;
-
-        var th          = $( view.elements.th ),
-            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
-            sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( view.elements.div ).addClass( sortClasses );
-
-        th.append( title );
-
-        if ( _.isBoolean( it.sortable ) && !it.sortable ) {
-          th.attr( "data-sort-direction", "disabled" );
-          th.addClass( view.css.sortDisabled );
-        }
-        else {
-          th.append( sortIcon );
-          th.attr( "data-sort-direction", ( it.name == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
-        }
-
-        th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
-        th.attr( "data-property", it.name );
-        th.attr( "title", it.title );
-
-        if ( it.width )
-          th.css( "width", it.width );
-
-        tr.append( th );
-      });
-
-      thead.append ( tr );
-      view.frozenTable.append ( thead );
+      this._generateHead( this.frozenTable, this.frozenColumns );
     },
 
 
@@ -1228,6 +1209,13 @@ direction = ( direction === void 0 || direction === "ltr" ? "ltr" : "rtl" );
 
       if ( model )
         this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
+    },
+  
+
+    hideSpinner: function(target) {
+      $(target).find('div.loading').fadeOut(200, function() {
+        $(this).remove();
+      });
     }
   });
 }).call (this, $, _, Backbone, JSON, AjaxManager );

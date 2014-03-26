@@ -89,30 +89,46 @@ function ColumnResize(table) {
 	// ============================================================
 	// do changes columns widths
 	// returns true if success and false otherwise
-	this.changeColumnWidth = function(no, w) {
-		if (!dragColumns) return false;
+    this.changeColumnWidth = function(no, w, columnsWidth) {
+            if (direction == 'rtl'){ // arabic
+                w = -w
+	    }
+            if (w < 0 && no >= dragColumns.length) return false;
+            if (!dragColumns) return false;
+            if (no < 0) return false;
+            if (dragColumns.length < no) return false;
 
-		if (no < 0) return false;
-		if (dragColumns.length < no) return false;
+            var lCol = parseInt(dragColumns[no].style.width)
+            var lCellWidth = (lCol + w) <= 5 ? 5 : lCol + w
+            var lTitleWidth = (lCol + w - 30) <= 0 ? 0 : lCol + w - 30
+            var lSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
+            var containerWidth = $(table).parent().width()
 
-		if (parseInt(dragColumns[no].style.width) <= -w) return false;
-		if (dragColumns[no+1] && parseInt(dragColumns[no+1].style.width) <= w) return false;
+            $( '.title', dragColumns[no] )[ 0 ].style.width = ( lTitleWidth ) + 'px';
+            if ($( '.sort-icon', dragColumns[no] )[ 0 ]) {
+                $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
+            }
+            dragColumns[no].style.width =  ( lCellWidth) + 'px';
 
-		$( '.title', dragColumns[no] )[ 0 ].style.width = ( parseInt(dragColumns[no].style.width) + w - 30 ) + 'px';
-
-		dragColumns[no].style.width =  parseInt(dragColumns[no].style.width) + w + 'px';
-
-		if (dragColumns[no+1]) {
-			$( '.title', dragColumns[no+1] )[ 0 ].style.width = ( parseInt(dragColumns[no+1].style.width) - w - 30 ) + 'px';
-
-			dragColumns[no+1].style.width = parseInt(dragColumns[no+1].style.width) - w + 'px';
+            if (columnsWidth <= containerWidth) {
+                var rCol = parseInt(dragColumns[dragColumns.length - 1].style.width)
+                if (w < 0){
+                    w = -w
 		}
+                    var rCellWidth = (rCol + w) <= 0 ? 1 : rCol + w
+                    var rTitleWidth = (rCol + w - 30) <= 0 ? 0 : rCol + w - 30
+                    var rSortDisplay = (lCol + w) <= 21 ? 'none' : 'inline'
+                $( '.title', dragColumns[dragColumns.length - 1] )[ 0 ].style.width = ( rTitleWidth ) + 'px';
+                if ($( '.sort-icon', dragColumns[no] )[ 0 ]) {
+                    $( '.sort-icon', dragColumns[dragColumns.length] )[ 0 ].style.display = rSortDisplay;
+                }
+                dragColumns[dragColumns.length - 1].style.width =  (rCellWidth) + 'px';
+	    }
 
+            // Adding a trigger so that instances can react.
+            $('#' + self.id).trigger('columnWidthChanging');
 
-		// Adding a trigger so that instances can react.
-		$('#' + self.id).trigger('columnWidthChanging');
-
-		return true;
+            return true;
 	}
 
 	// ============================================================
@@ -120,7 +136,11 @@ function ColumnResize(table) {
 	this.columnDrag = function(e) {
 		var e = e || window.event;
 		var X = e.clientX || e.pageX;
-		if (!self.changeColumnWidth(dragColumnNo, X-dragX)) {
+		var containerWidth = 31; // for gear icon
+		for (var i=0; i<dragColumns.length; i++) {
+		    containerWidth += parseInt( getWidth(dragColumns[i])) + 11;
+		}
+	    if (!self.changeColumnWidth(dragColumnNo, X-dragX, containerWidth)) {
 			// stop drag!
 			self.stopColumnDrag(e);
 		}
@@ -228,8 +248,14 @@ function ColumnResize(table) {
 		//      .append( sortIcon );
 
 		// orig.empty().append( outer );
+            if ($( '.sort-handle',   dragColumns[i] ).css('width'))
 		$( '.sort-handle', dragColumns[i] ).remove();
+
+            if ($( '.sort-icon',   dragColumns[i] ).css('width'))
 		$( '.sort-icon',   dragColumns[i] ).before( handle );
+            else
+		$( '.title',   dragColumns[i] ).after( handle );
+
 	}
 }
 

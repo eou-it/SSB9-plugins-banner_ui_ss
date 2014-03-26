@@ -47,6 +47,7 @@
 .grid button.sort-icon{
     background-color: transparent;
     border: 0;
+    cursor: pointer;
 }
 
 .grid th.sort-disabled {
