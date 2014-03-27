@@ -1,3 +1,6 @@
+/*******************************************************************************
+ Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 import net.hedtech.banner.configuration.HttpRequestUtils
 import net.hedtech.banner.security.FormContext
 import org.apache.log4j.Logger
@@ -5,15 +8,15 @@ import net.hedtech.banner.loginworkflow.PostLoginWorkflow
 import org.codehaus.groovy.grails.web.servlet.GrailsUrlPathHelper
 import javax.servlet.http.HttpSession
 
-/*******************************************************************************
- Copyright 2009-2012 Ellucian Company L.P. and its affiliates.
- *******************************************************************************/
+
 class BannerSelfServicePostLoginFlowFilters {
     private static final String SLASH = "/"
     private static final String QUESTION_MARK = "?"
     def springSecurityService
     private final log = Logger.getLogger(getClass())
     public static final String LAST_FLOW_COMPLETED =  "LAST_FLOW_COMPLETED"
+	def dependsOn = [net.hedtech.banner.security.AccessControlFilters.class]
+	
     def filters = {
         all(controller:  "selfServiceMenu|login|logout|error|dateConverter", invert: true) {
             before = {
@@ -33,7 +36,7 @@ class BannerSelfServicePostLoginFlowFilters {
                     boolean uriHampered = false
                     if(uriRedirected != null){
                         String controllerRedirected = HttpRequestUtils.getControllerNameFromPath(uriRedirected)
-                        if(!path.contains(controllerRedirected)){
+						 if(!path.contains(controllerRedirected)){
                             uriHampered = true
                         }
                     }
@@ -42,7 +45,7 @@ class BannerSelfServicePostLoginFlowFilters {
                             lastFlowCompleted = 0
                         }
                         session.setAttribute(PostLoginWorkflow.URI_ACCESSED, path)
-                        setFormContext()
+                        
                         int noOfFlows = listOfFlows.size()
                         for(int i = lastFlowCompleted; i < noOfFlows; i++) {
                             session.setAttribute(LAST_FLOW_COMPLETED, i)
@@ -64,16 +67,11 @@ class BannerSelfServicePostLoginFlowFilters {
          return  (!isFlowControllerURI(path, uriMap)) || lastFlowCompleted == null || uriHampered
     }
 
-    private setFormContext() {
-        def associatedFormsList = []
-        associatedFormsList?.add( 0, "SELFSERVICE" )
-        FormContext.set( associatedFormsList )
-    }
-
+	
     public boolean isFlowControllerURI(String path,Map uriMap) {
         boolean isIgnoredUri = false;
         String controllerName = HttpRequestUtils.getControllerNameFromPath(path)
-        if(uriMap.get(controllerName)!=null)
+		if(uriMap.get(controllerName)!=null)
         {
             isIgnoredUri = true
         }
