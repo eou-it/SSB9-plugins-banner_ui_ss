@@ -3042,7 +3042,7 @@ var requestTimeout
             opts,
             select2,
             value, multiple,
-            allowedMethods = ["val", "destroy", "opened", "open", "close", "focus", "isFocused", "container", "dropdown", "onSortStart", "onSortEnd", "enable", "readonly", "positionDropdown", "data", "search"],
+            allowedMethods = ["val", "destroy", "opened", "open", "close", "focus", "isFocused", "container", "dropdown", "onSortStart", "onSortEnd", "enable", "readonly", "positionDropdown", "data", "search", "updateResults"],
             valueMethods = ["val", "opened", "isFocused", "container", "data"];
 
         this.each(function () {
