@@ -99,6 +99,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
               }, 150
             );
           },
+
           ajaxCallback:  function( params ) {
             return ajaxManager.create( ajaxId, { abortOld: true } ).add( params );
           }
@@ -108,6 +109,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 // FIXME: use common.js .loading/loading(false) when available
     collection.bind( "fetching", function ( ) { this.showSpinner("." + "grid-container") } ); // TODO: hard coded container
     collection.bind( "change", function ( model ) { model.makeDirty(); } );
+
     collection.fetch();
 
     return collection
@@ -219,7 +221,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
     events: {
       "click td":                               "selectCell",
-      "click th":                               "sort",
+      "click th":                               "sort"
     },
 
     selectCell: function (e) {
@@ -386,6 +388,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     initialize: function () {
+
       _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
 
       // make sure we have an id attribute
@@ -448,6 +451,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
             sortColumn:    this.collection.sortColumn,
             sortDirection: this.collection.sortDirection,
             batch:         this.collection.batch
+
           });
 
         } else {
@@ -467,7 +471,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.collection.bind( "reset", function () { view.refresh(); } );
       this.collection.bind( "fetched", function () { view.hideSpinner("." + view.css.gridContainer) } );
       this.collection.bind( "failed", function () { view.hideSpinner("." + view.css.gridContainer) } );
-
 
       if ( _.isNull( this.collection.sortColumn ) ) {
         var column = _.first( this.options.columns );
@@ -512,8 +515,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
               .on( 'mouseleave', '.grid tr', removeMatchHover );
 
       var lazyResizeHandler = _.debounce( function resizeHandler( e ) {
-        view.checkTitleWidths();
-      }, 300 );
+          view.recalcTitleWidths();
+      }, 350 );
 
       $( window ).on( 'resize', lazyResizeHandler );
     },
@@ -571,19 +574,45 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.columnVisibilityControls.render();
     },
 
-    checkTitleWidths: function( e ) {
-        _.each( $( 'th', this.table ), function( it ) {
-            var el = $( it );
-            el.find( '.title' ).css( 'width', 'auto' );
-        });
+    recalcTitleWidths: function () {
+        var frozenWidthString = (_.isUndefined( this.options.frozenWidth) ? "auto" : this.options.frozenWidth)
+        var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString))
+        var outerWidth = $(".grid-container").find(".grid-wrapper").width()
 
-        if (this.frozenTable) {
-            _.each( $( 'th', this.frozenTable ), function( it ) {
-                var el = $( it );
-                el.find( '.title' ).css( 'width', 'auto' );
-            });
-	}
+        var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString))
+
+        $(".grid-container").find(".grid-frozen-wrapper").css("width", frozenWidthString);
+        $(".grid-container").find(".grid-main-wrapper").css("width", mainWidthString);
+        $(".grid-container").find(".grid-main-wrapper").css("display", "block");
+
+        _.each( $( 'th', $(".grid-container").find("table") ), function( it ) {
+            var el = $( it );
+            var padding = 5
+            var titleWidth = el.find( '.title' ).length > 0 ? parseInt(el.find( '.title' ).css( 'width')) + padding: 0
+            var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
+            var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
+            var cellWidth = el.width()
+
+            if (titleWidth >= el.width()) {
+                el.find( '.title' ).css( 'width', (cellWidth - handleWidth - iconWidth - padding) + 'px' );
+            }
+        });
     },
+    
+      parseMeasurementType: function (distance) {
+          if (-1 != distance.indexOf("px") ) {
+              return "px"
+	  }
+          else if (-1 != distance.indexOf("%") ) {
+              return "%"
+	  }
+          else if (-1 != distance.indexOf("el") ) {
+              return "el"
+	  }
+          else {
+            return ""
+	  }
+      },
 
     render: function () {
       var view = this;
@@ -613,8 +642,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       }
       else
         this.$el.find( "." + this.css.gridMainWrapper ).css( "width", "100%" );
-
-      this.checkTitleWidths();
 
       this.setupScrolling();
 
@@ -719,8 +746,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
         this.generateHead();
 
-        this.checkTitleWidths();
-
         this.generateBody();
 
         this.generateColumnVisibilityControls();
@@ -744,7 +769,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       tbody.empty();
 
       var columnState = view.getColumnState();
-
       if(view.collection.length == 0){
         view.renderNoRecordsFound();
       } else {
@@ -1169,7 +1193,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this._generateHead( this.frozenTable, this.frozenColumns );
     },
 
-
     generateFrozenBody: function () {
       this.frozenTable.append( $( this.elements.tbody ) );
     },
@@ -1211,11 +1234,12 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
     },
   
-
     hideSpinner: function(target) {
       $(target).find('div.loading').fadeOut(200, function() {
         $(this).remove();
       });
+      this.recalcTitleWidths();
     }
   });
+
 }).call (this, $, _, Backbone, JSON, AjaxManager );
