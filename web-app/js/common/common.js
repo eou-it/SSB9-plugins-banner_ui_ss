@@ -176,6 +176,27 @@ function hideLoading( target ) {
     $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
 }
 
+function showLoadingPopup( target ) {
+    var t = $(target);
+
+    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
+    var pos = {top: $(window).scrollTop(), left: 0 };
+    var height = (t[0] && t[0].scrollHeight > t.outerHeight() ? t[0].scrollHeight : t.outerHeight() );
+    loading.css(pos).height(height).width(t.outerWidth());
+
+    setTimeout(
+        function() {
+            $(target).find( 'div.loading-pending' ).fadeIn( 200, function() {
+                $(this).removeClass( 'loading-pending' );
+            });
+        }, 500
+    );
+}
+
+function hideLoadingPopup( target ) {
+    $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
+}
+
 
 /* Usage:
      $(selector).loading();   // show loading indicator
@@ -183,6 +204,15 @@ function hideLoading( target ) {
 */
 $.fn.loading = function(isLoading) {
     (isLoading||isLoading==undefined) ? showLoading( this ) : hideLoading( this );
+    return this;
+}
+
+/* Usage:
+     $(selector).loadingPopup();   // show loading indicator
+     $(selector).loadingPopup(false); // hide loading indicator
+*/
+$.fn.loadingPopup = function(isLoading) {
+    (isLoading||isLoading==undefined) ? showLoadingPopup( this ) : hideLoadingPopup( this );
     return this;
 }
 
