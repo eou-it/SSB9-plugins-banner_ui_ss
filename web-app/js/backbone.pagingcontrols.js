@@ -72,6 +72,8 @@
     },
 
     selectPageSize: function (e) {
+      smoothRefresh();
+      $(".body-content").loading();
       var val = parseInt( $( e.target ).find( "option:eq(" + e.target.selectedIndex + ")" ).val() );
 
       this.log( "new page size selected: " + val  );
@@ -79,26 +81,35 @@
       this.collection.setPageSize( val );
     },
     gotoFirstPage:    function (e) {
+      smoothRefresh();
+      $(".body-content").loading();
       this.log( "requested first page" );
 
       this.collection.firstPage();
     },
     gotoLastPage:     function (e) {
+      smoothRefresh();
+      $(".body-content").loading();
       this.log( "requested last page" );
 
       this.collection.lastPage();
     },
     gotoPreviousPage: function (e) {
+      smoothRefresh();
+      $(".body-content").loading();
       this.log( "requested previous page" );
 
       this.collection.previousPage();
     },
     gotoNextPage:     function (e) {
+      smoothRefresh();
+      $(".body-content").loading();
       this.log( "requested next page" );
-
       this.collection.nextPage();
     },
     gotoSpecificPage: function (e) {
+      smoothRefresh();
+      $(".body-content").loading();
       var num = parseInt( $( e.target ).val() );
       this.log( "requested specific page: " + num );
 

@@ -224,6 +224,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     sort: function (e) {
+      smoothRefresh();
       if ( $( e.target ).data( "just-sorted" ) == "true" ) {
         // skip
       } else {
@@ -1217,7 +1218,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
   
     hideSpinner: function(target) {
-      $(".body-content").loading(false);      
+      $(".body-content").loading(false);
       this.recalcTitleWidths();
     }
   });
