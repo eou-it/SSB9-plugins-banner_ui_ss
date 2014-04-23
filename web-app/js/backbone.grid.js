@@ -89,7 +89,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         });
 
     var collection = new GridCollection;
-    collection.bind( "fetching", function ( ) { $(".body-content").loading() } );
+    collection.bind( "fetching", function ( ) { $(".grid-container").loading() } );
     collection.bind( "change", function ( model ) { model.makeDirty(); } );
 
     collection.fetch();
@@ -224,7 +224,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     sort: function (e) {
-      smoothRefresh();
       if ( $( e.target ).data( "just-sorted" ) == "true" ) {
         // skip
       } else {
@@ -241,6 +240,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
           return;
         }
+
+        smoothRefresh();
 
         if ( direction == this.strings.none )
           direction = this.strings.asc;
@@ -889,7 +890,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
 
     refreshFrozen: function () {
-      var view  = this,
+     if (undefined !== this.frozenTable) {
+        var view  = this,
           tbody = this.frozenTable.find( "tbody" ),
           clz   = this.strings.odd;
 
@@ -929,6 +931,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
         tbody.append( tr );
       });
+     }
     },
 
     redraw: function () {
@@ -1218,7 +1221,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
   
     hideSpinner: function(target) {
-      $(".body-content").loading(false);
+      $(".grid-container").loading(false);
       this.recalcTitleWidths();
     }
   });

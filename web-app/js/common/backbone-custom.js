@@ -438,9 +438,10 @@ function createFetchOptions( collection, options ) {
     return options;
 }
 
-// workaround to slightly tweak the grid size on events to handle possible
-// scrollbar size. stops widths from getting too wide and pushing content
-// out of alignments while refreshing
+// TODO: improve this. Currently causes table bounce effect.
+// Workaround to slightly tweak the grid size on events to handle possible
+// scrollbar size. Stops widths from getting too wide and pushing content
+// out of alignments while refreshing.
 function smoothRefresh () {
     $(".grid-container").find(".grid-main-wrapper").css("width", ($(".grid-container").find(".grid-main-wrapper").width() - 20 + 'px'))
 }
