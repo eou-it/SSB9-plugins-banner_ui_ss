@@ -89,7 +89,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         });
 
     var collection = new GridCollection;
-      collection.bind( "fetching", function ( ) { if ($(".grid-container").height() > 10) { $(".grid-container").loading(); } else { $(".body-content").loading(); } } );
+
+    collection.bind( "fetching", function ( ) { if ($(".grid-container").height() > 10) { $(".grid-container").loading(); } else { $(".body-content").loading(); } } );
     collection.bind( "change", function ( model ) { model.makeDirty(); } );
 
     collection.fetch();
@@ -888,7 +889,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
 
     refreshFrozen: function () {
-      var view  = this,
+     if (undefined !== this.frozenTable) {
+        var view  = this,
           tbody = this.frozenTable.find( "tbody" ),
           clz   = this.strings.odd;
 
@@ -928,6 +930,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
         tbody.append( tr );
       });
+     }
     },
 
     redraw: function () {
