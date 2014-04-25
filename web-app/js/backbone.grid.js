@@ -89,7 +89,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         });
 
     var collection = new GridCollection;
-    collection.bind( "fetching", function ( ) { $(".body-content").loading() } );
+      collection.bind( "fetching", function ( ) { if ($(".grid-container").height() > 10) { $(".grid-container").loading(); } else { $(".body-content").loading(); } } );
     collection.bind( "change", function ( model ) { model.makeDirty(); } );
 
     collection.fetch();
@@ -224,7 +224,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     sort: function (e) {
-      smoothRefresh();
       if ( $( e.target ).data( "just-sorted" ) == "true" ) {
         // skip
       } else {
@@ -1218,6 +1217,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
   
     hideSpinner: function(target) {
+      $(".grid-container").loading(false);
       $(".body-content").loading(false);
       this.recalcTitleWidths();
     }
