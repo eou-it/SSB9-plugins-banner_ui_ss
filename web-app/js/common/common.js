@@ -155,11 +155,13 @@ window.SaveTimer = ActivityTimer.extend({
 
 function showLoading( target ) {
     var t = $(target);
+    var offTop = (undefined === t[0] ? 0 : t[0].offsetTop);
+    var offLeft = (undefined === t[0] ? 0 : t[0].offsetLeft);
 
     var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
 
     // $.offset() includes the top nav bar's height, so find position manually
-    var pos = {top:t[0].offsetTop + $(window).scrollTop(), left:t[0].offsetLeft };
+    var pos = {top:offTop + $(window).scrollTop(), left:offLeft };
 
     loading.css(pos).height(t.outerHeight()).width(t.outerWidth());
 
