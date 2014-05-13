@@ -16,7 +16,8 @@
  * Spring bean configuration using Groovy DSL, versus normal Spring XML.
  */
 beans = {
-
-    
+    messageSource(org.springframework.context.support.ReloadableResourceBundleMessageSource) {
+        basenames = ["classpath:grails-app/i18n/messages"]
+    }
 }
 
