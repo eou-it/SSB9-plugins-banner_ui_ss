@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Workbook
 
 class ExcelExportBaseController {
     public static final String DEFAULT_FILE_TYPE = "xls"
-    public static final String DEFAULT_FILE_NAME = "export.xls"//MessageResolver.message("net.hedtech.banner.export.ExcelExportBaseController.defaultFileName")
+    public static final String DEFAULT_FILE_NAME = "export"//MessageResolver.message("net.hedtech.banner.export.ExcelExportBaseController.defaultFileName")
     public static final String DEFAULT_SHEET_TITLE = "Exported Data"
     public static final String CONTENT_TYPE = "application/excel"
 
@@ -34,7 +34,7 @@ class ExcelExportBaseController {
 
             Workbook wb = excelExportService.getExcelFile(data, fileTypeS as ExcelExportService.FileType, getSheetTitle())
 
-            response.setHeader("Content-disposition", "attachment;filename=\"" + getFileName() + "\"")
+            response.setHeader("Content-disposition", "attachment;filename=\"" + getFileName() + "." + fileTypeS + "\"")
             response.contentType = CONTENT_TYPE
             response.outputStream << toByteArray(wb)
             response.outputStream.flush()

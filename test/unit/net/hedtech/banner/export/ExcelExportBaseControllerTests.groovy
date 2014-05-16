@@ -62,7 +62,7 @@ class ExcelExportBaseControllerTests {
         testController.exportExcelFile()
 
         assertEquals 200, testController.response.status
-        assertEquals "attachment;filename=\"" + ExcelExportBaseController.DEFAULT_FILE_NAME + "\"", controller.response.getHeader("Content-disposition")
+        assertEquals "attachment;filename=\"" + ExcelExportBaseController.DEFAULT_FILE_NAME + ".xls\"", controller.response.getHeader("Content-disposition")
     }
 
 
@@ -126,7 +126,7 @@ class ExcelExportBaseControllerTests {
 
 
         String getFileName() {
-            return "testFile.xls"
+            return "testFile"
         }
 
 
@@ -144,7 +144,7 @@ class ExcelExportBaseControllerTests {
 
 
         String getFileName() {
-            return "testFile.xls"
+            return "testFile"
         }
     }
 
@@ -157,7 +157,7 @@ class ExcelExportBaseControllerTests {
 
 
         String getFileName() {
-            return "testFile.xls"
+            return "testFile"
         }
 
 
