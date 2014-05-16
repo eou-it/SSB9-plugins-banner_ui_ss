@@ -46,35 +46,43 @@ class ExcelExportBaseController {
 
     /**
      * Override to control who has access to the export service.
-     * @return
+     * @return true if access should be allowed.
      */
     Boolean hasAccess() {
         return false
     }
 
     /**
-     * Returns the filename to use for the excel export file.
-     * @return
+     * Override this to returns the filename to use for the excel export file without the extension.
+     * @return The desired file name without the extension.
      */
     String getFileName() {
         return DEFAULT_FILE_NAME
 
     }
 
-
+    /**
+     * Override this to return the data to be used by the spreadsheet generator.
+     * @return The data as a map in the form expected by the ExcelExportService
+     * @see ExcelExportService
+     */
     def getData() {
         return null
     }
 
-
+    /**
+     * Override this in order to change the title of the sheet.
+     * @return The title of the worksheet.
+     */
     String getSheetTitle() {
         return DEFAULT_SHEET_TITLE
     }
 
+
     private Boolean validFileType(String fileType) {
         def returnValue = true
         try {
-            def fileTypeE = fileType as ExcelExportService.FileType
+            fileType as ExcelExportService.FileType
         }
         catch (Exception e) {
             returnValue = false
