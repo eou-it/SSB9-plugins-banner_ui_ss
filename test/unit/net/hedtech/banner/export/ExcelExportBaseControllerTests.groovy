@@ -112,7 +112,7 @@ class ExcelExportBaseControllerTests {
             return true
         }
 
-        def getData() {
+        def retrieveData() {
             return [success: false]
         }
     }
@@ -130,7 +130,7 @@ class ExcelExportBaseControllerTests {
         }
 
 
-        def getData() {
+        def retrieveData() {
             return [success: false]
         }
     }
@@ -161,7 +161,7 @@ class ExcelExportBaseControllerTests {
         }
 
 
-        def getData() {
+        def retrieveData() {
             return [success: true,
                     headers: ["one", "two"],
                     data: [ ["11", "12"] ]

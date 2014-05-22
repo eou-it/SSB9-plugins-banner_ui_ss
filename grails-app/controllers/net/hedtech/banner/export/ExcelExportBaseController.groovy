@@ -9,6 +9,8 @@ class ExcelExportBaseController {
     public static final String DEFAULT_SHEET_TITLE = "Exported Data"
     public static final String CONTENT_TYPE = "application/excel"
 
+    static defaultAction = "exportExcel"
+
     def excelExportService
 
     /**
@@ -18,18 +20,18 @@ class ExcelExportBaseController {
      */
     def exportExcelFile() {
         if (!hasAccess()) {
-            response.status = 403
+            response.sendError(403)
             return
         }
         def fileTypeS = params.fileType ?: DEFAULT_FILE_TYPE
 
         // If invalid filetype is passed in, return a security error
         if (!validFileType(fileTypeS)) {
-            response.status = 403
+            response.sendError(403)
             return
         }
 
-        def data = getData()
+        def data = retrieveData()
         if (data) {
 
             Workbook wb = excelExportService.getExcelFile(data, fileTypeS as ExcelExportService.FileType, getSheetTitle())
@@ -40,7 +42,7 @@ class ExcelExportBaseController {
             response.outputStream.flush()
         }
         else {
-            response.status = 404
+            response.sendError(404)
         }
     }
 
@@ -66,7 +68,7 @@ class ExcelExportBaseController {
      * @return The data as a map in the form expected by the ExcelExportService
      * @see ExcelExportService
      */
-    def getData() {
+    def retrieveData() {
         return null
     }
 
