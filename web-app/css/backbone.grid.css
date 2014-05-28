@@ -150,7 +150,7 @@
 }
 
 .grid-without-title th:last-child {
-    padding-right: 30px;
+    //padding-right: 30px;
 }
 
 .button-menu-container {
