@@ -1,3 +1,6 @@
+/*******************************************************************************
+ Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 package net.hedtech.banner.export
 
 import net.hedtech.banner.exceptions.ApplicationException

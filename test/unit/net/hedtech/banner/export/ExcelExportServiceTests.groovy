@@ -1,3 +1,6 @@
+/*******************************************************************************
+ Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 package net.hedtech.banner.export
 
 import net.hedtech.banner.exceptions.ApplicationException
@@ -13,61 +16,62 @@ class ExcelExportServiceTests extends GrailsUnitTestCase{
 
     void testAssertions() {
         try {
-            def workBook = excelExportService.getExcelFile(null, ExcelExportService.FileType.xls, null)
+            excelExportService.getExcelFile(null, ExcelExportService.FileType.xls, null)
             fail "Should not be able to have null data or name."
         } catch (ApplicationException ae) {
             assertEquals ae.message, "@@r1:missingParameters@@"
         }
 
         try {
-            def workBook = excelExportService.getExcelFile(null, ExcelExportService.FileType.xlsx, null)
+            excelExportService.getExcelFile(null, ExcelExportService.FileType.xlsx, null)
             fail "Should not be able to have null data."
         } catch (ApplicationException ae) {
             assertEquals ae.message, "@@r1:missingParameters@@"
         }
 
         try {
-            def workBook = excelExportService.getExcelFile([], ExcelExportService.FileType.xls, null)
+            excelExportService.getExcelFile([], ExcelExportService.FileType.xls, null)
             fail "Should not be able to have null title."
         } catch (ApplicationException ae) {
             assertEquals ae.message, "@@r1:missingParameters@@"
         }
 
         try {
-            def workBook = excelExportService.getExcelFile([], ExcelExportService.FileType.xls, "")
+            excelExportService.getExcelFile([], ExcelExportService.FileType.xls, "")
             fail "Should not be able to have empty title."
         } catch (ApplicationException ae) {
             assertEquals ae.message, "@@r1:missingParameters@@"
         }
 
         try {
-            def workBook = excelExportService.getExcelFile(null, ExcelExportService.FileType.xls, "This is the title")
+            excelExportService.getExcelFile(null, ExcelExportService.FileType.xls, "This is the title")
             fail "Should not be able to have null data."
         } catch (ApplicationException ae) {
             assertEquals ae.message, "@@r1:missingParameters@@"
         }
 
         try {
-            def workBook = excelExportService.getExcelFile([success: false], ExcelExportService.FileType.xls, "")
+            excelExportService.getExcelFile([success: false], ExcelExportService.FileType.xls, "")
             fail "Should not be able to have empty title."
         } catch (ApplicationException ae) {
             assertEquals ae.message, "@@r1:missingParameters@@"
         }
 
         try {
-            def workBook = excelExportService.getExcelFile([success: false], ExcelExportService.FileType.xls, null)
+            excelExportService.getExcelFile([success: false], ExcelExportService.FileType.xls, null)
             fail "Should not be able to have null title."
         } catch (ApplicationException ae) {
             assertEquals ae.message, "@@r1:missingParameters@@"
         }
 
         try {
-            def workBook = excelExportService.getExcelFile([success: false], null, "This is good")
+            excelExportService.getExcelFile([success: false], null, "This is good")
             fail "Should not be able to have null file type."
         } catch (ApplicationException ae) {
             assertEquals ae.message, "@@r1:missingParameters@@"
         }
     }
+
 
     void testDocumentTypeAndTitle() {
         def workBook = excelExportService.getExcelFile([success: false], ExcelExportService.FileType.xls, "Test Title")
@@ -100,6 +104,7 @@ class ExcelExportServiceTests extends GrailsUnitTestCase{
         assertEquals "header1", headerRow.getCell(0).getStringCellValue()
         assertEquals "header2", headerRow.getCell(1).getStringCellValue()
     }
+
 
     void testDocumentWithErrorAndData() {
         def map = [success: false, errorMessage: "Error Message",

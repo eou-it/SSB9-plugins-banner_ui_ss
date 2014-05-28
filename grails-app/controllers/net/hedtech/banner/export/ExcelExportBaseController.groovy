@@ -1,12 +1,12 @@
+/*******************************************************************************
+ Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 package net.hedtech.banner.export
 
-import net.hedtech.banner.utility.MessageResolver
 import org.apache.poi.ss.usermodel.Workbook
 
 class ExcelExportBaseController {
     public static final String DEFAULT_FILE_TYPE = "xls"
-    public static final String DEFAULT_FILE_NAME = "export"//MessageResolver.message("net.hedtech.banner.export.ExcelExportBaseController.defaultFileName")
-    public static final String DEFAULT_SHEET_TITLE = "Exported Data"
     public static final String CONTENT_TYPE = "application/excel"
 
     static defaultAction = "exportExcel"
@@ -50,7 +50,7 @@ class ExcelExportBaseController {
      * Override to control who has access to the export service.
      * @return true if access should be allowed.
      */
-    Boolean hasAccess() {
+    protected Boolean hasAccess() {
         return false
     }
 
@@ -58,8 +58,8 @@ class ExcelExportBaseController {
      * Override this to returns the filename to use for the excel export file without the extension.
      * @return The desired file name without the extension.
      */
-    String getFileName() {
-        return DEFAULT_FILE_NAME
+    protected String getFileName() {
+        return message(code: "net.hedtech.banner.export.ExcelExportBaseController.defaultFileName")
 
     }
 
@@ -68,7 +68,7 @@ class ExcelExportBaseController {
      * @return The data as a map in the form expected by the ExcelExportService
      * @see ExcelExportService
      */
-    def retrieveData() {
+    protected def retrieveData() {
         return null
     }
 
@@ -76,8 +76,8 @@ class ExcelExportBaseController {
      * Override this in order to change the title of the sheet.
      * @return The title of the worksheet.
      */
-    String getSheetTitle() {
-        return DEFAULT_SHEET_TITLE
+    protected def getSheetTitle() {
+        return message(code: "net.hedtech.banner.export.ExcelExportBaseController.defaultTabName")
     }
 
 
@@ -86,7 +86,7 @@ class ExcelExportBaseController {
         try {
             fileType as ExcelExportService.FileType
         }
-        catch (Exception e) {
+        catch (IllegalArgumentException e) {
             returnValue = false
         }
         return returnValue
