@@ -196,7 +196,7 @@
 /* notification/datatables integration classes */
 
 .grid tr td:first-child {
-    padding-left: 30px;
+    //padding-left: 30px;
 }
 
 .grid.grid-frozen tr td:first-child {
