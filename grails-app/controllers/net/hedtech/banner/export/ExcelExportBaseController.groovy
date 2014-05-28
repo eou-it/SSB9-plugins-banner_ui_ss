@@ -50,7 +50,7 @@ class ExcelExportBaseController {
      * Override to control who has access to the export service.
      * @return true if access should be allowed.
      */
-    Boolean hasAccess() {
+    protected Boolean hasAccess() {
         return false
     }
 
@@ -58,7 +58,7 @@ class ExcelExportBaseController {
      * Override this to returns the filename to use for the excel export file without the extension.
      * @return The desired file name without the extension.
      */
-    String getFileName() {
+    protected String getFileName() {
         return message(code: "net.hedtech.banner.export.ExcelExportBaseController.defaultFileName")
 
     }
@@ -68,7 +68,7 @@ class ExcelExportBaseController {
      * @return The data as a map in the form expected by the ExcelExportService
      * @see ExcelExportService
      */
-    def retrieveData() {
+    protected def retrieveData() {
         return null
     }
 
@@ -76,7 +76,7 @@ class ExcelExportBaseController {
      * Override this in order to change the title of the sheet.
      * @return The title of the worksheet.
      */
-    def getSheetTitle() {
+    protected def getSheetTitle() {
         return message(code: "net.hedtech.banner.export.ExcelExportBaseController.defaultTabName")
     }
 
