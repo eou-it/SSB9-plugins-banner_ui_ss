@@ -1,15 +1,32 @@
+/*******************************************************************************
+ Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 package net.hedtech.banner.export
 
-
-
 import grails.test.mixin.*
-import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(ExcelExportBaseController)
 class ExcelExportBaseControllerTests {
+
+    def originalHasAccess
+    def originalRetreiveData
+    def originalGetFilename
+
+    void setUp() {
+        originalHasAccess = ExcelExportBaseController.metaClass.hasAccess
+        originalRetreiveData = ExcelExportBaseController.metaClass.retrieveData
+        originalGetFilename = ExcelExportBaseController.metaClass.getFileName
+    }
+
+
+    void tearDown() {
+        ExcelExportBaseController.metaClass.hasAccess = originalHasAccess
+        ExcelExportBaseController.metaClass.retrieveData = originalRetreiveData
+        ExcelExportBaseController.metaClass.getFileName = originalGetFilename
+    }
 
     void testDefaultSecurity() {
         controller.exportExcelFile()
@@ -19,157 +36,104 @@ class ExcelExportBaseControllerTests {
 
 
     void testAllowsAccess() {
-        def testController = new ExcelExportBaseControllerWithAccess()
-        testController.excelExportService = new ExcelExportService()
-        testController.exportExcelFile()
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.retrieveData = { return [success: false] }
+        controller.excelExportService = new ExcelExportService()
+        controller.exportExcelFile()
 
-        assertEquals 200, testController.response.status
+        assertEquals 200, controller.response.status
     }
 
 
     void testFileTypesBad() {
-        def testController = new ExcelExportBaseControllerWithAccess()
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.retrieveData = { return [success: false] }
         controller.params.fileType = "bad"
-        testController.exportExcelFile()
+        controller.exportExcelFile()
 
-        assertEquals 403, testController.response.status
+        assertEquals 403, controller.response.status
     }
 
 
     void testFileTypesXls() {
-        def testController = new ExcelExportBaseControllerWithAccess()
-        testController.excelExportService = new ExcelExportService()
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.retrieveData = { return [success: false] }
+        controller.excelExportService = new ExcelExportService()
         controller.params.fileType = "xls"
-        testController.exportExcelFile()
+        controller.exportExcelFile()
 
-        assertEquals 200, testController.response.status
+        assertEquals 200, controller.response.status
     }
 
 
     void testFileTypesXlsx() {
-        def testController = new ExcelExportBaseControllerWithAccess()
-        testController.excelExportService = new ExcelExportService()
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.retrieveData = { return [success: false] }
+        controller.excelExportService = new ExcelExportService()
         controller.params.fileType = "xlsx"
-        testController.exportExcelFile()
+        controller.exportExcelFile()
 
-        assertEquals 200, testController.response.status
+        assertEquals 200, controller.response.status
     }
 
 
     void testResponseFilenameHeaderDefault() {
-        def testController = new ExcelExportBaseControllerWithAccess()
-        testController.excelExportService = new ExcelExportService()
-        testController.exportExcelFile()
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.retrieveData = { return [success: false] }
+        controller.excelExportService = new ExcelExportService()
+        controller.exportExcelFile()
 
-        assertEquals 200, testController.response.status
-        assertEquals "attachment;filename=\"" + ExcelExportBaseController.DEFAULT_FILE_NAME + ".xls\"", controller.response.getHeader("Content-disposition")
+        assertEquals 200, controller.response.status
+        assertEquals "attachment;filename=\"" + controller.message(code: "net.hedtech.banner.export.ExcelExportBaseController.defaultFileName") + ".xls\"", controller.response.getHeader("Content-disposition")
     }
 
 
     void testResponseFilenameHeaderProvided() {
-        def testController = new ExcelExportBaseControllerWithAccessAndFilename()
-        testController.excelExportService = new ExcelExportService()
-        testController.exportExcelFile()
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.retrieveData = { return [success: false] }
+        ExcelExportBaseController.metaClass.getFileName = { return "testFile" }
+        controller.excelExportService = new ExcelExportService()
+        controller.exportExcelFile()
 
-        assertEquals 200, testController.response.status
+        assertEquals 200, controller.response.status
         assertEquals "attachment;filename=\"testFile.xls\"", controller.response.getHeader("Content-disposition")
     }
 
 
-    void testcontentTypeHeader() {
-        def testController = new ExcelExportBaseControllerWithAccessAndFilename()
-        testController.excelExportService = new ExcelExportService()
-        testController.exportExcelFile()
+    void testContentTypeHeader() {
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.retrieveData = { return [success: false] }
+        ExcelExportBaseController.metaClass.getFileName = { return "testFile" }
+        controller.excelExportService = new ExcelExportService()
+        controller.exportExcelFile()
 
-        assertEquals 200, testController.response.status
+        assertEquals 200, controller.response.status
         assertEquals "application/excel", response.contentType
     }
 
 
     void testNullData() {
-        def testController = new ExcelExportBaseControllerWithAccessAndFilenameNullData()
-        testController.excelExportService = new ExcelExportService()
-        testController.exportExcelFile()
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.getFileName = { return "testFile" }
+        controller.excelExportService = new ExcelExportService()
+        controller.exportExcelFile()
 
-        assertEquals 404, testController.response.status
+        assertEquals 404, controller.response.status
     }
 
 
     void testActualData() {
-        def testController = new ExcelExportBaseControllerWithAccessAndFilenameWithData()
-        testController.excelExportService = new ExcelExportService()
-        testController.exportExcelFile()
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.retrieveData = { return [success: true,
+                headers: ["one", "two"],
+                data: [ ["11", "12"] ]
+        ] }
+        ExcelExportBaseController.metaClass.getFileName = { return "testFile" }
+        controller.excelExportService = new ExcelExportService()
+        controller.exportExcelFile()
 
-        assertEquals 200, testController.response.status
-        assertNotNull testController.response.outputStream
-        assertTrue testController.response.getContentAsString().size() > 0
+        assertEquals 200, controller.response.status
+        assertNotNull controller.response.outputStream
+        assertTrue controller.response.getContentAsString().size() > 0
     }
-
-
-    private class ExcelExportBaseControllerWithAccess extends ExcelExportBaseController
-    {
-        Boolean hasAccess() {
-            return true
-        }
-
-        def retrieveData() {
-            return [success: false]
-        }
-    }
-
-
-    private class ExcelExportBaseControllerWithAccessAndFilename extends ExcelExportBaseController
-    {
-        Boolean hasAccess() {
-            return true
-        }
-
-
-        String getFileName() {
-            return "testFile"
-        }
-
-
-        def retrieveData() {
-            return [success: false]
-        }
-    }
-
-
-    private class ExcelExportBaseControllerWithAccessAndFilenameNullData extends ExcelExportBaseController
-    {
-        Boolean hasAccess() {
-            return true
-        }
-
-
-        String getFileName() {
-            return "testFile"
-        }
-    }
-
-
-    private class ExcelExportBaseControllerWithAccessAndFilenameWithData extends ExcelExportBaseController
-    {
-        Boolean hasAccess() {
-            return true
-        }
-
-
-        String getFileName() {
-            return "testFile"
-        }
-
-
-        def retrieveData() {
-            return [success: true,
-                    headers: ["one", "two"],
-                    data: [ ["11", "12"] ]
-            ]
-
-        }
-    }
-
-
-
 }
