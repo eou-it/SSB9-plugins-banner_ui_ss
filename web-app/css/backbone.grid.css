@@ -150,7 +150,7 @@
 }
 
 .grid-without-title th:last-child {
-    padding-right: 30px;
+    //padding-right: 30px;
 }
 
 .button-menu-container {
@@ -196,7 +196,7 @@
 /* notification/datatables integration classes */
 
 .grid tr td:first-child {
-    padding-left: 30px;
+    //padding-left: 30px;
 }
 
 .grid.grid-frozen tr td:first-child {

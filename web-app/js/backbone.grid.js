@@ -371,7 +371,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     initialize: function () {
-
       _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
 
       // make sure we have an id attribute
@@ -434,7 +433,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
             sortColumn:    this.collection.sortColumn,
             sortDirection: this.collection.sortDirection,
             batch:         this.collection.batch
-
           });
 
         } else {
@@ -558,44 +556,42 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     recalcTitleWidths: function () {
-        var frozenWidthString = (_.isUndefined( this.options.frozenWidth) ? "auto" : this.options.frozenWidth)
-        var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString))
-        var outerWidth = $(".grid-container").find(".grid-wrapper").width()
+        var frozenWidthString = this.options.frozenWidth || this.frozenTable.css("width") || "auto";
+        var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString));
+        var outerWidth = $(".grid-container .grid-wrapper").width();
 
-        var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString))
+        var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString));
 
-        $(".grid-container").find(".grid-frozen-wrapper").css("width", frozenWidthString);
-        $(".grid-container").find(".grid-main-wrapper").css("width", mainWidthString);
-        $(".grid-container").find(".grid-main-wrapper").css("display", "block");
+        $(".grid-container .grid-frozen-wrapper").css("width", frozenWidthString);
+        $(".grid-container .grid-main-wrapper").css({ "width": mainWidthString, "display": "block"});
 
-        _.each( $( 'th', $(".grid-container").find("table") ), function( it ) {
+        _.each( $(".grid-container table th"), function( it ) {
             var el = $( it );
-            var padding = 5
-            var titleWidth = el.find( '.title' ).length > 0 ? parseInt(el.find( '.title' ).css( 'width')) + padding: 0
-            var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
-            var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
-            var cellWidth = el.width()
+            var title = el.find('.title');
+            if ( title.length ) {
+                title.css('width', 'auto');
+                var padding = 5
+                var titleWidth = parseInt(title.css( 'width')) + padding
+                var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
+                var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
+                var cellWidth = el.width()
 
-            if (titleWidth >= el.width()) {
-                el.find( '.title' ).css( 'width', (cellWidth - handleWidth - iconWidth - padding) + 'px' );
-            }
+                if (titleWidth >= el.width()) {
+                    title.css('width', (cellWidth - handleWidth - iconWidth - padding) + "px");
+                }
+              }
         });
     },
-    
-      parseMeasurementType: function (distance) {
-          if (-1 != distance.indexOf("px") ) {
-              return "px"
-	  }
-          else if (-1 != distance.indexOf("%") ) {
-              return "%"
-	  }
-          else if (-1 != distance.indexOf("el") ) {
-              return "el"
-	  }
-          else {
-            return ""
-	  }
-      },
+
+    parseMeasurementType: function (sizeString) {
+       var units = ["px", "%", "em"];
+       var found = _.find(units, function(unit) {
+         if (-1 != sizeString.indexOf(unit)) {
+           return true;
+         }
+       });
+      return found || "";
+     },
 
     render: function () {
       var view = this;
@@ -1218,7 +1214,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       if ( model )
         this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
     },
-  
+
     hideSpinner: function(target) {
       $(".grid-container").loading(false);
       $(".body-content").loading(false);
