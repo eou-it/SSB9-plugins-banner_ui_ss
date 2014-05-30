@@ -10,12 +10,12 @@
                 <span><g:message code="net.hedtech.banner.export.ExcelExportBaseController.exportHeading"/></span>
                 <ul class="excel-export-wizard-type-list">
                     <li><span>
-                        <g:radio id="excelExportWizardTypeXls"  name="excelExportWizardType" value="xls" checked="true"/>
-                        <label for="excelExportWizardTypeXls"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelSpreadsheetXls"/></label>
+                        <g:radio id="excelExportWizardTypeXlsx" name="excelExportWizardType" value="xlsx" checked="true"/>
+                        <label for="excelExportWizardTypeXlsx"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelSpreadsheetXlsx"/></label>
                     </span></li>
                     <li><span>
-                        <g:radio id="excelExportWizardTypeXlsx" name="excelExportWizardType" value="xlsx" />
-                        <label for="excelExportWizardTypeXlsx"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelSpreadsheetXlsx"/></label>
+                        <g:radio id="excelExportWizardTypeXls"  name="excelExportWizardType" value="xls"/>
+                        <label for="excelExportWizardTypeXls"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelSpreadsheetXls"/></label>
                     </span></li>
                 </ul>
             </div>
