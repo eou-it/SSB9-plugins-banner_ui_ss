@@ -556,9 +556,10 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     recalcTitleWidths: function () {
-        var frozenWidthString = this.options.frozenWidth || this.frozenTable.css("width") || "auto";
+        var predefinedWidth   = this.frozenTable === void 0 ? void 0 : this.frozenTable.css("width");
+        var frozenWidthString = this.options.frozenWidth || predefinedWidth || "auto";
         var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString));
-        var outerWidth = $(".grid-container .grid-wrapper").width();
+        var outerWidth  = $(".grid-container .grid-wrapper").width();
 
         var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString));
 

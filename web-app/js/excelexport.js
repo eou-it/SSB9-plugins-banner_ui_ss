@@ -35,7 +35,7 @@ window.ExcelExportWizardView = Backbone.View.extend({
                     spacing_open: 0,
                     spacing_closed: 0
                 });
-                $('#excelExportWizardTypeXls').attr("checked","checked");
+                $('#excelExportWizardTypeXlsx').attr("checked","checked");
             }
         });
     },
