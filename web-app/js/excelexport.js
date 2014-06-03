@@ -16,9 +16,10 @@ window.ExcelExportWizardView = Backbone.View.extend({
         "click button.excel-export-wizard-cancel-button": "doCancel",
         "click button.excel-export-wizard-export-button": "doExport"
     },
-    render: function(theUrl, theTitle) {
+    render: function(theUrl, theTitle, theDescription) {
         this.url = theUrl
         $("#excel-export-title").html(theTitle)
+        $("#excel-export-description").html(theDescription)
 
         $(".excel-export-wizard").modal({
             overlayClose: true,
@@ -35,9 +36,10 @@ window.ExcelExportWizardView = Backbone.View.extend({
                     spacing_open: 0,
                     spacing_closed: 0
                 });
-                $('#excelExportWizardTypeXlsx').attr("checked","checked");
             }
         });
+        $("#excel-export-dialog").attr('tabindex','-1');
+        $("#excel-export-dialog").focus();
     },
     doCancel: function() {
         $(".excel-export-wizard-content").layout().destroy();

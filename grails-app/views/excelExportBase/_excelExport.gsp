@@ -1,29 +1,44 @@
 <div class="modal-content">
-    <div class="excel-export-wizard ui-widget">
-        <div class="excel-export-wizard-content page-with-sidebar">
-            <div class="excel-export-wizard-content-north">
-                <div class="excel-export-wizard-header ui-widget-header">
-                    <span id="excel-export-title" name="excel-export-title"></span>
+    <div class="excel-export-wizard ui-widget" id="excel-export-dialog" name="excel-export-dialog" role="dialog" tabindex="-1" aria-labeledBy="excel-export-title excel-export-description">
+        <div role="document">
+            <div class="excel-export-wizard-content page-with-sidebar">
+                <div class="excel-export-wizard-content-north">
+                    <div class="excel-export-wizard-header ui-widget-header" role="heading" aria-labeledby="excel-export-title">
+                        <span id="excel-export-title" name="excel-export-title" tabindex="0"></span>
+                    </div>
+                </div>
+                <div class="excel-export-wizard-content-center" id="excelExportWizardHeading" role="contentinfo" tabindex="1" aria-labelledby="excelExportWizardHeadingLabel">
+                    <label for="excelExportWizardHeading" id="excelExportWizardHeadingLabel"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.exportHeading"/></label>
+                    <ul class="excel-export-wizard-type-list">
+                        <li>
+                            <g:radio id="excelExportWizardTypeXlsx" name="excelExportWizardType" value="xlsx" aria-labeledBy="excelExportWizardTypeXlsxDescription" checked="true" tabindex="2"/>
+                            <label aria-hidden="true" for="excelExportWizardTypeXlsx"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelSpreadsheetXlsx"/></label>
+                        </li>
+                        <li>
+                            <g:radio id="excelExportWizardTypeXls"  name="excelExportWizardType" value="xls" aria-labeledBy="excelExportWizardTypeXlsDescription" tabindex="3"/>
+                            <label aria-hidden="true" for="excelExportWizardTypeXls"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelSpreadsheetXls"/></label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="excel-export-wizard-content-south">
+                    <div class="buttons">
+                        <button class="excel-export-button excel-export-wizard-export-button primary-button" aria-labeledBy="exportButtonDescription" tabindex="4"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.export"/></button>
+                        <button class="excel-export-button excel-export-wizard-cancel-button secondary-button" aria-labeledBy="cancelButtonDescription" tabindex="5"  autofocus><g:message code="net.hedtech.banner.export.ExcelExportBaseController.cancel"/></button>
+                    </div>
                 </div>
             </div>
-            <div class="excel-export-wizard-content-center">
-                <span><g:message code="net.hedtech.banner.export.ExcelExportBaseController.exportHeading"/></span>
-                <ul class="excel-export-wizard-type-list">
-                    <li><span>
-                        <g:radio id="excelExportWizardTypeXlsx" name="excelExportWizardType" value="xlsx" checked="true"/>
-                        <label for="excelExportWizardTypeXlsx"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelSpreadsheetXlsx"/></label>
-                    </span></li>
-                    <li><span>
-                        <g:radio id="excelExportWizardTypeXls"  name="excelExportWizardType" value="xls"/>
-                        <label for="excelExportWizardTypeXls"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelSpreadsheetXls"/></label>
-                    </span></li>
-                </ul>
+            <div hidden id="excel-export-description" name="excel-export-description" class="screen-reader-offscreen"></div>
+            <div hidden id="excelExportWizardTypeXlsxDescription" name="excelExportWizardTypeXlsxDescription" class="screen-reader-offscreen">
+                <g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelExportWizardTypeXlsxDescription"/>
             </div>
-            <div class="excel-export-wizard-content-south">
-                <div class="buttons">
-                    <button class="excel-export-button excel-export-wizard-export-button primary-button"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.export"/></button>
-                    <button class="excel-export-button excel-export-wizard-cancel-button secondary-button"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.cancel"/></button>
-                </div>
+            <div hidden id="excelExportWizardTypeXlsDescription" name="excelExportWizardTypeXlsDescription" class="screen-reader-offscreen">
+                <g:message code="net.hedtech.banner.export.ExcelExportBaseController.excelExportWizardTypeXlsDescription"/>
+            </div>
+            <div hidden id="exportButtonDescription" name="exportButtonDescription" class="screen-reader-offscreen">
+                <g:message code="net.hedtech.banner.export.ExcelExportBaseController.exportButtonDescription"/>
+            </div>
+            <div hidden id="cancelButtonDescription" name="cancelButtonDescription" class="screen-reader-offscreen">
+                <g:message code="net.hedtech.banner.export.ExcelExportBaseController.cancelButtonDescription"/>
             </div>
         </div>
     </div>
