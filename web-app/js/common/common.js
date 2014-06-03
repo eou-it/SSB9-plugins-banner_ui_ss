@@ -184,7 +184,7 @@ function showLoadingPopup( target ) {
     var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
     var pos = {top: $(window).scrollTop(), left: 0 };
     var height = (t[0] && t[0].scrollHeight > t.outerHeight() ? t[0].scrollHeight : t.outerHeight() );
-    loading.css(pos).height(height).width(t.outerWidth());
+    loading.css(pos).height(height-2).width(t.outerWidth()-2);
 
     setTimeout(
         function() {
