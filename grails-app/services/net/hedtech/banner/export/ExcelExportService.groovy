@@ -26,9 +26,10 @@ class ExcelExportService {
      *     errorMessage: <error message>, <-- This is optional
      *     defaultColumnWidth: <default width>, <-- This is optional. Default is 25
      *     headers: [String], <-- An array of strings that will be treated as the headers.  (Optional)
-     *     data: [data element] <-- An array of data elements. The number of items should coorespond to the number of items
-     *         in the headers, though it is not considered an error if it does not. Each data element can be either a String or
-     *         a Data object. This is optional (in the case of error).
+     *     data: [data element] <-- An array of data elements. Each data element itself is an array of values.
+     *     The number of items in each data element should correspond to the number of items
+     *         in the headers, though it is not considered an error if it does not. Each item can be either a String or
+     *         a Date object. This is optional (in the case of error).
      * ]
      *
      */
