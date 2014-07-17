@@ -1,14 +1,6 @@
-/*********************************************************************************
- Copyright 2009-2012 SunGard Higher Education. All Rights Reserved.
- This copyrighted software contains confidential and proprietary information of
- SunGard Higher Education and its subsidiaries. Any use of this software is limited
- solely to SunGard Higher Education licensees, and is further subject to the terms
- and conditions of one or more written license agreements between SunGard Higher
- Education and the licensee in question. SunGard is either a registered trademark or
- trademark of SunGard Data Systems in the U.S.A. and/or other regions and/or countries.
- Banner and Luminis are either registered trademarks or trademarks of SunGard Higher
- Education in the U.S.A. and/or other regions and/or countries.
- **********************************************************************************/
+/** *****************************************************************************
+ Copyright 2009 - 2014 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 package net.hedtech.banner.common
 
 
@@ -35,7 +27,7 @@ class RtlCssGenerator {
 
 
     def getCSSFileDSL(srcFile) {
-        def CSSClasses = srcFile.text.split("}")
+        def CSSClasses = srcFile.split("}")//text.split("}")
         def CSSDSL = [];
 
         CSSClasses.each { fs ->
@@ -265,11 +257,23 @@ class RtlCssGenerator {
     def createRTLCSSFile(destFileName, RTLCSSDSL) {
         def destFile = new File(destFileName)
         destFile.delete()
-        RTLCSSDSL.each { DSLEntryCSS ->
-            destFile.append(DSLEntryCSS["CLASS_NAME"] + " {\n")
-            destFile.append(DSLEntryCSS["CSS"])
-            destFile.append("}")
+        destFile.append(createCSSEntryFromDSL(RTLCSSDSL))
+    }
+
+    def createCSSEntryFromDSL(CSS_DSL) {
+        int numberOfCss = CSS_DSL.size();
+        int cssCounter = 0;
+        StringBuilder cssEntry = new StringBuilder();
+        CSS_DSL.each { DSLEntryCSS ->
+            cssEntry.append(DSLEntryCSS["CLASS_NAME"] + " {\n")
+            cssEntry.append(DSLEntryCSS["CSS"])
+            cssEntry.append("}")
+            cssCounter++
+            if(DSLEntryCSS["CLASS_NAME"] =~ /[\s]*\/\*/ && cssCounter == numberOfCss) {
+                cssEntry.append("*/")
+            }
         }
+        return cssEntry.toString();
     }
 
 
@@ -283,11 +287,69 @@ class RtlCssGenerator {
 
 
     def transformFile( File source, File target) {
-        def CSS_DSL = getCSSFileDSL(source)
+        List mediaQueries = getMediaQueries(source)
+
+        def sourceWithoutMediaQueries = removeMediaQueriesFromSource(source, mediaQueries);
+        def rtlMediaQueries = convertMediaQueriesToRTL(mediaQueries);
+
+        def CSS_DSL = getCSSFileDSL(sourceWithoutMediaQueries)
         def RTL_CSS_DSL = convertCSSDSLToRTL(CSS_DSL)
         createRTLCSSFile(target.path, RTL_CSS_DSL)
+
+        appendMediaQueriesToFile(target.path, rtlMediaQueries);
     }
 
+    def getMediaQueries(srcFile) {
+        def mediaQueryRegExp = /(?m)@media[\S\s]*?}[\s]*[*\/]*[\s]*}/;
+        List mediaQueryList = new ArrayList();
+
+        def srcFileText = srcFile.text;
+        srcFileText.eachMatch(mediaQueryRegExp) { match ->
+            mediaQueryList.add(match);
+        }
+        return mediaQueryList
+    }
+
+    def removeMediaQueriesFromSource(srcFile, List mediaQueries) {
+        int numberOfMediaQueries = mediaQueries.size();
+
+        String textFileWithoutMediaQueries = srcFile.text;
+        for(int counter = 0; counter < numberOfMediaQueries; counter++) {
+            textFileWithoutMediaQueries = textFileWithoutMediaQueries.replace(mediaQueries.get(counter), "");
+        }
+        return textFileWithoutMediaQueries
+    }
+
+    def convertMediaQueriesToRTL(List mediaQueries) {
+        int numberOfMediaQueries = mediaQueries.size();
+        List RTLMediaQueryCss = new ArrayList();
+
+        for(int counter = 0; counter < numberOfMediaQueries; counter++) {
+            String mediaQuery = mediaQueries[counter];
+
+            def matcher = mediaQuery =~ /@media[\S\s]*?\{/
+            String mediaLine = matcher[0];
+            String mediaQueryCss = mediaQueries[counter].replace(mediaLine, "");
+            def CSS_DSL = getCSSFileDSL(mediaQueryCss)
+            def RTL_CSS_DSL = convertCSSDSLToRTL(CSS_DSL)
+
+            StringBuilder rtlCss = new StringBuilder(mediaLine);
+            rtlCss.append(createCSSEntryFromDSL(RTL_CSS_DSL))
+            rtlCss.append("}");
+            rtlCss.append("\n");
+            RTLMediaQueryCss.add(rtlCss.toString());
+        }
+        return RTLMediaQueryCss
+    }
+
+    def appendMediaQueriesToFile(destFileName, rtlMediaQueries) {
+        def destFile = new File(destFileName)
+        destFile.append("\n/*** Media Query Section ***/\n")
+
+        rtlMediaQueries.each { rtlEntry ->
+            destFile.append(rtlEntry)
+        }
+    }
 
     def getFilesToTransformMapList(dir) {
         def files = []
@@ -311,7 +373,7 @@ class RtlCssGenerator {
         if (includePluginsDir) {
             filesToGenerate.addAll( getFilesToTransformMapList( BuildSettingsHolder.settings.projectPluginsDir ) )
             if(new File("${BuildSettingsHolder.settings.baseDir.absolutePath}/plugins/").exists()) {
-            	filesToGenerate.addAll( getFilesToTransformMapList( new File("${BuildSettingsHolder.settings.baseDir.absolutePath}/plugins/")) )
+                filesToGenerate.addAll( getFilesToTransformMapList( new File("${BuildSettingsHolder.settings.baseDir.absolutePath}/plugins/")) )
             }
         }
 
