@@ -27,7 +27,7 @@ class RtlCssGenerator {
 
 
     def getCSSFileDSL(srcFile) {
-        def CSSClasses = srcFile.split("}")//text.split("}")
+        def CSSClasses = srcFile.split("}")
         def CSSDSL = [];
 
         CSSClasses.each { fs ->
@@ -240,8 +240,8 @@ class RtlCssGenerator {
     }
 
 
-    def convertCSSDSLToRTL(CSSDSL) {
-        def RTLCSSDSL = []
+    List convertCSSDSLToRTL(CSSDSL) {
+        List RTLCSSDSL = []
         CSSDSL.each { DSLEntry ->
             def DSLEntryCSS = DSLEntry["CSS"]
             def newDSLEntryCSS = convertCSSToRTL(DSLEntryCSS)
@@ -254,10 +254,14 @@ class RtlCssGenerator {
     }
 
 
-    def createRTLCSSFile(destFileName, RTLCSSDSL) {
-        def destFile = new File(destFileName)
+    def createRTLCSSFile(destFileName, RTLCSSDSL , rtlMediaQueries) {
+        File destFile = new File(destFileName)
         destFile.delete()
         destFile.append(createCSSEntryFromDSL(RTLCSSDSL))
+        if(rtlMediaQueries){
+            destFile.append("\n/*** Media Query Section ***/\n")
+            destFile.append(rtlMediaQueries)
+        }
     }
 
     def createCSSEntryFromDSL(CSS_DSL) {
@@ -269,9 +273,6 @@ class RtlCssGenerator {
             cssEntry.append(DSLEntryCSS["CSS"])
             cssEntry.append("}")
             cssCounter++
-            if(DSLEntryCSS["CLASS_NAME"] =~ /[\s]*\/\*/ && cssCounter == numberOfCss) {
-                cssEntry.append("*/")
-            }
         }
         return cssEntry.toString();
     }
@@ -290,27 +291,26 @@ class RtlCssGenerator {
         List mediaQueries = getMediaQueries(source)
 
         def sourceWithoutMediaQueries = removeMediaQueriesFromSource(source, mediaQueries);
-        def rtlMediaQueries = convertMediaQueriesToRTL(mediaQueries);
+        String rtlMediaQueries = convertMediaQueriesToRTL(mediaQueries);
 
         def CSS_DSL = getCSSFileDSL(sourceWithoutMediaQueries)
         def RTL_CSS_DSL = convertCSSDSLToRTL(CSS_DSL)
-        createRTLCSSFile(target.path, RTL_CSS_DSL)
+        createRTLCSSFile(target.path, RTL_CSS_DSL, rtlMediaQueries)
 
-        appendMediaQueriesToFile(target.path, rtlMediaQueries);
     }
 
-    def getMediaQueries(srcFile) {
+    List getMediaQueries(srcFile) {
         def mediaQueryRegExp = /(?m)@media[\S\s]*?}[\s]*[*\/]*[\s]*}/;
         List mediaQueryList = new ArrayList();
 
-        def srcFileText = srcFile.text;
+        String srcFileText = srcFile.text;
         srcFileText.eachMatch(mediaQueryRegExp) { match ->
             mediaQueryList.add(match);
         }
         return mediaQueryList
     }
 
-    def removeMediaQueriesFromSource(srcFile, List mediaQueries) {
+    String removeMediaQueriesFromSource(srcFile, List mediaQueries) {
         int numberOfMediaQueries = mediaQueries.size();
 
         String textFileWithoutMediaQueries = srcFile.text;
@@ -320,9 +320,9 @@ class RtlCssGenerator {
         return textFileWithoutMediaQueries
     }
 
-    def convertMediaQueriesToRTL(List mediaQueries) {
+    String convertMediaQueriesToRTL(List mediaQueries) {
         int numberOfMediaQueries = mediaQueries.size();
-        List RTLMediaQueryCss = new ArrayList();
+        StringBuilder RTLMediaQueryCss = new StringBuilder();
 
         for(int counter = 0; counter < numberOfMediaQueries; counter++) {
             String mediaQuery = mediaQueries[counter];
@@ -335,21 +335,14 @@ class RtlCssGenerator {
 
             StringBuilder rtlCss = new StringBuilder(mediaLine);
             rtlCss.append(createCSSEntryFromDSL(RTL_CSS_DSL))
+            rtlCss.append("\n");
             rtlCss.append("}");
             rtlCss.append("\n");
-            RTLMediaQueryCss.add(rtlCss.toString());
+            RTLMediaQueryCss.append(rtlCss.toString());
         }
-        return RTLMediaQueryCss
+        return RTLMediaQueryCss.toString();
     }
 
-    def appendMediaQueriesToFile(destFileName, rtlMediaQueries) {
-        def destFile = new File(destFileName)
-        destFile.append("\n/*** Media Query Section ***/\n")
-
-        rtlMediaQueries.each { rtlEntry ->
-            destFile.append(rtlEntry)
-        }
-    }
 
     def getFilesToTransformMapList(dir) {
         def files = []
