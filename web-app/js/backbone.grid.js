@@ -1,3 +1,5 @@
+//TODO: Should have hover styling
+//TODO: Should hide hover styling when moving via keyboard, and vice versa
 /* Copyright 2013 Ellucian Company L.P. and its affiliates. */
 
 /*
@@ -207,8 +209,12 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       "click th":                               "sort"
     },
 
-    selectCell: function (e) {
-      var td = $(e.target),
+    focus: function() {
+      this.keyTable && this.keyTable.focus();
+    },
+
+    selectCell: function (eventOrCell) {
+      var td = $(eventOrCell.target || eventOrCell),
           tr = td.closest ( "tr" );
 
       this.$el.find( "." + this.css.selected ).removeClass( this.css.selected );
@@ -506,14 +512,25 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
 
       if ( window.KeyTable ) {
-        if ( !_.isUndefined( this.keyTable ) && !_.isNull( this.keyTable ) ) {
-          $( document ).unbind( "keypress", this.keyTable._fnKey );
-          $( document ).unbind( "keydown",  this.keyTable._fnKey );
-
-          this.$el.find( "td" ).die( 'click', this.keyTable._fnClick );
+        if ( this.keyTable ) {
+          this.keyTable.fnDestroy();
+          this.keyTable = null;
         }
 
-        this.keyTable = new KeyTable( { table: this.table[0] } );
+        var enabledColumns = _.reduce( this.options.columns,
+          function getEnabledColumnIndices( accumulator, item, index, list ) {
+            if (  item.editable ) {
+              accumulator.push( index );
+            }
+            return accumulator;
+          }, [] );
+        console.log( "setupKeyTable ", this.el.id, this, " enabledColumns: ", enabledColumns );
+        var view = this,
+            keyTable = this.keyTable = new KeyTable( { table: this.table[0],
+                                        enabledColumns: enabledColumns } );
+        keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
+          view.selectCell( cell );
+        });
       }
     },
 
@@ -650,6 +667,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     destroy: function () {
       delete this.columns;
       delete this.title;
+
+      this.keyTable && this.keyTable.fnDestroy();
       delete this.keyTable;
       delete this.pageLengths;
 
@@ -877,6 +896,23 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
               view.selectCell.call( view, e );
             });
 
+            // create an onblur function that will re-enable keyboard events in the grid
+            // when we leave the editable control
+            options.onblur = _.wrap( options.onblur, function( oldBlur, val, settings ) {
+              if ( view.keyTable ) {
+                console.log( "Un-blocking keyboard events for grid" );
+                view.keyTable.block = false;
+              }
+              oldBlur.apply( this, val, settings );
+            });
+
+            if ( view.keyTable ) {
+              console.log( "Blocking keyboard events for grid, so editable gets them" );
+              view.keyTable.block = true;
+            } else {
+              console.log( "keyTable is null, not blocking" );
+            }
+
             el.editable( editableSubmitCallback, _.extend( defaults, options ) );
           }
         }
@@ -933,6 +969,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     redraw: function () {
       this.log( "executing redraw" );
 
+      this.keyTable && this.keyTable.fnDestroy();
       delete this.keyTable;
 
       this.$el.empty();
