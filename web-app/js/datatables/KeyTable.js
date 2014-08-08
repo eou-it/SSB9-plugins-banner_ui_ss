@@ -1054,7 +1054,7 @@ function KeyTable ( oInit )
      */
     function _fnCaptureKeys( )
     {
-        console.log('capture keys. #' + $(_nBody).closest('[id]').attr('id') +  ' already captured=' + _bKeyCapture);
+        _log('capture keys. #' + $(_nBody).closest('[id]').attr('id') +  ' already captured=' + _bKeyCapture);
         if ( !_bKeyCapture )
         {
             _bKeyCapture = true;
@@ -1070,7 +1070,7 @@ function KeyTable ( oInit )
      */
     function _fnReleaseKeys( )
     {
-        console.log('> release keys.  already captured=' + _bKeyCapture);
+        _log('> release keys.  already captured=' + _bKeyCapture);
         _bKeyCapture = false;
     }
 

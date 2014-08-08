@@ -1,5 +1,3 @@
-//TODO: Should have hover styling
-//TODO: Should hide hover styling when moving via keyboard, and vice versa
 /* Copyright 2013 Ellucian Company L.P. and its affiliates. */
 
 /*
@@ -413,7 +411,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     initialize: function () {
-      _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
+      _.bindAll( this, 'notificationAdded', 'notificationRemoved', 'render' );
 
       // make sure we have an id attribute
       if ( !this.$el.attr( 'id' ) )
@@ -574,7 +572,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         keyTable.event['blur']( null, null, function actionBlurCell( cell, x, y ) {
           if ( keyTable.block ) {
             var focus = $(':focus');
-            this.log( 'blurring cell: ', cell, 'to', focus, ' edit mode was: ', (view.keyTable && view.keyTable.block) );
+            view.log( 'blurring cell: ', cell, 'to', focus, ' edit mode was: ', (view.keyTable && view.keyTable.block) );
             if ( $.contains( cell, focus[0] )) {
               focus.blur();
             }
@@ -731,7 +729,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     log: function ( msg ) {
-      window.debug = true; //!!!!! DEBUG ONLY
       if ( _.isBoolean( window.debug ) && window.debug == true )
         var args = ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): " + msg].concat( arguments );
         console.log.apply( console, args );
