@@ -682,7 +682,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
     log: function ( msg ) {
       if ( _.isBoolean( window.debug ) && window.debug == true )
-        console.log( "backbone.grid ( " +  this.$el.attr( "id" ) + " ): " + msg );
+        var args = ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): " + msg].concat( arguments );
+        console.log.apply( console, args );
     },
 
     updateData: function ( id, name, value ) {
