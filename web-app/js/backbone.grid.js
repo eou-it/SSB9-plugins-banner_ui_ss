@@ -4,7 +4,8 @@
 
 /*
 var column = {
-  editable: "Boolean | String | Object | Function",
+  editable: "Boolean | String | Object | Function", // define edit behavior of cell. Implies focus
+  focus:    "Boolean", // mark cell as able to receive keyboard focus, used for editable cells that don't need jeditable
   freeze:   "Boolean",
   name:     "String",
   render:   "Function",
@@ -33,7 +34,8 @@ var events = {
   afterRender:   "Function",
   beforeRefresh: "Function",
   afterRefresh:  "Function",
-  rowSelected:   "Function"
+  rowSelected:   "Function( $row, backboneRowModel )"
+  cellSelected:  "Function( $cell, backboneRowModel )" // if cellSelected is provided, caller must manage editMode to prevent grid from acting on keyboard events while cell is being edited.
 }
 
 var data = {
@@ -213,8 +215,37 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.keyTable && this.keyTable.focus();
     },
 
-    selectCell: function (eventOrCell) {
-      var td = $(eventOrCell.target || eventOrCell),
+    /**
+     * Enable edit mode when interacting with the contents of a cell to prevent the grid from acting on keyboard
+     * events to move between cells.
+     *
+     * The grid will generally manage edit mode based on the focus (enable edit mode when a click or ENTER is pressed in a cell,
+     * then disable edit mode on blur or when the focus changes outside the cell).  If an edit action will take the focus
+     * to an element outside the cell, call editMode(false), then when finished, call editMode(true)
+     */
+    editMode: function(flag) {
+      this.keyTable && (this.keyTable.block = flag); // may need a separate flag to indicate explicitly in edit mode
+    },
+
+    /**
+     * Enter 'edit' mode in cell, disabling keyboard events until done editing.
+     * grid recognizes "done editing" by the focus moving outside the target cell.
+     */
+    editCell: function( cell ) {
+      var grid = this,
+          tabs = $('[tabindex]', cell),
+          editControls = $('a, area, button, input, object, select, textarea', cell).filter(':not([tabindex])').filter(':visible'),
+          target = tabs.add( editControls ).first();
+
+      if ( target.length ) {
+        grid.editMode(true);
+        target.focus();
+      }
+    },
+
+    selectCell: function (eventOrElement) {
+      var target = $(eventOrElement.target || eventOrElement),
+          td = target.closest( "td" ),
           tr = td.closest ( "tr" );
 
       this.$el.find( "." + this.css.selected ).removeClass( this.css.selected );
@@ -227,6 +258,11 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         var data = this.collection.get( parseInt( tr.attr( "data-id" ) ) );
 
         this.options.rowSelected.call( this, tr, data );
+      }
+
+      if ( _.isFunction( this.options.cellSelected ) ) {
+        var data = this.collection.get( parseInt( td.attr( "data-id" ) ) );
+        this.options.cellSelected.call( this, td, data );
       }
     },
 
@@ -407,6 +443,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.options.widthUnit = ( this.options.gridwidthType == "percentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
 
 
+      this.options.cellSelected = this.options.cellSelected || this.editCell;
+
       this.columns       = _.where( this.options.columns, { freeze: false } );
       this.frozenColumns = _.where( this.options.columns, { freeze: true  } );
 
@@ -519,17 +557,29 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
         var enabledColumns = _.reduce( this.options.columns,
           function getEnabledColumnIndices( accumulator, item, index, list ) {
-            if (  item.editable ) {
+            if (  item.editable || item.focus ) {
               accumulator.push( index );
             }
             return accumulator;
           }, [] );
-        console.log( "setupKeyTable ", this.el.id, this, " enabledColumns: ", enabledColumns );
+        this.log( "setupKeyTable enabledColumns: ", enabledColumns );
         var view = this,
             keyTable = this.keyTable = new KeyTable( { table: this.table[0],
                                         enabledColumns: enabledColumns } );
         keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
-          view.selectCell( cell );
+          // trigger the click action on the contained element, if any, or the td itself
+          $(':first-child', cell).add(cell).first().click();
+        });
+
+        keyTable.event['blur']( null, null, function actionBlurCell( cell, x, y ) {
+          if ( keyTable.block ) {
+            var focus = $(':focus');
+            this.log( 'blurring cell: ', cell, 'to', focus, ' edit mode was: ', (view.keyTable && view.keyTable.block) );
+            if ( $.contains( cell, focus[0] )) {
+              focus.blur();
+            }
+            view.editMode( false );
+          }
         });
       }
     },
@@ -681,6 +731,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     log: function ( msg ) {
+      window.debug = true; //!!!!! DEBUG ONLY
       if ( _.isBoolean( window.debug ) && window.debug == true )
         var args = ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): " + msg].concat( arguments );
         console.log.apply( console, args );
@@ -896,23 +947,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
             el.on( 'click.onedit', function( e ) {
               view.selectCell.call( view, e );
             });
-
-            // create an onblur function that will re-enable keyboard events in the grid
-            // when we leave the editable control
-            options.onblur = _.wrap( options.onblur, function( oldBlur, val, settings ) {
-              if ( view.keyTable ) {
-                console.log( "Un-blocking keyboard events for grid" );
-                view.keyTable.block = false;
-              }
-              oldBlur.apply( this, val, settings );
-            });
-
-            if ( view.keyTable ) {
-              console.log( "Blocking keyboard events for grid, so editable gets them" );
-              view.keyTable.block = true;
-            } else {
-              console.log( "keyTable is null, not blocking" );
-            }
 
             el.editable( editableSubmitCallback, _.extend( defaults, options ) );
           }
