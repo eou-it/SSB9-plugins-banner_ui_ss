@@ -458,10 +458,11 @@ function KeyTable ( oInit )
 
         // look for an enabled cell close by
         function findEnabledCell( nCell ) {
+            var foundCell = nCell;
             var position = _fnCoordsFromCell( nCell );
             var x = position[0];
             var y = position[1];
-            if ( !_aEnabledColumns || -1 != _aEnabledColumns.indexOf(x)) { return nCell; }
+            if ( !_aEnabledColumns || -1 != _aEnabledColumns.indexOf(x)) { return foundCell; }
 
             var iTableWidth = _nBody.getElementsByTagName('tr')[0].getElementsByTagName('td').length;
 
@@ -477,9 +478,9 @@ function KeyTable ( oInit )
                     // wrapped, so look backward along the row instead
                     enabledPos = _fnFindEnabledColumn(x, y, -1, iTableWidth);
                 }
-                nCell = _fnCellFromCoords( enabledPos[0], y ); // nearby cell in same row
+                foundCell = _fnCellFromCoords( enabledPos[0], y ); // nearby cell in same row
             }
-            return nCell;
+            return foundCell || nCell;
         }
         nTarget = findEnabledCell(nTarget);
 
