@@ -230,13 +230,12 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
      * grid recognizes "done editing" by the focus moving outside the target cell.
      */
     editCell: function( cell ) {
-      var grid = this,
-          tabs = $('[tabindex]', cell),
+      var tabs = $('[tabindex]', cell),
           editControls = $('a, area, button, input, object, select, textarea', cell).filter(':not([tabindex])').filter(':visible'),
           target = tabs.add( editControls ).first();
 
-      if ( target.length ) {
-        grid.editMode(true);
+      if ( target.length || _.contains( this.enabledColumns, $(cell).index())) {
+        this.editMode(true);
         target.focus();
       }
     },
@@ -441,6 +440,15 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.options.widthUnit = ( this.options.gridwidthType == "percentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
 
 
+      this.enabledColumns = _.reduce( //TODO: verify enabledColumns and keyboard nav with frozenColumns
+        this.options.columns,
+        function getEnabledColumnIndices( accumulator, item, index, list ) {
+          if (  item.editable || item.focus ) {
+            accumulator.push( index );
+          }
+          return accumulator;
+        }, [] );
+
       this.options.cellSelected = this.options.cellSelected || this.editCell;
 
       this.columns       = _.where( this.options.columns, { freeze: false } );
@@ -553,17 +561,10 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           this.keyTable = null;
         }
 
-        var enabledColumns = _.reduce( this.options.columns,
-          function getEnabledColumnIndices( accumulator, item, index, list ) {
-            if (  item.editable || item.focus ) {
-              accumulator.push( index );
-            }
-            return accumulator;
-          }, [] );
-        this.log( "setupKeyTable enabledColumns: ", enabledColumns );
+        this.log( "setupKeyTable enabledColumns: ", this.enabledColumns );
         var view = this,
             keyTable = this.keyTable = new KeyTable( { table: this.table[0],
-                                        enabledColumns: enabledColumns } );
+                                        enabledColumns: this.enabledColumns } );
         keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
           // trigger the click action on the contained element, if any, or the td itself
           $(':first-child', cell).add(cell).first().click();
@@ -728,9 +729,9 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.$el.empty();
     },
 
-    log: function ( msg ) {
+    log: function () {
       if ( _.isBoolean( window.debug ) && window.debug == true )
-        var args = ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): " + msg].concat( arguments );
+        var args = Array.prototype.concat.apply( ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): "], arguments);
         console.log.apply( console, args );
     },
 
@@ -905,6 +906,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     determineColumnEditability: function ( column, el, data ) {
       var view = this,
           editableSubmitCallback = function ( value, settings ) {
+            view.log( "editableSubmitCallback editMode=", (view.keyTable && view.keyTable.block));
+            view.editMode( false );
             return view.updateData.call( view, $( this ).attr( "data-id" ), $( this ).attr( "data-property" ), value );
           };
 
@@ -913,6 +916,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
               defaults = {
                 height: "none",
                 onblur: function ( val, settings ) {
+                  view.log( "editable onblur, editMode=", (view.keyTable && view.keyTable.block));
+                  view.editMode( false );
                   $( 'form', this ).submit();
                 },
                 placeholder: ""
@@ -942,6 +947,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
           if ( !_.isUndefined( options ) ) {
             el.on( 'click.onedit', function( e ) {
+              view.log( "editable click.onedit", (view.keyTable && view.keyTable.block));
               view.selectCell.call( view, e );
             });
 

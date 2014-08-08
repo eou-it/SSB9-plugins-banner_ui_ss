@@ -85,8 +85,11 @@ function KeyTable ( oInit )
     };
 
     function _log() {
-        // convert to use real logging when available
-        //console.log.apply(console, [_oDatatable.fnSettings().nTable.id].concat( arguments ));
+        if (window.debug) {
+            console.log.apply(console, Array.prototype.concat.apply(
+                [(_oDatatable && _oDatatable.fnSettings().nTable.id) || $(_nBody).closest('[id]')[0].id],
+                arguments ));
+        }
     }
 
     /*
@@ -507,7 +510,6 @@ function KeyTable ( oInit )
             var position = _fnFindDtCell( nTarget );
             if (!position) {
                 _log( '_fnSetFocus on cell that is not found', nTarget );
-                //alert('_fnSetFocus on cell that is not found');
                 return;
             }
             var iRow = position[1];
@@ -922,7 +924,7 @@ function KeyTable ( oInit )
              iTableHeight = _nBody.getElementsByTagName('tr').length;
          }
 
-         _oDatatable && _log( _oDatatable.fnSettings().nTable.id + ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
+         _log( ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
          switch( action )
          {
              case _Action.ACTION:
@@ -1070,7 +1072,7 @@ function KeyTable ( oInit )
      */
     function _fnReleaseKeys( )
     {
-        _log('> release keys.  already captured=' + _bKeyCapture);
+        _log('  release keys.  already captured=' + _bKeyCapture);
         _bKeyCapture = false;
     }
 
