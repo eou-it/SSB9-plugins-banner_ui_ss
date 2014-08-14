@@ -1009,6 +1009,10 @@ function KeyTable ( oInit )
         {
             return true;
         }
+        if (!$(':visible', _nBody).length) {
+            //_log( "Not visible for #" + $(_nBody).closest('[id]').attr('id'));
+            return true;
+        }
 
         if (_that.block) {
             // KeyTable has been told to block/ignore keypresses, because a component is open
