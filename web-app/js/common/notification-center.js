@@ -201,13 +201,11 @@ $(document).ready(function() {
             return prefix + "-" + notification.get("type") + notification.get( "message" );
         },
         comparator: function( a, b ) {
-            var aHash = this.generateCompareHash( a ),
-                bHash = this.generateCompareHash( b );
+            var x = this.generateCompareHash( a ),
+                y = this.generateCompareHash( b );
 
-            var x = aHash.split( "/" );
-            var y = bHash.split( "/" );
-            x = x[ x.length - 1 ].replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
-            y = y[ y.length - 1 ].replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
+            x = x.replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
+            y = y.replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
 
             for ( var i = 0; i < x.length; i++ ) {
                 if ( x[ i ] && !y[ i ] || isFinite( x[ i ] ) && !isFinite( y[ i ] ) ) {
