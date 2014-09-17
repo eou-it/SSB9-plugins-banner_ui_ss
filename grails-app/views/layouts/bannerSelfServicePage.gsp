@@ -46,7 +46,8 @@
             var transactionTimeoutMeta    = $( "meta[name=transactionTimeout]" ),
                 transactionTimeoutSeconds = ( transactionTimeoutMeta.length == 1 ? parseInt( transactionTimeoutMeta.attr( "content" ) ) : 30 ),
                 transactionTimeoutPadding = 10 * 1000,
-                transactionTimeoutMilli   = ( transactionTimeoutSeconds * 1000 ) + transactionTimeoutPadding;
+                transactionTimeoutMilli   = ( transactionTimeoutSeconds * 1000 ) + transactionTimeoutPadding,
+                extensibilityPluginPath   = "${resource(plugin:'web-app-extensibility', dir:'html')}";
 
             $.ajaxSetup( { timeout: transactionTimeoutMilli } );
 
