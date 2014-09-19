@@ -53,7 +53,9 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-
+        compile 'rome:rome:0.9'
+        compile 'org.jdom:jdom:2.0.2'
+        compile 'rome:modules:0.3.2'
     }
 }
 
