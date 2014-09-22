@@ -642,9 +642,9 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
                 var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
                 var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
                 var cellWidth = el.width()
-
-                if (titleWidth >= el.width()) {
-                    title.css('width', (cellWidth - handleWidth - iconWidth - padding) + "px");
+                // todo: better detection. This handles titles with ellipses
+                if (titleWidth + handleWidth + iconWidth + 6 >= el.width()) {
+                    title.css('width', (cellWidth - handleWidth - iconWidth - padding - 12 ) + "px");
                 }
               }
         });
