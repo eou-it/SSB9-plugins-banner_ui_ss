@@ -53,9 +53,9 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
+        // rome dependency is required for the feeds plugin. Otherwise it throws multiple compilation error
+        // for import com.sun.syndication.io.SyndFeedOutput
         compile 'rome:rome:0.9'
-        compile 'org.jdom:jdom:2.0.2'
-        compile 'rome:modules:0.3.2'
     }
 }
 
