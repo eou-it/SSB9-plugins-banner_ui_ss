@@ -281,6 +281,7 @@ $(document).ready(function() {
                 preferences_label :                     $.i18n.prop( "aurora.preferences_label" ),
                 userdetails_signin :                    $.i18n.prop( "aurora.userdetails_signin" ),
                 userdetails_signout :                   $.i18n.prop( "aurora.userdetails_signout" ),
+                guestuserdetails_signin :               $.i18n.prop( "aurora.guestuserdetails_signin" ),
                 userdetails_help :                      $.i18n.prop( "aurora.userdetails_help" )
             },
             handler : function( data ) {
