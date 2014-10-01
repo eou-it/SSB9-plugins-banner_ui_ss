@@ -16,7 +16,7 @@ class BannerUiSsBootStrap {
         servletContext.setAttribute( "loginEndpoint", grailsApplication.config?.loginEndpoint?: "" )
         servletContext.setAttribute( "logoutEndpoint", grailsApplication.config?.logoutEndpoint?: "" )
 
-        if ((true == grailsApplication.config?.guestAuthenticationEnabled) && "cas".equalsIgnoreCase(grailsApplication.config?.banner?.sso?.authenticationProvider.toString())) {
+        if ((true == grailsApplication.config?.guestAuthenticationEnabled) && (!"default".equalsIgnoreCase(grailsApplication.config?.banner?.sso?.authenticationProvider.toString()))) {
             servletContext.setAttribute("guestLoginEnabled", true)
         }
 	}
