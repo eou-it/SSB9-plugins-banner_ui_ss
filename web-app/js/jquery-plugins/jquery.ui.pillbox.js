@@ -5,7 +5,8 @@
                 container: "ui-pillbox",
                 highlight: "ui-state-highlight",
                 disabled:  "ui-state-disabled",
-                normal:    "ui-state-default"
+                normal:    "ui-state-default",
+                screenReader: "screen-reader"
             },
             editable: false,
             items: [
@@ -17,6 +18,16 @@
             span: "<span></span>",
             ul:   "<ul></ul>",
             li:   "<li></li>"
+        },
+        updateItemState: function (el, highlight) {
+            var $el = $(el),
+                name = $el.attr( "data-name" ),
+                flag = _.isUndefined(highlight) ? !$(el).is('.' + this.options.styles.highlight) : highlight;
+                text = flag ?
+                    $.i18n.prop( "ui.pillbox.on", [name] ) :
+                    $.i18n.prop( "ui.pillbox.off", [name] );
+
+            $el.toggleClass( this.options.styles.highlight, flag ).find('.' + this.options.styles.screenReader).text( text );
         },
         updateTooltipText: function () {
             var items = _.map( $( this.element ).find ( "." + this.options.styles.highlight ), function ( it ) {
@@ -30,16 +41,13 @@
         _create: function() {
             var self    = this,
                 list    = $( this.elements.ul ),
-                tooltip = [ ],
                 el      = $( this.element );
 
             el.addClass( this.options.styles.container ).attr( "tabindex", 0 );
 
             var toggleSelected = function ( el ) {
-                el = $( el );
-
-                if ( !el.hasClass( self.options.styles.disabled ) ) {
-                    el.toggleClass( self.options.styles.highlight );
+                if ( !$( el ).hasClass( self.options.styles.disabled ) ) {
+                    self.updateItemState( el );
                     self.updateTooltipText();
                 }
             };
@@ -72,16 +80,13 @@
                 if ( !it.enabled )
                     item.addClass( self.options.styles.disabled );
 
-                if ( it.highlight ) {
-                    item.addClass( self.options.styles.highlight );
-
-                    tooltip.push( it.name );
-                }
-
                 item.attr( "data-name", it.name );
                 item.attr( "data-abbreviation", it.abbreviation );
 
-                item.append( $( self.elements.div ).text( it.abbreviation ) );
+                item.append( $( self.elements.div ).text( it.abbreviation ).attr('aria-hidden','true' ) );
+                item.append( $( self.elements.span ).addClass( self.options.styles.screenReader ).attr( 'aria-live', 'assertive'));
+
+                self.updateItemState( item, it.highlight )
 
                 if ( self.options.editable ) {
                     item.attr( "tabindex", 0 );
