@@ -38,6 +38,77 @@ function validateDate( dateString ) {
 }
 
 
+/**
+ * $(ele).screenReaderLabel( text, ariaLive );
+ *
+ * set the label that will be read by a screen reader for this element.
+ *
+ * text - label text
+ * ariaLive - off (default), polite, assertive - will only be applied
+ * when the label is first created. If you need to change the ariaLive
+ * setting for a label, remove the label and the link attribute and
+ * create a new one.
+ * ariaLink - aria-labelledby (default) or aria-describedby
+ *
+ * Returns the label object, not the original jQuery object.
+ */
+$.fn.screenReaderLabel = (function(){
+    var counter = 0;
+    return function( text, ariaLive, ariaLink) {
+        var $el = this,
+            ariaLink = ariaLink || 'aria-labelledby',
+            $label = getLabel($el, ariaLink) || createLabel($el, ariaLive, ariaLink);
+
+        function getLabel($el, ariaLink) {
+            var id = $el.attr(ariaLink);
+            return id ? $('#' + id) : null;
+        }
+
+        function createLabel($el, ariaLive, ariaLink) {
+            var id = 'screen-reader-label-' + ++counter;
+            var live = ariaLive ? ' aria-live="' + ariaLive + '"' : "";
+            var $label = $('<span id="' + id + '"' + live + '></span>').screenReaderOnly();
+            $('body').append( $label );
+
+            $el.attr(ariaLink, id);
+            return $label;
+        }
+
+        return $label.text( text );
+    }
+})();
+
+/**
+ * Hide the element and optionally its descendants, from the screen
+ * reader.
+ *
+ * element - an element, jquery object, or a selector
+ * recursive - boolean to hide descendants or not. Use with caution - if the contained
+ * elements can receive keyboard focus, it can cause problems on some
+ * browser/screen reader combinations. google aria-hidden for more
+ * information.
+ *
+ * Returns a jQuery object of the element for chaining.
+ */
+$.fn.screenReaderHide = function( recursive ) {
+    if ( recursive ) {
+        this.attr('aria-hidden', 'true')
+    } else {
+        this.attr('role', 'presentation');
+    }
+
+    return this;
+}
+
+/**
+ * mark content to only be read by screen reader, not displayed visually
+ * Returns jQuery object for element
+ */
+$.fn.screenReaderOnly = function() {
+    return this.addClass( 'screen-reader');
+}
+
+
 window.InactivityTimer = ActivityTimer.extend({
     timeoutHandler: function() {
         var n = new Notification( {

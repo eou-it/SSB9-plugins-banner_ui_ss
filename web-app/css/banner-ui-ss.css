@@ -1130,11 +1130,6 @@ div.infoicon {
     border-right: 0;
 }
 
-.screen-reader {
-    position:absolute !important;
-    left:-10000em;
-}
-
 .ui-pillbox li div {
     height: 16px;
     min-width: 14px;
@@ -1150,4 +1145,9 @@ div.infoicon {
 #multiCalendarContainer .ui-datepicker {
     height: auto;
     padding: 0;
+}
+
+.screen-reader {
+    position:absolute !important;
+    left:-10000em;
 }

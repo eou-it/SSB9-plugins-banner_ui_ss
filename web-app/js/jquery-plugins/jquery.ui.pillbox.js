@@ -5,8 +5,7 @@
                 container: "ui-pillbox",
                 highlight: "ui-state-highlight",
                 disabled:  "ui-state-disabled",
-                normal:    "ui-state-default",
-                screenReader: "screen-reader"
+                normal:    "ui-state-default"
             },
             editable: false,
             items: [
@@ -27,7 +26,8 @@
                     $.i18n.prop( "ui.pillbox.on", [name] ) :
                     $.i18n.prop( "ui.pillbox.off", [name] );
 
-            $el.toggleClass( this.options.styles.highlight, flag ).find('.' + this.options.styles.screenReader).text( text );
+            $el.toggleClass( this.options.styles.highlight, flag ).attr('aria-checked', flag ? 'true' : 'false');
+            $el.screenReaderLabel(text, 'assertive');
         },
         updateTooltipText: function () {
             var items = _.map( $( this.element ).find ( "." + this.options.styles.highlight ), function ( it ) {
@@ -37,6 +37,8 @@
             var tooltipText = items.length > 0 ? items.join( $.i18n.prop( "ui.pillbox.tooltip.separator" ) ) : $.i18n.prop( "default.none" );
 
             $( this.element ).attr( "title", $.i18n.prop( "ui.pillbox.tooltip.label", [ tooltipText ] ) );
+
+            $( this.element ).screenReaderLabel( tooltipText, 'assertive' );
         },
         _create: function() {
             var self    = this,
@@ -76,25 +78,25 @@
 
             _.each( this.options.items, function ( it ) {
                 var item = $( self.elements.li ).addClass( self.options.styles.normal );
+                var tabindex = 0;
 
-                if ( !it.enabled )
-                    item.addClass( self.options.styles.disabled );
+                if ( !it.enabled ) {
+                    item.addClass( self.options.styles.disabled ).attr({
+                        'aria-disabled': 'true'
+                    });
+                    tabindex=-1;
+                } else if ( self.options.editable ) {
+                    item.attr( "tabindex", 0 )
+                        .click( onClick )
+                        .keypress( onKeypress );
+                }
 
                 item.attr( "data-name", it.name );
                 item.attr( "data-abbreviation", it.abbreviation );
 
-                item.append( $( self.elements.div ).text( it.abbreviation ).attr('aria-hidden','true' ) );
-                item.append( $( self.elements.span ).addClass( self.options.styles.screenReader ).attr( 'aria-live', 'assertive'));
+                item.append( $( self.elements.div ).text( it.abbreviation ).screenReaderHide() );
 
-                self.updateItemState( item, it.highlight )
-
-                if ( self.options.editable ) {
-                    item.attr( "tabindex", 0 );
-
-                    item.click( onClick );
-                    item.keypress( onKeypress );
-                }
-
+                self.updateItemState( item, it.highlight );
 
                 list.append( item );
             });
