@@ -37,6 +37,7 @@
             pagingContainer:"paging-container",
             enabled:"enabled",
             pageLabelWrapper:"page-label-wrapper",
+            perPageLabelWrap:"per-page-label-wrapper",
             pageSizeSelect:"page-size-select",
             pageSizeSelectWrapper:"page-size-select-wrapper",
             pagingControl:"paging-control",
@@ -50,7 +51,8 @@
             divider:"divider",
             totalPages:"total-pages",
             pageOf:"page-of",
-            pagePer:"page-per"
+            pagePer:"page-per",
+            offscreen:"offscreen"
         },
         elements:{
             div:"<div></div>",
@@ -107,19 +109,26 @@
 
             var view = this,
                 pageInfo = this.collection.pageInfo(),
-                first = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.first + " " + dir).attr('tabIndex',0), //.text( "First" ),
-                last = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.last + " " + dir).attr('tabIndex',0), //.text( "Last" ),
-                next = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.next + " " + dir).attr('tabIndex',0), //.text( "Next" ),
-                prev = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.previous + " " + dir).attr('tabIndex',0), //.text( "Previous" ),
+                firstInfo = $(this.elements.label).addClass(this.css.offscreen + " " + dir).text($.i18n.prop("js.net.hedtech.banner.pagingControls.firstButton.message")).attr('id','first'),
+                lastInfo = $(this.elements.label).addClass(this.css.offscreen + " " + dir).text($.i18n.prop('js.net.hedtech.banner.pagingControls.lastButton.message')).attr('id','last'),
+                nextInfo = $(this.elements.label).addClass(this.css.offscreen + " " + dir).text($.i18n.prop('js.net.hedtech.banner.pagingControls.nextButton.message')).attr('id','next'),
+                previousInfo = $(this.elements.label).addClass(this.css.offscreen + " " + dir).text($.i18n.prop('js.net.hedtech.banner.pagingControls.previousButton.message')).attr('id','previous'),
+                first = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.first + " " + dir).attr('title',$.i18n.prop('js.net.hedtech.banner.pagingControls.firstButton.title')).attr('aria-describedby','first').append(firstInfo), //.text( "First" ),
+                last = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.last + " " + dir).attr('title',$.i18n.prop('js.net.hedtech.banner.pagingControls.lastButton.title')).attr('aria-describedby','last').append(lastInfo), //.text( "Last" ),
+                next = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.next + " " + dir).attr('title',$.i18n.prop('js.net.hedtech.banner.pagingControls.nextButton.title')).attr('aria-describedby','next').append(nextInfo), //.text( "Next" ),
+                prev = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.previous + " " + dir).attr('title',$.i18n.prop('js.net.hedtech.banner.pagingControls.previousButton.title')).attr('aria-describedby','previous').append(previousInfo), //.text( "Previous" ),
                 of = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.pageOf).text(pageInfo.pages == 1 ? $.i18n.prop("js.net.hedtech.banner.pagingControls.firstPage.label") : $.i18n.prop("js.net.hedtech.banner.pagingControls.of.label")),
                 pages = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.totalPages).text(pageInfo.pages),
-                input = $(this.elements.text).addClass(this.css.pageNumber).val(pageInfo.page),
-                pageLabel = $(this.elements.label).addClass(this.css.pagingText + " " + this.css.pageLabel  + " " + dir).text($.i18n.prop("js.net.hedtech.banner.pagingControls.page.label")).append(input),
-                pageLabelWrap = $(this.elements.div).addClass(this.css.pageLabelWrapper).append(pageLabel),
+                input = $(this.elements.text).addClass(this.css.pageNumber).val(pageInfo.page).attr('aria-label', pageInfo.page +$.i18n.prop('js.net.hedtech.banner.pagingControls.of.label')+ pageInfo.pages),
+                pageLabel = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.pageLabel  + " " + dir).text($.i18n.prop("js.net.hedtech.banner.pagingControls.page.label")),
+                pageLabelWrap = $(this.elements.div).addClass(this.css.pageLabelWrapper).append(pageLabel).append(input),
                 divider = $(this.elements.div).addClass(this.css.divider),
-                select = $(this.elements.select).addClass(this.css.pageSizeSelect),
-                perPage = $(this.elements.label).addClass(this.css.pagingText + " " + this.css.pagePer  + " " + dir).text($.i18n.prop("js.net.hedtech.banner.pagingControls.perPage.label")).append(select),
-                selWrap = $(this.elements.div).addClass(this.css.pageSizeSelectWrapper).append(perPage);
+                select = $(this.elements.select).addClass(this.css.pageSizeSelect).attr('id','comboSelect'),
+                perPage = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.pagePer  + " " + dir).text($.i18n.prop("js.net.hedtech.banner.pagingControls.perPage.label")),
+                perPageLabelWrap = $(this.elements.div).addClass(this.css.pageLabelWrapper).append(perPage),
+                selectLabel = $(this.elements.label).addClass(this.css.offscreen + " " + dir).text($.i18n.prop('js.net.hedtech.banner.pagingControls.comboBox.message')).attr('for','comboSelect'),
+                selWrap = $(this.elements.div).addClass(this.css.pageSizeSelectWrapper).append(selectLabel).append(select);
+
 
 
             _.each(this.pageLengths, function (it) {
@@ -147,11 +156,12 @@
                     enabled = enabled.concat([ first, last, prev, next ]);
                 }
                 _.each(enabled, function (it) {
-                    it.addClass(view.css.enabled)
+                    it.addClass(view.css.enabled);
+                    it.attr('tabIndex',0);
                 });
             }
 
-            _.each([ first, prev, pageLabelWrap, of, pages, next, last, divider, selWrap ], function (it) {
+            _.each([  first, prev, pageLabelWrap, of, pages, next, last, divider, perPageLabelWrap, selWrap ], function (it) {
                 view.$el.append(it);
             });
         }
