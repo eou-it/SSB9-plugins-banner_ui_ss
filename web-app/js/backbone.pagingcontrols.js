@@ -36,7 +36,6 @@
         css:{
             pagingContainer:"paging-container",
             enabled:"enabled",
-            pageLabelWrapper:"page-label-wrapper",
             pageSizeSelect:"page-size-select",
             pageSizeSelectWrapper:"page-size-select-wrapper",
             pagingControl:"paging-control",
@@ -46,7 +45,6 @@
             previous:"previous",
             next:"next",
             pageNumber:"page-number",
-            pageLabel:"page-label",
             divider:"divider",
             totalPages:"total-pages",
             pageOf:"page-of",
@@ -55,10 +53,9 @@
         elements:{
             div:"<div></div>",
             span:"<span></span>",
-            text:"<input type='text' />",
+            text:"<input type='text'></input>",
             select:"<select></select>",
-            option:"<option></option>",
-            label:"<label></label>"
+            option:"<option></option>"
         },
 
         log:function (msg) {
@@ -107,20 +104,17 @@
 
             var view = this,
                 pageInfo = this.collection.pageInfo(),
-                first = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.first + " " + dir).attr('tabIndex',0), //.text( "First" ),
-                last = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.last + " " + dir).attr('tabIndex',0), //.text( "Last" ),
-                next = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.next + " " + dir).attr('tabIndex',0), //.text( "Next" ),
-                prev = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.previous + " " + dir).attr('tabIndex',0), //.text( "Previous" ),
+                first = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.first + " " + dir), //.text( "First" ),
+                last = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.last + " " + dir), //.text( "Last" ),
+                next = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.next + " " + dir), //.text( "Next" ),
+                prev = $(this.elements.div).addClass(this.css.pagingControl + " " + this.css.previous + " " + dir), //.text( "Previous" ),
                 of = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.pageOf).text(pageInfo.pages == 1 ? $.i18n.prop("js.net.hedtech.banner.pagingControls.firstPage.label") : $.i18n.prop("js.net.hedtech.banner.pagingControls.of.label")),
                 pages = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.totalPages).text(pageInfo.pages),
                 input = $(this.elements.text).addClass(this.css.pageNumber).val(pageInfo.page),
-                pageLabel = $(this.elements.label).addClass(this.css.pagingText + " " + this.css.pageLabel  + " " + dir).text($.i18n.prop("js.net.hedtech.banner.pagingControls.page.label")).append(input),
-                pageLabelWrap = $(this.elements.div).addClass(this.css.pageLabelWrapper).append(pageLabel),
                 divider = $(this.elements.div).addClass(this.css.divider),
+                perPage = $(this.elements.span).addClass(this.css.pagingText + " " + this.css.pagePer).text($.i18n.prop("js.net.hedtech.banner.pagingControls.perPage.label")), select = $(this.elements.select).addClass(this.css.pageSizeSelect),
                 select = $(this.elements.select).addClass(this.css.pageSizeSelect),
-                perPage = $(this.elements.label).addClass(this.css.pagingText + " " + this.css.pagePer  + " " + dir).text($.i18n.prop("js.net.hedtech.banner.pagingControls.perPage.label")).append(select),
-                selWrap = $(this.elements.div).addClass(this.css.pageSizeSelectWrapper).append(perPage);
-
+                selWrap = $(this.elements.div).addClass(this.css.pageSizeSelectWrapper).append(select);
 
             _.each(this.pageLengths, function (it) {
                 var option = $(view.elements.option).val(it).text(it);
@@ -151,7 +145,7 @@
                 });
             }
 
-            _.each([ first, prev, pageLabelWrap, of, pages, next, last, divider, selWrap ], function (it) {
+            _.each([ first, prev, input, of, pages, next, last, divider, perPage, selWrap ], function (it) {
                 view.$el.append(it);
             });
         }
