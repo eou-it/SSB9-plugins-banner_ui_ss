@@ -18,6 +18,8 @@ class BannerUiSsBootStrap {
 
         if ((true == grailsApplication.config?.guestAuthenticationEnabled) && (!"default".equalsIgnoreCase(grailsApplication.config?.banner?.sso?.authenticationProvider.toString()))) {
             servletContext.setAttribute("guestLoginEnabled", true)
+        } else{
+            servletContext.setAttribute("guestLoginEnabled", false)
         }
 	}
 }
