@@ -3,7 +3,7 @@
 modules = {
 
     'bannerSelfService' {
-        dependsOn "bannerSelfServiceWithoutAurora, aurora"
+        dependsOn "bannerSelfServiceWithoutAurora, aurora, extensibilityJQuery"
     }
 
     'jquery' {
