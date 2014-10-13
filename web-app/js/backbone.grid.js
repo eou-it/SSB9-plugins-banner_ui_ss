@@ -2,7 +2,8 @@
 
 /*
 var column = {
-  editable: "Boolean | String | Object | Function",
+  editable: "Boolean | String | Object | Function", // define edit behavior of cell. Implies focus
+  focus:    "Boolean", // mark cell as able to receive keyboard focus, used for editable cells that don't need jeditable
   freeze:   "Boolean",
   name:     "String",
   render:   "Function",
@@ -31,7 +32,8 @@ var events = {
   afterRender:   "Function",
   beforeRefresh: "Function",
   afterRefresh:  "Function",
-  rowSelected:   "Function"
+  rowSelected:   "Function( $row, backboneRowModel )"
+  cellSelected:  "Function( $cell, backboneRowModel )" // if cellSelected is provided, caller must manage editMode to prevent grid from acting on keyboard events while cell is being edited.
 }
 
 var data = {
@@ -207,8 +209,40 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       "click th":                               "sort"
     },
 
-    selectCell: function (e) {
-      var td = $(e.target),
+    focus: function() {
+      this.keyTable && this.keyTable.focus();
+    },
+
+    /**
+     * Enable edit mode when interacting with the contents of a cell to prevent the grid from acting on keyboard
+     * events to move between cells.
+     *
+     * The grid will generally manage edit mode based on the focus (enable edit mode when a click or ENTER is pressed in a cell,
+     * then disable edit mode on blur or when the focus changes outside the cell).  If an edit action will take the focus
+     * to an element outside the cell, call editMode(false), then when finished, call editMode(true)
+     */
+    editMode: function(flag) {
+      this.keyTable && (this.keyTable.block = flag); // may need a separate flag to indicate explicitly in edit mode
+    },
+
+    /**
+     * Enter 'edit' mode in cell, disabling keyboard events until done editing.
+     * grid recognizes "done editing" by the focus moving outside the target cell.
+     */
+    editCell: function( cell ) {
+      var tabs = $('[tabindex]', cell),
+          editControls = $('a, area, button, input, object, select, textarea', cell).filter(':not([tabindex])').filter(':visible'),
+          target = tabs.add( editControls ).first();
+
+      if ( target.length || _.contains( this.enabledColumns, $(cell).index())) {
+        this.editMode(true);
+        target.focus();
+      }
+    },
+
+    selectCell: function (eventOrElement) {
+      var target = $(eventOrElement.target || eventOrElement),
+          td = target.closest( "td" ),
           tr = td.closest ( "tr" );
 
       this.$el.find( "." + this.css.selected ).removeClass( this.css.selected );
@@ -221,6 +255,11 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         var data = this.collection.get( parseInt( tr.attr( "data-id" ) ) );
 
         this.options.rowSelected.call( this, tr, data );
+      }
+
+      if ( _.isFunction( this.options.cellSelected ) ) {
+        var data = this.collection.get( parseInt( td.attr( "data-id" ) ) );
+        this.options.cellSelected.call( this, td, data );
       }
     },
 
@@ -371,7 +410,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     initialize: function () {
-      _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
+      _.bindAll( this, 'notificationAdded', 'notificationRemoved', 'render' );
 
       // make sure we have an id attribute
       if ( !this.$el.attr( 'id' ) )
@@ -400,6 +439,17 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.options.widthType = _.string.endsWith( firstColumn.width, "%" ) ? "percentage" : "fixed";
       this.options.widthUnit = ( this.options.gridwidthType == "percentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
 
+
+      this.enabledColumns = _.reduce( //TODO: verify enabledColumns and keyboard nav with frozenColumns
+        this.options.columns,
+        function getEnabledColumnIndices( accumulator, item, index, list ) {
+          if (  item.editable || item.focus ) {
+            accumulator.push( index );
+          }
+          return accumulator;
+        }, [] );
+
+      this.options.cellSelected = this.options.cellSelected || this.editCell;
 
       this.columns       = _.where( this.options.columns, { freeze: false } );
       this.frozenColumns = _.where( this.options.columns, { freeze: true  } );
@@ -506,14 +556,30 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
 
       if ( window.KeyTable ) {
-        if ( !_.isUndefined( this.keyTable ) && !_.isNull( this.keyTable ) ) {
-          $( document ).unbind( "keypress", this.keyTable._fnKey );
-          $( document ).unbind( "keydown",  this.keyTable._fnKey );
-
-          this.$el.find( "td" ).die( 'click', this.keyTable._fnClick );
+        if ( this.keyTable ) {
+          this.keyTable.fnDestroy();
+          this.keyTable = null;
         }
 
-        this.keyTable = new KeyTable( { table: this.table[0] } );
+        this.log( "setupKeyTable enabledColumns: ", this.enabledColumns );
+        var view = this,
+            keyTable = this.keyTable = new KeyTable( { table: this.table[0],
+                                        enabledColumns: this.enabledColumns } );
+        keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
+          // trigger the click action on the contained element, if any, or the td itself
+          $(':first-child', cell).add(cell).first().click();
+        });
+
+        keyTable.event['blur']( null, null, function actionBlurCell( cell, x, y ) {
+          if ( keyTable.block ) {
+            var focus = $(':focus');
+            view.log( 'blurring cell: ', cell, 'to', focus, ' edit mode was: ', (view.keyTable && view.keyTable.block) );
+            if ( $.contains( cell, focus[0] )) {
+              focus.blur();
+            }
+            view.editMode( false );
+          }
+        });
       }
     },
 
@@ -650,6 +716,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     destroy: function () {
       delete this.columns;
       delete this.title;
+
+      this.keyTable && this.keyTable.fnDestroy();
       delete this.keyTable;
       delete this.pageLengths;
 
@@ -661,9 +729,10 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.$el.empty();
     },
 
-    log: function ( msg ) {
+    log: function () {
       if ( _.isBoolean( window.debug ) && window.debug == true )
-        console.log( "backbone.grid ( " +  this.$el.attr( "id" ) + " ): " + msg );
+        var args = Array.prototype.concat.apply( ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): "], arguments);
+        console.log.apply( console, args );
     },
 
     updateData: function ( id, name, value ) {
@@ -837,6 +906,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     determineColumnEditability: function ( column, el, data ) {
       var view = this,
           editableSubmitCallback = function ( value, settings ) {
+            view.log( "editableSubmitCallback editMode=", (view.keyTable && view.keyTable.block));
+            view.editMode( false );
             return view.updateData.call( view, $( this ).attr( "data-id" ), $( this ).attr( "data-property" ), value );
           };
 
@@ -845,6 +916,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
               defaults = {
                 height: "none",
                 onblur: function ( val, settings ) {
+                  view.log( "editable onblur, editMode=", (view.keyTable && view.keyTable.block));
+                  view.editMode( false );
                   $( 'form', this ).submit();
                 },
                 placeholder: ""
@@ -874,6 +947,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
           if ( !_.isUndefined( options ) ) {
             el.on( 'click.onedit', function( e ) {
+              view.log( "editable click.onedit", (view.keyTable && view.keyTable.block));
               view.selectCell.call( view, e );
             });
 
@@ -933,6 +1007,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     redraw: function () {
       this.log( "executing redraw" );
 
+      this.keyTable && this.keyTable.fnDestroy();
       delete this.keyTable;
 
       this.$el.empty();
