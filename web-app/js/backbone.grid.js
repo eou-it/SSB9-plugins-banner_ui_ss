@@ -66,6 +66,21 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     }
   };
 
+  var getModelId = (function() {
+    var modelIdCounter = 0;
+    return function(model) {
+
+      if (!_.isUndefined( model.id )) {
+        return model.id;
+      } else {
+        if ( _.isUndefined( model.cid )) {
+          model.cid = 'gridItem-' + ++this.modelIdCounter;
+        }
+        return model.cid;
+      }
+    }
+  })();
+
   var generateBackboneCollection = function( config ) {
 
     _.defaults( config, {
@@ -252,13 +267,13 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       td.addClass( this.css.selected );
 
       if ( _.isFunction( this.options.rowSelected ) ) {
-        var data = this.collection.get( parseInt( tr.attr( "data-id" ) ) );
+        var data = this.collection.get( tr.attr( "data-id" ) );
 
         this.options.rowSelected.call( this, tr, data );
       }
 
       if ( _.isFunction( this.options.cellSelected ) ) {
-        var data = this.collection.get( parseInt( td.attr( "data-id" ) ) );
+        var data = this.collection.get( td.attr( "data-id" ) );
         this.options.cellSelected.call( this, td, data );
       }
     },
@@ -797,7 +812,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
     updateData: function ( id, name, value ) {
       var map   = { },
-          model = this.collection.get( parseInt( id ) );
+          model = this.collection.get( id );
 
       map[ name ] = value;
 
@@ -886,7 +901,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           var tr = $( view.elements.tr ),
               it = model.toJSON();
 
-          tr.attr( "data-id", it.id );
+          tr.attr( "data-id", getModelId( model ));
           tr.addClass ( clz );
 
           clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
@@ -904,7 +919,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
               td.text( view.resolveProperty( it, col.name ) || view.defaults.display );
             }
 
-            td.attr( "data-id", it.id );
+            td.attr( "data-id", getModelId(model) );
             td.attr( "data-property", col.name );
 
             if ( col.width )
@@ -1032,7 +1047,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       _.each( view.getDataAsJson(), function ( it ) {
         var tr = $( view.elements.tr );
 
-        tr.attr( "data-id", it.id );
+        tr.attr( "data-id", getModelId(it) );
         tr.addClass ( clz );
 
         clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
@@ -1050,7 +1065,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
             td.text( it[ col.name ] || view.defaults.display );
           }
 
-          td.attr( "data-id", it.id );
+          td.attr( "data-id", getModelId( it ));
           td.attr( "data-property", col.name );
 
           if ( col.width )
@@ -1317,13 +1332,10 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
     getModelFromNotification: function( notification ) {
       var m = notification.get( "model" );
-      if( _.isNull( m ) || _.isUndefined( m ) || _.isUndefined( m.id ) )
+      if( _.isNull( m ) || _.isUndefined( m ) || (_.isUndefined( m.id ) && _.isUndefined( m.cid )))
         return false;
 
-      var model = this.collection.find( function( it ) {
-        return it.get( "id" ) === m.id;
-      });
-
+      var model = this.collection.get( getModelId( m ));
       return ( _.isNull( model ) ? false : model );
     },
 
