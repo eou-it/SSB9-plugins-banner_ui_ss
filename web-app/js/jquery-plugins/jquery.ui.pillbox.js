@@ -5,7 +5,8 @@
                 container: "ui-pillbox",
                 highlight: "ui-state-highlight",
                 disabled:  "ui-state-disabled",
-                normal:    "ui-state-default"
+                normal:    "ui-state-default",
+                summary:   "ui-pillbox-summary"
             },
             editable: false,
             items: [
@@ -27,7 +28,7 @@
                     $.i18n.prop( "ui.pillbox.off", [name] );
 
             $el.toggleClass( this.options.styles.highlight, flag ).attr('aria-checked', flag ? 'true' : 'false');
-            $el.screenReaderLabel(text, 'assertive');
+            //editable:$el.screenReaderLabel(text, 'assertive');
         },
         updateTooltipText: function () {
             var items = _.map( $( this.element ).find ( "." + this.options.styles.highlight ), function ( it ) {
@@ -38,14 +39,16 @@
 
             $( this.element ).attr( "title", $.i18n.prop( "ui.pillbox.tooltip.label", [ tooltipText ] ) );
 
-            $( this.element ).screenReaderLabel( tooltipText, 'assertive' );
+            //editable:$( this.element ).screenReaderLabel( tooltipText, 'assertive' );
+            $( "." + this.options.styles.summary, this.element ).screenReaderOnly().text( tooltipText );
         },
         _create: function() {
             var self    = this,
+                summary = $( this.elements.div ).addClass(this.options.styles.summary),
                 list    = $( this.elements.ul ),
                 el      = $( this.element );
 
-            el.addClass( this.options.styles.container ).attr( "tabindex", 0 );
+            el.addClass( this.options.styles.container ).attr( "tabindex", 0 ).attr('role','group');
 
             var toggleSelected = function ( el ) {
                 if ( !$( el ).hasClass( self.options.styles.disabled ) ) {
@@ -86,7 +89,7 @@
                     });
                     tabindex=-1;
                 } else if ( self.options.editable ) {
-                    item.attr( "tabindex", 0 )
+                    item.attr( "tabindex", 0 ).attr('role','checkbox')
                         .click( onClick )
                         .keypress( onKeypress );
                 }
@@ -94,13 +97,17 @@
                 item.attr( "data-name", it.name );
                 item.attr( "data-abbreviation", it.abbreviation );
 
-                item.append( $( self.elements.div ).text( it.abbreviation ).screenReaderHide() );
+                item.append( $( self.elements.div ).text( it.abbreviation ));
 
                 self.updateItemState( item, it.highlight );
 
                 list.append( item );
             });
 
+            if ( !self.options.editable ) {
+                list.screenReaderHide(true);
+            }
+            el.append( summary );
             el.append( list );
 
             this.updateTooltipText();
