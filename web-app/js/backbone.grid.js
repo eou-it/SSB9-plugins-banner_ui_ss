@@ -572,50 +572,44 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     /***************************************************************************************************
 
          Modify this grid instance based on extensibility information in xe.extensions
-         - determine grid's containing section. This HTML element will have a xe-section attribute
+         - determine grid's containing section. This HTML element will have a xe.attr.section attribute
          - locate any extensbility information for this grid instance in xe.extensions
          - modify the instantiation of this grid instance accordingly
 
     ***************************************************************************************************/
     applyExtensions: function() {
+
       var dataXESection;
       var gridExtensions;
+      var attr = "[" + xe.attr.section + "]";
 
       if ( xe.extensions ) {
+
         // determine the container of this grid instance
-        dataXESection = this.getGridSection();
+        dataXESection = $(this.el).closest(attr).attr(xe.attr.section);
 
         if ( dataXESection ) {
+
           // retrieve extensibility information from xe object
           gridExtensions = xe.extensions.sections[dataXESection];
 
           if ( gridExtensions ) {
+
             this.removeColumns( gridExtensions );
 
+            this.orderColumns( gridExtensions );
+
             // this.addColumns();
-            // this.orderColumns();
+
             // etc
           }
         }
       }
     },
 
-
     /***************************************************************************************************
 
-         Determine the grid's containing element.
-         This is specified by the attribute 'xe-section'
-
-    ***************************************************************************************************/
-    getGridSection: function() {
-      var gridSection = $(this.el).closest('[xe-section]').attr("xe-section");
-      return gridSection;
-    },
-
-
-    /***************************************************************************************************
-
-         Remove any baseline columns from this grid instance as specified by extensibility information
+    Remove any baseline columns from this grid instance as specified by extensibility information
 
     ***************************************************************************************************/
     removeColumns: function( pGridExtensions ) {
@@ -626,6 +620,40 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       } );
     },
 
+
+    /***************************************************************************************************
+
+    Reorder any baseline columns in this grid instance as specified by extensibility information
+
+    ***************************************************************************************************/
+    orderColumns: function( pGridExtensions ) {
+
+      var index;
+      var removedColumn;
+      var targetColumn;
+      var baselineColumns;
+
+      baselineColumns = this.options.columns;
+      _.each( pGridExtensions.move, function(extension) {
+
+          removedColumn = _.find(baselineColumns, function(column){
+              return extension.field == column.name;
+          });
+
+          targetColumn = _.find(baselineColumns, function(column){
+              return extension.before == column.name;
+          });
+
+          if ( removedColumn && targetColumn) {
+
+              index = _.indexOf(baselineColumns, removedColumn);
+              baselineColumns.splice(index,1);
+
+              index = _.indexOf(baselineColumns, targetColumn);
+              baselineColumns.splice(index,0,removedColumn);
+          }
+      });
+    },
 
     setupKeyTable: function () {
       this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
