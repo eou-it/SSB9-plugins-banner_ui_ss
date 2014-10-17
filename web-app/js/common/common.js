@@ -247,6 +247,15 @@ function hideLoading( target ) {
     $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
 }
 
+/* Usage:
+     $(selector).loading();   // show loading indicator
+     $(selector).loading(false); // hide loading indicator
+*/
+$.fn.loading = function(isLoading) {
+    (isLoading||isLoading==undefined) ? showLoading( this ) : hideLoading( this );
+    return this;
+}
+
 function getEol() {
     var aPlatform = navigator.platform.toLowerCase();
     if(aPlatform.indexOf('win') != -1) return "\r\n"; // win
