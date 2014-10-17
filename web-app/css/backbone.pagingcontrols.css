@@ -123,9 +123,3 @@
 .paging-container .Page-label {
     float: left;
 }
-
-.offscreen {
-    position: absolute;
-    left: -200em;
-    top: -20em;
-}
