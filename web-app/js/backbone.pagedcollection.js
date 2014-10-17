@@ -29,7 +29,7 @@
 
                 var info = self.pageInfo();
 
-                if (self.page > info.pages) {
+                if (info.pages && self.page > info.pages) {
                     self.fetch({ page: 1, success: success });
                 }
 

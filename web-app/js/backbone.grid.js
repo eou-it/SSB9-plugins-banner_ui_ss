@@ -2,7 +2,8 @@
 
 /*
 var column = {
-  editable: "Boolean | String | Object | Function",
+  editable: "Boolean | String | Object | Function", // define edit behavior of cell. Implies focus
+  focus:    "Boolean", // mark cell as able to receive keyboard focus, used for editable cells that don't need jeditable
   freeze:   "Boolean",
   name:     "String",
   render:   "Function",
@@ -30,8 +31,9 @@ var events = {
   beforeRender:  "Function",
   afterRender:   "Function",
   beforeRefresh: "Function",
-  afterRefresh:  "Function"
-  rowSelected:   "Function"
+  afterRefresh:  "Function",
+  rowSelected:   "Function( $row, backboneRowModel )"
+  cellSelected:  "Function( $cell, backboneRowModel )" // if cellSelected is provided, caller must manage editMode to prevent grid from acting on keyboard events while cell is being edited.
 }
 
 var data = {
@@ -42,6 +44,8 @@ var data = {
   "pageMaxSize": "Number"
 };
 */
+var direction = $('meta[name=dir]').attr('content');
+direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
 ;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
@@ -87,7 +91,10 @@ var data = {
         });
 
     var collection = new GridCollection;
+
+    collection.bind( "fetching", function ( ) { if ($(".grid-container").height() > 10) { $(".grid-container").loading(); } else { $(".body-content").loading(); } } );
     collection.bind( "change", function ( model ) { model.makeDirty(); } );
+
     collection.fetch();
 
     return collection
@@ -202,8 +209,40 @@ var data = {
       "click th":                               "sort"
     },
 
-    selectCell: function (e) {
-      var td = $(e.target),
+    focus: function() {
+      this.keyTable && this.keyTable.focus();
+    },
+
+    /**
+     * Enable edit mode when interacting with the contents of a cell to prevent the grid from acting on keyboard
+     * events to move between cells.
+     *
+     * The grid will generally manage edit mode based on the focus (enable edit mode when a click or ENTER is pressed in a cell,
+     * then disable edit mode on blur or when the focus changes outside the cell).  If an edit action will take the focus
+     * to an element outside the cell, call editMode(false), then when finished, call editMode(true)
+     */
+    editMode: function(flag) {
+      this.keyTable && (this.keyTable.block = flag); // may need a separate flag to indicate explicitly in edit mode
+    },
+
+    /**
+     * Enter 'edit' mode in cell, disabling keyboard events until done editing.
+     * grid recognizes "done editing" by the focus moving outside the target cell.
+     */
+    editCell: function( cell ) {
+      var tabs = $('[tabindex]', cell),
+          editControls = $('a, area, button, input, object, select, textarea', cell).filter(':not([tabindex])').filter(':visible'),
+          target = tabs.add( editControls ).first();
+
+      if ( target.length || _.contains( this.enabledColumns, $(cell).index())) {
+        this.editMode(true);
+        target.focus();
+      }
+    },
+
+    selectCell: function (eventOrElement) {
+      var target = $(eventOrElement.target || eventOrElement),
+          td = target.closest( "td" ),
           tr = td.closest ( "tr" );
 
       this.$el.find( "." + this.css.selected ).removeClass( this.css.selected );
@@ -216,6 +255,11 @@ var data = {
         var data = this.collection.get( parseInt( tr.attr( "data-id" ) ) );
 
         this.options.rowSelected.call( this, tr, data );
+      }
+
+      if ( _.isFunction( this.options.cellSelected ) ) {
+        var data = this.collection.get( parseInt( td.attr( "data-id" ) ) );
+        this.options.cellSelected.call( this, td, data );
       }
     },
 
@@ -366,7 +410,7 @@ var data = {
     },
 
     initialize: function () {
-      _.bindAll( this, 'notificationAdded', 'notificationRemoved' );
+      _.bindAll( this, 'notificationAdded', 'notificationRemoved', 'render' );
 
       // make sure we have an id attribute
       if ( !this.$el.attr( 'id' ) )
@@ -395,6 +439,17 @@ var data = {
       this.options.widthType = _.string.endsWith( firstColumn.width, "%" ) ? "percentage" : "fixed";
       this.options.widthUnit = ( this.options.gridwidthType == "percentage" ? "%" : ( _.string.endsWith( firstColumn.width, "em" ) ? "em" : "px" ) );
 
+
+      this.enabledColumns = _.reduce( //TODO: verify enabledColumns and keyboard nav with frozenColumns
+        this.options.columns,
+        function getEnabledColumnIndices( accumulator, item, index, list ) {
+          if (  item.editable || item.focus ) {
+            accumulator.push( index );
+          }
+          return accumulator;
+        }, [] );
+
+      this.options.cellSelected = this.options.cellSelected || this.editCell;
 
       this.columns       = _.where( this.options.columns, { freeze: false } );
       this.frozenColumns = _.where( this.options.columns, { freeze: true  } );
@@ -444,10 +499,9 @@ var data = {
         }
       }
 
-
-      this.collection.bind( "reset", function () {
-        view.refresh();
-      });
+      this.collection.bind( "reset", function () { view.refresh(); } );
+	this.collection.bind( "fetched", function () { view.hideSpinner(); } );
+      this.collection.bind( "failed", function () { view.hideSpinner(); } );
 
       if ( _.isNull( this.collection.sortColumn ) ) {
         var column = _.first( this.options.columns );
@@ -492,8 +546,8 @@ var data = {
               .on( 'mouseleave', '.grid tr', removeMatchHover );
 
       var lazyResizeHandler = _.debounce( function resizeHandler( e ) {
-        view.checkTitleWidths();
-      }, 300 );
+          view.recalcTitleWidths();
+      }, 350 );
 
       $( window ).on( 'resize', lazyResizeHandler );
     },
@@ -502,14 +556,30 @@ var data = {
       this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
 
       if ( window.KeyTable ) {
-        if ( !_.isUndefined( this.keyTable ) && !_.isNull( this.keyTable ) ) {
-          $( document ).unbind( "keypress", this.keyTable._fnKey );
-          $( document ).unbind( "keydown",  this.keyTable._fnKey );
-
-          this.$el.find( "td" ).die( 'click', this.keyTable._fnClick );
+        if ( this.keyTable ) {
+          this.keyTable.fnDestroy();
+          this.keyTable = null;
         }
 
-        this.keyTable = new KeyTable( { table: this.table[0] } );
+        this.log( "setupKeyTable enabledColumns: ", this.enabledColumns );
+        var view = this,
+            keyTable = this.keyTable = new KeyTable( { table: this.table[0],
+                                        enabledColumns: this.enabledColumns } );
+        keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
+          // trigger the click action on the contained element, if any, or the td itself
+          $(':first-child', cell).add(cell).first().click();
+        });
+
+        keyTable.event['blur']( null, null, function actionBlurCell( cell, x, y ) {
+          if ( keyTable.block ) {
+            var focus = $(':focus');
+            view.log( 'blurring cell: ', cell, 'to', focus, ' edit mode was: ', (view.keyTable && view.keyTable.block) );
+            if ( $.contains( cell, focus[0] )) {
+              focus.blur();
+            }
+            view.editMode( false );
+          }
+        });
       }
     },
 
@@ -551,17 +621,44 @@ var data = {
       this.columnVisibilityControls.render();
     },
 
-    checkTitleWidths: function( e ) {
-      _.each( $( 'th', this.table ), function( it ) {
-        var el = $( it );
-        el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
-      });
+    recalcTitleWidths: function () {
+        var predefinedWidth   = this.frozenTable === void 0 ? void 0 : this.frozenTable.css("width");
+        var frozenWidthString = this.options.frozenWidth || predefinedWidth || "auto";
+        var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString));
+        var outerWidth  = $(".grid-container .grid-wrapper").width();
 
-      _.each( $( 'th', this.frozenTable ), function( it ) {
-        var el = $( it );
-        el.find( '.title' ).css( 'width', ( el.width() - 30 ) + 'px' );
-      });
+        var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString));
+
+        $(".grid-container .grid-frozen-wrapper").css("width", frozenWidthString);
+        $(".grid-container .grid-main-wrapper").css({ "width": mainWidthString, "display": "block"});
+
+        _.each( $(".grid-container table th"), function( it ) {
+            var el = $( it );
+            var title = el.find('.title');
+            if ( title.length ) {
+                title.css('width', 'auto');
+                var padding = 5
+                var titleWidth = parseInt(title.css( 'width')) + padding
+                var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
+                var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
+                var cellWidth = el.width()
+
+                if (titleWidth >= el.width()) {
+                    title.css('width', (cellWidth - handleWidth - iconWidth - padding) + "px");
+                }
+              }
+        });
     },
+
+    parseMeasurementType: function (sizeString) {
+       var units = ["px", "%", "em"];
+       var found = _.find(units, function(unit) {
+         if (-1 != sizeString.indexOf(unit)) {
+           return true;
+         }
+       });
+      return found || "";
+     },
 
     render: function () {
       var view = this;
@@ -592,8 +689,6 @@ var data = {
       else
         this.$el.find( "." + this.css.gridMainWrapper ).css( "width", "100%" );
 
-      this.checkTitleWidths();
-
       this.setupScrolling();
 
       this.setupKeyTable();
@@ -607,10 +702,11 @@ var data = {
     },
 
     setupScrolling: function () {
+      var frozenWidth = this.frozenTable ? this.frozenTable.width() : 0
       if ( this.options.widthType != "percentage" ) {
         var widths = _.reduce( $( "th", this.table ), function ( memo, it ) { return memo + $( it ).width() }, 0 );
 
-        if ( widths > this.$el.find( "." + this.css.gridMainWrapper ).outerWidth() )
+        if ( widths + frozenWidth > this.$el.find( "." + this.css.gridMainWrapper ).outerWidth() )
           this.$el.find( "." + this.css.gridMainWrapper ).addClass( this.css.gridScrollX );
         else
           this.$el.find( "." + this.css.gridMainWrapper ).removeClass( this.css.gridScrollX );
@@ -620,6 +716,8 @@ var data = {
     destroy: function () {
       delete this.columns;
       delete this.title;
+
+      this.keyTable && this.keyTable.fnDestroy();
       delete this.keyTable;
       delete this.pageLengths;
 
@@ -631,9 +729,10 @@ var data = {
       this.$el.empty();
     },
 
-    log: function ( msg ) {
+    log: function () {
       if ( _.isBoolean( window.debug ) && window.debug == true )
-        console.log( "backbone.grid ( " +  this.$el.attr( "id" ) + " ): " + msg );
+        var args = Array.prototype.concat.apply( ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): "], arguments);
+        console.log.apply( console, args );
     },
 
     updateData: function ( id, name, value ) {
@@ -683,7 +782,6 @@ var data = {
       }
     },
 
-
     refresh: function ( fullRefresh ) {
       fullRefresh = ( _.isBoolean( fullRefresh ) ? fullRefresh : false );
 
@@ -697,9 +795,8 @@ var data = {
 
         this.generateHead();
 
-        this.checkTitleWidths();
-
         this.generateBody();
+
         this.generateColumnVisibilityControls();
 
         if ( this.features.freeze ) {
@@ -721,7 +818,6 @@ var data = {
       tbody.empty();
 
       var columnState = view.getColumnState();
-
       if(view.collection.length == 0){
         view.renderNoRecordsFound();
       } else {
@@ -810,6 +906,8 @@ var data = {
     determineColumnEditability: function ( column, el, data ) {
       var view = this,
           editableSubmitCallback = function ( value, settings ) {
+            view.log( "editableSubmitCallback editMode=", (view.keyTable && view.keyTable.block));
+            view.editMode( false );
             return view.updateData.call( view, $( this ).attr( "data-id" ), $( this ).attr( "data-property" ), value );
           };
 
@@ -818,6 +916,8 @@ var data = {
               defaults = {
                 height: "none",
                 onblur: function ( val, settings ) {
+                  view.log( "editable onblur, editMode=", (view.keyTable && view.keyTable.block));
+                  view.editMode( false );
                   $( 'form', this ).submit();
                 },
                 placeholder: ""
@@ -847,6 +947,7 @@ var data = {
 
           if ( !_.isUndefined( options ) ) {
             el.on( 'click.onedit', function( e ) {
+              view.log( "editable click.onedit", (view.keyTable && view.keyTable.block));
               view.selectCell.call( view, e );
             });
 
@@ -859,7 +960,8 @@ var data = {
 
 
     refreshFrozen: function () {
-      var view  = this,
+     if (undefined !== this.frozenTable) {
+        var view  = this,
           tbody = this.frozenTable.find( "tbody" ),
           clz   = this.strings.odd;
 
@@ -899,11 +1001,13 @@ var data = {
 
         tbody.append( tr );
       });
+     }
     },
 
     redraw: function () {
       this.log( "executing redraw" );
 
+      this.keyTable && this.keyTable.fnDestroy();
       delete this.keyTable;
 
       this.$el.empty();
@@ -957,6 +1061,7 @@ var data = {
         it.title    = c.title;
         it.width    = it.width + "%";
         it.visible  = c.visible;
+        it.name = c.name;
       });
 
       return cols;
@@ -1003,9 +1108,9 @@ var data = {
           return;
 
         var th          = $( view.elements.th ),
-            title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ),
-            sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
-            sortIcon    = $( "<button type='button'>" ).addClass( sortClasses );
+          title       = $( view.elements.div ).addClass( view.css.title ).text( it.title ).attr( "title", it.title ),
+          sortClasses = view.css.sortIcon + " "+ view.css.uiIcon + " " + view.columnSortIcon( it ),
+          sortIcon    = $( "<button type='button'>" ).addClass( sortClasses );
 
         th.append( title );
 
@@ -1142,9 +1247,8 @@ var data = {
     },
 
     generateFrozenHead: function () {
-      this._generateHead( view.frozenTable, this.frozenColumns );
+      this._generateHead( this.frozenTable, this.frozenColumns );
     },
-
 
     generateFrozenBody: function () {
       this.frozenTable.append( $( this.elements.tbody ) );
@@ -1185,6 +1289,13 @@ var data = {
 
       if ( model )
         this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
+    },
+
+    hideSpinner: function(target) {
+      $(".grid-container").loading(false);
+      $(".body-content").loading(false);
+      this.recalcTitleWidths();
     }
   });
+
 }).call (this, $, _, Backbone, JSON, AjaxManager );
