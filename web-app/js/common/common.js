@@ -176,13 +176,6 @@ function hideLoading( target ) {
     $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
 }
 
-function getEol() {
-    var aPlatform = navigator.platform.toLowerCase();
-    if(aPlatform.indexOf('win') != -1) return "\r\n"; // win
-    else if(aPlatform.indexOf('mac') != -1) return "\r"; // mac
-    else return "\n";
-}
-
 $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
     // This cannot detect all failures to provide an error handler, as
     // ajaxmanager or backbone may be wrapping a missing error handler.
@@ -276,12 +269,7 @@ $(document).ready(function() {
                 areas_label_opened :                    $.i18n.prop( "aurora.areas_label_opened" ),
                 areas_label_tools :                     $.i18n.prop( "aurora.areas_label_tools" ),
                 areas_label_browse_shortcut :           $.i18n.prop( "aurora.areas_label_browse_shortcut" ),
-                areas_label_browse_description :        $.i18n.prop( "aurora.areas_label_browse_description" ),
-                areas_label_browse_title :              $.i18n.prop( "aurora.areas_label_browse_title" ),
-                areas_label_home_title :                $.i18n.prop( "aurora.areas_label_home_title" ),
-                areas_label_home_description :          $.i18n.prop( "aurora.areas_label_home_description" ),
                 areas_label_home_shortcut :             $.i18n.prop( "aurora.areas_label_home_shortcut" ),
-                areas_label_branding:                   $.i18n.prop( "aurora.areas_label_branding" ),
                 areas_label_opened_shortcut :           $.i18n.prop( "aurora.areas_label_opened_shortcut" ),
                 areas_label_tools_shortcut :            $.i18n.prop( "aurora.areas_label_tools_shortcut" ),
                 openitems_label_closeSelected :         $.i18n.prop( "aurora.openitems_label_closeSelected" ),
