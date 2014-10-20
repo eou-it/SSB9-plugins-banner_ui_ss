@@ -85,11 +85,8 @@ function KeyTable ( oInit )
     };
 
     function _log() {
-        if (window.debug) {
-            console.log.apply(console, Array.prototype.concat.apply(
-                [(_oDatatable && _oDatatable.fnSettings().nTable.id) || $(_nBody).closest('[id]')[0].id],
-                arguments ));
-        }
+        // convert to use real logging when available
+        //console.log.apply(console, [_oDatatable.fnSettings().nTable.id].concat( arguments ));
     }
 
     /*
@@ -133,8 +130,7 @@ function KeyTable ( oInit )
      * Clean up bound events
      */
     this.fnDestroy = function() {
-        jQuery(document).unbind( "keypress", _fnKey ).unbind( "keydown", _fnKey )
-            .unbind( "click focus", _fnReleaseFocus );
+        jQuery(document).unbind( "keypress", _fnKey ).unbind( "keydown", _fnKey );
         if ( _oDatatable )
         {
             jQuery('tbody td', _oDatatable.fnSettings().nTable).die( 'click', _fnClick );
@@ -461,11 +457,10 @@ function KeyTable ( oInit )
 
         // look for an enabled cell close by
         function findEnabledCell( nCell ) {
-            var foundCell = nCell;
             var position = _fnCoordsFromCell( nCell );
             var x = position[0];
             var y = position[1];
-            if ( !_aEnabledColumns || -1 != _aEnabledColumns.indexOf(x)) { return foundCell; }
+            if ( !_aEnabledColumns || -1 != _aEnabledColumns.indexOf(x)) { return nCell; }
 
             var iTableWidth = _nBody.getElementsByTagName('tr')[0].getElementsByTagName('td').length;
 
@@ -481,9 +476,9 @@ function KeyTable ( oInit )
                     // wrapped, so look backward along the row instead
                     enabledPos = _fnFindEnabledColumn(x, y, -1, iTableWidth);
                 }
-                foundCell = _fnCellFromCoords( enabledPos[0], y ); // nearby cell in same row
+                nCell = _fnCellFromCoords( enabledPos[0], y ); // nearby cell in same row
             }
-            return foundCell || nCell;
+            return nCell;
         }
         nTarget = findEnabledCell(nTarget);
 
@@ -510,6 +505,7 @@ function KeyTable ( oInit )
             var position = _fnFindDtCell( nTarget );
             if (!position) {
                 _log( '_fnSetFocus on cell that is not found', nTarget );
+                //alert('_fnSetFocus on cell that is not found');
                 return;
             }
             var iRow = position[1];
@@ -924,7 +920,7 @@ function KeyTable ( oInit )
              iTableHeight = _nBody.getElementsByTagName('tr').length;
          }
 
-         _log( ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
+         _oDatatable && _log( _oDatatable.fnSettings().nTable.id + ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
          switch( action )
          {
              case _Action.ACTION:
@@ -1009,10 +1005,6 @@ function KeyTable ( oInit )
         {
             return true;
         }
-        if (!$(':visible', _nBody).length) {
-            //_log( "Not visible for #" + $(_nBody).closest('[id]').attr('id'));
-            return true;
-        }
 
         if (_that.block) {
             // KeyTable has been told to block/ignore keypresses, because a component is open
@@ -1060,7 +1052,6 @@ function KeyTable ( oInit )
      */
     function _fnCaptureKeys( )
     {
-        _log('capture keys. #' + $(_nBody).closest('[id]').attr('id') +  ' already captured=' + _bKeyCapture);
         if ( !_bKeyCapture )
         {
             _bKeyCapture = true;
@@ -1076,7 +1067,6 @@ function KeyTable ( oInit )
      */
     function _fnReleaseKeys( )
     {
-        _log('  release keys.  already captured=' + _bKeyCapture);
         _bKeyCapture = false;
     }
 
@@ -1222,33 +1212,6 @@ function KeyTable ( oInit )
     }
 
 
-    /*
-     * Function: _fnReleaseFocus
-     * Purpose: Release table focus when click or focus outside the table
-     * Returns: -
-     * Inputs: -
-     */
-    function _fnReleaseFocus(e) {
-        var nTarget = e.target;
-        var bTableClick = false;
-        if($(e.target).parents('.keytable-popup').length) bTableClick = true;
-        else{
-            while ( nTarget )
-            {
-                if ( nTarget == oInit.table )
-                {
-                    bTableClick = true;
-                    break;
-                }
-                nTarget = nTarget.parentNode;
-            }
-        }
-        if ( !bTableClick )
-        {
-            _fnBlur();
-        }
-    }
-
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Initialisation
@@ -1298,7 +1261,6 @@ function KeyTable ( oInit )
 
         if ( typeof oInit.enabledColumns != 'undefined' ) {
             _aEnabledColumns = oInit.enabledColumns;
-            _aEnabledColumns = _aEnabledColumns.length ? _aEnabledColumns : void 0;
         }
 
         _bRowSelect = oInit.rowselect && true || false;
@@ -1388,7 +1350,26 @@ function KeyTable ( oInit )
         }
 
         /* Lose table focus when click outside the table */
-        jQuery(document).bind('click focus', _fnReleaseFocus );
+        jQuery(document).bind('click focus', function(e) {
+            var nTarget = e.target;
+            var bTableClick = false;
+            if($(e.target).parents('.keytable-popup').length) bTableClick = true;
+            else{
+                while ( nTarget )
+                {
+                    if ( nTarget == oInit.table )
+                    {
+                        bTableClick = true;
+                        break;
+                    }
+                    nTarget = nTarget.parentNode;
+                }
+            }
+            if ( !bTableClick )
+            {
+                _fnBlur();
+            }
+        } );
     }
 
     this.fnCoordsFromCell = _fnCoordsFromCell; // expose, at least for debugging

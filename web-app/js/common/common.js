@@ -155,13 +155,11 @@ window.SaveTimer = ActivityTimer.extend({
 
 function showLoading( target ) {
     var t = $(target);
-    var offTop = (undefined === t[0] ? 0 : t[0].offsetTop);
-    var offLeft = (undefined === t[0] ? 0 : t[0].offsetLeft);
 
     var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
 
     // $.offset() includes the top nav bar's height, so find position manually
-    var pos = {top:offTop + $(window).scrollTop(), left:offLeft };
+    var pos = {top:t[0].offsetTop + $(window).scrollTop(), left:t[0].offsetLeft };
 
     loading.css(pos).height(t.outerHeight()).width(t.outerWidth());
 
@@ -183,46 +181,6 @@ function getEol() {
     if(aPlatform.indexOf('win') != -1) return "\r\n"; // win
     else if(aPlatform.indexOf('mac') != -1) return "\r"; // mac
     else return "\n";
-}
-
-function showLoadingPopup( target ) {
-    var t = $(target);
-
-    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
-    var pos = {top: $(window).scrollTop(), left: 0 };
-    var height = (t[0] && t[0].scrollHeight > t.outerHeight() ? t[0].scrollHeight : t.outerHeight() );
-    loading.css(pos).height(height-2).width(t.outerWidth()-2);
-
-    setTimeout(
-        function() {
-            $(target).find( 'div.loading-pending' ).fadeIn( 200, function() {
-                $(this).removeClass( 'loading-pending' );
-            });
-        }, 500
-    );
-}
-
-function hideLoadingPopup( target ) {
-    $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
-}
-
-
-/* Usage:
-     $(selector).loading();   // show loading indicator
-     $(selector).loading(false); // hide loading indicator
-*/
-$.fn.loading = function(isLoading) {
-    (isLoading||isLoading==undefined) ? showLoading( this ) : hideLoading( this );
-    return this;
-}
-
-/* Usage:
-     $(selector).loadingPopup();   // show loading indicator
-     $(selector).loadingPopup(false); // hide loading indicator
-*/
-$.fn.loadingPopup = function(isLoading) {
-    (isLoading||isLoading==undefined) ? showLoadingPopup( this ) : hideLoadingPopup( this );
-    return this;
 }
 
 $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
@@ -314,7 +272,6 @@ $(document).ready(function() {
             showHelp: false,
             langDir: $.i18n.prop( "default.language.direction" ),
             resourceMap : {
-                skip_link_text :                        $.i18n.prop( "aurora.skip_link_text" ),
                 areas_label_browse :                    $.i18n.prop( "aurora.areas_label_browse" ),
                 areas_label_opened :                    $.i18n.prop( "aurora.areas_label_opened" ),
                 areas_label_tools :                     $.i18n.prop( "aurora.areas_label_tools" ),

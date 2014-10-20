@@ -1,3 +1,6 @@
+/** *****************************************************************************
+ Copyright 2013-2014 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 .grid {
     margin: 0 auto;
     width: 100%;
@@ -47,7 +50,6 @@
 .grid button.sort-icon{
     background-color: transparent;
     border: 0;
-    cursor: pointer;
 }
 
 .grid th.sort-disabled {
@@ -70,6 +72,7 @@
     border-bottom: 1px solid #DDDDDD;
     border-color: #DDDDDD;
 }
+
 .grid tr.even {
     background-color: #FFFFFF;
     border-bottom: 1px solid #DDDDDD;
@@ -94,13 +97,9 @@
     min-height: 30px;
 }
 
-.grid td.focus {
-  /*background: #e4e4e4;*/
-}
 
 .grid tbody tr td form input {
     vertical-align: top;
-    /*margin-top: 2px;*/
     width: 98% !important;
     padding-left: 5px;
     height: 20px;
@@ -110,8 +109,6 @@
 .grid-container {
     position: relative;
 }
-
-
 
 .sort-icon {
     float: right;
@@ -139,9 +136,7 @@
 
 .column-visibility-menu {
     position: absolute;
-    right: 0px;
     left: auto;
-    top: 0px;
     z-index: 1101;
     border-left: 1px solid #DDDDDD;
     background: url('../images/grid_customize.png') no-repeat center center;
@@ -150,7 +145,7 @@
 }
 
 .grid-without-title th:last-child {
-    //padding-right: 30px;
+    padding-right: 30px;
 }
 
 .button-menu-container {
@@ -162,9 +157,9 @@
     margin-top: 4px;
     border: 1px solid #DDDDDD;
     border-top: 1px solid #CCCCCC;
-    box-shadow:2px 2px 2px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow:2px 2px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow:2px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
 .button-menu-container ul {
@@ -179,12 +174,12 @@
 }
 
 .button-menu-container ul li input {
-    height:auto;
+    height: auto;
 }
 
 .button-menu-overlay {
     opacity: 0.0;
-    filter:alpha(opacity=0);
+    filter: alpha(opacity = 0);
     position: absolute;
     top: 0px;
     left: 0px;
@@ -196,7 +191,7 @@
 /* notification/datatables integration classes */
 
 .grid tr td:first-child {
-    //padding-left: 30px;
+    padding-left: 30px;
 }
 
 .grid.grid-frozen tr td:first-child {
@@ -208,15 +203,15 @@
 }
 
 .grid tr.notification-error td:first-child {
-    background:url("../images/icon-error-16x16-plus7.png") no-repeat left center
+    background: url("../images/icon-error-16x16-plus7.png") no-repeat left center
 }
 
 .grid tr.notification-success td:first-child {
-    background:url("../images/icon-success-16x16-plus7.png") no-repeat left center
+    background: url("../images/icon-success-16x16-plus7.png") no-repeat left center
 }
 
 .grid tr.notification-warning td:first-child {
-    background:url("../images/icon-warning-16x16-plus7.png") no-repeat left center
+    background: url("../images/icon-warning-16x16-plus7.png") no-repeat left center
 }
 
 .grid tr.notification-success {

@@ -438,6 +438,7 @@ function createFetchOptions( collection, options ) {
     return options;
 }
 
+
 // Add validation logic when models change.  We do not use the 'validate' function on the model due to some lack of control when it is called.
 // For example, validate is called on the model when the model is fetched/added to the collection.  This means we will validate as we prepare the model
 // which has the unforeseen consquence that the model we were validating does not exist in the collection yet.  We want to avoid that.
