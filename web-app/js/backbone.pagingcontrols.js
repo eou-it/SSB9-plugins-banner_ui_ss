@@ -51,6 +51,7 @@
       pagePer:               "page-per"
     },
     elements: {
+      button: "<button></button>",
       div:    "<div></div>",
       span:   "<span></span>",
       pageLabel:  "<div><label></label></div>",
@@ -117,10 +118,10 @@
 
       var view     = this,
           pageInfo = this.collection.pageInfo(),
-          first    = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.first + " " + dir ),
-          last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last + " " + dir ),
-          next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ),
-          prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ),
+          first    = $( this.elements.button ).addClass( this.css.pagingControl + " " + this.css.first + " " + dir ).attr('tabindex',-1),
+          last     = $( this.elements.button ).addClass( this.css.pagingControl + " " + this.css.last + " " + dir ).attr('tabindex',-1),
+          next     = $( this.elements.button ).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ).attr('tabindex',-1),
+          prev     = $( this.elements.button ).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ).attr('tabindex',-1),
           page     = $( this.elements.pageLabel ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
           input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ).attr('tabindex',0),
           of       = $( this.elements.span ).attr('id','of-n-pages').addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? this.strings.pageOfOne : this.strings.of ),

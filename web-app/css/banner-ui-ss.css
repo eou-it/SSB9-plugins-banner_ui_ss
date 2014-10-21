@@ -1148,6 +1148,7 @@ div.infoicon {
 }
 
 .screen-reader {
-    position:absolute !important;
-    left:-10000em;
+    position: absolute;
+    left: -200em;
+    top: -20em;
 }

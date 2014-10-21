@@ -50,13 +50,13 @@ function validateDate( dateString ) {
  * create a new one.
  * ariaLink - aria-labelledby (default) or aria-describedby
  *
- * Returns the label object, not the original jQuery object.
+ * Returns the original jQuery object.
  */
 $.fn.screenReaderLabel = (function(){
     var counter = 0;
     return function( text, ariaLive, ariaLink) {
         var $el = this,
-            ariaLink = ariaLink || 'aria-labelledby',
+            ariaLink = ariaLink || 'aria-describedby',
             $label = getLabel($el, ariaLink) || createLabel($el, ariaLive, ariaLink);
 
         function getLabel($el, ariaLink) {
@@ -74,7 +74,8 @@ $.fn.screenReaderLabel = (function(){
             return $label;
         }
 
-        return $label.text( text );
+        $label.text( text );
+        return $el;
     }
 })();
 
@@ -227,7 +228,9 @@ window.SaveTimer = ActivityTimer.extend({
 function showLoading( target ) {
     var t = $(target);
 
-    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
+    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' )
+        .attr("aria-label", $.i18n.prop("js.net.hedtech.banner.ajax.loading"))
+        .attr("aria-live", "assertive").attr("aria-busy","true");
 
     // $.offset() includes the top nav bar's height, so find position manually
     var pos = {top:t[0].offsetTop + $(window).scrollTop(), left:t[0].offsetLeft };
@@ -254,13 +257,6 @@ function hideLoading( target ) {
 $.fn.loading = function(isLoading) {
     (isLoading||isLoading==undefined) ? showLoading( this ) : hideLoading( this );
     return this;
-}
-
-function getEol() {
-    var aPlatform = navigator.platform.toLowerCase();
-    if(aPlatform.indexOf('win') != -1) return "\r\n"; // win
-    else if(aPlatform.indexOf('mac') != -1) return "\r"; // mac
-    else return "\n";
 }
 
 $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
@@ -418,4 +414,8 @@ function checkAndAddClass(browserName) {
     if(!bodyTag.hasClass(browserWithVersion)) {
         bodyTag.addClass(browserWithVersion);
     }
+}
+
+function formatTitleAndShortcut(title, shortcut) {
+    return $.i18n.prop( "net.hedtech.banner.title.shortcut", [title, shortcut] );
 }
