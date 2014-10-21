@@ -462,3 +462,105 @@ function checkAndAddClass(browserName) {
         bodyTag.addClass(browserWithVersion);
     }
 }
+
+var key = (function(key) {
+    var modifierCode = {
+        SHIFT: 1,
+        ALT: 2,
+        CTRL: 4
+        //META: 8 //windows key or command key (mac)
+        //MOD: platform-specific, Ctrl on windows/unix or Command on Mac.  See 'mousetrap' library
+        };
+    var modifierStrings = {
+        'shift':modifierCode.SHIFT,
+        'alt':modifierCode.ALT,
+        'ctrl':modifierCode.CTRL
+    };
+
+    var keys = {
+        'return': 0x0d,
+        escape: 0x1b,
+        space: 0x20,
+        pageUp: 0x21,
+        pageDown: 0x22,
+        end: 0x23,
+        home: 0x24,
+        left: 0x25,
+        up: 0x26,
+        right: 0x27,
+        down: 0x28
+    };
+
+    key.KeyException = function (message) {
+        this.message = message;
+        this.name = "KeyException";
+    }
+
+    key.parseModifiers = function( shortcut ) {
+        var modifiers = 0,
+            words = shortcut.split('+');
+        words.pop();
+
+        _.each( words, function( word ) {
+            var value = modifierStrings[ word.toLowerCase() ];
+            if ( value ) {
+                modifiers |= value;
+            } else {
+                throw new key.KeyException( "Unknown modifier '" + word + "' in shortcut '" + shortcut + "'" );
+            }
+        });
+        return modifiers;
+    };
+
+
+    key.parseKey = function( shortcut ) {
+        var word = shortcut.split('+').pop(),
+            code = keys[word.toLowerCase()];
+        if ( !code ) {
+            if ( word.length > 1 ) {
+                throw new key.KeyException( "Unknown key name '" + word + "' in shortcut '" + shortcut + "'" );
+            } else {
+                code = word.charCodeAt(0);
+            }
+        }
+        return code;
+    };
+
+
+    var BoundKey = function( shortcut, handler ) {
+        this.modifiers = key.parseModifiers( shortcut );
+        this.code = key.parseKey( shortcut );
+        this.handler = handler;
+    };
+
+    key.boundKeys = [];
+
+    key.eventHandler = function( event ) {
+        _.each( key.boundKeys, function( boundKey ) {
+            var match = false;
+            if ( boundKey.modifiers ) {
+                if ( boundKey.modifiers && keys.SHIFT && !event.shiftKey ) {
+                    return;
+                }
+                if ( boundKey.modifiers && keys.ALT && !event.altKey ) {
+                    return;
+                }
+                if ( boundKey.modifiers && keys.CTRL && !event.ctrlKey ) {
+                    return;
+                }
+            }
+            if ( boundKey.code != event.keyCode ) {
+                return;
+            }
+            boundKey.handler( event );
+        });
+    };
+
+    key.bind = function( shortcut, handler ) {
+        if ( !boundKeys ) {
+            $(body).on( 'keyup', key.eventHandler );
+        }
+        boundKeys.push( new BoundKey( shortcut, handler ));
+    };
+
+})(key || {});
