@@ -68,10 +68,17 @@
 }
 
 
+.paging-container button,
 .paging-container div,
 .paging-container span,
 .paging-container input {
     float: left;
+}
+
+.paging-container button,
+.paging-container button:hover {
+    border:0;
+    border-style:none;
 }
 
 .paging-container {

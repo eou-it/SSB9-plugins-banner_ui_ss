@@ -50,13 +50,13 @@ function validateDate( dateString ) {
  * create a new one.
  * ariaLink - aria-labelledby (default) or aria-describedby
  *
- * Returns the label object, not the original jQuery object.
+ * Returns the original jQuery object.
  */
 $.fn.screenReaderLabel = (function(){
     var counter = 0;
     return function( text, ariaLive, ariaLink) {
         var $el = this,
-            ariaLink = ariaLink || 'aria-labelledby',
+            ariaLink = ariaLink || 'aria-describedby',
             $label = getLabel($el, ariaLink) || createLabel($el, ariaLive, ariaLink);
 
         function getLabel($el, ariaLink) {
@@ -74,7 +74,8 @@ $.fn.screenReaderLabel = (function(){
             return $label;
         }
 
-        return $label.text( text );
+        $label.text( text );
+        return $el;
     }
 })();
 
@@ -224,12 +225,15 @@ window.SaveTimer = ActivityTimer.extend({
     activityTarget: function() { return $("body"); }
 });
 
+
 function showLoading( target ) {
     var t = $(target);
     var offTop = (undefined === t[0] ? 0 : t[0].offsetTop);
     var offLeft = (undefined === t[0] ? 0 : t[0].offsetLeft);
 
-    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
+    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' )
+        .attr("aria-label", $.i18n.prop("js.net.hedtech.banner.ajax.loading"))
+        .attr("aria-live", "assertive").attr("aria-busy","true");
 
     // $.offset() includes the top nav bar's height, so find position manually
     var pos = {top:offTop + $(window).scrollTop(), left:offLeft };
@@ -249,26 +253,16 @@ function hideLoading( target ) {
     $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
 }
 
-/* Usage:
-     $(selector).loading();   // show loading indicator
-     $(selector).loading(false); // hide loading indicator
-*/
-$.fn.loading = function(isLoading) {
-    (isLoading||isLoading==undefined) ? showLoading( this ) : hideLoading( this );
-    return this;
-}
 
-function getEol() {
-    var aPlatform = navigator.platform.toLowerCase();
-    if(aPlatform.indexOf('win') != -1) return "\r\n"; // win
-    else if(aPlatform.indexOf('mac') != -1) return "\r"; // mac
-    else return "\n";
-}
-
+/**
+ * @deprecated to be consolidated with showLoading
+ */
 function showLoadingPopup( target ) {
     var t = $(target);
 
-    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
+    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' )
+        .attr("aria-label", $.i18n.prop("js.net.hedtech.banner.ajax.loading"))
+        .attr("aria-live", "assertive").attr("aria-busy","true");
     var pos = {top: $(window).scrollTop(), left: 0 };
     var height = (t[0] && t[0].scrollHeight > t.outerHeight() ? t[0].scrollHeight : t.outerHeight() );
     loading.css(pos).height(height-2).width(t.outerWidth()-2);
@@ -282,10 +276,10 @@ function showLoadingPopup( target ) {
     );
 }
 
-function hideLoadingPopup( target ) {
-    $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
-}
-
+/**
+ * @deprecated use hideLoading
+ */
+var hideLoadingPopup = hideLoading;
 
 /* Usage:
      $(selector).loading();   // show loading indicator
@@ -296,14 +290,11 @@ $.fn.loading = function(isLoading) {
     return this;
 }
 
-/* Usage:
-     $(selector).loadingPopup();   // show loading indicator
-     $(selector).loadingPopup(false); // hide loading indicator
+/**
+ * @deprecated use $.fn.loading
 */
-$.fn.loadingPopup = function(isLoading) {
-    (isLoading||isLoading==undefined) ? showLoadingPopup( this ) : hideLoadingPopup( this );
-    return this;
-}
+$.fn.loadingPopup = $.fn.loading;
+
 
 $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
     // This cannot detect all failures to provide an error handler, as
@@ -463,7 +454,12 @@ function checkAndAddClass(browserName) {
     }
 }
 
-var key = (function(key) {
+function formatTitleAndShortcut(title, shortcut) {
+    return $.i18n.prop( "net.hedtech.banner.title.shortcut", [title, shortcut] )
+        .replace( /&lt;br&gt;/g, '\n' );
+}
+
+key = (function(key) {
     var modifierCode = {
         SHIFT: 1,
         ALT: 2,
@@ -520,7 +516,7 @@ var key = (function(key) {
             if ( word.length > 1 ) {
                 throw new key.KeyException( "Unknown key name '" + word + "' in shortcut '" + shortcut + "'" );
             } else {
-                code = word.charCodeAt(0);
+                code = word.toUpperCase().charCodeAt(0);
             }
         }
         return code;
@@ -539,13 +535,13 @@ var key = (function(key) {
         _.each( key.boundKeys, function( boundKey ) {
             var match = false;
             if ( boundKey.modifiers ) {
-                if ( boundKey.modifiers && keys.SHIFT && !event.shiftKey ) {
+                if ( (boundKey.modifiers & modifierCode.SHIFT) && !event.shiftKey ) {
                     return;
                 }
-                if ( boundKey.modifiers && keys.ALT && !event.altKey ) {
+                if ( (boundKey.modifiers & modifierCode.ALT) && !event.altKey ) {
                     return;
                 }
-                if ( boundKey.modifiers && keys.CTRL && !event.ctrlKey ) {
+                if ( (boundKey.modifiers & modifierCode.CTRL) && !event.ctrlKey ) {
                     return;
                 }
             }
@@ -556,11 +552,23 @@ var key = (function(key) {
         });
     };
 
-    key.bind = function( shortcut, handler ) {
-        if ( !boundKeys ) {
-            $(body).on( 'keyup', key.eventHandler );
+    /**
+     * bind shortcut & handler pairs.
+     * key.bind( 'shift+home', homeFunction, 'alt+m', menuFunction, ... )
+     */
+    key.bind = function() {
+        var i = 0;
+        if ( !key.boundKeys.length ) {
+            // register page-level event handler only once
+            $(document).on( 'keyup', key.eventHandler );
         }
-        boundKeys.push( new BoundKey( shortcut, handler ));
+
+        for ( ; i < arguments.length; i += 2 ) {
+            shortcut = arguments[ i ];
+            handler = arguments[ i+1 ];
+            key.boundKeys.push( new BoundKey( shortcut, handler ));
+        }
     };
 
-})(key || {});
+    return key;
+})(window.key || {});

@@ -353,7 +353,10 @@ $(document).ready(function() {
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
 
-            $(this.el).append( '<div class="notification-center-count"><span/></div>' ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
+            $(this.el).append(
+              $('<div class="notification-center-count"><span/></div>' )
+                .screenReaderLabel($.i18n.prop("js.notification.label"))
+            ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
 
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
