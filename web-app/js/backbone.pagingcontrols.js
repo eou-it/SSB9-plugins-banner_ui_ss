@@ -35,8 +35,6 @@
     css: {
       pagingContainer:       "paging-container",
       enabled:               "enabled",
-      pageLabelWrapper:      "page-label-wrapper",
-      perPageLabelWrap:      "per-page-label-wrapper",
       pageSizeSelect:        "page-size-select",
       pageSizeSelectWrapper: "page-size-select-wrapper",
       pagingControl:         "paging-control",
@@ -46,28 +44,22 @@
       previous:              "previous",
       next:                  "next",
       pageNumber:            "page-number",
-      pageLabel:             "page-label",
       divider:               "divider",
       totalPages:            "total-pages",
       page:                  "page",
       pageOf:                "page-of",
-      pagePer:               "page-per",
-      offscreen:             "offscreen"
+      pagePer:               "page-per"
     },
     elements: {
       div:    "<div></div>",
       span:   "<span></span>",
-      text:"<input type='text'></input>",
-      select:"<select></select>",
-      option:"<option></option>",
-      label:"<label></label>"
+      pageLabel:  "<div><label></label></div>",
+      text:   "<input type='text' id='page1'></input>",
+      sizeLabel:  "<label></label>",
+      select: "<select id='size1'></select>",
+      option: "<option></option>"
     },
     strings: {
-
-      first:                       function() { return $.i18n.prop('backbone.paging.controls.first') },
-      last:                        function() { return $.i18n.prop('backbone.paging.controls.last') },
-      prev:                        function() { return $.i18n.prop('backbone.paging.controls.previous') },
-      next:                        function() { return $.i18n.prop('backbone.paging.controls.next') },
       page:                        function() { return $.i18n.prop('backbone.paging.controls.page') },
       of:                          function() { return $.i18n.prop('backbone.paging.controls.of') },
       pageOfOne:                   function() { return $.i18n.prop('backbone.paging.controls.oneof') },
@@ -120,32 +112,36 @@
     render: function () {
       this.$el.empty();
 
+      var dir = $( "meta[name=dir]" ).attr( "content" );
+      dir = ( dir === void 0 || dir === "ltr" ? "ltr" : "rtl" );
 
       var view     = this,
           pageInfo = this.collection.pageInfo(),
-          first    = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.first + " " ).attr('title',this.strings.first).attr('role','button'),
-          last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last + " " ).attr('title',this.strings.last).attr('role','button'),
-          next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next + " " ).attr('title',this.strings.next).attr('role','button'),
-          prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous + " " ).attr('title',this.strings.prev).attr('role','button'),
-          page     = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
+          first    = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.first + " " + dir ),
+          last     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.last + " " + dir ),
+          next     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ),
+          prev     = $( this.elements.div ).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ),
+          page     = $( this.elements.pageLabel ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
+          input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ).attr('tabindex',0),
           of       = $( this.elements.span ).attr('id','of-n-pages').addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? this.strings.pageOfOne : this.strings.of ),
           pages    = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.totalPages ).text( pageInfo.pages ),
-          input    = $(this.elements.text).addClass(this.css.pageNumber).val(pageInfo.page).attr('tabindex',0).attr('aria-label', $.i18n.prop('backbone.paging.controls.page.of.pages',[pageInfo.page, pageInfo.pages])),
-          pageLabel = $(this.elements.label).addClass(this.css.pagingText + " " + this.css.pageLabel  + " " ).text(this.strings.page).append(input),
-          pageLabelWrap = $(this.elements.div).addClass(this.css.pageLabelWrapper).append(pageLabel),
           divider  = $( this.elements.div ).addClass( this.css.divider ),
-          perPage  = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.pagePer ).text( this.strings.perPage ),
-          select   = $( this.elements.select ).addClass( this.css.pageSizeSelect ).attr('tabindex',0).attr('id','comboSelect'),
-          selectLabel = $(this.elements.label).addClass(this.css.offscreen + " " + dir).attr('for','comboSelect'),
-          selWrap  = $( this.elements.div ).addClass( this.css.pageSizeSelectWrapper ).append(selectLabel).append(select);
+          perPage  = $( this.elements.sizeLabel ).addClass( this.css.pagingText + " " + this.css.pagePer ).text( this.strings.perPage ),
+          select   = $( this.elements.select ).addClass( this.css.pageSizeSelect ).attr('tabindex',0),
+          selWrap  = $( this.elements.div ).addClass( this.css.pageSizeSelectWrapper ).append( select );
 
+      first.screenReaderLabel( $.i18n.prop('backbone.paging.controls.first'));
+      last.screenReaderLabel( $.i18n.prop('backbone.paging.controls.last'));
+      next.screenReaderLabel( $.i18n.prop('backbone.paging.controls.next'));
+      prev.screenReaderLabel( $.i18n.prop('backbone.paging.controls.previous'));
+      input.screenReaderLabel( $.i18n.prop('backbone.paging.controls.page.of.pages', [pageInfo.page, pageInfo.pages]));
 
       _.each( this.pageLengths, function (it) {
         var option = $( view.elements.option ).val( it ).text( it );
 
         if ( it == pageInfo.pageMaxSize ) {
-            option.attr("selected", "selected");
-            selectLabel.text($.i18n.prop('backbone.paging.controls.count.per.page',[it]));
+            option.attr( "selected", "selected" );
+            select.screenReaderLabel( $.i18n.prop('backbone.paging.controls.count.per.page', [it]));
         }
 
         select.append( option );
@@ -158,23 +154,20 @@
       } else {
           input.show();
 
-                var enabled = [input];
-                if (pageInfo.page == 1) {
-                    enabled = enabled.concat([ next, last ]);
-                } else if (pageInfo.page == pageInfo.pages) {
-                    enabled = enabled.concat([ first, prev ]);
-                } else {
-                    enabled = enabled.concat([ first, last, prev, next ]);
-                }
-                _.each(enabled, function (it) {
-                    it.addClass(view.css.enabled);
-                    it.attr('tabIndex',0);
-                });
-            }
+          var enabled = [input];
+          if (pageInfo.page == 1) {
+              enabled = enabled.concat( [ next, last ] );
+          } else if (pageInfo.page == pageInfo.pages) {
+              enabled = enabled.concat( [ first, prev ] );
+          } else {
+              enabled = enabled.concat( [ first, last, prev, next ] );
+          }
+          _.each( enabled, function (it) { it.addClass( view.css.enabled ).attr('tabindex',0) });
+      }
 
-            _.each([ first, prev, pageLabelWrap, of, pages, next, last, divider, perPage, selWrap ], function (it) {
-                view.$el.append(it);
-            });
-        }
-    });
-}).call(this, $, _, Backbone);
+	_.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap], function (it) {
+        view.$el.append( it );
+      });
+    }
+  });
+}).call (this, $, _, Backbone);
