@@ -38,6 +38,78 @@ function validateDate( dateString ) {
 }
 
 
+/**
+ * $(ele).screenReaderLabel( text, ariaLive );
+ *
+ * set the label that will be read by a screen reader for this element.
+ *
+ * text - label text
+ * ariaLive - off (default), polite, assertive - will only be applied
+ * when the label is first created. If you need to change the ariaLive
+ * setting for a label, remove the label and the link attribute and
+ * create a new one.
+ * ariaLink - aria-labelledby (default) or aria-describedby
+ *
+ * Returns the original jQuery object.
+ */
+$.fn.screenReaderLabel = (function(){
+    var counter = 0;
+    return function( text, ariaLive, ariaLink) {
+        var $el = this,
+            ariaLink = ariaLink || 'aria-describedby',
+            $label = getLabel($el, ariaLink) || createLabel($el, ariaLive, ariaLink);
+
+        function getLabel($el, ariaLink) {
+            var id = $el.attr(ariaLink);
+            return id ? $('#' + id) : null;
+        }
+
+        function createLabel($el, ariaLive, ariaLink) {
+            var id = 'screen-reader-label-' + ++counter;
+            var live = ariaLive ? ' aria-live="' + ariaLive + '"' : "";
+            var $label = $('<span id="' + id + '"' + live + '></span>').screenReaderOnly();
+            $('body').append( $label );
+
+            $el.attr(ariaLink, id);
+            return $label;
+        }
+
+        $label.text( text );
+        return $el;
+    }
+})();
+
+/**
+ * Hide the element and optionally its descendants, from the screen
+ * reader.
+ *
+ * element - an element, jquery object, or a selector
+ * recursive - boolean to hide descendants or not. Use with caution - if the contained
+ * elements can receive keyboard focus, it can cause problems on some
+ * browser/screen reader combinations. google aria-hidden for more
+ * information.
+ *
+ * Returns a jQuery object of the element for chaining.
+ */
+$.fn.screenReaderHide = function( recursive ) {
+    if ( recursive ) {
+        this.attr('aria-hidden', 'true')
+    } else {
+        this.attr('role', 'presentation');
+    }
+
+    return this;
+}
+
+/**
+ * mark content to only be read by screen reader, not displayed visually
+ * Returns jQuery object for element
+ */
+$.fn.screenReaderOnly = function() {
+    return this.addClass( 'screen-reader');
+}
+
+
 window.InactivityTimer = ActivityTimer.extend({
     timeoutHandler: function() {
         var n = new Notification( {
@@ -153,12 +225,15 @@ window.SaveTimer = ActivityTimer.extend({
     activityTarget: function() { return $("body"); }
 });
 
+
 function showLoading( target ) {
     var t = $(target);
     var offTop = (undefined === t[0] ? 0 : t[0].offsetTop);
     var offLeft = (undefined === t[0] ? 0 : t[0].offsetLeft);
 
-    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
+    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' )
+        .attr("aria-label", $.i18n.prop("js.net.hedtech.banner.ajax.loading"))
+        .attr("aria-live", "assertive").attr("aria-busy","true");
 
     // $.offset() includes the top nav bar's height, so find position manually
     var pos = {top:offTop + $(window).scrollTop(), left:offLeft };
@@ -178,17 +253,16 @@ function hideLoading( target ) {
     $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
 }
 
-function getEol() {
-    var aPlatform = navigator.platform.toLowerCase();
-    if(aPlatform.indexOf('win') != -1) return "\r\n"; // win
-    else if(aPlatform.indexOf('mac') != -1) return "\r"; // mac
-    else return "\n";
-}
 
+/**
+ * @deprecated to be consolidated with showLoading
+ */
 function showLoadingPopup( target ) {
     var t = $(target);
 
-    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' );
+    var loading = t.append( '<div class="loading loading-pending">' ).find( '.loading' )
+        .attr("aria-label", $.i18n.prop("js.net.hedtech.banner.ajax.loading"))
+        .attr("aria-live", "assertive").attr("aria-busy","true");
     var pos = {top: $(window).scrollTop(), left: 0 };
     var height = (t[0] && t[0].scrollHeight > t.outerHeight() ? t[0].scrollHeight : t.outerHeight() );
     loading.css(pos).height(height-2).width(t.outerWidth()-2);
@@ -202,10 +276,10 @@ function showLoadingPopup( target ) {
     );
 }
 
-function hideLoadingPopup( target ) {
-    $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
-}
-
+/**
+ * @deprecated use hideLoading
+ */
+var hideLoadingPopup = hideLoading;
 
 /* Usage:
      $(selector).loading();   // show loading indicator
@@ -216,14 +290,11 @@ $.fn.loading = function(isLoading) {
     return this;
 }
 
-/* Usage:
-     $(selector).loadingPopup();   // show loading indicator
-     $(selector).loadingPopup(false); // hide loading indicator
+/**
+ * @deprecated use $.fn.loading
 */
-$.fn.loadingPopup = function(isLoading) {
-    (isLoading||isLoading==undefined) ? showLoadingPopup( this ) : hideLoadingPopup( this );
-    return this;
-}
+$.fn.loadingPopup = $.fn.loading;
+
 
 $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
     // This cannot detect all failures to provide an error handler, as
@@ -382,3 +453,122 @@ function checkAndAddClass(browserName) {
         bodyTag.addClass(browserWithVersion);
     }
 }
+
+function formatTitleAndShortcut(title, shortcut) {
+    return $.i18n.prop( "net.hedtech.banner.title.shortcut", [title, shortcut] )
+        .replace( /&lt;br&gt;/g, '\n' );
+}
+
+key = (function(key) {
+    var modifierCode = {
+        SHIFT: 1,
+        ALT: 2,
+        CTRL: 4
+        //META: 8 //windows key or command key (mac)
+        //MOD: platform-specific, Ctrl on windows/unix or Command on Mac.  See 'mousetrap' library
+        };
+    var modifierStrings = {
+        'shift':modifierCode.SHIFT,
+        'alt':modifierCode.ALT,
+        'ctrl':modifierCode.CTRL
+    };
+
+    var keys = {
+        'return': 0x0d,
+        escape: 0x1b,
+        space: 0x20,
+        pageUp: 0x21,
+        pageDown: 0x22,
+        end: 0x23,
+        home: 0x24,
+        left: 0x25,
+        up: 0x26,
+        right: 0x27,
+        down: 0x28
+    };
+
+    key.KeyException = function (message) {
+        this.message = message;
+        this.name = "KeyException";
+    }
+
+    key.parseModifiers = function( shortcut ) {
+        var modifiers = 0,
+            words = shortcut.split('+');
+        words.pop();
+
+        _.each( words, function( word ) {
+            var value = modifierStrings[ word.toLowerCase() ];
+            if ( value ) {
+                modifiers |= value;
+            } else {
+                throw new key.KeyException( "Unknown modifier '" + word + "' in shortcut '" + shortcut + "'" );
+            }
+        });
+        return modifiers;
+    };
+
+
+    key.parseKey = function( shortcut ) {
+        var word = shortcut.split('+').pop(),
+            code = keys[word.toLowerCase()];
+        if ( !code ) {
+            if ( word.length > 1 ) {
+                throw new key.KeyException( "Unknown key name '" + word + "' in shortcut '" + shortcut + "'" );
+            } else {
+                code = word.toUpperCase().charCodeAt(0);
+            }
+        }
+        return code;
+    };
+
+
+    var BoundKey = function( shortcut, handler ) {
+        this.modifiers = key.parseModifiers( shortcut );
+        this.code = key.parseKey( shortcut );
+        this.handler = handler;
+    };
+
+    key.boundKeys = [];
+
+    key.eventHandler = function( event ) {
+        _.each( key.boundKeys, function( boundKey ) {
+            var match = false;
+            if ( boundKey.modifiers ) {
+                if ( (boundKey.modifiers & modifierCode.SHIFT) && !event.shiftKey ) {
+                    return;
+                }
+                if ( (boundKey.modifiers & modifierCode.ALT) && !event.altKey ) {
+                    return;
+                }
+                if ( (boundKey.modifiers & modifierCode.CTRL) && !event.ctrlKey ) {
+                    return;
+                }
+            }
+            if ( boundKey.code != event.keyCode ) {
+                return;
+            }
+            boundKey.handler( event );
+        });
+    };
+
+    /**
+     * bind shortcut & handler pairs.
+     * key.bind( 'shift+home', homeFunction, 'alt+m', menuFunction, ... )
+     */
+    key.bind = function() {
+        var i = 0;
+        if ( !key.boundKeys.length ) {
+            // register page-level event handler only once
+            $(document).on( 'keyup', key.eventHandler );
+        }
+
+        for ( ; i < arguments.length; i += 2 ) {
+            shortcut = arguments[ i ];
+            handler = arguments[ i+1 ];
+            key.boundKeys.push( new BoundKey( shortcut, handler ));
+        }
+    };
+
+    return key;
+})(window.key || {});

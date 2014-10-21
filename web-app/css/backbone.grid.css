@@ -149,10 +149,6 @@
     height: 30px;
 }
 
-.grid-without-title th:last-child {
-    //padding-right: 30px;
-}
-
 .button-menu-container {
     position: absolute;
     z-index: 1101;
@@ -194,10 +190,6 @@
 }
 
 /* notification/datatables integration classes */
-
-.grid tr td:first-child {
-    //padding-left: 30px;
-}
 
 .grid.grid-frozen tr td:first-child {
     padding-left: 10px;
