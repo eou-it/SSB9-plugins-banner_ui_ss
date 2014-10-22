@@ -599,7 +599,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
             this.orderColumns( gridExtensions );
 
-            // this.addColumns();
+            this.addColumns( gridExtensions );
 
             // etc
           }
@@ -655,7 +655,54 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       });
     },
 
-    setupKeyTable: function () {
+      /***************************************************************************************************
+       Add any new columns to this grid instance as specified by extensibility information
+       ***************************************************************************************************/
+      addColumns: function (pGridExtensions) {
+
+          var gridColumns = this.options.columns;
+          var thisView = this;
+          if (pGridExtensions) {
+              var newColumns = pGridExtensions.add;
+              _.each(newColumns, function (newColumn) {
+                  console.log(newColumn.field);
+                  var extendedColumn = thisView.assembleExtzColumn(newColumn);
+                  var locIndex = -1
+                  if (newColumn.after) {
+                      locIndex = gridColumns.indexOf(_.find(gridColumns, function (col) {
+                          return col.name === newColumn.after;
+                      }));
+                      locIndex = (locIndex < 0) ? locIndex : locIndex + 1;
+                  } else if (newColumn.before) {
+                      locIndex = gridColumns.indexOf(_.find(gridColumns, function (col) {
+                          return col.name === newColumn.before;
+                      }));
+                  }
+                  if (locIndex < 0) {
+                      // just add to the end of the column list
+                      gridColumns.push(extendedColumn);
+                  } else {
+                      // insert the new column in the appropriate location
+                      gridColumns.splice(locIndex, 0, extendedColumn);
+                  }
+
+              });
+          }
+      },
+
+      assembleExtzColumn: function (extzJSONColumn) {
+          var extendedColumn = {
+              name: extzJSONColumn.field,
+              title: extzJSONColumn.label
+          };
+          if (extzJSONColumn.width) {
+              extendedColumn.width = extzJSONColumn.width
+          }
+          return extendedColumn;
+
+      },
+
+      setupKeyTable: function () {
       this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
 
       if ( window.KeyTable ) {
@@ -949,6 +996,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
             td.attr( "data-id", getModelId(model) );
             td.attr( "data-property", col.name );
+            //assign extensibility field id
+            td.attr( xe.typePrefix + xe.type.field,col.name);
 
             if ( col.width )
               td.css( "width", col.width );
