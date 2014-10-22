@@ -1146,3 +1146,9 @@ div.infoicon {
     height: auto;
     padding: 0;
 }
+
+.screen-reader {
+    position: absolute;
+    left: -200em;
+    top: -20em;
+}
