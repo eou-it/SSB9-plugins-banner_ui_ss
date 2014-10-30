@@ -730,9 +730,10 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     log: function () {
-      if ( _.isBoolean( window.debug ) && window.debug == true )
+      if ( _.isBoolean( window.debug ) && window.debug == true ) {
         var args = Array.prototype.concat.apply( ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): "], arguments);
-        console.log.apply( console, args );
+        console.log( args );
+      }
     },
 
     updateData: function ( id, name, value ) {
