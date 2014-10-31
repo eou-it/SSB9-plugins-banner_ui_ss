@@ -108,7 +108,11 @@
       var num = parseInt( $( e.target ).val() );
       this.log( "requested specific page: " + num );
 
-      this.collection.goToPage( num );
+      var success = this.collection.goToPage( num );
+
+      if (success === false) {
+          $(".grid-container").loading(false)
+      }
     },
     render: function () {
       this.$el.empty();
