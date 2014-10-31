@@ -61,6 +61,10 @@
       option: "<option></option>"
     },
     strings: {
+      first:                       function() { return $.i18n.prop('backbone.paging.controls.first') },
+      last:                        function() { return $.i18n.prop('backbone.paging.controls.last') },
+      prev:                        function() { return $.i18n.prop('backbone.paging.controls.previous') },
+      next:                        function() { return $.i18n.prop('backbone.paging.controls.next') },
       page:                        function() { return $.i18n.prop('backbone.paging.controls.page') },
       of:                          function() { return $.i18n.prop('backbone.paging.controls.of') },
       pageOfOne:                   function() { return $.i18n.prop('backbone.paging.controls.oneof') },
@@ -122,10 +126,10 @@
 
       var view     = this,
           pageInfo = this.collection.pageInfo(),
-          first    = $( this.elements.button ).addClass( this.css.pagingControl + " " + this.css.first + " " + dir ).attr('tabindex',-1),
-          last     = $( this.elements.button ).addClass( this.css.pagingControl + " " + this.css.last + " " + dir ).attr('tabindex',-1),
-          next     = $( this.elements.button ).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ).attr('tabindex',-1),
-          prev     = $( this.elements.button ).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ).attr('tabindex',-1),
+          first    = $( this.elements.button ).attr('title',this.strings.first).addClass( this.css.pagingControl + " " + this.css.first + " " + dir ).attr('tabindex',-1),
+          last     = $( this.elements.button ).attr('title',this.strings.last).addClass( this.css.pagingControl + " " + this.css.last + " " + dir ).attr('tabindex',-1),
+          next     = $( this.elements.button ).attr('title',this.strings.next).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ).attr('tabindex',-1),
+          prev     = $( this.elements.button ).attr('title',this.strings.prev).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ).attr('tabindex',-1),
           page     = $( this.elements.pageLabel ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
           input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ).attr('tabindex',0),
           of       = $( this.elements.span ).attr('id','of-n-pages').addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? this.strings.pageOfOne : this.strings.of ),
@@ -135,10 +139,10 @@
           select   = $( this.elements.select ).addClass( this.css.pageSizeSelect ).attr('tabindex',0),
           selWrap  = $( this.elements.div ).addClass( this.css.pageSizeSelectWrapper ).append( select );
 
-      first.screenReaderLabel( $.i18n.prop('backbone.paging.controls.first'));
-      last.screenReaderLabel( $.i18n.prop('backbone.paging.controls.last'));
-      next.screenReaderLabel( $.i18n.prop('backbone.paging.controls.next'));
-      prev.screenReaderLabel( $.i18n.prop('backbone.paging.controls.previous'));
+      first.screenReaderLabel( this.strings.first );
+      last.screenReaderLabel( this.strings.last );
+      next.screenReaderLabel( this.strings.next );
+      prev.screenReaderLabel( this.strings.prev );
       input.screenReaderLabel( $.i18n.prop('backbone.paging.controls.page.of.pages', [pageInfo.page, pageInfo.pages]));
 
       _.each( this.pageLengths, function (it) {
