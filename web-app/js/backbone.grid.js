@@ -622,17 +622,28 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     },
 
     recalcTitleWidths: function () {
+        var hasFrozenColumns = this.frozenTable === void 0 ? false : true
         var predefinedWidth   = this.frozenTable === void 0 ? void 0 : this.frozenTable.css("width");
         var frozenWidthString = this.options.frozenWidth || predefinedWidth || "auto";
         var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString));
-        var outerWidth  = $(".grid-container .grid-wrapper").width();
+        var outerWidth  = this.$el.find(".grid-wrapper").width();
 
         var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString));
+        if (!hasFrozenColumns) {
+            if (outerWidth === 0) {
+                mainWidthString = "100%"
+            }
+            else {
+                mainWidthString = "" + "100%"
+            }
+        }
 
-        $(".grid-container .grid-frozen-wrapper").css("width", frozenWidthString);
-        $(".grid-container .grid-main-wrapper").css({ "width": mainWidthString, "display": "block"});
+        if (hasFrozenColumns) {
+            this.$el.find(".grid-frozen-wrapper").css("width", frozenWidthString);
+        }
+        this.$el.find(".grid-main-wrapper").css({ "width": mainWidthString, "display": "block"});
 
-        _.each( $(".grid-container table th"), function( it ) {
+        _.each( this.$el.find("table th"), function( it ) {
             var el = $( it );
             var title = el.find('.title');
             if ( title.length ) {
