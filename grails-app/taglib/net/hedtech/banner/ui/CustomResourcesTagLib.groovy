@@ -26,7 +26,6 @@ package net.hedtech.banner.ui
  * css/views/facultyGradeEntry/facultyGradeEntry-custom.css will add this CSS only for the controller 'facultyGradeEntry'
  * and the action 'facultyGradeEntry'.
  */
-@Deprecated
 class CustomResourcesTagLib {
 
     def customStylesheetIncludes = { attrs ->

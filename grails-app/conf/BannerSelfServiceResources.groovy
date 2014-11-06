@@ -3,7 +3,7 @@
 modules = {
 
     'bannerSelfService' {
-        dependsOn "bannerSelfServiceWithoutAurora, aurora, custom"
+        dependsOn "bannerSelfServiceWithoutAurora, aurora"
     }
 
     'jquery' {
@@ -104,17 +104,11 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/detectmobilebrowser.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/detecttabletbrowser.js']
 
+        resource url: [plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
     }
-    'custom' {
-        resource url:[file: 'css/bannerSelfService-custom.css'], attrs:[media:'screen, projection']
-        resource url:[file: 'js/bannerSelfService-custom.js']
 
-    }
-    'customRTL' {
-        resource url:[file: 'css/bannerSelfService-custom-rtl.css'], attrs:[media:'screen, projection']
-    }
     'bannerSelfServiceRTL' {
-        dependsOn "bannerSelfService, auroraRTL, customRTL"
+        dependsOn "bannerSelfService, auroraRTL"
         defaultBundle environment == "development" ? false : "bannerSelfServiceRTL"
 
         resource id: 'themeRTL', url:[plugin:'banner-ui-ss', dir:'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme', file:'jquery-ui-1.8.13.custom-rtl.css'], attrs:[media:'screen, projection']
