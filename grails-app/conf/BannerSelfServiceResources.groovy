@@ -103,15 +103,16 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/detectmobilebrowser.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/detecttabletbrowser.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
 
     }
     'custom' {
-        resource url:[file: 'css/bannerSelfService-custom.css'], attrs:[media:'screen, projection']
-        resource url:[file: 'js/bannerSelfService-custom.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/bannerSelfService-custom.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/bannerSelfService-custom.js']
 
     }
     'customRTL' {
-        resource url:[file: 'css/bannerSelfService-custom-rtl.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/bannerSelfService-custom-rtl.css'], attrs:[media:'screen, projection']
     }
     'bannerSelfServiceRTL' {
         dependsOn "bannerSelfService, auroraRTL, customRTL"
