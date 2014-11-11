@@ -105,6 +105,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/detecttabletbrowser.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
 
+        resource url: [plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
     }
     'custom' {
         resource url:[plugin: 'banner-ui-ss', file: 'css/bannerSelfService-custom.css'], attrs:[media:'screen, projection']
@@ -114,6 +115,7 @@ modules = {
     'customRTL' {
         resource url:[plugin: 'banner-ui-ss', file: 'css/bannerSelfService-custom-rtl.css'], attrs:[media:'screen, projection']
     }
+
     'bannerSelfServiceRTL' {
         dependsOn "bannerSelfService, auroraRTL, customRTL"
         defaultBundle environment == "development" ? false : "bannerSelfServiceRTL"

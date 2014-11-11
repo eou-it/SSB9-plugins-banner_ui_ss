@@ -70,6 +70,7 @@
         <g:layoutHead />
 
 
+
     </head>
     <body>
         <div id="splash"></div>
@@ -80,6 +81,7 @@
         <g:layoutBody />
 
         <r:layoutResources/>
+
 
     </body>
 </html>
