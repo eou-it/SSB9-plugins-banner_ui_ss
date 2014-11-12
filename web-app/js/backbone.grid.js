@@ -638,6 +638,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
             }
         }
 
+        this.$el.find(".grid-wrapper").css({ "display": "flex"});
+
         if (hasFrozenColumns) {
             this.$el.find(".grid-frozen-wrapper").css("width", frozenWidthString);
         }
