@@ -652,6 +652,9 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
                 title.css('width', 'auto');
                 var padding = 5
                 var titleWidth = parseInt(title.css( 'width')) + padding
+                var eWidth = parseInt(el.css( 'width')) + padding
+                var showTitle = eWidth <= 31 ? 'none' : 'inline'
+                title.css('display', showTitle);
                 var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
                 var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
                 var cellWidth = el.width()
