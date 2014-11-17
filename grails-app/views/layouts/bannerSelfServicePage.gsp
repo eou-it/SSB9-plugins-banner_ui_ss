@@ -71,6 +71,7 @@
 
         <g:customStylesheetIncludes/>
 
+
     </head>
     <body>
         <div id="splash"></div>
