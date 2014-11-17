@@ -1150,5 +1150,6 @@ div.infoicon {
 .screen-reader {
     position: absolute;
     left: -200em;
+    right: auto;
     top: -20em;
 }
