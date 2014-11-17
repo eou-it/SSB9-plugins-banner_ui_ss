@@ -69,6 +69,7 @@
 
         <g:layoutHead />
 
+        <g:customStylesheetIncludes/>
 
 
     </head>
@@ -82,7 +83,7 @@
 
         <r:layoutResources/>
 
-
+        <g:customJavaScriptIncludes/>
     </body>
 </html>
 

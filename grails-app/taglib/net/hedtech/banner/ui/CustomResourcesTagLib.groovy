@@ -26,15 +26,11 @@ package net.hedtech.banner.ui
  * css/views/facultyGradeEntry/facultyGradeEntry-custom.css will add this CSS only for the controller 'facultyGradeEntry'
  * and the action 'facultyGradeEntry'.
  */
-@Deprecated
 class CustomResourcesTagLib {
 
     def customStylesheetIncludes = { attrs ->
         def controller = attrs.controller ?: controllerName
         def action = attrs.action ?: actionName
-
-        // Check to see bannerSelfService-custom.css exists
-        writeCssIfExists( out, "css/bannerSelfService-custom.css" )
 
         // Determine the current page
         writeCssIfExists( out, "css/views/$controller/${action}-custom.css" )
@@ -44,12 +40,10 @@ class CustomResourcesTagLib {
         def controller = attrs.controller ?: controllerName
         def action = attrs.action ?: actionName
 
-        // Check to see bannerSelfService-custom.js exists
-        writeJavaScriptIfExists( out, "js/bannerSelfService-custom.js" )
-
         // Determine the current page
         writeJavaScriptIfExists( out, "js/views/$controller/${action}-custom.js" )
     }
+
 
     def specScriptIncludes = { attrs ->
         def name = attrs.name
@@ -66,10 +60,7 @@ class CustomResourcesTagLib {
         if (resourceExists(js)) {
             def baseUri = grailsAttributes.getApplicationUri(request)
 
-            writer << '<script type="text/javascript" src="'
-            writer << baseUri << (baseUri.endsWith('/') ? '' : '/')
-            writer << js
-            writer << '"></script>\n'
+            writer << r.external(uri: (baseUri.endsWith('/') ? '' : '/') + js , type: 'js', disposition: 'defer')
         }
     }
 
@@ -77,10 +68,7 @@ class CustomResourcesTagLib {
         if (resourceExists(css)) {
             def baseUri = grailsAttributes.getApplicationUri(request)
 
-            writer << '<link href="'
-            writer << baseUri << (baseUri.endsWith('/') ? '' : '/')
-            writer << css
-            writer << '" type="text/css" rel="stylesheet"/>'
+            writer << r.external(uri: (baseUri.endsWith('/') ? '' : '/') + css , type: 'css', disposition: 'defer')
         }
     }
 }
