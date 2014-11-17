@@ -58,8 +58,7 @@
     float: left;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    display: inline
+    white-space: nowrap
 }
 
 .grid tr {
