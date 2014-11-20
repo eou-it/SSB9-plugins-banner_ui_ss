@@ -579,32 +579,35 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     ***************************************************************************************************/
     applyExtensions: function() {
 
-      var dataXESection;
-      var gridExtensions;
-      var attr = "[" + xe.attr.section + "]";
+        var dataXESection;
+        var gridExtensions;
+        var attr = "[" + xe.attr.section + "]";
 
-      if ( xe.extensions ) {
+        if ( xe.extensions ) {
 
-        // determine the container of this grid instance
-        dataXESection = $(this.el).closest(attr).attr(xe.attr.section);
+            // determine the container of this grid instance
+            dataXESection = $(this.el).closest(attr).attr(xe.attr.section);
 
-        if ( dataXESection ) {
+            if ( dataXESection ) {
 
-          // retrieve extensibility information from xe object
-          gridExtensions = xe.extensions.sections[dataXESection];
+                // retrieve extensibility information from xe object
+                //gridExtensions = xe.extensions.sections[dataXESection];
+                gridExtensions = _.find(xe.extensions.sections, function(section) {
+                    return section.name == dataXESection;
+                });
 
-          if ( gridExtensions ) {
+                if ( gridExtensions ) {
 
-            this.removeColumns( gridExtensions );
+                    this.removeColumns( gridExtensions );
 
-            this.orderColumns( gridExtensions );
+                    this.orderColumns( gridExtensions );
 
-            this.addColumns( gridExtensions );
+                    this.addColumns( gridExtensions );
 
-            // etc
-          }
+                    // etc
+                }
+            }
         }
-      }
     },
 
     /***************************************************************************************************
@@ -613,9 +616,10 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
     ***************************************************************************************************/
     removeColumns: function( pGridExtensions ) {
+
       this.options.columns = _.filter( this.options.columns, function(baselineColumn) {
         return !(_.find(pGridExtensions.remove, function(removedColumn) {
-          return removedColumn.field == baselineColumn.name;
+            return removedColumn.name == baselineColumn.name;
         }));
       } );
     },
@@ -626,33 +630,51 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     Reorder any baseline columns in this grid instance as specified by extensibility information
 
     ***************************************************************************************************/
+
     orderColumns: function( pGridExtensions ) {
 
-      var index;
-      var removedColumn;
-      var targetColumn;
-      var baselineColumns;
+        var removedColumn;
+        var targetColumn;
+        var validJSON;
+        var thisGridInstance = this;
 
-      baselineColumns = this.options.columns;
-      _.each( pGridExtensions.move, function(extension) {
+        baselineColumns = this.options.columns;
+        _.each( pGridExtensions.move, function(extension) {
 
-          removedColumn = _.find(baselineColumns, function(column){
-              return extension.field == column.name;
-          });
+            validJSON = true;
+            removedColumn = _.find(baselineColumns, function(column){
+                return extension.name == column.name;
+            });
+            if ( !removedColumn ) {
+                thisGridInstance.log("JSON item not found in page");
+                validJSON = false;
+            }
 
-          targetColumn = _.find(baselineColumns, function(column){
-              return extension.before == column.name;
-          });
+            if ( extension.nextSibling ) {
+                targetColumn = _.find(baselineColumns, function(column){
+                    return extension.nextSibling == column.name;
+                });
+                if ( !targetColumn ) {
+                    thisGridInstance.log("JSON item not found in page");
+                    validJSON = false;
+                }
+            } else {
+                targetColumn = null;
+            }
 
-          if ( removedColumn && targetColumn) {
+            if ( validJSON ) {
 
-              index = _.indexOf(baselineColumns, removedColumn);
-              baselineColumns.splice(index,1);
+                index = _.indexOf(baselineColumns, removedColumn);
+                baselineColumns.splice(index,1);
 
-              index = _.indexOf(baselineColumns, targetColumn);
-              baselineColumns.splice(index,0,removedColumn);
-          }
-      });
+                if ( !targetColumn ) {
+                    index = baselineColumns.length;
+                } else {
+                    index = _.indexOf(baselineColumns, targetColumn);
+                }
+                baselineColumns.splice(index,0,removedColumn);
+            }
+        })
     },
 
       /***************************************************************************************************
