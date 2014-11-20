@@ -3,9 +3,9 @@
     width: 100%;
     float: left;
     clear: none;
-    border-collapse: collapse;
     table-layout: fixed;
     border-spacing: 0;
+    position: relative;
 }
 
 .grid-container .bottom {
@@ -137,16 +137,29 @@
     width: 15px;
 }
 
-.column-visibility-menu {
+.grid-main-wrapper .column-visibility-menu{
     position: absolute;
-    right: 0px;
-    left: auto;
-    top: 0px;
+    right: 0px !important;
+    left: auto !important;
+    top: 0px !important;
     z-index: 1101;
     border-left: 1px solid #DDDDDD;
-    background: url('../images/grid_customize.png') no-repeat center center;
+    background: url('../images/grid_customize.png') no-repeat center;
     width: 30px;
-    height: 30px;
+    padding:0px;
+    cursor: pointer;
+}
+
+.grid-main-wrapper .visibility-control-column {
+    position:static;
+    width:1%;
+    border-left: none;
+    border-bottom:none;
+    padding:0px;
+}
+
+.grid-main-wrapper .grid td{
+    border-right:none;
 }
 
 .button-menu-container {

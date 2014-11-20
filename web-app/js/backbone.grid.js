@@ -1,4 +1,6 @@
-/* Copyright 2013 Ellucian Company L.P. and its affiliates. */
+/*********************************************************************************
+ Copyright 2012-2014 Ellucian Company L.P. and its affiliates.
+ **********************************************************************************/
 
 /*
 var column = {
@@ -134,6 +136,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       header:                 "header",
       bottom:                 "bottom",
       columnVisibilityMenu:   "column-visibility-menu",
+      visibilityControlColumn:"visibility-control-column",
       title:                  "title",
       gridWithoutTitle:       "grid-without-title",
       totalRecords:           "total-records",
@@ -613,6 +616,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.columnVisibilityControls = new Backbone.ButtonMenu({
           el:         this.$el.find( "." + this.css.columnVisibilityMenu ),
           container:  this.getMenuContainer(),
+          gridWrapper: this.$el,
           items:      map,
           callback:   toggleColumnVisibility,
           buttonIcon: "grid-button-menu-icon"
@@ -875,12 +879,20 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
       if ( _.isFunction( this.options.afterRefresh ) )
           this.options.afterRefresh.call( this );
+
+      this.generateColumnVisibilityMenuColumn();
     },
+
+     generateColumnVisibilityMenuColumn: function(){
+        if ( this.features.visibility ) {
+          var tableCell = $(this.elements.td).addClass(this.css.visibilityControlColumn);
+          this.table.find('tbody tr').append(tableCell);
+        }
+     },
 
     toggleTableChrome: function( visible ) {
       this.table.find('thead').toggle( visible );
       this.$el.find( "." + this.css.bottom ).toggle( visible );
-      this.columnVisibilityControls && this.columnVisibilityControls.$el.toggle( visible );
 
       if ( visible ) {
         this.generatePagingControls();
@@ -1145,7 +1157,33 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
       thead.append ( tr );
       table.append ( thead );
+
+      this.generateColumnControlMenuHeader(table);
     },
+
+    generateColumnControlMenuHeader:function(table){
+      if ( this.features.visibility ) {
+          var tr = table.find('tr');
+          var lastColumnHead = tr.find('th').last();
+          var columnVisibilityMenuExists = lastColumnHead.children().hasClass(this.css.columnVisibilityMenu);
+
+          if(columnVisibilityMenuExists == false){
+              var tableHeaderHeight = tr.height();
+
+              var columnVisibilityMenu =  $(this.elements.div)
+                  .addClass(this.css.columnVisibilityMenu)
+                  .attr('tabindex',0)
+                  .height(tableHeaderHeight);
+
+              var columnVisibilityMenuHeader = $(this.elements.th)
+                  .append(columnVisibilityMenu)
+                  .attr( "data-sort-direction", "disabled" )
+                  .addClass(this.css.sortDisabled + " " + this.css.visibilityControlColumn);
+
+              tr.append(columnVisibilityMenuHeader);
+          }
+      }
+     },
 
     generateHead: function () {
       this._generateHead( this.table, this.columns );
@@ -1200,10 +1238,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       }
 
       gridWrapper.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
-
-      if ( this.features.visibility ) {
-        this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
-      }
     },
 
     updateRecordCount: function () {
