@@ -1151,5 +1151,6 @@ div.infoicon {
     position: absolute;
     right: auto;
     left: -200em;
+    right: auto;
     top: -20em;
 }
