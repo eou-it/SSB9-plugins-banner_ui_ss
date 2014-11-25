@@ -35,6 +35,9 @@
         <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
         <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
         <meta name="fullName" content="${g.fullName()}"/>
+        <meta name="loginEndpoint" content="${session.getServletContext().loginEndpoint}"/>
+        <meta name="logoutEndpoint" content="${session.getServletContext().logoutEndpoint}"/>
+        <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
 
         <title><g:layoutTitle default="Banner"/></title>
 
