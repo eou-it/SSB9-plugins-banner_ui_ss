@@ -142,6 +142,8 @@ function KeyTable ( oInit )
         else
         {
             jQuery('td', _nBody).die( 'click', _fnClick );
+            /* When Grid is part of the form, KeyTable creates hidden input field this needs to be cleaned up on destroy*/
+            jQuery(_sHiddenClass).remove();
         }
     }
 
@@ -200,6 +202,13 @@ function KeyTable ( oInit )
      * Scope:    KeyTable - private
      */
     var _sFocusClass = "focus";
+
+    /*
+     * Variable: sHiddenClass
+     * Purpose:  Class that should be used for Hidden cell created for supporting Form element.
+     * Scope:    KeyTable - private
+     */
+    var _sHiddenClass = "offScreen";
 
     /*
      * Variable: _bKeyCapture
@@ -1325,6 +1334,7 @@ function KeyTable ( oInit )
             _nInput = document.createElement('input');
             nDiv.style.height = "1px"; /* Opera requires a little something */
             nDiv.style.width = "0px";
+            nDiv.className = _sHiddenClass;
             nDiv.style.overflow = "hidden";
             if ( typeof oInit.tabIndex != 'undefined' )
             {

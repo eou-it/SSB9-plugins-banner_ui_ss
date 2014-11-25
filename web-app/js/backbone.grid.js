@@ -554,7 +554,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
       $( window ).on( 'resize', lazyResizeHandler );
     },
-
     setupKeyTable: function () {
       this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
 
@@ -564,10 +563,12 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           this.keyTable = null;
         }
 
-        this.log( "setupKeyTable enabledColumns: ", this.enabledColumns );
-        var view = this,
-            keyTable = this.keyTable = new KeyTable( { table: this.table[0],
-                                        enabledColumns: this.enabledColumns } );
+          var node = $(".page-number")[0];
+          this.log( "setupKeyTable enabledColumns: ", this.enabledColumns );
+
+          var view = this,
+              keyTable = this.keyTable = new KeyTable( { table: this.table[0],
+                  enabledColumns: this.enabledColumns, focus: node , form: true, tabindex:0 } );
         keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
           // trigger the click action on the contained element, if any, or the td itself
           $(':first-child', cell).add(cell).first().click();
