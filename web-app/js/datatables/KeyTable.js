@@ -208,7 +208,7 @@ function KeyTable ( oInit )
      * Purpose:  Class that should be used for Hidden cell created for supporting Form element.
      * Scope:    KeyTable - private
      */
-    var _sHiddenClass = "offScreen";
+    var _sHiddenClass = "hiddenClass";
 
     /*
      * Variable: _bKeyCapture
