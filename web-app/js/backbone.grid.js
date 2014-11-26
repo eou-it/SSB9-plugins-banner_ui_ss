@@ -604,7 +604,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
                     this.addColumns( gridExtensions );
 
-                    // etc
+                    this.replaceColumnAttributes( gridExtensions);
                 }
             }
         }
@@ -723,6 +723,26 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           return extendedColumn;
 
       },
+
+/***************************************************************************************************
+
+       Replace any baseline column attributes from this grid instance as specified by extensibility information
+
+       ***************************************************************************************************/
+      replaceColumnAttributes: function( pGridExtensions ) {
+          var thisGrid = this;
+          if (pGridExtensions.replace) {
+              _.each(pGridExtensions.replace, function(replaceColumn) {
+                  var baselineColumn = _.findWhere(thisGrid.options.columns,{name: replaceColumn.name});
+                  if (baselineColumn) {
+                      if (replaceColumn.label) {
+                          baselineColumn.title = xe.i18n(replaceColumn.label);
+                      }
+                  }
+              });
+          }
+      },
+
 
       setupKeyTable: function () {
       this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
@@ -1310,6 +1330,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
         th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
         th.attr( "data-property", it.name );
+        //assign extensibility field id
+        th.attr( xe.typePrefix + xe.type.field,it.name);
 
         if ( it.width )
           th.css( "width", it.width );
