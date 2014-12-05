@@ -44,8 +44,8 @@ var data = {
   "pageMaxSize": "Number"
 };
 */
-var direction = $('meta[name=dir]').attr('content');
-direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
+var slideDirection = $('meta[name=dir]').attr('content');
+slideDirection = ( slideDirection === void 0 || slideDirection !== "rtl" ? "ltr" : "rtl" );
 
 ;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
