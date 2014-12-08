@@ -305,7 +305,15 @@ $(document).ready(function() {
 
             $(this.el).addClass( notificationClass );
 
-            var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html( $("<span></span>" ).append( this.model.get("message" ) ) );
+            var messageLink = $("<span class='notification-message'></span>") ;
+
+            var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html( messageLink.append( this.model.get("message" ) ) );
+
+            var view = this;
+
+            messageLink.on('click', function(){
+                view.navigateToErrorComponent(view.model);
+            });
 
             // Manage the prompts if available
             var promptsDiv;
@@ -338,6 +346,12 @@ $(document).ready(function() {
             if (this.model === notification) {
                 $(this.el).fadeOut( 1000 ).remove();
             }
+        },
+        navigateToErrorComponent: function(model) {
+          var component = model.attributes.component;
+          if(component){
+              component.focus();
+          }
         }
     });
 

@@ -232,3 +232,9 @@ body > .notification-center-shim {
     opacity:  0.3;
     filter: alpha(opacity = 30);
 }
+
+.notification-center-flyout .notification-item.notification-center-message-error .notification-message{
+    color: #ff0000;
+    text-decoration: underline;
+    cursor: pointer;
+}

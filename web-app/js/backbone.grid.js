@@ -1315,8 +1315,16 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     notificationAdded: function( notification ) {
       var model = this.getModelFromNotification( notification );
 
-      if ( model )
-        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).stop( true, true ).addClass( this.getStyleForNotificationType( notification ) );
+      if ( model ){
+          var tableRow = this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" );
+          tableRow.stop( true, true ).addClass( this.getStyleForNotificationType( notification ) );
+          var columnName= notification.attributes.attribute;
+          var tableCell = tableRow.find( "td[data-property=" + columnName + "]" );
+          var inputElement = tableCell.find(':input');
+          if(inputElement.length > 0){
+              window.notifications.get(notification).attributes.component = inputElement;
+          }
+      }
     },
 
 
