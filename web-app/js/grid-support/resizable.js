@@ -90,7 +90,7 @@ function ColumnResize(table) {
 	// do changes columns widths
 	// returns true if success and false otherwise
         this.changeColumnWidth = function(no, w, columnsWidth) {
-            if (slideDirection == 'rtl'){ // arabic
+            if (langDirection == 'rtl'){ // arabic
                 w = -w
 	    }
             if (w < 0 && no >= dragColumns.length) return false;
