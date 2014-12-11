@@ -158,6 +158,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       notificationSuccess:    "notification-success",
       notificationWarning:    "notification-warning",
       notificationError:      "notification-error",
+      errorComponent:         "error-component",
       pagingText:             "paging-text",
       pagingContainer:        "paging-container"
     },
@@ -1318,21 +1319,32 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       if ( model ){
           var tableRow = this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" );
           tableRow.stop( true, true ).addClass( this.getStyleForNotificationType( notification ) );
-          var columnName= notification.attributes.attribute;
-          var tableCell = tableRow.find( "td[data-property=" + columnName + "]" );
-          var inputElement = tableCell.find(':input');
+          var inputElement = this.getErrorComponent(notification, tableRow);
           if(inputElement.length > 0){
               window.notifications.get(notification).attributes.component = inputElement;
+              inputElement.addClass(this.css.errorComponent);
           }
       }
     },
 
-
     notificationRemoved: function( notification ) {
       var model = this.getModelFromNotification( notification );
 
-      if ( model )
-        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
+      if ( model ) {
+          var tableRow = this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" );
+          tableRow.removeClass(this.getStyleForNotificationType(notification));
+          var inputElement = this.getErrorComponent(notification, tableRow);
+          if(inputElement.length > 0){
+              inputElement.removeClass(this.css.errorComponent);
+          }
+      }
+    },
+
+    getErrorComponent: function (notification, tableRow) {
+        var columnName = notification.attributes.attribute;
+        var tableCell = tableRow.find("td[data-property=" + columnName + "]");
+        var inputElement = tableCell.find(':input');
+        return inputElement;
     },
 
     hideSpinner: function(target) {

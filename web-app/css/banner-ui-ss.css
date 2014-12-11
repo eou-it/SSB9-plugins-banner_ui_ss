@@ -1153,3 +1153,12 @@ div.infoicon {
     right: auto;
     top: -20em;
 }
+
+.error-component {
+    border:1px solid #FF3F3F;
+}
+
+.error-component:focus {
+    border-width:2px;
+    outline: none;
+}

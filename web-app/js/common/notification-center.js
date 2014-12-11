@@ -49,6 +49,11 @@ $(document).ready(function() {
             else {
                 this.add( notification );
 
+                var errorComponent = notification.attributes.component;
+                if(errorComponent){
+                    errorComponent.addClass("error-component");
+                }
+
                 // If the notification gets orphaned remove it from the collection.
                 if (notification.has( "model" ) && notification.get( "model" )) {
                     var model = notification.get( "model" );
@@ -147,7 +152,7 @@ $(document).ready(function() {
                                 });
 
                                 _.each( associatedNotifications, function( n ) {
-                                     n.get( "flash" ) || notifications.remove( n );
+                                    n.get( "flash" ) || notifications.remove( n );
                                 });
                             }, this );
                         }, this);
@@ -348,10 +353,10 @@ $(document).ready(function() {
             }
         },
         navigateToErrorComponent: function(model) {
-          var component = model.attributes.component;
-          if(component){
-              component.focus();
-          }
+            var component = model.attributes.component;
+            if(component){
+                component.focus();
+            }
         }
     });
 
@@ -368,8 +373,8 @@ $(document).ready(function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
 
             $(this.el).append(
-              $('<div class="notification-center-count"><span/></div>' )
-                .screenReaderLabel($.i18n.prop("js.notification.label"))
+                $('<div class="notification-center-count"><span/></div>' )
+                    .screenReaderLabel($.i18n.prop("js.notification.label"))
             ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
 
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
@@ -466,7 +471,7 @@ $(document).ready(function() {
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle',
-                      'clickOutsideToClose' );
+                'clickOutsideToClose' );
             this.model.bind("add", this.addNotification);
             this.model.bind("remove", this.removeNotification);
         },
