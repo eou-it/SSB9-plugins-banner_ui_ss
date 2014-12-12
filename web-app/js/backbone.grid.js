@@ -1347,7 +1347,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
             notificationComponents[component].removeClass(notificationStyle);
         }
 
-        if(notificationComponents.tableRow.find("."+this.css.notificationError) > 0){
+        if(notificationComponents.tableRow.find("."+this.css.notificationError).length > 0){
             notificationComponents.tableRow.addClass(this.css.notificationError);
         }
     },
