@@ -49,9 +49,12 @@ $(document).ready(function() {
             else {
                 this.add( notification );
 
-                var errorComponent = notification.attributes.component;
-                if(errorComponent){
-                    errorComponent.addClass("error-component");
+                var notificationType = notification.get("type");
+                if(notificationType == "error"){
+                    var errorComponent = notification.attributes.component;
+                        if(errorComponent){
+                            errorComponent.addClass("notification-error");
+                        }
                 }
 
                 // If the notification gets orphaned remove it from the collection.

@@ -158,7 +158,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       notificationSuccess:    "notification-success",
       notificationWarning:    "notification-warning",
       notificationError:      "notification-error",
-      errorComponent:         "error-component",
       pagingText:             "paging-text",
       pagingContainer:        "paging-container"
     },
@@ -1317,12 +1316,12 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       var model = this.getModelFromNotification( notification );
 
       if ( model ){
-          var tableRow = this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" );
-          tableRow.stop( true, true ).addClass( this.getStyleForNotificationType( notification ) );
-          var inputElement = this.getErrorComponent(notification, tableRow);
+          var notificationComponents = this.getNotificationComponents(notification, model);
+          var notificationStyle = this.getStyleForNotificationType( notification );
+          this.addNotificationStyle(notificationComponents,notificationStyle);
+          var inputElement = notificationComponents.inputElement;
           if(inputElement.length > 0){
               window.notifications.get(notification).attributes.component = inputElement;
-              inputElement.addClass(this.css.errorComponent);
           }
       }
     },
@@ -1331,20 +1330,35 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       var model = this.getModelFromNotification( notification );
 
       if ( model ) {
-          var tableRow = this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" );
-          tableRow.removeClass(this.getStyleForNotificationType(notification));
-          var inputElement = this.getErrorComponent(notification, tableRow);
-          if(inputElement.length > 0){
-              inputElement.removeClass(this.css.errorComponent);
-          }
+           var notificationComponents = this.getNotificationComponents(notification, model);
+           var notificationStyle = this.getStyleForNotificationType( notification );
+           this.removeNotificationStyle(notificationComponents,notificationStyle);
       }
     },
 
-    getErrorComponent: function (notification, tableRow) {
+    addNotificationStyle: function(notificationComponents,notificationStyle){
+        for (var component in notificationComponents) {
+            notificationComponents[component].addClass(notificationStyle);
+        }
+    },
+
+    removeNotificationStyle: function(notificationComponents,notificationStyle){
+        for (var component in notificationComponents) {
+            notificationComponents[component].removeClass(notificationStyle);
+        }
+
+        if(notificationComponents.tableRow.find("."+this.css.notificationError) > 0){
+            notificationComponents.tableRow.addClass(this.css.notificationError);
+        }
+    },
+
+    getNotificationComponents: function (notification,model) {
+        var tableRow = this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).stop( true, true );
         var columnName = notification.attributes.attribute;
         var tableCell = tableRow.find("td[data-property=" + columnName + "]");
         var inputElement = tableCell.find(':input');
-        return inputElement;
+        var notificationComponents = {"inputElement":inputElement,"tableCell":tableCell,"tableRow":tableRow};
+        return notificationComponents;
     },
 
     hideSpinner: function(target) {

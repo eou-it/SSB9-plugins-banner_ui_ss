@@ -249,8 +249,9 @@
     background-color: #FFF6B3;
 }
 
-.grid tr.notification-error .error-component {
-    padding-left:10px;
+.grid tr.notification-error td.notification-error {
+    padding-left:20px;
+    background:url("../images/icon-error-16x16.png") no-repeat left center;
 }
 
 /* editable component specific integration classes */
