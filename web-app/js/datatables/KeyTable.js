@@ -190,18 +190,25 @@ function KeyTable ( oInit )
     var _aEnabledColumns = null;
 
     /*
-     * Variable: _aEnabledColumns
-     * Purpose:  Column indices that allow focus.  Other columns are skipped. Null = all enabled.
+     * Variable: _aFocusableColumns
+     * Purpose:  Column indices that allow focus. All cells in the grid. Other columns are skipped. Null = all enabled.
      * Scope:    KeyTable - private
      */
     var _aFocusableColumns = null;
 
     /*
-     * Variable: _aEnabledColumns
-     * Purpose:  Column indices that allow focus.  Other columns are skipped. Null = all enabled.
+     * Variable: _aActionableColumns
+     * Purpose:  Column indices that allow focus.  Only actionable or editable cells.Other columns are skipped. Null = all enabled.
      * Scope:    KeyTable - private
      */
     var _aActionableColumns = null;
+
+    /*
+     * Variable: _actionablePositions
+     * Purpose:  Column indices that allow focus.  Only actionable or editable cells.Other columns are skipped. Null = all enabled.
+     * Scope:    KeyTable - private
+     */
+    var _actionablePositions = {};
 
     /*
      * Variable: _that
@@ -712,11 +719,7 @@ function KeyTable ( oInit )
             nTarget = nTarget.parentNode;
         }
         var editableComponentExists = $('a, area, button, input, object, select, textarea', nTarget).length;
-        if(editableComponentExists > 0) {
-            _aEnabledColumns = _aActionableColumns;
-        } else {
-            _aEnabledColumns = _aFocusableColumns;
-        }
+        editableComponentExists?_fnSetActionableColumnsToEnabledColumns():_fnSetFocusableColumnsToEnabledColumns();
         _fnSetFocus( nTarget );
         _fnCaptureKeys();
     }
@@ -829,7 +832,7 @@ function KeyTable ( oInit )
         }
 
         if ( !anyModifier || shiftOnly ) {
-            if ( e.keyCode >= 32 ) return _Action.CHARACTER_ENTRY; //!! this isn't a good test for character entry
+            if ( e.keyCode > 32 ) return _Action.CHARACTER_ENTRY; //!! this isn't a good test for character entry
         }
 
         if ( shiftOnly ) {
@@ -837,11 +840,6 @@ function KeyTable ( oInit )
                 return _Action.LEFT;
             else if(e.keyCode == _KeyCode.SPACE)
                 return _Action.FULL_ROW_SELECT;
-            else {
-                console.log(e.keyCode);
-                console.log(e.which);
-                console.log(e.charCode);
-            }
         }
 
         if ( altOnly ) {
@@ -980,7 +978,7 @@ function KeyTable ( oInit )
         switch( action )
         {
             case _Action.ACTION:
-                _aEnabledColumns = _aActionableColumns;
+
                 _fnEventFire( "action", _iOldX, _iOldY );
                 return true;
 
@@ -988,10 +986,9 @@ function KeyTable ( oInit )
                 if ( !_fnEventFire( "esc", _iOldX, _iOldY ) )
                 {
                     /* Only lose focus if there isn't an escape handler on the cell */
-                    _aEnabledColumns = _aFocusableColumns;
                     _fnEventFire("blur",_iOldX,_iOldY);
-
                 }
+                _fnSetFocusableColumnsToEnabledColumns();
                 return true;
 
             case _Action.LEFT:
@@ -1051,6 +1048,9 @@ function KeyTable ( oInit )
                 y =  iTableHeight - 1;
                 break;
             case _Action.FULL_ROW_SELECT:
+                x = _iOldX;
+                y = _iOldY;
+                jQuery('td',_nBody).filter('.add-row-selected').removeClass('add-row-selected');
                 jQuery('tr:eq('+_iOldY+')',_nBody).children("td").addClass("add-row-selected");
                 break;
             case _Action.BLUR:
@@ -1063,7 +1063,7 @@ function KeyTable ( oInit )
             default: /* Nothing we are interested in */
                 return true;
         }
-
+        _fnSetFocusableColumnsToEnabledColumns();
         _fnSetFocus( _fnCellFromCoords(x, y) );
         return false;
     }
@@ -1077,6 +1077,7 @@ function KeyTable ( oInit )
      */
     function _fnKey ( e )
     {
+
         if ( e.keytable_done || (e.originalEvent && e.originalEvent.keytable_done)) {
             return false; // this event has already been handled
         }
@@ -1099,15 +1100,13 @@ function KeyTable ( oInit )
             switch (e.keyCode) {
                 case _KeyCode.TAB: // make TAB move LEFT (RIGHT with SHIFT)
                     _fnAction(_Action.ESCAPE);
-                    _aEnabledColumns = _aActionableColumns;
-                    move( e.shiftKey ?
-                        _Action.LEFT :
-                        _Action.RIGHT );
+                    var xy = _fnGetNextEditablePos();
+                    _fnSetActionableColumnsToEnabledColumns();
                     //!!breaks onblur?return false;
-                    _fnEventFire( "action", _iOldX, _iOldY );
+                    _fnEventFire( "action", xy[0], xy[1]);
                     //Keytable blur event modifies the edit mode to false. As this is a tab
                     //event the edit mode should continue to be true.
-                    _that.block = true;
+
                     e.stopPropagation();
                     e.preventDefault();
                     break;
@@ -1143,6 +1142,43 @@ function KeyTable ( oInit )
         return result;
     }
 
+    function _fnGetNextEditablePos(){
+        var arr = _actionablePositions[_iOldY];
+        var arrLen = arr.length;
+        var mapLength = Object.keys(_actionablePositions).length;
+        var x = jQuery.inArray(_iOldX,arr);
+        var y = _iOldY;
+        if(!( x < (arrLen - 1)))  {
+           do {
+                y = y + 1;
+                if(y == mapLength)  {
+                    y = 0;
+                }
+                arr = _actionablePositions[y];
+                arrLen = arr.length;
+                x = arr[0];
+            }   while(arrLen === 0)
+        } else {
+            x = arr[x+1];
+        }
+        _aActionableColumns = arr;
+        return [x, y];
+    }
+
+
+
+    function _fnSetActionableColumnsToEnabledColumns(){
+        _that.block = true;
+        _fnSetEnabledColumns(_aActionableColumns);
+    }
+
+    function _fnSetFocusableColumnsToEnabledColumns(){
+        _fnSetEnabledColumns(_aFocusableColumns);
+    }
+
+    function _fnSetEnabledColumns(enableColumns)   {
+        _aEnabledColumns = enableColumns;
+    }
     /*
      * Function: _fnCaptureKeys
      * Purpose:  Start capturing key events for this table
@@ -1340,6 +1376,23 @@ function KeyTable ( oInit )
         }
     }
 
+    function _fnScanForEditableCells(){
+        var tdArray;
+        var trArray = $(_nBody);
+        var editableComponentExists;
+        var trIndex;
+        $('tr',trArray).each(function()	{
+            trIndex = $(this).index();
+            tdArray = new Array();
+            $('a, area, button, input, object, select, textarea', this).each(function() {
+                $(this).each(function(){
+                    tdArray.push($(this).parent().parent().children().index($(this).parent()));
+                });
+            });
+            _actionablePositions[trIndex] = tdArray;
+        });
+    }
+
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Initialisation
@@ -1400,8 +1453,8 @@ function KeyTable ( oInit )
                 colLength = rows[0].getElementsByTagName('td').length;
                 _aFocusableColumns = Array.apply(null, {length:colLength}).map(Number.call, Number);
             }
-            _aEnabledColumns = _aFocusableColumns;
-            _aActionableColumns = [3,5,6];
+            _fnScanForEditableCells();
+            _fnSetFocusableColumnsToEnabledColumns()
         }
 
         _bRowSelect = oInit.rowselect && true || false;
@@ -1410,7 +1463,6 @@ function KeyTable ( oInit )
             oInit.form = false;
         }
         _bForm = oInit.form;
-
 
         if ( oInit.focus.nodeName == undefined ) {
             _iDefaultX = oInit.focus[0];
@@ -1493,6 +1545,8 @@ function KeyTable ( oInit )
         /* Lose table focus when click outside the table */
         jQuery(document).bind('click focus', _fnReleaseFocus );
     }
+
+
 
     this.fnCoordsFromCell = _fnCoordsFromCell; // expose, at least for debugging
 
