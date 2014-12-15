@@ -237,9 +237,9 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           editControls = $('a, area, button, input, object, select, textarea', cell).filter(':not([tabindex])').filter(':visible'),
           target = tabs.add( editControls ).first();
 
-      if ( target.length || _.contains( this.enabledColumns, $(cell).index())) {
-        this.editMode(true);
-        target.focus();
+      if ( target.length)   {
+            this.editMode(true);
+            target.focus();
       }
     },
 
@@ -568,10 +568,13 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
           var view = this,
               keyTable = this.keyTable = new KeyTable( { table: this.table[0],
-                  enabledColumns: this.enabledColumns, focus: node , form: true, tabindex:0 } );
+                    form: false, tabindex:0 } );
+
         keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
-          // trigger the click action on the contained element, if any, or the td itself
-          $(':first-child', cell).add(cell).first().click();
+            // trigger the click action on the contained element, if any, or the td itself
+            var temp = $(':first-child',cell)
+            temp = temp.length? temp.first():cell;
+            temp.click();
         });
 
         keyTable.event['blur']( null, null, function actionBlurCell( cell, x, y ) {
@@ -579,7 +582,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
             var focus = $(':focus');
             view.log( 'blurring cell: ', cell, 'to', focus, ' edit mode was: ', (view.keyTable && view.keyTable.block) );
             if ( $.contains( cell, focus[0] )) {
-              focus.blur();
+                focus.blur();
             }
             view.editMode( false );
           }
