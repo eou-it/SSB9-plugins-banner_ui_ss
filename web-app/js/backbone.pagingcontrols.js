@@ -1,8 +1,9 @@
 /* Copyright 2013-2014 Ellucian Company L.P. and its affiliates. */
 
 ;(function ( $, _, Backbone ) {
-  Backbone.PagingControls = Backbone.View.extend({
+    Backbone.PagingControls = Backbone.View.extend({
     pageLengths: [5, 50, 250, 500],
+    dirtyCheck: null,
 
     defaults: {
       pageLengths: [5, 50, 250, 500]
@@ -10,7 +11,7 @@
 
     initialize: function () {
       var view = this;
-
+      this.dirtyCheck = this.options.dirtyCheck;
       if ( _.isArray( this.options.pageLengths ) ) {
         var validPageLengths = _.all( this.options.pageLengths, function ( it ) {
           return _.isNumber( it ) && it > 0;
@@ -116,7 +117,7 @@
     },
     render: function () {
       this.$el.empty();
-
+      this.pageActions = [];
       var dir = $( "meta[name=dir]" ).attr( "content" );
       dir = ( dir === void 0 || dir === "ltr" ? "ltr" : "rtl" );
 
@@ -173,6 +174,30 @@
 	_.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap], function (it) {
         view.$el.append( it );
       });
+
+        first.onclick = function(e){
+            view.gotoFirstPage(e);
+        }
+        prev.onclick = function(e){
+            view.gotoPreviousPage(e);
+        }
+        next.onclick = function(e){
+            view.gotoNextPage(e);
+        }
+        last.onclick = function(e){
+            view.gotoLastPage(e);
+        }
+        input.onchange = function(e){
+            view.gotoSpecificPage(e);
+        }
+        selWrap.onchange = function(e){
+            view.selectPageSize(e);
+        }
+
+      view.pageActions.push(first, prev, input, next, last, selWrap);
+    },
+    getPagesActions: function(){
+        return this.pageActions;
     }
   });
 }).call (this, $, _, Backbone);

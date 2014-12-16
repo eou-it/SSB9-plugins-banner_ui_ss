@@ -1119,7 +1119,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       var view  = this,
           thead = $( this.elements.thead ),
           tr    = $( this.elements.tr );
-
+      this.sortElements = [];
       _.each( columns, function ( it ) {
         if ( _.isBoolean( it.visible ) && !it.visible )
           return;
@@ -1157,6 +1157,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           th.css( "width", it.width );
 
         tr.append( th );
+        view.sortElements.push(th);
       });
 
       thead.append ( tr );
@@ -1209,7 +1210,20 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         $( th ).attr( "data-sort-direction", ( prop == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
       });
     },
-
+    getSortElements: function () {
+          _.each(this.sortElements, function(it){
+              console.log("SortElement Events" + $._data( $(it)[0], "events" ));
+          });
+          return this.sortElements;
+      },
+    getPageActions: function () {
+          if(!_.isNull(pagingActions)) {
+              _.each(pagingActions, function(it) {
+                  console.log("PageAction Events" + $._data($(it)[0], "events"));
+              });
+          }
+          return pagingActions;
+      },
     getDataAsJson: function () {
       return this.collection.toJSON();
     },
@@ -1256,11 +1270,12 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
     removePagingControls: function() {
       this.$el.find( "." + this.css.pagingContainer ).remove();
+      pagingActions = [];
     },
 
     generatePagingControls: function () {
       this.removePagingControls();
-
+      pagingActions =[];
       if ( this.collection.paginate ) {
         var paging = $( this.elements.div ).addClass( this.css.pagingContainer );
 
@@ -1270,7 +1285,15 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           el:          paging,
           collection:  this.collection,
           pageLengths: this.pageLengths
-        }).render();
+        });
+      pagingControls.render();
+      pagingActions = pagingControls.getPagesActions();
+      console.log("Paging Actions  : " + pagingActions);
+      if(!_.isNull(pagingActions)) {
+          _.each(pagingActions, function (it) {
+              console.log("Paging action Events" + $._data($(it)[0], "events"));
+          });
+      }
       }
     },
 
