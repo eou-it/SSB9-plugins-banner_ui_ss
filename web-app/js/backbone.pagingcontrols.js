@@ -174,6 +174,7 @@
 	_.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap], function (it) {
         view.$el.append( it );
       });
+        selWrap = view.$el.find(".page-size-select");
 
         first.on("click",function (e) {
             view.gotoFirstPage(e);
