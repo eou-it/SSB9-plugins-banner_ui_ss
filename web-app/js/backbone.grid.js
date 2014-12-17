@@ -48,6 +48,34 @@ var data = {
 */
 var direction = $('meta[name=dir]').attr('content');
 direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
+var dirtyCheckTargets = [];
+
+var dirtyCheckDefault = {
+
+    save: function (options) {
+        var callback = options.callback;
+        var saveOptions = {
+            success: function () {
+                console.log("dirty check - success callback");
+                /* Let the save animation complete before firing callback. */
+                setTimeout(function(){callback()}, 500);
+            }
+        };
+    },
+    no: function (options) {
+        var callback = options.callback;
+        console.log("dirty check - no callback");
+        callback();
+    },
+    isDirty: function (options) {
+        var dirty = false;
+        if (!_.isUndefined(this.collection) && this.collection.isDirty()) {
+            dirty = true;
+        };
+        console.log("dirty check - isDirty: " + dirty);
+        return dirty;
+    }
+};
 
 ;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
@@ -461,6 +489,9 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       if ( this.frozenColumns.length > 0 )
         this.features.freeze = true;
 
+      if (!_.isUndefined(this.options.dirtyCheckDefault ) )  {
+            this.dirtyCheckDefault = this.options.dirtyCheckDefault;
+      }
 
       if ( _.isArray( this.options.pageLengths ) ) {
         var validPageLengths = _.all( this.options.pageLengths, function ( it ) {
@@ -667,7 +698,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
        });
       return found || "";
      },
-
     render: function () {
       var view = this;
 
@@ -704,6 +734,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.draggableColumns();
 
       window.ResizableColumns( this.table );
+
+      this.addDirtyCheckFor(this.sortElements, this.dirtyCheckDefault);
 
       if ( _.isFunction( this.options.afterRender ) )
         this.options.afterRender.call( this );
@@ -1284,7 +1316,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         var pagingControls = new Backbone.PagingControls({
           el:          paging,
           collection:  this.collection,
-          pageLengths: this.pageLengths
+          pageLengths: this.pageLengths,
+          dirtyCheck: this.dirtyCheckDefault
         });
       pagingControls.render();
       pagingActions = pagingControls.getPagesActions();
@@ -1391,7 +1424,23 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       $(".grid-container").loading(false);
       $(".body-content").loading(false);
       this.recalcTitleWidths();
-    }
-  });
+    },
+    addDirtyCheckFor: function (target, dirtyCheckDefaults) {
 
+          var targetExistsInDom = ($(target).size() > 0);
+          var targetIndex = dirtyCheckTargets.indexOf(target);
+          var targetExistsInTracker = targetIndex > -1;
+
+          // If the element does not exist in dom and is present in tracker, remove it.
+          if(targetExistsInTracker && !targetExistsInDom) {
+              dirtyCheckTargets.splice(targetIndex, 1);
+          }
+
+          // add a dirty check only if the element exists in dom and is not already being tracked.
+          if(targetExistsInDom && !targetExistsInTracker) {
+              dirtyCheckTargets.push(target);
+              $(target).dirtyCheck(dirtyCheckDefaults);
+          }
+      }
+  });
 }).call (this, $, _, Backbone, JSON, AjaxManager );

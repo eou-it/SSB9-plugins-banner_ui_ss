@@ -25,14 +25,14 @@
         view.render();
       });
     },
-    events: {
-      "change .page-size-select":               "selectPageSize",
-      "click .paging-control.first.enabled":    "gotoFirstPage",
-      "click .paging-control.last.enabled":     "gotoLastPage",
-      "click .paging-control.previous.enabled": "gotoPreviousPage",
-      "click .paging-control.next.enabled":     "gotoNextPage",
-      "change .page-number.enabled":            "gotoSpecificPage"
-    },
+//    events: {
+//      "change .page-size-select":               "selectPageSize",
+//      "click .paging-control.first.enabled":    "gotoFirstPage",
+//      "click .paging-control.last.enabled":     "gotoLastPage",
+//      "click .paging-control.previous.enabled": "gotoPreviousPage",
+//      "click .paging-control.next.enabled":     "gotoNextPage",
+//      "change .page-number.enabled":            "gotoSpecificPage"
+//    },
     css: {
       pagingContainer:       "paging-container",
       enabled:               "enabled",
@@ -193,6 +193,13 @@
         selWrap.onchange = function(e){
             view.selectPageSize(e);
         }
+
+        first.dirtyCheck(this.dirtyCheck);
+        next.dirtyCheck(this.dirtyCheck);
+        prev.dirtyCheck(this.dirtyCheck);
+        last.dirtyCheck(this.dirtyCheck);
+        input.dirtyCheck(this.dirtyCheck);
+        selWrap.dirtyCheck(this.dirtyCheck);
 
       view.pageActions.push(first, prev, input, next, last, selWrap);
     },
