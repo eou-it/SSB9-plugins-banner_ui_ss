@@ -174,7 +174,6 @@
 	_.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap], function (it) {
         view.$el.append( it );
       });
-        selWrap = view.$el.find(".page-size-select");
 
         first.on("click",function (e) {
             view.gotoFirstPage(e);
@@ -191,17 +190,17 @@
         input.on("change",function (e) {
             view.gotoSpecificPage(e);
         });
-        selWrap.on("change",function (e) {
+        select.on("change",function (e) {
             view.selectPageSize(e);
         });
 
-        first.dirtyCheck(_.defaults({collection:this.collection},this.dirtyCheckDefault));
-        next.dirtyCheck(_.defaults({collection:this.collection},this.dirtyCheckDefault));
-        prev.dirtyCheck(_.defaults({collection:this.collection},this.dirtyCheckDefault));
-        last.dirtyCheck(_.defaults({collection:this.collection},this.dirtyCheckDefault));
-        input.dirtyCheck(_.defaults({collection:this.collection,eventType:"change"},this.dirtyCheckDefault));
-        selWrap.dirtyCheck(_.defaults({collection:this.collection,eventType:"change"},this.dirtyCheckDefault));
-      view.pageActions.push(first, prev, input, next, last, selWrap);
+        first.dirtyCheck(this.dirtyCheckDefault);
+        next.dirtyCheck(this.dirtyCheckDefault);
+        prev.dirtyCheck(this.dirtyCheckDefault);
+        last.dirtyCheck(this.dirtyCheckDefault);
+        input.dirtyCheck(_.defaults({eventType:"change"},this.dirtyCheckDefault));
+        select.dirtyCheck(_.defaults({eventType:"change"},this.dirtyCheckDefault));
+      view.pageActions.push(first, prev, input, next, last, select);
     },
     getPagesActions: function(){
         return this.pageActions;

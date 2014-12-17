@@ -69,9 +69,6 @@ var dirtyCheckDefault = {
     },
     isDirty: function (options) {
         var dirty = false;
-        if (!_.isUndefined(this.collection) && this.collection.isDirty()) {
-            dirty = true;
-        };
         console.log("dirty check - isDirty: " + dirty);
         return dirty;
     }
