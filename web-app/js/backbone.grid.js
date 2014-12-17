@@ -1317,7 +1317,7 @@ var dirtyCheckDefault = {
           el:          paging,
           collection:  this.collection,
           pageLengths: this.pageLengths,
-          dirtyCheck: this.dirtyCheckDefault
+          dirtyCheckDefault: this.dirtyCheckDefault
         });
       pagingControls.render();
       pagingActions = pagingControls.getPagesActions();

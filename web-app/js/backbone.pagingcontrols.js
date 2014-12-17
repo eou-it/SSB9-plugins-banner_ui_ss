@@ -3,7 +3,7 @@
 ;(function ( $, _, Backbone ) {
     Backbone.PagingControls = Backbone.View.extend({
     pageLengths: [5, 50, 250, 500],
-    dirtyCheck: null,
+    dirtyCheckDefault: null,
 
     defaults: {
       pageLengths: [5, 50, 250, 500]
@@ -11,7 +11,7 @@
 
     initialize: function () {
       var view = this;
-      this.dirtyCheck = this.options.dirtyCheck;
+      this.dirtyCheckDefault = this.options.dirtyCheckDefault;
       if ( _.isArray( this.options.pageLengths ) ) {
         var validPageLengths = _.all( this.options.pageLengths, function ( it ) {
           return _.isNumber( it ) && it > 0;
@@ -175,32 +175,31 @@
         view.$el.append( it );
       });
 
-        first.onclick = function(e){
+        first.on("click",function (e) {
             view.gotoFirstPage(e);
-        }
-        prev.onclick = function(e){
-            view.gotoPreviousPage(e);
-        }
-        next.onclick = function(e){
+        });
+        next.on("click",function (e) {
             view.gotoNextPage(e);
-        }
-        last.onclick = function(e){
+        });
+        prev.on("click",function (e) {
+            view.gotoPreviousPage(e);
+        });
+        last.on("click",function (e) {
             view.gotoLastPage(e);
-        }
-        input.onchange = function(e){
+        });
+        input.on("change",function (e) {
             view.gotoSpecificPage(e);
-        }
-        selWrap.onchange = function(e){
+        });
+        selWrap.on("change",function (e) {
             view.selectPageSize(e);
-        }
+        });
 
-        first.dirtyCheck(this.dirtyCheck);
-        next.dirtyCheck(this.dirtyCheck);
-        prev.dirtyCheck(this.dirtyCheck);
-        last.dirtyCheck(this.dirtyCheck);
-        input.dirtyCheck(this.dirtyCheck);
-        selWrap.dirtyCheck(this.dirtyCheck);
-
+        first.dirtyCheck(_.defaults({collection:this.collection},this.dirtyCheckDefault));
+        next.dirtyCheck(_.defaults({collection:this.collection},this.dirtyCheckDefault));
+        prev.dirtyCheck(_.defaults({collection:this.collection},this.dirtyCheckDefault));
+        last.dirtyCheck(_.defaults({collection:this.collection},this.dirtyCheckDefault));
+        input.dirtyCheck(_.defaults({collection:this.collection,eventType:"change"},this.dirtyCheckDefault));
+        selWrap.dirtyCheck(_.defaults({collection:this.collection,eventType:"change"},this.dirtyCheckDefault));
       view.pageActions.push(first, prev, input, next, last, selWrap);
     },
     getPagesActions: function(){
