@@ -32,7 +32,7 @@ class CustomResourcesTagLib {
         def controller = attrs.controller ?: controllerName
         def action = attrs.action ?: actionName
 
-        // Check to see bannerSelfService-custom.css exists\r
+//        // Check to see bannerSelfService-custom.css exists\r
         writeCssIfExists( out, "css/bannerSelfService-custom.css" )
         // Determine the current page
         writeCssIfExists( out, "css/views/$controller/${action}-custom.css" )
@@ -41,7 +41,7 @@ class CustomResourcesTagLib {
     def customJavaScriptIncludes = { attrs ->
         def controller = attrs.controller ?: controllerName
         def action = attrs.action ?: actionName
-        // Check to see bannerSelfService-custom.js exists\r
+//        // Check to see bannerSelfService-custom.js exists\r
         writeJavaScriptIfExists( out, "js/bannerSelfService-custom.js" )
 
         // Determine the current page
