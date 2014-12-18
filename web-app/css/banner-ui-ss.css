@@ -1154,11 +1154,11 @@ div.infoicon {
     top: -20em;
 }
 
-input.notification-error, select.notification-error {
-    border:1px solid #FF3F3F;
+.component-error {
+    border:1px solid #cc0000;
 }
 
-input.notification-error:focus, select.notification-error:focus {
+.component-error:focus {
     border-width:2px;
     outline: none;
 }

@@ -37,6 +37,10 @@ $(document).ready(function() {
     });
 
     window.Notifications = Backbone.Collection.extend({
+        initialize: function () {
+           this.bind('add', this.addComponentErrorStyle, this);
+           this.bind('remove', this.removeComponentErrorStyle, this);
+        },
         model: Notification,
         addNotification: function( notification ) {
             var foundNotification = this.find( function(n) {
@@ -48,15 +52,6 @@ $(document).ready(function() {
             }
             else {
                 this.add( notification );
-
-                var notificationType = notification.get("type");
-                if(notificationType == "error"){
-                    var errorComponent = notification.attributes.component;
-                        if(errorComponent){
-                            errorComponent.addClass("notification-error");
-                        }
-                }
-
                 // If the notification gets orphaned remove it from the collection.
                 if (notification.has( "model" ) && notification.get( "model" )) {
                     var model = notification.get( "model" );
@@ -126,7 +121,7 @@ $(document).ready(function() {
             else {
                 // Remove all models
                 this.reset();
-            }
+                }
         },
         addNotificationsFromModel: function(model) {
             if (model) {
@@ -282,6 +277,25 @@ $(document).ready(function() {
             });
 
             return groupedModels;
+        },
+        addComponentErrorStyle: function( notification ) {
+            var errorComponent = this.getNotificationComponent(notification);
+            if(!_.isUndefined(errorComponent)){
+                $(errorComponent).addClass("component-error");
+            }
+        },
+        removeComponentErrorStyle: function( notification ) {
+            var errorComponent = this.getNotificationComponent(notification);
+            if(!_.isUndefined(errorComponent)){
+                $(errorComponent).removeClass("component-error");
+            }
+        },
+        getNotificationComponent: function( notification ){
+            var notificationType = notification.get("type");
+            if (notificationType == "error") {
+                var errorComponent = notification.attributes.component;
+            }
+            return errorComponent;
         }
     });
 
@@ -313,15 +327,19 @@ $(document).ready(function() {
 
             $(this.el).addClass( notificationClass );
 
-            var messageLink = $("<span class='notification-message'></span>") ;
+            var messageLink = $("<span></span>") ;
 
             var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html( messageLink.append( this.model.get("message" ) ) );
 
             var view = this;
 
-            messageLink.on('click', function(){
-                view.navigateToErrorComponent(view.model);
-            });
+            var component = this.model.get("component");
+            if(component){
+                messageLink.addClass('notification-message');
+                messageLink.on('click', function(){
+                    view.navigateToErrorComponent(view.model);
+                });
+            }
 
             // Manage the prompts if available
             var promptsDiv;
@@ -356,8 +374,11 @@ $(document).ready(function() {
             }
         },
         navigateToErrorComponent: function(model) {
-            var component = model.attributes.component;
+            var component = model.attributes.component[0];
             if(component){
+                if(model.attributes.componentType == "select2"){
+                    component = component.find('.select2-focusser');
+                }
                 component.focus();
             }
         }

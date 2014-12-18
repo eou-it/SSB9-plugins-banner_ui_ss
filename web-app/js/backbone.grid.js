@@ -183,6 +183,7 @@ var dirtyCheckDefault = {
       notificationSuccess:    "notification-success",
       notificationWarning:    "notification-warning",
       notificationError:      "notification-error",
+      componentError:         "component-error",
       pagingText:             "paging-text",
       pagingContainer:        "paging-container"
     },
@@ -1378,6 +1379,7 @@ var dirtyCheckDefault = {
           var inputElement = notificationComponents.inputElement;
           if(inputElement.length > 0){
               window.notifications.get(notification).attributes.component = inputElement;
+              inputElement.addClass(this.css.componentError);
           }
       }
     },
