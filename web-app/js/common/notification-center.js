@@ -374,7 +374,7 @@ $(document).ready(function() {
             }
         },
         navigateToErrorComponent: function(model) {
-            var component = model.attributes.component[0];
+            var component = model.attributes.component;
             if(component){
                 if(model.attributes.componentType == "select2"){
                     component = component.find('.select2-focusser');
