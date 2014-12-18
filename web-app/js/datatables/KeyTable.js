@@ -1050,6 +1050,7 @@ function KeyTable ( oInit )
             case _Action.FULL_ROW_SELECT:
                 x = _iOldX;
                 y = _iOldY;
+                jQuery('tr',_nBody).filter('.add-row-selected').removeClass('add-row-selected');
                 jQuery('td',_nBody).filter('.add-row-selected').removeClass('add-row-selected');
                 jQuery('tr:eq('+_iOldY+')',_nBody).children("td").addClass("add-row-selected");
                 break;

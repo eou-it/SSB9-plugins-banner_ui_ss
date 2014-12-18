@@ -157,7 +157,7 @@ var dirtyCheckDefault = {
       gridFrozenWrapper:      "grid-frozen-wrapper",
       gridScrollX:            "grid-scroll-x",
       selected:               "selected",
-      hover:                  "hover",
+      hover:                  "add-row-hover",
       header:                 "header",
       bottom:                 "bottom",
       columnVisibilityMenu:   "column-visibility-menu",
