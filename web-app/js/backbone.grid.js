@@ -56,7 +56,7 @@ var dirtyCheckDefault = {
         var callback = options.callback;
         var saveOptions = {
             success: function () {
-                console.log("dirty check - success callback");
+                this.log("dirty check - success callback");
                 /* Let the save animation complete before firing callback. */
                 setTimeout(function(){callback()}, 500);
             }
@@ -64,12 +64,12 @@ var dirtyCheckDefault = {
     },
     no: function (options) {
         var callback = options.callback;
-        console.log("dirty check - no callback");
+        this.log("dirty check - no callback");
         callback();
     },
     isDirty: function (options) {
         var dirty = false;
-        console.log("dirty check - isDirty: " + dirty);
+        this.log("dirty check - isDirty: " + dirty);
         return dirty;
     }
 };
@@ -1242,16 +1242,11 @@ var dirtyCheckDefault = {
     },
     getSortElements: function () {
           _.each(this.sortElements, function(it){
-              console.log("SortElement Events" + $._data( $(it)[0], "events" ));
+              this.log("SortElement Events" + $._data( $(it)[0], "events" ));
           });
           return this.sortElements;
       },
     getPageActions: function () {
-          if(!_.isNull(pagingActions)) {
-              _.each(pagingActions, function(it) {
-                  console.log("PageAction Events" + $._data($(it)[0], "events"));
-              });
-          }
           return pagingActions;
       },
     getDataAsJson: function () {
@@ -1319,12 +1314,7 @@ var dirtyCheckDefault = {
         });
       pagingControls.render();
       pagingActions = pagingControls.getPagesActions();
-      console.log("Paging Actions  : " + pagingActions);
-      if(!_.isNull(pagingActions)) {
-          _.each(pagingActions, function (it) {
-              console.log("Paging action Events" + $._data($(it)[0], "events"));
-          });
-      }
+      this.log("Paging Actions  : " + pagingActions);
       }
     },
 
