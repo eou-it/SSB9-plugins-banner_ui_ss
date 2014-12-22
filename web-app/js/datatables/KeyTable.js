@@ -978,7 +978,6 @@ function KeyTable ( oInit )
         switch( action )
         {
             case _Action.ACTION:
-
                 _fnEventFire( "action", _iOldX, _iOldY );
                 return true;
 
@@ -1101,13 +1100,9 @@ function KeyTable ( oInit )
             switch (e.keyCode) {
                 case _KeyCode.TAB: // make TAB move LEFT (RIGHT with SHIFT)
                     _fnAction(_Action.ESCAPE);
-                    var xy = _fnGetNextEditablePos();
+                    var xy = e.shiftKey?_fnGetPreviousEditablePos():_fnGetNextEditablePos();
                     _fnSetActionableColumnsToEnabledColumns();
-                    //!!breaks onblur?return false;
                     _fnEventFire( "action", xy[0], xy[1]);
-                    //Keytable blur event modifies the edit mode to false. As this is a tab
-                    //event the edit mode should continue to be true.
-
                     e.stopPropagation();
                     e.preventDefault();
                     break;
@@ -1166,8 +1161,31 @@ function KeyTable ( oInit )
         return [x, y];
     }
 
+    function _fnGetPreviousEditablePos(){
+        var arr = _actionablePositions[_iOldY];
+        var arrLen = arr.length;
+        var mapLength = Object.keys(_actionablePositions).length;
+        var x = jQuery.inArray(_iOldX,arr);
+        var y = _iOldY;
+        if( x === 0)  {
+            do {
+                y = y - 1;
+                if(y < 0)  {
+                    y = mapLength - 1;
+                }
+                arr = _actionablePositions[y];
+                arrLen = arr.length - 1;
+                x = arr[arrLen];
+            }   while(arrLen === 0)
+        } else {
+            x = arr[x - 1];
+        }
+        _aActionableColumns = arr;
+        return [x, y];
+    }
 
-
+    //Keytable blur event modifies the edit mode to false. As this is a tab
+    //event the edit mode should continue to be true.
     function _fnSetActionableColumnsToEnabledColumns(){
         _that.block = true;
         _fnSetEnabledColumns(_aActionableColumns);
