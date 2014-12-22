@@ -119,6 +119,9 @@ $(document).ready(function() {
                 }
             }
             else {
+                _.each(this.models,function(model){
+                    notifications.removeComponentErrorStyle(model);
+                });
                 // Remove all models
                 this.reset();
                 }
