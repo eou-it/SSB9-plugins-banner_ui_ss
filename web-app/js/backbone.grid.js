@@ -733,7 +733,7 @@ var dirtyCheckDefault = {
 
       window.ResizableColumns( this.table );
 
-      this.addDirtyCheckFor(this.sortElements, this.dirtyCheckDefault);
+      this.addDirtyCheckFor(view.sortElements, this.dirtyCheckDefault);
 
       if ( _.isFunction( this.options.afterRender ) )
         this.options.afterRender.call( this );
@@ -1241,9 +1241,6 @@ var dirtyCheckDefault = {
       });
     },
     getSortElements: function () {
-          _.each(this.sortElements, function(it){
-              this.log("SortElement Events" + $._data( $(it)[0], "events" ));
-          });
           return this.sortElements;
       },
     getPageActions: function () {
