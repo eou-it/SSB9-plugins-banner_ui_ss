@@ -1054,8 +1054,9 @@ function KeyTable ( oInit )
                 jQuery('tr:eq('+_iOldY+')',_nBody).children("td").addClass("add-row-selected");
                 break;
             case _Action.BLUR:
-                return _fnBlur();
-
+                _fnBlur();
+                oInit.table.blur();
+                return true;
             case _Action.PREVIOUS_CONTROL:
                 return _fnFocusFormInput(-1);
             case _Action.NEXT_CONTROL:
@@ -1081,6 +1082,7 @@ function KeyTable ( oInit )
         if ( e.keytable_done || (e.originalEvent && e.originalEvent.keytable_done)) {
             return false; // this event has already been handled
         }
+
         if (!_bKeyCapture ) // focus is not on this KeyTable
         {
             return true;
@@ -1102,7 +1104,13 @@ function KeyTable ( oInit )
                     _fnAction(_Action.ESCAPE);
                     var xy = e.shiftKey?_fnGetPreviousEditablePos():_fnGetNextEditablePos();
                     _fnSetActionableColumnsToEnabledColumns();
-                    _fnEventFire( "action", xy[0], xy[1]);
+                    nTarget = _fnCellFromCoords(xy[0], xy[1]);
+                    _fnSetFocus(nTarget);
+                    var temp = $(':first-child', nTarget);
+                    temp = temp.length ? temp[0] : nTarget;
+                    console.log('temp value is ',temp);
+                    temp.focus();
+                    _that.block = true;
                     e.stopPropagation();
                     e.preventDefault();
                     break;
@@ -1187,7 +1195,6 @@ function KeyTable ( oInit )
     //Keytable blur event modifies the edit mode to false. As this is a tab
     //event the edit mode should continue to be true.
     function _fnSetActionableColumnsToEnabledColumns(){
-        _that.block = true;
         _fnSetEnabledColumns(_aActionableColumns);
     }
 
@@ -1411,6 +1418,7 @@ function KeyTable ( oInit )
             _actionablePositions[trIndex] = tdArray;
         });
     }
+
 
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
