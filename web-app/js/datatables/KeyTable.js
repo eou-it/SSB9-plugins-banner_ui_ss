@@ -530,7 +530,7 @@ function KeyTable ( oInit )
         /* Add the new class to highlight the focused cell */
         jQuery(nTarget).addClass( _sFocusClass );
         jQuery(nTarget).parent().addClass( _sFocusClass );
-
+        jQuery(nTarget).attr('tabindex','0');
         /* If it's a DataTable then we need to jump the paging to the relevant page */
         var oSettings;
         if ( _oDatatable )
@@ -668,7 +668,6 @@ function KeyTable ( oInit )
                 dtScrollBody.scrollLeft = nTarget.offsetLeft;
             }
         }
-
         /* Fire of the focus event if there is one */
         _fnEventFire( "focus", _iOldX, _iOldY );
     }
@@ -686,6 +685,7 @@ function KeyTable ( oInit )
         // remember old X,Y for when we get focus again, but clear out old element
         _nOldFocus = null;
         _fnReleaseKeys();
+        jQuery(_nOldFocus).attr('tabindex', '0');
     }
 
 
@@ -699,6 +699,7 @@ function KeyTable ( oInit )
     {
         jQuery(nTarget).removeClass( _sFocusClass );
         jQuery(nTarget).parent().removeClass( _sFocusClass );
+        jQuery(nTarget).removeAttr('tabindex');
         if ( nTarget !== null ) {
             _fnEventFire( "blur", _iOldX, _iOldY );
         }
@@ -837,7 +838,7 @@ function KeyTable ( oInit )
 
         if ( shiftOnly ) {
             if ( e.keyCode == _KeyCode.TAB )
-                return _Action.LEFT;
+                return _Action.PREVIOUS_CONTROL;
             else if(e.keyCode == _KeyCode.SPACE)
                 return _Action.FULL_ROW_SELECT;
         }
@@ -941,6 +942,12 @@ function KeyTable ( oInit )
         return [x,oldY];
     }
 
+    function _fnBlur() {
+        nTarget = _fnCellFromCoords(_iOldX, _iOldY);
+        _fnRemoveFocus(nTarget);
+        jQuery(nTarget).attr('tabindex', '0');
+    }
+
     function _fnAction(action)
     {
         var
@@ -980,7 +987,6 @@ function KeyTable ( oInit )
             case _Action.ACTION:
                 _fnEventFire( "action", _iOldX, _iOldY );
                 return true;
-
             case _Action.ESCAPE:
                 if ( !_fnEventFire( "esc", _iOldX, _iOldY ) )
                 {
@@ -988,8 +994,9 @@ function KeyTable ( oInit )
                     _fnEventFire("blur",_iOldX,_iOldY);
                 }
                 _fnSetFocusableColumnsToEnabledColumns();
+                _fnAddTabIndexToFormObjs();
+                nTarget.focus();
                 return true;
-
             case _Action.LEFT:
                 var xy = _fnFindEnabledColumn( _iOldX-1, _iOldY, -1, iTableWidth );
                 x = xy[0];
@@ -1032,11 +1039,11 @@ function KeyTable ( oInit )
 
             case _Action.HOME:
                 x = _aEnabledColumns[0];
-                y = 0;
+                y = _iOldY;
                 break;
             case _Action.END:
                 x = _aEnabledColumns[_aEnabledColumns.length-1];
-                y = iTableHeight - 1;
+                y = _iOldY;
                 break;
             case _Action.PAGE_UP:
                 x = _iOldX;
@@ -1055,20 +1062,35 @@ function KeyTable ( oInit )
                 break;
             case _Action.BLUR:
                 _fnBlur();
-                oInit.table.blur();
+                _bKeyCapture = false;
                 return true;
             case _Action.PREVIOUS_CONTROL:
-                return _fnFocusFormInput(-1);
+                _fnBlur();
+                if(_bForm == true)
+                    return _fnFocusFormInput(-1);
+                else
+                    return true;
             case _Action.NEXT_CONTROL:
                 return _fnFocusFormInput(+1);
             default: /* Nothing we are interested in */
                 return true;
         }
         _fnSetFocusableColumnsToEnabledColumns();
-        _fnSetFocus( _fnCellFromCoords(x, y) );
+        nTarget = _fnCellFromCoords(x, y)
+        _fnSetFocus( nTarget );
+        nTarget.focus();
         return false;
     }
     this.fnAction = _fnAction;
+
+    function _fnAddTabIndexToFormObjs(){
+        $('a, area, button, input, object, select, textarea', _nBody).each(function() {
+            $(this).each(function(){
+                $(this).attr('tabindex','-1');
+            });
+        });
+    }
+
 
     /*
      * Function: _fnKey
@@ -1082,7 +1104,6 @@ function KeyTable ( oInit )
         if ( e.keytable_done || (e.originalEvent && e.originalEvent.keytable_done)) {
             return false; // this event has already been handled
         }
-
         if (!_bKeyCapture ) // focus is not on this KeyTable
         {
             return true;
@@ -1108,7 +1129,6 @@ function KeyTable ( oInit )
                     _fnSetFocus(nTarget);
                     var temp = $(':first-child', nTarget);
                     temp = temp.length ? temp[0] : nTarget;
-                    console.log('temp value is ',temp);
                     temp.focus();
                     _that.block = true;
                     e.stopPropagation();
@@ -1533,9 +1553,9 @@ function KeyTable ( oInit )
         {
             /* Set the initial focus on the table */
             _fnSetFocus( oInit.focus, oInit.initScroll );
-            _fnCaptureKeys();
+            //_fnCaptureKeys();
         }
-
+        _fnAddTabIndexToFormObjs();
         /*
          * Add event listeners
          * Well - I hate myself for doing this, but it would appear that key events in browsers are
@@ -1568,6 +1588,13 @@ function KeyTable ( oInit )
         {
             jQuery('td', _nBody).live( 'click', _fnClick );
         }
+
+        $("td").focus(function(){
+            _fnCaptureKeys();
+            nTarget = _fnCellFromCoords(_iOldX,_iOldY);
+            jQuery(nTarget).addClass( _sFocusClass );
+            jQuery(nTarget).parent().addClass( _sFocusClass );
+        });
 
         /* Lose table focus when click outside the table */
         jQuery(document).bind('click focus', _fnReleaseFocus );
