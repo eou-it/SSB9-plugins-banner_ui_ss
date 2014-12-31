@@ -489,6 +489,8 @@ var dirtyCheckDefault = {
 
       if (!_.isUndefined(this.options.dirtyCheckDefault ) )  {
             this.dirtyCheckDefault = this.options.dirtyCheckDefault;
+      } else {
+          this.dirtyCheckDefault = dirtyCheckDefault;
       }
 
       if ( _.isArray( this.options.pageLengths ) ) {
