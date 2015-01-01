@@ -683,10 +683,10 @@ function KeyTable ( oInit )
     {
         _fnRemoveFocus( _nOldFocus );
         // remember old X,Y for when we get focus again, but clear out old element
-        _nOldFocus = null;
         _fnReleaseKeys();
         jQuery(_nOldFocus).attr('tabindex', '0');
     }
+
 
 
     /*
@@ -942,11 +942,6 @@ function KeyTable ( oInit )
         return [x,oldY];
     }
 
-    function _fnBlur() {
-        nTarget = _fnCellFromCoords(_iOldX, _iOldY);
-        _fnRemoveFocus(nTarget);
-        jQuery(nTarget).attr('tabindex', '0');
-    }
 
     function _fnAction(action)
     {
@@ -985,6 +980,9 @@ function KeyTable ( oInit )
         switch( action )
         {
             case _Action.ACTION:
+                _fnRemoveTabIndexToFormObjs();
+                nTarget = _fnCellFromCoords(_iOldX,_iOldY);
+                jQuery(nTarget).attr('tabindex','0');
                 _fnEventFire( "action", _iOldX, _iOldY );
                 return true;
             case _Action.ESCAPE:
@@ -1066,10 +1064,11 @@ function KeyTable ( oInit )
                 return true;
             case _Action.PREVIOUS_CONTROL:
                 _fnBlur();
+                _bKeyCapture = false;
                 if(_bForm == true)
                     return _fnFocusFormInput(-1);
                 else
-                    return true;
+                  return true;
             case _Action.NEXT_CONTROL:
                 return _fnFocusFormInput(+1);
             default: /* Nothing we are interested in */
@@ -1091,6 +1090,13 @@ function KeyTable ( oInit )
         });
     }
 
+    function _fnRemoveTabIndexToFormObjs(){
+        $('a, area, button, input, object, select, textarea', _nBody).each(function() {
+            $(this).each(function(){
+                $(this).removeAttr('tabindex');
+            });
+        });
+    }
 
     /*
      * Function: _fnKey
@@ -1215,6 +1221,7 @@ function KeyTable ( oInit )
     //Keytable blur event modifies the edit mode to false. As this is a tab
     //event the edit mode should continue to be true.
     function _fnSetActionableColumnsToEnabledColumns(){
+        _that.block = true;
         _fnSetEnabledColumns(_aActionableColumns);
     }
 
@@ -1553,7 +1560,7 @@ function KeyTable ( oInit )
         {
             /* Set the initial focus on the table */
             _fnSetFocus( oInit.focus, oInit.initScroll );
-            //_fnCaptureKeys();
+            _fnCaptureKeys();
         }
         _fnAddTabIndexToFormObjs();
         /*
