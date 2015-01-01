@@ -187,9 +187,19 @@
         last.on("click",function (e) {
             view.gotoLastPage(e);
         });
-        input.on("change",function (e) {
-            view.gotoSpecificPage(e);
-        });
+        // Fix provided specifically for the IE issue.
+        if($.browser.msie) {
+            input.bind("change", function (e) {
+                e.preventDefault();
+                view.gotoSpecificPage(e);
+
+            });
+        }else {
+            input.bind("change",function (e) {
+                    view.gotoSpecificPage(e);
+            });
+        }
+
         select.on("change",function (e) {
             view.selectPageSize(e);
         });
@@ -198,8 +208,12 @@
         next.dirtyCheck(this.dirtyCheckDefault);
         prev.dirtyCheck(this.dirtyCheckDefault);
         last.dirtyCheck(this.dirtyCheckDefault);
-        input.dirtyCheck(_.defaults({eventType:"change"},this.dirtyCheckDefault));
-        select.dirtyCheck(_.defaults({eventType:"change"},this.dirtyCheckDefault));
+        if($.browser.msie) {
+            input.dirtyCheck(_.defaults({eventType: "change"}, this.dirtyCheckDefault));
+        } else {
+            input.dirtyCheck(_.defaults({eventType: "change"}, this.dirtyCheckDefault));
+        }
+      select.dirtyCheck(_.defaults({eventType:"change"},this.dirtyCheckDefault));
       view.pageActions.push(first, prev, input, next, last, select);
     },
     getPagesActions: function(){
