@@ -839,7 +839,7 @@ function KeyTable ( oInit )
         if ( shiftOnly ) {
             if ( e.keyCode == _KeyCode.TAB )
                 return _Action.PREVIOUS_CONTROL;
-            else if(e.keyCode == _KeyCode.SPACE)
+            else if((e.keyCode == _KeyCode.SPACE) ||((navigator.userAgent.toLowerCase().indexOf('firefox')) && (e.charCode == _KeyCode.SPACE)))
                 return _Action.FULL_ROW_SELECT;
         }
 
