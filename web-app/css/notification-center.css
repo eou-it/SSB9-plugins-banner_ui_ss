@@ -72,12 +72,13 @@
     overflow: auto;
 }
 
-.notification-center-anchor {
+#globalNav li a.notification-center-anchor {
     height: 20px;
     padding-left: 3px;
     padding-right: 5px;
     padding-top: 5px;
     cursor: pointer;
+    display: block;
 }
 
 
@@ -233,8 +234,9 @@ body > .notification-center-shim {
     filter: alpha(opacity = 30);
 }
 
-.notification-center-flyout .notification-item.notification-center-message-error .notification-message{
+#globalNav li a.notification-message{
     color: #ff0000;
     text-decoration: underline;
     cursor: pointer;
+    padding:0;
 }
