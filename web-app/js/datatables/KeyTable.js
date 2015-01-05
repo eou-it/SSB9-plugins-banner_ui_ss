@@ -983,6 +983,7 @@ function KeyTable ( oInit )
                 _fnRemoveTabIndexToFormObjs();
                 nTarget = _fnCellFromCoords(_iOldX,_iOldY);
                 jQuery(nTarget).attr('tabindex','0');
+                nTarget.focus();
                 _fnEventFire( "action", _iOldX, _iOldY );
                 return true;
             case _Action.ESCAPE:
@@ -993,6 +994,7 @@ function KeyTable ( oInit )
                 }
                 _fnSetFocusableColumnsToEnabledColumns();
                 _fnAddTabIndexToFormObjs();
+                nTarget = _fnCellFromCoords(_iOldX,_iOldY);
                 nTarget.focus();
                 return true;
             case _Action.LEFT:
@@ -1148,11 +1150,6 @@ function KeyTable ( oInit )
                     break;
                 case _KeyCode.ESC:
                     _that.fnAction(_Action.ESCAPE);
-                    break;
-                case _KeyCode.SPACE:
-                    move(e.shiftKey? _Action.FULL_ROW_SELECT:_Action.NO_ACTION);
-                    e.stopPropagation();
-                    e.preventDefault();
                     break;
             }
             return true;
