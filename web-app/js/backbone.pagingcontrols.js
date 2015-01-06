@@ -188,11 +188,16 @@
             view.gotoLastPage(e);
         });
 
-        input.bind("change",function (e) {
-               // Fix provided specifically for the IE issue.
-               e.preventDefault();
-               view.gotoSpecificPage(e);
-        });
+        if($.browser.msie) {
+            input.on("change",function (e) {
+                e.preventDefault();
+                view.gotoSpecificPage(e);
+            });
+        } else {
+            input.on("change",function (e) {
+                view.gotoSpecificPage(e);
+            });
+        }
 
         select.on("change",function (e) {
             view.selectPageSize(e);
