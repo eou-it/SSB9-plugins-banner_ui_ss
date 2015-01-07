@@ -1139,6 +1139,7 @@ function KeyTable ( oInit )
                     temp = temp.length ? temp[0] : nTarget;
                     temp.focus();
                     _that.block = true;
+                    _fnRemoveTabIndexToFormObjs();
                     e.stopPropagation();
                     e.preventDefault();
                     break;
@@ -1553,12 +1554,8 @@ function KeyTable ( oInit )
             // if in a form, don't capture keys until we get a focus event
             _bKeyCapture = false;
         }
-        else
-        {
-            /* Set the initial focus on the table */
-            _fnSetFocus( oInit.focus, oInit.initScroll );
-            _fnCaptureKeys();
-        }
+        //set the tabindex to the first cell of the grid
+        jQuery(oInit.focus).attr('tabindex','0');
         _fnAddTabIndexToFormObjs();
         /*
          * Add event listeners
@@ -1594,12 +1591,12 @@ function KeyTable ( oInit )
         }
 
         $("td").focus(function(){
-            _fnCaptureKeys();
-            nTarget = _fnCellFromCoords(_iOldX,_iOldY);
-            jQuery(nTarget).addClass( _sFocusClass );
-            jQuery(nTarget).parent().addClass( _sFocusClass );
-        });
-
+            if(_bKeyCapture == false)   {
+                _bKeyCapture = true;
+                _nOldFocus = null;
+                _fnSetFocus(_fnCellFromCoords(_iOldX,_iOldY));
+            }
+         });
         /* Lose table focus when click outside the table */
         jQuery(document).bind('click focus', _fnReleaseFocus );
     }
