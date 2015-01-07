@@ -590,20 +590,14 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
             if ( dataXESection ) {
 
-                // retrieve extensibility information from xe object
-                //gridExtensions = xe.extensions.sections[dataXESection];
                 gridExtensions = _.find(xe.extensions.sections, function(section) {
                     return section.name == dataXESection;
                 });
 
                 if ( gridExtensions ) {
-
                     this.removeColumns( gridExtensions );
-
                     this.orderColumns( gridExtensions );
-
                     this.addColumns( gridExtensions );
-
                     this.replaceColumnAttributes( gridExtensions);
                 }
             }
@@ -617,11 +611,11 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     ***************************************************************************************************/
     removeColumns: function( pGridExtensions ) {
 
-      this.options.columns = _.filter( this.options.columns, function(baselineColumn) {
-        return !(_.find(pGridExtensions.remove, function(removedColumn) {
-            return removedColumn.name == baselineColumn.name;
-        }));
-      } );
+        this.options.columns = _.filter( this.options.columns, function(baselineColumn) {
+            return !(_.find(pGridExtensions.fields, function(removedColumn) {
+                return removedColumn.exclude && (removedColumn.name == baselineColumn.name);
+            }));
+        } );
     },
 
 
@@ -637,42 +631,44 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         var targetColumn;
         var validJSON;
         var thisGridInstance = this;
+        var baselineColumns = this.options.columns;
 
-        baselineColumns = this.options.columns;
-        _.each( pGridExtensions.move, function(extension) {
+        _.each( pGridExtensions.orderedFields, function(extension) {
+            if ( _.has(extension, "nextSibling") ) {
 
-            validJSON = true;
-            removedColumn = _.find(baselineColumns, function(column){
-                return extension.name == column.name;
-            });
-            if ( !removedColumn ) {
-                thisGridInstance.log("JSON item not found in page");
-                validJSON = false;
-            }
-
-            if ( extension.nextSibling ) {
-                targetColumn = _.find(baselineColumns, function(column){
-                    return extension.nextSibling == column.name;
+                validJSON = true;
+                removedColumn = _.find(baselineColumns, function(column){
+                    return extension.name == column.name;
                 });
-                if ( !targetColumn ) {
+                if ( !removedColumn ) {
                     thisGridInstance.log("JSON item not found in page");
                     validJSON = false;
                 }
-            } else {
-                targetColumn = null;
-            }
 
-            if ( validJSON ) {
-
-                index = _.indexOf(baselineColumns, removedColumn);
-                baselineColumns.splice(index,1);
-
-                if ( !targetColumn ) {
-                    index = baselineColumns.length;
+                if ( extension.nextSibling ) {
+                    targetColumn = _.find(baselineColumns, function(column){
+                        return extension.nextSibling == column.name;
+                    });
+                    if ( !targetColumn ) {
+                        thisGridInstance.log("JSON item not found in page");
+                        validJSON = false;
+                    }
                 } else {
-                    index = _.indexOf(baselineColumns, targetColumn);
+                    targetColumn = null;
                 }
-                baselineColumns.splice(index,0,removedColumn);
+
+                if ( validJSON ) {
+
+                    index = _.indexOf(baselineColumns, removedColumn);
+                    baselineColumns.splice(index,1);
+
+                    if ( !targetColumn ) {
+                        index = baselineColumns.length;
+                    } else {
+                        index = _.indexOf(baselineColumns, targetColumn);
+                    }
+                    baselineColumns.splice(index,0,removedColumn);
+                }
             }
         })
     },
@@ -724,24 +720,26 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
       },
 
-/***************************************************************************************************
+    /***************************************************************************************************
+    Replace any baseline column attributes from this grid instance as specified by extensibility information
+    ***************************************************************************************************/
+    replaceColumnAttributes: function( pGridExtensions ) {
+        var thisGrid = this;
 
-       Replace any baseline column attributes from this grid instance as specified by extensibility information
+        _.each( pGridExtensions.fields, function(field) {
 
-       ***************************************************************************************************/
-      replaceColumnAttributes: function( pGridExtensions ) {
-          var thisGrid = this;
-          if (pGridExtensions.replace) {
-              _.each(pGridExtensions.replace, function(replaceColumn) {
-                  var baselineColumn = _.findWhere(thisGrid.options.columns,{name: replaceColumn.name});
-                  if (baselineColumn) {
-                      if (replaceColumn.label) {
-                          baselineColumn.title = xe.i18n(replaceColumn.label);
-                      }
-                  }
-              });
-          }
-      },
+            var baselineColumn = _.findWhere(thisGrid.options.columns,{name: field.name});
+            if (baselineColumn) {
+
+               if ( field.attributes ) {
+                   if (_.has(field.attributes, "label") ) {
+                       baselineColumn.title = xe.i18n(field.attributes.label);
+                   }
+               }
+
+            }
+        })
+    },
 
 
       setupKeyTable: function () {
