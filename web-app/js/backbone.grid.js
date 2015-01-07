@@ -71,6 +71,12 @@ var dirtyCheckDefault = {
         var dirty = false;
         this.log("dirty check - isDirty: " + dirty);
         return dirty;
+    },
+    log: function () {
+        if ( _.isBoolean( window.debug ) && window.debug == true ) {
+            var args = Array.prototype.concat.apply( ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): "], arguments);
+            console.log( args );
+        }
     }
 };
 
