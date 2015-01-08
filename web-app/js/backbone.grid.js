@@ -74,7 +74,7 @@ var dirtyCheckDefault = {
     },
     log: function () {
         if ( _.isBoolean( window.debug ) && window.debug == true ) {
-            var args = Array.prototype.concat.apply( ["backbone.grid ( " +  this.$el.attr( "id" ) + " ): "], arguments);
+            var args = Array.prototype.concat.apply( ["dirtyCheckDefault : "], arguments);
             console.log( args );
         }
     }
