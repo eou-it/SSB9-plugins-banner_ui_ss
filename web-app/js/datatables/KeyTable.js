@@ -716,17 +716,22 @@ function KeyTable ( oInit )
     function _fnClick ( e )
     {
         var nTarget = this;
+        var prevTarget;
+        if(!_iOldX && !_iOldY)  {
+            prevTarget = _fnCellFromCoords(_iDefaultX,_iDefaultY);
+        } else {
+            prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
+        }
+        jQuery(prevTarget).removeAttr('tabindex');
         while ( nTarget.nodeName != "TD" )
         {
             nTarget = nTarget.parentNode;
         }
-        var actionableComponentExists = $(_ACTIONABLE_COMPONENTS_CONSTANT, nTarget).length;
-        actionableComponentExists?_fnSetActionableColumnsToEnabledColumns():_fnSetFocusableColumnsToEnabledColumns();
-        _fnSetFocus( nTarget );
         _fnCaptureKeys();
-    }
-
-
+        isActionableComponentExists(nTarget)?_fnSetActionableColumnsToEnabledColumns():_fnSetFocusableColumnsToEnabledColumns();
+        _fnSetFocus( nTarget );
+        nTarget.focus();
+     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Key events
@@ -949,11 +954,12 @@ function KeyTable ( oInit )
         switch( action )
         {
             case _Action.ACTION:
-                _fnRemoveTabIndexToFormObjs();
                 nTarget = _fnCellFromCoords(_iOldX,_iOldY);
-                jQuery(nTarget).attr('tabindex','0');
                 nTarget.focus();
-                _fnEventFire( "action", _iOldX, _iOldY );
+                if(isActionableComponentExists())   {
+                    _fnEventFire( "action", _iOldX, _iOldY );
+                }
+                jQuery(nTarget).attr('tabindex','0');
                 return true;
             case _Action.ESCAPE:
                 if ( !_fnEventFire( "esc", _iOldX, _iOldY ) )
@@ -962,7 +968,7 @@ function KeyTable ( oInit )
                     _fnEventFire("blur",_iOldX,_iOldY);
                 }
                 _fnSetFocusableColumnsToEnabledColumns();
-                _fnAddTabIndexToFormObjs();
+
                 nTarget = _fnCellFromCoords(_iOldX,_iOldY);
                 nTarget.focus();
                 return true;
@@ -1062,6 +1068,11 @@ function KeyTable ( oInit )
         });
     }
 
+    function isActionableComponentExists(nTarget){
+        var actionableComponentExists = $(_ACTIONABLE_COMPONENTS_CONSTANT, nTarget).length;
+        return (actionableComponentExists? true: false);
+    }
+
     /*
      * Function: _fnKey
      * Purpose:  Deal with a key events, be it moving the focus or return etc.
@@ -1070,7 +1081,6 @@ function KeyTable ( oInit )
      */
     function _fnKey ( e )
     {
-
         if ( e.keytable_done || (e.originalEvent && e.originalEvent.keytable_done)) {
             return false; // this event has already been handled
         }
@@ -1183,10 +1193,13 @@ function KeyTable ( oInit )
     function _fnSetActionableColumnsToEnabledColumns(){
         _that.block = true;
         _fnSetEnabledColumns(_columnsActionableMode);
+        _fnRemoveTabIndexToFormObjs();
     }
 
     function _fnSetFocusableColumnsToEnabledColumns(){
+        _that.block = false;
         _fnSetEnabledColumns(_columnsNavigationMode);
+        _fnAddTabIndexToFormObjs();
     }
 
     function _fnSetEnabledColumns(enableColumns)   {
@@ -1433,7 +1446,6 @@ function KeyTable ( oInit )
     function _fnSetGridNavigationMode(){
         _fnCaptureKeys();
         _fnSetFocusableColumnsToEnabledColumns();
-        _fnAddTabIndexToFormObjs();
         _fnSetFocus(_fnCellFromCoords(_iOldX,_iOldY));
     }
 
