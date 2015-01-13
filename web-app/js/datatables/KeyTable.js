@@ -682,9 +682,11 @@ function KeyTable ( oInit )
     function _fnBlur()
     {
         _fnRemoveFocus( _nOldFocus );
+        _fnAddTabIndexToFormObjs();
         // remember old X,Y for when we get focus again, but clear out old element
         _fnReleaseKeys();
         jQuery(_nOldFocus).attr('tabindex', '0');
+        _nOldFocus = null;
     }
 
 
@@ -1592,8 +1594,7 @@ function KeyTable ( oInit )
 
         $("td").focus(function(){
             if(_bKeyCapture == false)   {
-                _bKeyCapture = true;
-                _nOldFocus = null;
+                _fnCaptureKeys();
                 _fnSetFocus(_fnCellFromCoords(_iOldX,_iOldY));
             }
          });
