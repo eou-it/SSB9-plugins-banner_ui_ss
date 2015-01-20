@@ -216,14 +216,17 @@
                     collection.goToPage(page);
                 }
             }
-            if($.browser.msie) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
             return;
 
         });
 
+        input.on("keypress",function(e){
+            if(e.keyCode == 13){
+                $(input).trigger('blur');
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
         input.focus(function(e) {
             $.data(this, 'initial', this.value);
         });
