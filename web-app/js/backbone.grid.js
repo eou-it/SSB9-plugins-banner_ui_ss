@@ -735,6 +735,9 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
                    if (_.has(field.attributes, "label") ) {
                        baselineColumn.title = xe.i18n(field.attributes.label);
                    }
+                   if (_.has(field.attributes, "placeholder") ) {
+                       baselineColumn.placeholder = xe.i18n(field.attributes.placeholder);
+                   }
                }
 
             }
@@ -1030,7 +1033,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
                 td = $( view.elements.td );
 
             if ( _.isFunction( col.render ) )
-              td.append( col.render.call( this, it ) );
+              td.append( col.render.call( this, it, col ) );
             else {
               td.text( view.resolveProperty( it, col.name ) || view.defaults.display );
             }
@@ -1113,7 +1116,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
                   view.editMode( false );
                   $( 'form', this ).submit();
                 },
-                placeholder: ""
+                placeholder: column.placeholder
               };
 
           if ( _.isBoolean( column.editable ) && column.editable )
@@ -1178,7 +1181,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
               td = $( view.elements.td );
 
           if ( _.isFunction( col.render ) )
-            td.append( col.render.call( this, it ) );
+            td.append( col.render.call( this, it, col ) );
           else {
             td.text( it[ col.name ] || view.defaults.display );
           }
