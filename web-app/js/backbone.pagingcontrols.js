@@ -5,6 +5,7 @@
     pageLengths: [5, 50, 250, 500],
     dirtyCheckDefault: null,
 
+
     defaults: {
       pageLengths: [5, 50, 250, 500]
     },
@@ -56,9 +57,9 @@
       div:    "<div></div>",
       span:   "<span></span>",
       pageLabel:  "<div><label></label></div>",
-      text:   "<input type='text' id='page1'></input>",
+      text:   "<input type='text'></input>",
       sizeLabel:  "<label></label>",
-      select: "<select id='size1'></select>",
+      select: "<select ></select>",
       option: "<option></option>"
     },
     strings: {
@@ -188,28 +189,75 @@
             view.gotoLastPage(e);
         });
 
-        if($.browser.msie) {
-            input.on("change",function (e) {
-                e.preventDefault();
-                view.gotoSpecificPage(e);
-            });
-        } else {
-            input.on("change",function (e) {
-                view.gotoSpecificPage(e);
-            });
+        function resetPageNumberInput() {
+            var target = input;
+            if (target.data().initial) {
+                target.val(target.data().initial);
+            }
+            return;
         }
+
+        input.on("change", function(e) {
+            if (typeof(this.collection) != 'undefined') {
+                var userEnteredPage = $(this).data().entered
+
+                if (userEnteredPage == "" || userEnteredPage.match(/[^0-9]/)) {
+                    resetPageNumberInput();
+                    return;
+                }
+
+                var page = parseInt($(this).data().entered, 10);
+                var collection = this.collection;
+                var info = collection.pageInfo();
+
+                if (page < 1 || page > info.pages) {
+                    resetPageNumberInput();
+                } else {
+                    collection.goToPage(page);
+                }
+            }
+            if($.browser.msie) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            return;
+
+        });
+
+        input.focus(function(e) {
+            $.data(this, 'initial', this.value);
+        });
+
+        input.dirtyCheck( _.defaults({
+                eventType: "change",
+                cancelCallback: resetPageNumberInput
+            }, this.dirtyCheckDefault)
+        );
+
+        select.focus(function(e) {
+            $.data( this, 'initial', this.value );
+        });
 
         select.on("change",function (e) {
             view.selectPageSize(e);
         });
 
+        function resetPageSize() {
+            var target = select;
+            if (target.data().initial) {
+                target.val(target.data().initial);
+            }
+            return;
+        }
+
         first.dirtyCheck(this.dirtyCheckDefault);
         next.dirtyCheck(this.dirtyCheckDefault);
         prev.dirtyCheck(this.dirtyCheckDefault);
         last.dirtyCheck(this.dirtyCheckDefault);
-        input.dirtyCheck(_.defaults({eventType: "change"}, this.dirtyCheckDefault));
-        select.dirtyCheck(_.defaults({eventType:"change"},this.dirtyCheckDefault));
-      view.pageActions.push(first, prev, input, next, last, select);
+        select.dirtyCheck(_.defaults({eventType:"change",
+            cancelCallback: resetPageSize},
+            this.dirtyCheckDefault));
+        view.pageActions.push(first, prev, input, next, last, select);
     },
     getPagesActions: function(){
         return this.pageActions;
