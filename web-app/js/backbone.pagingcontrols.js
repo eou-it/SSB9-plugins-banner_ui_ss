@@ -148,7 +148,7 @@
 
         if ( it == pageInfo.pageMaxSize ) {
             option.attr( "selected", "selected" );
-            select.screenReaderLabel( $.i18n.prop('backbone.paging.controls.count.per.page', [it]));
+            select.attr("aria-label", $.i18n.prop('backbone.paging.controls.count.per.page', [it]));
         }
 
         select.append( option );
