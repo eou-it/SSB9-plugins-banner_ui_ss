@@ -198,22 +198,24 @@
         }
 
         input.on("change", function(e) {
-            if (typeof(this.collection) != 'undefined') {
-                var userEnteredPage = $(this).data().entered
+            if (typeof(view.collection) != 'undefined') {
+                var target = input;
+                $.data(input, 'entered', $(input).val());
+                var userEnteredPage = $(input).val()
 
                 if (userEnteredPage == "" || userEnteredPage.match(/[^0-9]/)) {
                     resetPageNumberInput();
                     return;
                 }
 
-                var page = parseInt($(this).data().entered, 10);
-                var collection = this.collection;
+                var page = parseInt(target.data().entered, 10);
+                var collection = view.collection;
                 var info = collection.pageInfo();
 
                 if (page < 1 || page > info.pages) {
                     resetPageNumberInput();
                 } else {
-                    collection.goToPage(page);
+                    view.gotoSpecificPage(e);
                 }
             }
             return;
