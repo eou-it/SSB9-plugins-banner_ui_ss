@@ -1,8 +1,9 @@
 /* Copyright 2013-2014 Ellucian Company L.P. and its affiliates. */
 
 ;(function ( $, _, Backbone ) {
-  Backbone.PagingControls = Backbone.View.extend({
+    Backbone.PagingControls = Backbone.View.extend({
     pageLengths: [5, 50, 250, 500],
+    dirtyCheckDefault: null,
 
     defaults: {
       pageLengths: [5, 50, 250, 500]
@@ -10,7 +11,7 @@
 
     initialize: function () {
       var view = this;
-
+      this.dirtyCheckDefault = this.options.dirtyCheckDefault;
       if ( _.isArray( this.options.pageLengths ) ) {
         var validPageLengths = _.all( this.options.pageLengths, function ( it ) {
           return _.isNumber( it ) && it > 0;
@@ -24,14 +25,14 @@
         view.render();
       });
     },
-    events: {
-      "change .page-size-select":               "selectPageSize",
-      "click .paging-control.first.enabled":    "gotoFirstPage",
-      "click .paging-control.last.enabled":     "gotoLastPage",
-      "click .paging-control.previous.enabled": "gotoPreviousPage",
-      "click .paging-control.next.enabled":     "gotoNextPage",
-      "change .page-number.enabled":            "gotoSpecificPage"
-    },
+//    events: {
+//      "change .page-size-select":               "selectPageSize",
+//      "click .paging-control.first.enabled":    "gotoFirstPage",
+//      "click .paging-control.last.enabled":     "gotoLastPage",
+//      "click .paging-control.previous.enabled": "gotoPreviousPage",
+//      "click .paging-control.next.enabled":     "gotoNextPage",
+//      "change .page-number.enabled":            "gotoSpecificPage"
+//    },
     css: {
       pagingContainer:       "paging-container",
       enabled:               "enabled",
@@ -116,7 +117,7 @@
     },
     render: function () {
       this.$el.empty();
-
+      this.pageActions = [];
       var dir = $( "meta[name=dir]" ).attr( "content" );
       dir = ( dir === void 0 || dir === "ltr" ? "ltr" : "rtl" );
 
@@ -173,6 +174,45 @@
 	_.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap], function (it) {
         view.$el.append( it );
       });
+
+        first.on("click",function (e) {
+            view.gotoFirstPage(e);
+        });
+        next.on("click",function (e) {
+            view.gotoNextPage(e);
+        });
+        prev.on("click",function (e) {
+            view.gotoPreviousPage(e);
+        });
+        last.on("click",function (e) {
+            view.gotoLastPage(e);
+        });
+
+        if($.browser.msie) {
+            input.on("change",function (e) {
+                e.preventDefault();
+                view.gotoSpecificPage(e);
+            });
+        } else {
+            input.on("change",function (e) {
+                view.gotoSpecificPage(e);
+            });
+        }
+
+        select.on("change",function (e) {
+            view.selectPageSize(e);
+        });
+
+        first.dirtyCheck(this.dirtyCheckDefault);
+        next.dirtyCheck(this.dirtyCheckDefault);
+        prev.dirtyCheck(this.dirtyCheckDefault);
+        last.dirtyCheck(this.dirtyCheckDefault);
+        input.dirtyCheck(_.defaults({eventType: "change"}, this.dirtyCheckDefault));
+        select.dirtyCheck(_.defaults({eventType:"change"},this.dirtyCheckDefault));
+      view.pageActions.push(first, prev, input, next, last, select);
+    },
+    getPagesActions: function(){
+        return this.pageActions;
     }
   });
 }).call (this, $, _, Backbone);

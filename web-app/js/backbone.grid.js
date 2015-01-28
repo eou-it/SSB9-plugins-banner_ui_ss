@@ -1,4 +1,6 @@
-/* Copyright 2013 Ellucian Company L.P. and its affiliates. */
+/*********************************************************************************
+ Copyright 2012-2014 Ellucian Company L.P. and its affiliates.
+ **********************************************************************************/
 
 /*
 var column = {
@@ -46,6 +48,37 @@ var data = {
 */
 var direction = $('meta[name=dir]').attr('content');
 direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
+var dirtyCheckTargets = [];
+
+var dirtyCheckDefault = {
+
+    save: function (options) {
+        var callback = options.callback;
+        var saveOptions = {
+            success: function () {
+                this.log("dirty check - success callback");
+                /* Let the save animation complete before firing callback. */
+                setTimeout(function(){callback()}, 500);
+            }
+        };
+    },
+    no: function (options) {
+        var callback = options.callback;
+        this.log("dirty check - no callback");
+        callback();
+    },
+    isDirty: function (options) {
+        var dirty = false;
+        this.log("dirty check - isDirty: " + dirty);
+        return dirty;
+    },
+    log: function () {
+        if ( _.isBoolean( window.debug ) && window.debug == true ) {
+            var args = Array.prototype.concat.apply( ["dirtyCheckDefault : "], arguments);
+            console.log( args );
+        }
+    }
+};
 
 ;(function ( $, _, Backbone, JSON, AjaxManager ) {
   window.Storage = {
@@ -145,10 +178,11 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       gridFrozenWrapper:      "grid-frozen-wrapper",
       gridScrollX:            "grid-scroll-x",
       selected:               "selected",
-      hover:                  "hover",
+      hover:                  "add-row-hover",
       header:                 "header",
       bottom:                 "bottom",
       columnVisibilityMenu:   "column-visibility-menu",
+      visibilityControlColumn:"visibility-control-column",
       title:                  "title",
       gridWithoutTitle:       "grid-without-title",
       totalRecords:           "total-records",
@@ -170,6 +204,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       notificationSuccess:    "notification-success",
       notificationWarning:    "notification-warning",
       notificationError:      "notification-error",
+      componentError:         "component-error",
       pagingText:             "paging-text",
       pagingContainer:        "paging-container"
     },
@@ -249,9 +284,9 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           editControls = $('a, area, button, input, object, select, textarea', cell).filter(':not([tabindex])').filter(':visible'),
           target = tabs.add( editControls ).first();
 
-      if ( target.length || _.contains( this.enabledColumns, $(cell).index())) {
-        this.editMode(true);
-        target.focus();
+      if ( target.length)   {
+            this.editMode(true);
+            target.focus();
       }
     },
 
@@ -475,6 +510,11 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       if ( this.frozenColumns.length > 0 )
         this.features.freeze = true;
 
+      if (!_.isUndefined(this.options.dirtyCheckDefault ) )  {
+            this.dirtyCheckDefault = this.options.dirtyCheckDefault;
+      } else {
+          this.dirtyCheckDefault = dirtyCheckDefault;
+      }
 
       if ( _.isArray( this.options.pageLengths ) ) {
         var validPageLengths = _.all( this.options.pageLengths, function ( it ) {
@@ -744,8 +784,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         })
     },
 
+    setupKeyTable: function () {
 
-      setupKeyTable: function () {
       this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
 
       if ( window.KeyTable ) {
@@ -754,13 +794,18 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           this.keyTable = null;
         }
 
-        this.log( "setupKeyTable enabledColumns: ", this.enabledColumns );
-        var view = this,
-            keyTable = this.keyTable = new KeyTable( { table: this.table[0],
-                                        enabledColumns: this.enabledColumns } );
+          var node = $(".page-number")[0];
+          this.log( "setupKeyTable enabledColumns: ", this.enabledColumns );
+
+          var view = this,
+              keyTable = this.keyTable = new KeyTable( { table: this.table[0],
+                    form: false, tabindex:0 } );
+
         keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
-          // trigger the click action on the contained element, if any, or the td itself
-          $(':first-child', cell).add(cell).first().click();
+            // trigger the click action on the contained element, if any, or the td itself
+            var temp = $(':first-child',cell)
+            temp = temp.length? temp.first():cell;
+            temp.click();
         });
 
         keyTable.event['blur']( null, null, function actionBlurCell( cell, x, y ) {
@@ -768,7 +813,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
             var focus = $(':focus');
             view.log( 'blurring cell: ', cell, 'to', focus, ' edit mode was: ', (view.keyTable && view.keyTable.block) );
             if ( $.contains( cell, focus[0] )) {
-              focus.blur();
+                focus.blur();
             }
             view.editMode( false );
           }
@@ -806,6 +851,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.columnVisibilityControls = new Backbone.ButtonMenu({
           el:         this.$el.find( "." + this.css.columnVisibilityMenu ),
           container:  this.getMenuContainer(),
+          gridWrapper: this.$el,
           items:      map,
           callback:   toggleColumnVisibility,
           buttonIcon: "grid-button-menu-icon"
@@ -852,7 +898,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
        });
       return found || "";
      },
-
     render: function () {
       var view = this;
 
@@ -889,6 +934,8 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       this.draggableColumns();
 
       window.ResizableColumns( this.table );
+
+      this.addDirtyCheckFor(view.sortElements, this.dirtyCheckDefault);
 
       if ( _.isFunction( this.options.afterRender ) )
         this.options.afterRender.call( this );
@@ -1070,12 +1117,20 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
       if ( _.isFunction( this.options.afterRefresh ) )
           this.options.afterRefresh.call( this );
+
+      this.generateColumnVisibilityMenuColumn();
     },
+
+     generateColumnVisibilityMenuColumn: function(){
+        if ( this.features.visibility ) {
+          var tableCell = $(this.elements.td).addClass(this.css.visibilityControlColumn);
+          this.table.find('tbody tr').append(tableCell);
+        }
+     },
 
     toggleTableChrome: function( visible ) {
       this.table.find('thead').toggle( visible );
       this.$el.find( "." + this.css.bottom ).toggle( visible );
-      this.columnVisibilityControls && this.columnVisibilityControls.$el.toggle( visible );
 
       if ( visible ) {
         this.generatePagingControls();
@@ -1298,7 +1353,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       var view  = this,
           thead = $( this.elements.thead ),
           tr    = $( this.elements.tr );
-
+      this.sortElements = [];
       _.each( columns, function ( it ) {
         if ( _.isBoolean( it.visible ) && !it.visible )
           return;
@@ -1338,11 +1393,38 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
           th.css( "width", it.width );
 
         tr.append( th );
+        view.sortElements.push(th);
       });
 
       thead.append ( tr );
       table.append ( thead );
+
+      this.generateColumnControlMenuHeader(table);
     },
+
+    generateColumnControlMenuHeader:function(table){
+      if ( this.features.visibility ) {
+          var tr = table.find('tr');
+          var lastColumnHead = tr.find('th').last();
+          var columnVisibilityMenuExists = lastColumnHead.children().hasClass(this.css.columnVisibilityMenu);
+
+          if(columnVisibilityMenuExists == false){
+              var tableHeaderHeight = tr.height();
+
+              var columnVisibilityMenu =  $(this.elements.div)
+                  .addClass(this.css.columnVisibilityMenu)
+                  .attr('tabindex',0)
+                  .height(tableHeaderHeight);
+
+              var columnVisibilityMenuHeader = $(this.elements.th)
+                  .append(columnVisibilityMenu)
+                  .attr( "data-sort-direction", "disabled" )
+                  .addClass(this.css.sortDisabled + " " + this.css.visibilityControlColumn);
+
+              tr.append(columnVisibilityMenuHeader);
+          }
+      }
+     },
 
     generateHead: function () {
       this._generateHead( this.table, this.columns );
@@ -1364,7 +1446,12 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         $( th ).attr( "data-sort-direction", ( prop == view.collection.sortColumn ) ? view.collection.sortDirection : view.strings.none );
       });
     },
-
+    getSortElements: function () {
+          return this.sortElements;
+      },
+    getPageActions: function () {
+          return pagingActions;
+      },
     getDataAsJson: function () {
       return this.collection.toJSON();
     },
@@ -1397,10 +1484,6 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
       }
 
       gridWrapper.after(  $( this.elements.div ).addClass( this.css.bottom + " " + this.css.uiWidgetHeader ) );
-
-      if ( this.features.visibility ) {
-        this.$el.append( $( this.elements.div ).addClass( this.css.columnVisibilityMenu ) );
-      }
     },
 
     updateRecordCount: function () {
@@ -1415,11 +1498,12 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
 
     removePagingControls: function() {
       this.$el.find( "." + this.css.pagingContainer ).remove();
+      pagingActions = [];
     },
 
     generatePagingControls: function () {
       this.removePagingControls();
-
+      pagingActions =[];
       if ( this.collection.paginate ) {
         var paging = $( this.elements.div ).addClass( this.css.pagingContainer );
 
@@ -1428,8 +1512,12 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
         var pagingControls = new Backbone.PagingControls({
           el:          paging,
           collection:  this.collection,
-          pageLengths: this.pageLengths
-        }).render();
+          pageLengths: this.pageLengths,
+          dirtyCheckDefault: this.dirtyCheckDefault
+        });
+      pagingControls.render();
+      pagingActions = pagingControls.getPagesActions();
+      this.log("Paging Actions  : " + pagingActions);
       }
     },
 
@@ -1474,23 +1562,74 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
     notificationAdded: function( notification ) {
       var model = this.getModelFromNotification( notification );
 
-      if ( model )
-        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).stop( true, true ).addClass( this.getStyleForNotificationType( notification ) );
+      if ( model ){
+          var notificationComponents = this.getNotificationComponents(notification, model);
+          var notificationStyle = this.getStyleForNotificationType( notification );
+          this.addNotificationStyle(notificationComponents,notificationStyle);
+          var inputElement = notificationComponents.inputElement;
+          if(inputElement.length > 0){
+              window.notifications.get(notification).attributes.component = inputElement;
+              inputElement.addClass(this.css.componentError);
+          }
+      }
     },
-
 
     notificationRemoved: function( notification ) {
       var model = this.getModelFromNotification( notification );
 
-      if ( model )
-        this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).removeClass( this.getStyleForNotificationType( notification ), 1000 );
+      if ( model ) {
+           var notificationComponents = this.getNotificationComponents(notification, model);
+           var notificationStyle = this.getStyleForNotificationType( notification );
+           this.removeNotificationStyle(notificationComponents,notificationStyle);
+      }
+    },
+
+    addNotificationStyle: function(notificationComponents,notificationStyle){
+        for (var component in notificationComponents) {
+            notificationComponents[component].addClass(notificationStyle);
+        }
+    },
+
+    removeNotificationStyle: function(notificationComponents,notificationStyle){
+        for (var component in notificationComponents) {
+            notificationComponents[component].removeClass(notificationStyle);
+        }
+
+        if(notificationComponents.tableRow.find("."+this.css.notificationError).length > 0){
+            notificationComponents.tableRow.addClass(this.css.notificationError);
+        }
+    },
+
+    getNotificationComponents: function (notification,model) {
+        var tableRow = this.$el.find( "tr[data-id=" + model.get( "id" ) + "]" ).stop( true, true );
+        var columnName = notification.attributes.attribute;
+        var tableCell = tableRow.find("td[data-property=" + columnName + "]");
+        var inputElement = tableCell.find(':input');
+        var notificationComponents = {"inputElement":inputElement,"tableCell":tableCell,"tableRow":tableRow};
+        return notificationComponents;
     },
 
     hideSpinner: function(target) {
       $(".grid-container").loading(false);
       $(".body-content").loading(false);
       this.recalcTitleWidths();
-    }
-  });
+    },
+    addDirtyCheckFor: function (target, dirtyCheckDefaults) {
 
+          var targetExistsInDom = ($(target).size() > 0);
+          var targetIndex = dirtyCheckTargets.indexOf(target);
+          var targetExistsInTracker = targetIndex > -1;
+
+          // If the element does not exist in dom and is present in tracker, remove it.
+          if(targetExistsInTracker && !targetExistsInDom) {
+              dirtyCheckTargets.splice(targetIndex, 1);
+          }
+
+          // add a dirty check only if the element exists in dom and is not already being tracked.
+          if(targetExistsInDom && !targetExistsInTracker) {
+              dirtyCheckTargets.push(target);
+              $(target).dirtyCheck(dirtyCheckDefaults);
+          }
+      }
+  });
 }).call (this, $, _, Backbone, JSON, AjaxManager );

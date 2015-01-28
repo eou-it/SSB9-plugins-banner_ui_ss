@@ -37,6 +37,10 @@ $(document).ready(function() {
     });
 
     window.Notifications = Backbone.Collection.extend({
+        initialize: function () {
+           this.bind('add', this.addComponentErrorStyle, this);
+           this.bind('remove', this.removeComponentErrorStyle, this);
+        },
         model: Notification,
         addNotification: function( notification ) {
             var foundNotification = this.find( function(n) {
@@ -48,7 +52,6 @@ $(document).ready(function() {
             }
             else {
                 this.add( notification );
-
                 // If the notification gets orphaned remove it from the collection.
                 if (notification.has( "model" ) && notification.get( "model" )) {
                     var model = notification.get( "model" );
@@ -116,9 +119,12 @@ $(document).ready(function() {
                 }
             }
             else {
+                _.each(this.models,function(model){
+                    notifications.removeComponentErrorStyle(model);
+                });
                 // Remove all models
                 this.reset();
-            }
+                }
         },
         addNotificationsFromModel: function(model) {
             if (model) {
@@ -147,7 +153,7 @@ $(document).ready(function() {
                                 });
 
                                 _.each( associatedNotifications, function( n ) {
-                                     n.get( "flash" ) || notifications.remove( n );
+                                    n.get( "flash" ) || notifications.remove( n );
                                 });
                             }, this );
                         }, this);
@@ -274,6 +280,25 @@ $(document).ready(function() {
             });
 
             return groupedModels;
+        },
+        addComponentErrorStyle: function( notification ) {
+            var errorComponent = this.getNotificationComponent(notification);
+            if(!_.isUndefined(errorComponent)){
+                $(errorComponent).addClass("component-error");
+            }
+        },
+        removeComponentErrorStyle: function( notification ) {
+            var errorComponent = this.getNotificationComponent(notification);
+            if(!_.isUndefined(errorComponent)){
+                $(errorComponent).removeClass("component-error");
+            }
+        },
+        getNotificationComponent: function( notification ){
+            var notificationType = notification.get("type");
+            if (notificationType == "error") {
+                var errorComponent = notification.attributes.component;
+            }
+            return errorComponent;
         }
     });
 
@@ -305,7 +330,19 @@ $(document).ready(function() {
 
             $(this.el).addClass( notificationClass );
 
-            var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html( $("<span></span>" ).append( this.model.get("message" ) ) );
+            var messageLink = $("<span></span>") ;
+
+            var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html( messageLink.append( this.model.get("message" ) ) );
+
+            var view = this;
+
+            var component = this.model.get("component");
+            if(component){
+                messageLink.addClass('notification-message');
+                messageLink.on('click', function(){
+                    view.navigateToErrorComponent(view.model);
+                });
+            }
 
             // Manage the prompts if available
             var promptsDiv;
@@ -338,6 +375,15 @@ $(document).ready(function() {
             if (this.model === notification) {
                 $(this.el).fadeOut( 1000 ).remove();
             }
+        },
+        navigateToErrorComponent: function(model) {
+            var component = model.attributes.component;
+            if(component){
+                if(model.attributes.componentType == "select2"){
+                    component = component.find('.select2-focusser');
+                }
+                component.focus();
+            }
         }
     });
 
@@ -354,8 +400,8 @@ $(document).ready(function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
 
             $(this.el).append(
-              $('<div class="notification-center-count"><span/></div>' )
-                .screenReaderLabel($.i18n.prop("js.notification.label"))
+                $('<div class="notification-center-count"><span/></div>' )
+                    .screenReaderLabel($.i18n.prop("js.notification.label"))
             ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
 
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
@@ -452,7 +498,7 @@ $(document).ready(function() {
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle',
-                      'clickOutsideToClose' );
+                'clickOutsideToClose' );
             this.model.bind("add", this.addNotification);
             this.model.bind("remove", this.removeNotification);
         },

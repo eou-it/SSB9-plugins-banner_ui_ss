@@ -1,11 +1,15 @@
+/*******************************************************************************
+ Copyright 2012-2014 Ellucian Company L.P. and its affiliates.
+*******************************************************************************/
+
 .grid {
     margin: 0 auto;
     width: 100%;
     float: left;
     clear: none;
-    border-collapse: collapse;
     table-layout: fixed;
     border-spacing: 0;
+    position: relative;
 }
 
 .grid-container .bottom {
@@ -95,7 +99,7 @@
 }
 
 .grid td.focus {
-  /*background: #e4e4e4;*/
+    background-color:#CCDFE9 !important;
 }
 
 .grid tbody tr td form input {
@@ -137,16 +141,29 @@
     width: 15px;
 }
 
-.column-visibility-menu {
+.grid-main-wrapper .column-visibility-menu{
     position: absolute;
-    right: 0px;
-    left: auto;
-    top: 0px;
+    right: 0px !important;
+    left: auto !important;
+    top: 0px !important;
     z-index: 1101;
     border-left: 1px solid #DDDDDD;
-    background: url('../images/grid_customize.png') no-repeat center center;
+    background: url('../images/grid_customize.png') no-repeat center;
     width: 30px;
-    height: 30px;
+    padding:0px;
+    cursor: pointer;
+}
+
+.grid-main-wrapper .visibility-control-column {
+    position:static;
+    width:1%;
+    border-left: none;
+    border-bottom:none;
+    padding:0px;
+}
+
+.grid-main-wrapper .grid td{
+    border-right:none;
 }
 
 .button-menu-container {
@@ -212,25 +229,35 @@
 }
 
 .grid tr.notification-success {
-    background-color: #DDF4C9;
+    background-color: #DDF4C9 !important;
 }
 
 .grid tr.notification-error {
-    background-color: #EBCFCF;
+    background-color: #EBCFCF !important;
 }
 
 .grid tr.notification-error {
-    background-color: #EBCFCF;
+    background-color: #EBCFCF !important;
 }
 
 .grid tr.notification-warning {
-    background-color: #FFF6B3;
+    background-color: #FFF6B3 !important;
 }
 
 .grid tr.notification-warning {
     border: 1px solid #f9dc87;
-    background-color: #FFF6B3;
+    background-color: #FFF6B3 !important;
 }
+
+.grid tr.notification-error td.notification-error {
+    padding-left:20px;
+    background:url("../images/icon-error-16x16.png") no-repeat left center;
+}
+
+.grid td.notification-warning {
+    border: 1px solid #f9dc87 !important;
+}
+
 
 /* editable component specific integration classes */
 
@@ -240,4 +267,55 @@
     height: 20px !important;
     margin: 0 -22px 0 0 !important;
     padding: 0 0 0 0 !important;
+}
+
+
+.focus-by-row .grid tr.focus {
+    background-color:#CCDFE9 !important; /* TODO: !important is required because .grid tr td:first-child is flagged !important. */
+}
+
+.focus-by-cell .grid td.focus {
+    background-color:#CCDFE9 !important; /* TODO: !important is required because .add-row-selected is flagged !important. */
+}
+
+.add-row-hover {
+    background-color: #B2CEDE !important;
+    border: 1px solid #B1CEE0 !important;
+}
+
+.add-row-selected {
+    border: 1px solid #005C96 !important;
+    color: #FFF;
+    background-color: #005C96 !important;
+}
+
+.grid tr td:first-child {
+    padding-left: 10px;
+}
+
+.grid tr.selected {
+    background-color: #FFF !important;
+}
+
+.grid tr.hover {
+    background-color: #FFF;
+}
+
+.grid tr {
+    border-bottom: 1px solid #BBBBBB !important;
+}
+
+.grid tr td {
+    overflow: hidden;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.grid thead th {
+    background-color: #EDF0F4 !important;
+}
+
+.grid thead th .title {
+    text-overflow: clip;
+    white-space: normal;
 }

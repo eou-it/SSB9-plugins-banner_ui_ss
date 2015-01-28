@@ -103,8 +103,9 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/detectmobilebrowser.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/detecttabletbrowser.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
 
-        resource url: [plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
+
     }
 
     'bannerSelfServiceRTL' {

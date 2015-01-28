@@ -142,6 +142,8 @@ function KeyTable ( oInit )
         else
         {
             jQuery('td', _nBody).die( 'click', _fnClick );
+            /* When Grid is part of the form, KeyTable creates hidden input field this needs to be cleaned up on destroy*/
+            jQuery(_sHiddenClass).remove();
         }
     }
 
@@ -150,6 +152,7 @@ function KeyTable ( oInit )
      * Private parameters
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+    var _ACTIONABLE_COMPONENTS_CONSTANT = "a, area, button, input, object, select, textarea";
     /*
      * Variable: _nBody
      * Purpose:  Body node of the table - cached for reference
@@ -181,11 +184,32 @@ function KeyTable ( oInit )
     var _iOldY = null;
 
     /*
-     * Variable: _aEnabledColumns
-     * Purpose:  Column indices that allow focus.  Other columns are skipped. Null = all enabled.
+     * Variable: _enabledColumnsForNavigation
+     * Purpose:  Column indices that allow navigable/editable.
      * Scope:    KeyTable - private
      */
-    var _aEnabledColumns = null;
+    var _enabledColumnsForNavigation = null;
+
+    /*
+     * Variable: _columnsNavigationMode
+     * Purpose:  Column indices that allow focus. All cells in the grid. Other columns are skipped. Null = all enabled.
+     * Scope:    KeyTable - private
+     */
+    var _columnsNavigationMode = null;
+
+    /*
+     * Variable: _columnsActionableMode
+     * Purpose:  Column indices that allow focus.  Only actionable or editable cells.Other columns are skipped. Null = all enabled.
+     * Scope:    KeyTable - private
+     */
+    var _columnsActionableMode = null;
+
+    /*
+     * Variable: _actionablePositionsEveryRow
+     * Purpose:  Column indices that allow focus.  Only actionable or editable cells.Other columns are skipped. Null = all enabled.
+     * Scope:    KeyTable - private
+     */
+    var _actionablePositionsEveryRow = {};
 
     /*
      * Variable: _that
@@ -200,6 +224,12 @@ function KeyTable ( oInit )
      * Scope:    KeyTable - private
      */
     var _sFocusClass = "focus";
+    /*
+     * Variable: sHiddenClass
+     * Purpose:  Class that should be used for Hidden cell created for supporting Form element.
+     * Scope:    KeyTable - private
+     */
+    var _sHiddenClass = "hiddenClass";
 
     /*
      * Variable: _bKeyCapture
@@ -226,8 +256,6 @@ function KeyTable ( oInit )
      * Scope:    KeyTable - private
      */
     var _oDatatable = null;
-
-    var _bForm;
     var _nInput;
     var _bInputFocused = false;
 
@@ -263,8 +291,8 @@ function KeyTable ( oInit )
          */
         return function ( x, y, z ) {
             if ( (x===null || typeof x == "number") &&
-                 (y===null || typeof y == "number") &&
-                 typeof z == "function" )
+                (y===null || typeof y == "number") &&
+                typeof z == "function" )
             {
                 _fnEventAdd( sKey, x, y, z );
             }
@@ -305,7 +333,7 @@ function KeyTable ( oInit )
          */
         return function ( x, y, z ) {
             if ( (x===null || typeof arguments[0] == "number") &&
-                 (y===null || typeof arguments[1] == "number" ) )
+                (y===null || typeof arguments[1] == "number" ) )
             {
                 if ( typeof arguments[2] == "function" )
                 {
@@ -383,8 +411,8 @@ function KeyTable ( oInit )
             if ( typeof fn != 'undefined' )
             {
                 if ( _oaoEvents[sType][i-iCorrector].x == x &&
-                     _oaoEvents[sType][i-iCorrector].y == y &&
-                       _oaoEvents[sType][i-iCorrector].fn == fn )
+                    _oaoEvents[sType][i-iCorrector].y == y &&
+                    _oaoEvents[sType][i-iCorrector].fn == fn )
                 {
                     _oaoEvents[sType].splice( i-iCorrector, 1 );
                     iCorrector++;
@@ -393,7 +421,7 @@ function KeyTable ( oInit )
             else
             {
                 if ( _oaoEvents[sType][i-iCorrector].x == x && // iCorrector not relevant here, because this is only for no fn undefined
-                     _oaoEvents[sType][i-iCorrector].y == y )
+                    _oaoEvents[sType][i-iCorrector].y == y )
                 {
                     _oaoEvents[sType].splice( i, 1 );
                     return 1;
@@ -422,10 +450,10 @@ function KeyTable ( oInit )
         for ( var i=0 ; i<aEvents.length ; i++ )
         {
             if ( (aEvents[i].x == x     && aEvents[i].y == y    ) ||
-                 (aEvents[i].x === null && aEvents[i].y == y    ) ||
-                 (aEvents[i].x == x     && aEvents[i].y === null ) ||
-                 (aEvents[i].x === null && aEvents[i].y === null )
-            )
+                (aEvents[i].x === null && aEvents[i].y == y    ) ||
+                (aEvents[i].x == x     && aEvents[i].y === null ) ||
+                (aEvents[i].x === null && aEvents[i].y === null )
+                )
             {
                 aEvents[i].fn( _fnCellFromCoords(x,y), x, y );
                 iFired++;
@@ -465,13 +493,13 @@ function KeyTable ( oInit )
             var position = _fnCoordsFromCell( nCell );
             var x = position[0];
             var y = position[1];
-            if ( !_aEnabledColumns || -1 != _aEnabledColumns.indexOf(x)) { return foundCell; }
+            if ( !_enabledColumnsForNavigation || -1 != _enabledColumnsForNavigation.indexOf(x)) { return foundCell; }
 
             var iTableWidth = _nBody.getElementsByTagName('tr')[0].getElementsByTagName('td').length;
 
             // ensure x is within enabled columns
-            var min = _aEnabledColumns[0];
-            var max = _aEnabledColumns[_aEnabledColumns.length-1];
+            var min = _enabledColumnsForNavigation[0];
+            var max = _enabledColumnsForNavigation[_enabledColumnsForNavigation.length-1];
             x = x < min ? min : x;
             x = x > max ? max : x;
 
@@ -501,7 +529,7 @@ function KeyTable ( oInit )
         /* Add the new class to highlight the focused cell */
         jQuery(nTarget).addClass( _sFocusClass );
         jQuery(nTarget).parent().addClass( _sFocusClass );
-
+        jQuery(nTarget).attr('tabindex','0');
         /* If it's a DataTable then we need to jump the paging to the relevant page */
         var oSettings;
         if ( _oDatatable )
@@ -542,7 +570,7 @@ function KeyTable ( oInit )
 
                 if ( oSettings._iDisplayStart < 0 )
                 {
-                  oSettings._iDisplayStart = 0;
+                    oSettings._iDisplayStart = 0;
                 }
                 _oDatatable.oApi._fnCalculateEnd( oSettings );
             }
@@ -576,7 +604,7 @@ function KeyTable ( oInit )
              * the positioning calculation
              */
             if ( _oDatatable && typeof oSettings.oScroll != 'undefined' &&
-              (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
+                (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
             {
                 aiPos[1] -= $(oSettings.nTable.parentNode).scrollTop();
                 aiPos[0] -= $(oSettings.nTable.parentNode).scrollLeft();
@@ -609,7 +637,7 @@ function KeyTable ( oInit )
 
         /* Take account of scrolling in DataTables 1.7 */
         if ( _oDatatable && typeof oSettings.oScroll != 'undefined' &&
-          (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
+            (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
         {
             var dtScrollBody = oSettings.nTable.parentNode;
             iViewportHeight = dtScrollBody.clientHeight;
@@ -639,7 +667,6 @@ function KeyTable ( oInit )
                 dtScrollBody.scrollLeft = nTarget.offsetLeft;
             }
         }
-
         /* Fire of the focus event if there is one */
         _fnEventFire( "focus", _iOldX, _iOldY );
     }
@@ -654,10 +681,13 @@ function KeyTable ( oInit )
     function _fnBlur()
     {
         _fnRemoveFocus( _nOldFocus );
+        _fnAddTabIndexToFormObjs();
         // remember old X,Y for when we get focus again, but clear out old element
-        _nOldFocus = null;
         _fnReleaseKeys();
+        jQuery(_nOldFocus).attr('tabindex', '0');
+        _nOldFocus = null;
     }
+
 
 
     /*
@@ -670,6 +700,7 @@ function KeyTable ( oInit )
     {
         jQuery(nTarget).removeClass( _sFocusClass );
         jQuery(nTarget).parent().removeClass( _sFocusClass );
+        jQuery(nTarget).removeAttr('tabindex');
         if ( nTarget !== null ) {
             _fnEventFire( "blur", _iOldX, _iOldY );
         }
@@ -685,16 +716,22 @@ function KeyTable ( oInit )
     function _fnClick ( e )
     {
         var nTarget = this;
+        var prevTarget;
+        if(!_iOldX && !_iOldY)  {
+            prevTarget = _fnCellFromCoords(_iDefaultX,_iDefaultY);
+        } else {
+            prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
+        }
+        jQuery(prevTarget).removeAttr('tabindex');
         while ( nTarget.nodeName != "TD" )
         {
             nTarget = nTarget.parentNode;
         }
-
-        _fnSetFocus( nTarget );
         _fnCaptureKeys();
-    }
-
-
+        isActionableComponentExists(nTarget)?_fnSetActionableColumnsToEnabledColumns():_fnSetFocusableColumnsToEnabledColumns();
+        _fnSetFocus( nTarget );
+        nTarget.focus();
+     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Key events
@@ -720,16 +757,23 @@ function KeyTable ( oInit )
      */
     var _Action =  {
         NO_ACTION: _actionCount++
-,       CHARACTER_ENTRY: _actionCount++ // any plain keystroke
-,       ACTION: _actionCount++ // return
-,       ESCAPE: _actionCount++
-,       LEFT: _actionCount++
-,       UP: _actionCount++
-,       DOWN: _actionCount++
-,       RIGHT: _actionCount++
-,       LEFT: _actionCount++
-,       PREVIOUS_CONTROL: _actionCount++
-,       NEXT_CONTROL: _actionCount++
+        ,       CHARACTER_ENTRY: _actionCount++ // any plain keystroke
+        ,       ACTION: _actionCount++ // return
+        ,       ESCAPE: _actionCount++
+        ,       LEFT: _actionCount++
+        ,       UP: _actionCount++
+        ,       DOWN: _actionCount++
+        ,       RIGHT: _actionCount++
+        ,       LEFT: _actionCount++
+        ,       HOME: _actionCount++
+        ,       END: _actionCount++
+        ,       PAGE_UP: _actionCount++
+        ,       PAGE_DOWN: _actionCount++
+        ,       FULL_ROW_SELECT: _actionCount++
+        ,       BLUR: _actionCount++
+        ,       PREVIOUS_CONTROL: _actionCount++
+        ,       NEXT_CONTROL: _actionCount++
+        ,       SPACE: _actionCount++
     };
     this.Action = _Action;
 
@@ -739,13 +783,18 @@ function KeyTable ( oInit )
      * Scope:    KeyTable - private
      */
     var _KeyCode = {
-        TAB: 9
-,       ENTER: 13
-,       ESC: 27
-,       LEFT_ARROW: 37
-,       UP_ARROW: 38
-,       RIGHT_ARROW: 39
-,       DOWN_ARROW: 40
+                TAB: 9
+        ,       ENTER: 13
+        ,       ESC: 27
+        ,       LEFT_ARROW: 37
+        ,       UP_ARROW: 38
+        ,       RIGHT_ARROW: 39
+        ,       DOWN_ARROW: 40
+        ,       HOME: 36
+        ,       END: 35
+        ,       PAGE_UP: 33
+        ,       PAGE_DOWN: 34
+        ,       SPACE: 32
     };
 
     /*
@@ -755,13 +804,18 @@ function KeyTable ( oInit )
      * Scope:    KeyTable - private
      */
     var _UnmodifiedKeyActions = {};
-    _UnmodifiedKeyActions[_KeyCode.TAB] = _Action.RIGHT;
+    _UnmodifiedKeyActions[_KeyCode.TAB] = _Action.BLUR;
     _UnmodifiedKeyActions[_KeyCode.ENTER] = _Action.ACTION;
     _UnmodifiedKeyActions[_KeyCode.ESC] = _Action.ESCAPE;
     _UnmodifiedKeyActions[_KeyCode.LEFT_ARROW] = _Action.LEFT;
     _UnmodifiedKeyActions[_KeyCode.UP_ARROW] = _Action.UP;
     _UnmodifiedKeyActions[_KeyCode.RIGHT_ARROW] = _Action.RIGHT;
     _UnmodifiedKeyActions[_KeyCode.DOWN_ARROW] = _Action.DOWN;
+    _UnmodifiedKeyActions[_KeyCode.HOME] = _Action.HOME;
+    _UnmodifiedKeyActions[_KeyCode.END] = _Action.END;
+    _UnmodifiedKeyActions[_KeyCode.PAGE_UP] = _Action.PAGE_UP;
+    _UnmodifiedKeyActions[_KeyCode.PAGE_DOWN] = _Action.PAGE_DOWN;
+    _UnmodifiedKeyActions[_KeyCode.SPACE] = _Action.SPACE;
 
     /*
      * Function: _fnGetAction
@@ -785,11 +839,14 @@ function KeyTable ( oInit )
         }
 
         if ( !anyModifier || shiftOnly ) {
-            if ( e.keyCode >= 32 ) return _Action.CHARACTER_ENTRY; //!! this isn't a good test for character entry
+            if ( e.keyCode > 32 ) return _Action.CHARACTER_ENTRY; //!! this isn't a good test for character entry
         }
 
         if ( shiftOnly ) {
-            if ( e.keyCode == _KeyCode.TAB ) return _Action.LEFT;
+            if ( e.keyCode == _KeyCode.TAB )
+                return _Action.PREVIOUS_CONTROL;
+            else if((e.keyCode == _KeyCode.SPACE) ||((navigator.userAgent.toLowerCase().indexOf('firefox')) && (e.charCode == _KeyCode.SPACE)))
+                return _Action.FULL_ROW_SELECT;
         }
 
         if ( altOnly ) {
@@ -811,7 +868,7 @@ function KeyTable ( oInit )
      */
     function _fnMoveFocus(current, focusDirection) {
         var tabindexed = $('[tabindex]');
-        var targets = $('a, area, button, input, object, select, textarea').filter(':not([tabindex])').filter(':visible');
+        var targets = $(_ACTIONABLE_COMPONENTS_CONSTANT).filter(':not([tabindex])').filter(':visible');
 
         // convert to an array of elements, because jQuery would sort in document order
         var all = tabindexed.get().concat( targets.get() );
@@ -828,48 +885,16 @@ function KeyTable ( oInit )
         $(target).focus();
     }
 
-    /*
-     * Function: _fnFocusFormInput
-     * Purpose:  If in a form element, return focus to the 'input' element such that tabbing will
-     *           follow correctly in the browser.
-     * Returns:  bool: - allow browser default action
-     * Inputs:   focusDirection: +1 = next, -1 = previous
-     */
-    function _fnFocusFormInput(focusDirection)
-    {
-        if ( _bForm )
-        {
-            _bInputFocused = true;
-            _nInput.focus();
-            /* This timeout is a little nasty - but IE appears to have some async behaviour for
-             * focus
-             */
-            setTimeout( function(){ _bInputFocused = false; }, 0 );
-            _bKeyCapture = false;
-            _fnBlur();
-            if ( focusDirection ) {
-                _fnMoveFocus( _nInput, focusDirection );
-                return false; // handled the keystroke
-            }
-
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     function _fnFindEnabledColumn( oldX, oldY, direction, width )
     {
         var x = oldX;
         var min = 0;
         var max = width-1;
-        if ( _aEnabledColumns ) {
-            min = _aEnabledColumns[0];
-            max = _aEnabledColumns[_aEnabledColumns.length-1];
+        if ( _enabledColumnsForNavigation ) {
+            min = _enabledColumnsForNavigation[0];
+            max = _enabledColumnsForNavigation[_enabledColumnsForNavigation.length-1];
 
-            while ( -1 == _aEnabledColumns.indexOf(x)) {
+            while ( -1 == _enabledColumnsForNavigation.indexOf(x)) {
                 if ( x < min ) {
                     break;
                 }
@@ -891,86 +916,94 @@ function KeyTable ( oInit )
         return [x,oldY];
     }
 
+
     function _fnAction(action)
     {
         var
-             x, y,
-             iTableWidth = _nBody.getElementsByTagName('tr')[0].getElementsByTagName('td').length,
-             iTableHeight;
+            x, y,
+            iTableWidth = _nBody.getElementsByTagName('tr')[0].getElementsByTagName('td').length,
+            iTableHeight;
 
-         /* Get table height and width - done here so as to be dynamic (if table is updated) */
-         if ( _oDatatable )
-         {
-             /*
-              * Locate the current node in the DataTable overriding the old positions - the reason for
-              * is is that there might have been some DataTables interaction between the last focus and
-              * now
-              */
-             var oSettings = _oDatatable.fnSettings();
-             iTableHeight = oSettings.aiDisplay.length;
+        /* Get table height and width - done here so as to be dynamic (if table is updated) */
+        if ( _oDatatable )
+        {
+            /*
+             * Locate the current node in the DataTable overriding the old positions - the reason for
+             * is is that there might have been some DataTables interaction between the last focus and
+             * now
+             */
+            var oSettings = _oDatatable.fnSettings();
+            iTableHeight = oSettings.aiDisplay.length;
 
-             var aDtPos = _fnFindDtCell( _nOldFocus );
-             if ( aDtPos === null )
-             {
-                 //_log( '_fnKey focused cell cannot be seen: do nothing' );
-                 /* If the table has been updated such that the focused cell can't be seen - do nothing */
-                 return;
-             }
-             _iOldX = aDtPos[ 0 ];
-             _iOldY = aDtPos[ 1 ];
-         }
-         else
-         {
-             iTableHeight = _nBody.getElementsByTagName('tr').length;
-         }
+            var aDtPos = _fnFindDtCell( _nOldFocus );
+            if ( aDtPos === null )
+            {
+                //_log( '_fnKey focused cell cannot be seen: do nothing' );
+                /* If the table has been updated such that the focused cell can't be seen - do nothing */
+                return;
+            }
+            _iOldX = aDtPos[ 0 ];
+            _iOldY = aDtPos[ 1 ];
+        }
+        else
+        {
+            iTableHeight = _nBody.getElementsByTagName('tr').length;
+        }
 
-         _log( ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
-         switch( action )
-         {
-             case _Action.ACTION:
-                 _fnEventFire( "action", _iOldX, _iOldY );
-                 return true;
+        _log( ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
+        switch( action )
+        {
+            case _Action.ACTION:
+                nTarget = _fnCellFromCoords(_iOldX,_iOldY);
+                nTarget.focus();
+                if(isActionableComponentExists())   {
+                    _fnEventFire( "action", _iOldX, _iOldY );
+                }
+                jQuery(nTarget).attr('tabindex','0');
+                return true;
+            case _Action.ESCAPE:
+                if ( !_fnEventFire( "esc", _iOldX, _iOldY ) )
+                {
+                    /* Only lose focus if there isn't an escape handler on the cell */
+                    _fnEventFire("blur",_iOldX,_iOldY);
+                }
+                _fnSetFocusableColumnsToEnabledColumns();
 
-             case _Action.ESCAPE:
-                 if ( !_fnEventFire( "esc", _iOldX, _iOldY ) )
-                 {
-                     /* Only lose focus if there isn't an escape handler on the cell */
-                     _fnBlur();
-                 }
-                 break;
+                nTarget = _fnCellFromCoords(_iOldX,_iOldY);
+                nTarget.focus();
+                return true;
+            case _Action.LEFT:
+                var xy = _fnFindEnabledColumn( _iOldX-1, _iOldY, -1, iTableWidth );
+                x = xy[0];
+                y = xy[1];
+                if ( y < 0 ) {
+                    //!! change in behavior: left arrow will (may?) now move to previous form element
+                    //!! in addition to SHIFT-TAB key
+                    return false;
+                }
+                break;
 
-             case _Action.LEFT:
-                 var xy = _fnFindEnabledColumn( _iOldX-1, _iOldY, -1, iTableWidth );
-                 x = xy[0];
-                 y = xy[1];
-                 if ( y < 0 ) {
-                     //!! change in behavior: left arrow will (may?) now move to previous form element
-                     //!! in addition to SHIFT-TAB key
-                     return _fnFocusFormInput(-1);
-                 }
-                 break;
+            case _Action.UP:
+                if ( _iOldY > 0 ) {
+                    x = _iOldX;
+                    y = _iOldY - 1;
+                } else {
+                    return false;
+                }
+                break;
 
-             case _Action.UP:
-                 if ( _iOldY > 0 ) {
-                     x = _iOldX;
-                     y = _iOldY - 1;
-                 } else {
-                     return false;
-                 }
-                 break;
+            case _Action.RIGHT:
+                var xy = _fnFindEnabledColumn( _iOldX+1, _iOldY, 1, iTableWidth );
+                x = xy[0];
+                y = xy[1];
+                if ( y >= iTableHeight ) {
+                    //!! Change in behavior: right arrow will (may?) now move to next form element,
+                    //!! in addition to TAB key
+                    return false;
+                }
+                break;
 
-             case _Action.RIGHT:
-                 var xy = _fnFindEnabledColumn( _iOldX+1, _iOldY, 1, iTableWidth );
-                 x = xy[0];
-                 y = xy[1];
-                 if ( y >= iTableHeight ) {
-                     //!! Change in behavior: right arrow will (may?) now move to next form element,
-                     //!! in addition to TAB key
-                     return _fnFocusFormInput(+1);
-                 }
-                 break;
-
-             case _Action.DOWN:
+            case _Action.DOWN:
                 if ( _iOldY < iTableHeight-1 ) {
                     x = _iOldX;
                     y = _iOldY + 1;
@@ -979,20 +1012,66 @@ function KeyTable ( oInit )
                 }
                 break;
 
+            case _Action.HOME:
+                x = _enabledColumnsForNavigation[0];
+                y = _iOldY;
+                break;
+            case _Action.END:
+                x = _enabledColumnsForNavigation[_enabledColumnsForNavigation.length-1];
+                y = _iOldY;
+                break;
+            case _Action.PAGE_UP:
+                x = _iOldX;
+                y = 0;
+                break;
+            case _Action.PAGE_DOWN:
+                x = _iOldX;
+                y =  iTableHeight - 1;
+                break;
+            case _Action.FULL_ROW_SELECT:
+                x = _iOldX;
+                y = _iOldY;
+                jQuery('tr',_nBody).filter('.add-row-selected').removeClass('add-row-selected');
+                jQuery('td',_nBody).filter('.add-row-selected').removeClass('add-row-selected');
+                jQuery('tr:eq('+_iOldY+')',_nBody).children("td").addClass("add-row-selected");
+                break;
+            case _Action.BLUR:
             case _Action.PREVIOUS_CONTROL:
-                return _fnFocusFormInput(-1);
-
             case _Action.NEXT_CONTROL:
-                return _fnFocusFormInput(+1);
-
+                _fnBlur();
+                _bKeyCapture = false;
+                return true;
             default: /* Nothing we are interested in */
                 return true;
         }
-
-        _fnSetFocus( _fnCellFromCoords(x, y) );
+        _fnSetFocusableColumnsToEnabledColumns();
+        nTarget = _fnCellFromCoords(x, y)
+        _fnSetFocus( nTarget );
+        nTarget.focus();
         return false;
     }
     this.fnAction = _fnAction;
+
+    function _fnAddTabIndexToFormObjs(){
+        $(_ACTIONABLE_COMPONENTS_CONSTANT, _nBody).each(function() {
+            $(this).each(function(){
+                $(this).attr('tabindex','-1');
+            });
+        });
+    }
+
+    function _fnRemoveTabIndexToFormObjs(){
+        $(_ACTIONABLE_COMPONENTS_CONSTANT, _nBody).each(function() {
+            $(this).each(function(){
+                $(this).removeAttr('tabindex');
+            });
+        });
+    }
+
+    function isActionableComponentExists(nTarget){
+        var actionableComponentExists = $(_ACTIONABLE_COMPONENTS_CONSTANT, nTarget).length;
+        return (actionableComponentExists? true: false);
+    }
 
     /*
      * Function: _fnKey
@@ -1022,18 +1101,29 @@ function KeyTable ( oInit )
                 _that.fnAction( direction );
             }
             switch (e.keyCode) {
-            case _KeyCode.TAB: // make TAB move LEFT (RIGHT with SHIFT)
-                move( e.shiftKey ?
-                      _Action.LEFT :
-                      _Action.RIGHT );
-                //!!breaks onblur?return false;
-                e.stopPropagation();
-                e.preventDefault();
-                break;
-            case _KeyCode.ENTER: // make ENTER move down
-                move( _Action.DOWN );
-                //!!breaks onblur?return false;
-                break;
+                case _KeyCode.TAB: // make TAB move LEFT (RIGHT with SHIFT)
+                    _fnAction(_Action.ESCAPE);
+                    var xy = e.shiftKey?_fnGetPreviousEditablePos():_fnGetNextEditablePos();
+                    _fnSetActionableColumnsToEnabledColumns();
+                    nTarget = _fnCellFromCoords(xy[0], xy[1]);
+                    _fnSetFocus(nTarget);
+                    var temp = $(':first-child', nTarget);
+                    temp = temp.length ? temp[0] : nTarget;
+                    temp.focus();
+                    _that.block = true;
+                    _fnRemoveTabIndexToFormObjs();
+                    e.stopPropagation();
+                    e.preventDefault();
+                    break;
+                case _KeyCode.ENTER: // make ENTER move down
+                    //Commented this behaviour.. as the enter shouldn't do anything in the actionable mode
+                    //as per the W3C guidelines.
+                    // move( _Action.DOWN );
+                    //!!breaks onblur?return false;
+                    break;
+                case _KeyCode.ESC:
+                    _that.fnAction(_Action.ESCAPE);
+                    break;
             }
             return true;
         }
@@ -1052,6 +1142,69 @@ function KeyTable ( oInit )
         return result;
     }
 
+    function _fnGetNextEditablePos(){
+        var arr = _actionablePositionsEveryRow[_iOldY];
+        var arrLen = arr.length;
+        var mapLength = Object.keys(_actionablePositionsEveryRow).length;
+        var x = jQuery.inArray(_iOldX,arr);
+        var y = _iOldY;
+        if(!( x < (arrLen - 1)))  {
+           do {
+                y = y + 1;
+                if(y == mapLength)  {
+                    y = 0;
+                }
+                arr = _actionablePositionsEveryRow[y];
+                arrLen = arr.length;
+                x = arr[0];
+            }   while(arrLen === 0)
+        } else {
+            x = arr[x+1];
+        }
+        _columnsActionableMode = arr;
+        return [x, y];
+    }
+
+    function _fnGetPreviousEditablePos(){
+        var arr = _actionablePositionsEveryRow[_iOldY];
+        var arrLen = arr.length;
+        var mapLength = Object.keys(_actionablePositionsEveryRow).length;
+        var x = jQuery.inArray(_iOldX,arr);
+        var y = _iOldY;
+        if( x === 0)  {
+            do {
+                y = y - 1;
+                if(y < 0)  {
+                    y = mapLength - 1;
+                }
+                arr = _actionablePositionsEveryRow[y];
+                arrLen = arr.length - 1;
+                x = arr[arrLen];
+            }   while(arrLen === 0)
+        } else {
+            x = arr[x - 1];
+        }
+        _columnsActionableMode = arr;
+        return [x, y];
+    }
+
+    //Keytable blur event modifies the edit mode to false. As this is a tab
+    //event the edit mode should continue to be true.
+    function _fnSetActionableColumnsToEnabledColumns(){
+        _that.block = true;
+        _fnSetEnabledColumns(_columnsActionableMode);
+        _fnRemoveTabIndexToFormObjs();
+    }
+
+    function _fnSetFocusableColumnsToEnabledColumns(){
+        _that.block = false;
+        _fnSetEnabledColumns(_columnsNavigationMode);
+        _fnAddTabIndexToFormObjs();
+    }
+
+    function _fnSetEnabledColumns(enableColumns)   {
+        _enabledColumnsForNavigation = enableColumns;
+    }
     /*
      * Function: _fnCaptureKeys
      * Purpose:  Start capturing key events for this table
@@ -1128,7 +1281,7 @@ function KeyTable ( oInit )
             var oSettings = _oDatatable.fnSettings();
             return [
                 jQuery('td', n.parentNode).index(n),
-                jQuery('tr', n.parentNode.parentNode).index(n.parentNode) + oSettings._iDisplayStart
+                    jQuery('tr', n.parentNode.parentNode).index(n.parentNode) + oSettings._iDisplayStart
             ];
         }
         else
@@ -1249,6 +1402,52 @@ function KeyTable ( oInit )
         }
     }
 
+    /*
+     * Function: _fnInitScanForActionableCells
+     * Purpose: Scans for actionable cells in the grid and prepares the navigational path for every row during actionable mode.
+     * Returns: -
+     * Inputs: -
+     */
+    function _fnInitScanForActionableCells(){
+        var tdArray;
+        var trArray = $(_nBody);
+        var editableComponentExists;
+        var trIndex;
+        $('tr',trArray).each(function()	{
+            trIndex = $(this).index();
+            tdArray = new Array();
+            $(_ACTIONABLE_COMPONENTS_CONSTANT, this).each(function() {
+                $(this).each(function(){
+                    tdArray.push($(this).parent().parent().children().index($(this).parent()));
+                });
+            });
+            _actionablePositionsEveryRow[trIndex] = tdArray;
+        });
+    }
+
+    /*
+     * Function: _fnInitFocusableCellsInGrid
+     * Purpose: Scans for grid and prepares the navigational path for every row during navigational mode.
+     * Returns: -
+     * Inputs: -
+     */
+    function _fnInitFocusableCellsInGrid(){
+        if( !_columnsNavigationMode ) {
+            var rows = _nBody.getElementsByTagName('tr');
+            var rowLength = rows.length;
+            var colLength = 0;
+            if(rowLength > 0 ) {
+                colLength = rows[0].getElementsByTagName('td').length;
+                _columnsNavigationMode = Array.apply(null, {length:colLength}).map(Number.call, Number);
+            }
+        }
+    }
+
+    function _fnSetGridNavigationMode(){
+        _fnCaptureKeys();
+        _fnSetFocusableColumnsToEnabledColumns();
+        _fnSetFocus(_fnCellFromCoords(_iOldX,_iOldY));
+    }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Initialisation
@@ -1273,86 +1472,24 @@ function KeyTable ( oInit )
         /* Save scope */
         _that = that;
 
-        /* Capture undefined initialisation and apply the defaults */
-        if ( typeof oInit == 'undefined' ) {
-            oInit = {};
-        }
+        /* Cache the tbody node of interest */
+        _nBody = oInit.table.getElementsByTagName('tbody')[0];
 
-        if ( typeof oInit.focus == 'undefined' ) {
-            oInit.focus = [0,0];
-        }
-
-        if ( typeof oInit.table == 'undefined' ) {
-            oInit.table = jQuery('table.KeyTable')[0];
-        } else {
-            $(oInit.table).addClass('KeyTable');
-        }
-
-        if ( typeof oInit.focusClass != 'undefined' ) {
-            _sFocusClass = oInit.focusClass;
-        }
+        $(oInit.table).addClass('KeyTable');
 
         if ( typeof oInit.datatable != 'undefined' ) {
             _oDatatable = oInit.datatable;
         }
 
-        if ( typeof oInit.enabledColumns != 'undefined' ) {
-            _aEnabledColumns = oInit.enabledColumns;
-            _aEnabledColumns = _aEnabledColumns.length ? _aEnabledColumns : void 0;
-        }
+        _fnInitScanForActionableCells();
 
-        _bRowSelect = oInit.rowselect && true || false;
+        _fnInitFocusableCellsInGrid();
 
-        if ( typeof oInit.form == 'undefined' ) {
-            oInit.form = false;
-        }
-        _bForm = oInit.form;
+        _iDefaultX = 0;
+        _iDefaultY = 0;
 
-        /* Cache the tbody node of interest */
-        _nBody = oInit.table.getElementsByTagName('tbody')[0];
-        if ( oInit.focus.nodeName == undefined ) {
-            _iDefaultX = oInit.focus[0];
-            _iDefaultY = oInit.focus[1];
-            oInit.focus = _fnCellFromCoords( _iDefaultX,  _iDefaultY );
-        }
-
-        /* If the table is inside a form, then we need a hidden input box which can be used by the
-         * browser to catch the browser tabbing for our table
-         */
-        if ( _bForm )
-        {
-            var nDiv = document.createElement('div');
-            _nInput = document.createElement('input');
-            nDiv.style.height = "1px"; /* Opera requires a little something */
-            nDiv.style.width = "0px";
-            nDiv.style.overflow = "hidden";
-            if ( typeof oInit.tabIndex != 'undefined' )
-            {
-                _nInput.tabIndex = oInit.tabIndex;
-            }
-            nDiv.appendChild(_nInput);
-            oInit.table.parentNode.insertBefore( nDiv, oInit.table.nextSibling );
-
-            jQuery(_nInput).focus( function () {
-                /* See if we want to 'tab into' the table or out */
-                if ( !_bInputFocused )
-                {
-                    _fnSetFocus( oInit.focus, oInit.initScroll );
-                    _fnCaptureKeys();
-
-                    /* Need to interrupt the thread for this to work */
-                    setTimeout( function() { _nInput.blur(); }, 0 );
-                }
-            } );
-            // if in a form, don't capture keys until we get a focus event
-            _bKeyCapture = false;
-        }
-        else
-        {
-            /* Set the initial focus on the table */
-            _fnSetFocus( oInit.focus, oInit.initScroll );
-            _fnCaptureKeys();
-        }
+        //set the tabindex to the first cell of the grid
+        jQuery(_fnCellFromCoords(_iDefaultX,_iDefaultY)).attr('tabindex','0');
 
         /*
          * Add event listeners
@@ -1387,9 +1524,16 @@ function KeyTable ( oInit )
             jQuery('td', _nBody).live( 'click', _fnClick );
         }
 
+        $("td").focus(function(){
+            if(_bKeyCapture == false)   {
+                _fnSetGridNavigationMode();
+            }
+         });
         /* Lose table focus when click outside the table */
         jQuery(document).bind('click focus', _fnReleaseFocus );
     }
+
+
 
     this.fnCoordsFromCell = _fnCoordsFromCell; // expose, at least for debugging
 
