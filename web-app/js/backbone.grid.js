@@ -1116,7 +1116,7 @@ direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
                   view.editMode( false );
                   $( 'form', this ).submit();
                 },
-                placeholder: column.placeholder
+                placeholder: column.placeholder && "<span class='xe-placeholder'>"+xe.i18n(column.placeholder)+"</span>"
               };
 
           if ( _.isBoolean( column.editable ) && column.editable )
