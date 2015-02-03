@@ -257,7 +257,14 @@ var dirtyCheckDefault = {
      * to an element outside the cell, call editMode(false), then when finished, call editMode(true)
      */
     editMode: function(flag) {
-      this.keyTable && (this.keyTable.block = flag); // may need a separate flag to indicate explicitly in edit mode
+     // this.keyTable && (this.keyTable.block = flag); // may need a separate flag to indicate explicitly in edit mode
+        if(this.keyTable)   {
+            if(flag)    {
+                this.keyTable.setActionableMode();
+            } else {
+                this.keyTable.setNavigationMode();
+            }
+        }
     },
 
     /**
@@ -615,13 +622,12 @@ var dirtyCheckDefault = {
         });
 
         keyTable.event['blur']( null, null, function actionBlurCell( cell, x, y ) {
-          if ( keyTable.block ) {
+          if ( keyTable.isActionableMode() ) {
             var focus = $(':focus');
-            view.log( 'blurring cell: ', cell, 'to', focus, ' edit mode was: ', (view.keyTable && view.keyTable.block) );
+            view.log( 'blurring cell: ', cell, 'to', focus, ' edit mode was: ', (view.keyTable && view.keyTable.isActionableMode()) );
             if ( $.contains( cell, focus[0] )) {
                 focus.blur();
             }
-            view.editMode( false );
           }
         });
       }
@@ -961,7 +967,7 @@ var dirtyCheckDefault = {
     determineColumnEditability: function ( column, el, data ) {
       var view = this,
           editableSubmitCallback = function ( value, settings ) {
-            view.log( "editableSubmitCallback editMode=", (view.keyTable && view.keyTable.block));
+            view.log( "editableSubmitCallback editMode=", (view.keyTable && view.keyTable.gridCurrentMode));
             view.editMode( false );
             return view.updateData.call( view, $( this ).attr( "data-id" ), $( this ).attr( "data-property" ), value );
           };
@@ -971,7 +977,7 @@ var dirtyCheckDefault = {
               defaults = {
                 height: "none",
                 onblur: function ( val, settings ) {
-                  view.log( "editable onblur, editMode=", (view.keyTable && view.keyTable.block));
+                  view.log( "editable onblur, editMode=", (view.keyTable && view.keyTable.gridCurrentMode));
                   view.editMode( false );
                   $( 'form', this ).submit();
                 },
@@ -1002,7 +1008,7 @@ var dirtyCheckDefault = {
 
           if ( !_.isUndefined( options ) ) {
             el.on( 'click.onedit', function( e ) {
-              view.log( "editable click.onedit", (view.keyTable && view.keyTable.block));
+              view.log( "editable click.onedit", (view.keyTable && view.keyTable.gridCurrentMode));
               view.selectCell.call( view, e );
             });
 
