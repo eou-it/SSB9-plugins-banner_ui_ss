@@ -136,23 +136,7 @@ function KeyTable ( oInit )
         }
     };
 
-    /*
-     * Clean up bound events
-     */
-    this.fnDestroy = function() {
-        jQuery(document).unbind( "keypress", _fnKey ).unbind( "keydown", _fnKey )
-            .unbind( "click focus", _fnReleaseFocus );
-        if ( _oDatatable )
-        {
-            jQuery('tbody td', _oDatatable.fnSettings().nTable).die( 'click', _fnClick );
-        }
-        else
-        {
-            jQuery('td', _nBody).die( 'click', _fnClick );
-            /* When Grid is part of the form, KeyTable creates hidden input field this needs to be cleaned up on destroy*/
-            jQuery(_sHiddenClass).remove();
-        }
-    }
+
 
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -163,6 +147,25 @@ function KeyTable ( oInit )
 
     var _ACTIONABLE_COMPONENTS_TO_SET_FOCUS = "input,select, textarea";
 
+    var compFocus = 'td,' +_ACTIONABLE_COMPONENTS_TO_SET_FOCUS;
+
+    /*
+     * Clean up bound events
+    */
+    this.fnDestroy = function() {
+        jQuery(document).unbind( "keypress", _fnKey ).unbind( "keydown", _fnKey )
+            .unbind( "click focus", _fnReleaseFocus );
+        if ( _oDatatable )
+        {
+            jQuery('tbody td', _oDatatable.fnSettings().nTable).die( 'click', _fnClick );
+        }
+        else
+        {
+            jQuery(compFocus, _nBody).die( 'click focus', _fnClick );
+            /* When Grid is part of the form, KeyTable creates hidden input field this needs to be cleaned up on destroy*/
+            jQuery(_sHiddenClass).remove();
+        }
+    }
 
     /*
      * Variable: _nBody
@@ -728,17 +731,14 @@ function KeyTable ( oInit )
      function _fnClick ( e ) {
          var nTarget = this;
          var prevTarget;
-         if (_fnCheckTargetExistsInGrid(e.target))  {
-                 if (_that.isOutOfFocusMode()) {
-                     prevTarget = _fnCellFromCoords(_iDefaultX, _iDefaultY);
-                 } else {
-                     prevTarget = _fnCellFromCoords(_iOldX, _iOldY);
-                 }
-                 nTarget = _fnGetCellForSelectedComponent(nTarget);
+         prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
+         prevTarget = !prevTarget?_fnCellFromCoords(_iDefaultX,_iDefaultY):prevTarget;
+         if (_fnCheckTargetExistsInGrid(e.target) && prevTarget!=nTarget)  {
                  jQuery(prevTarget).removeAttr('tabindex');
                  nTarget = _fnGetCellForSelectedComponent(nTarget);
                  isActionableComponentExists(nTarget) ? _fnSetGridActionableMode(nTarget, e) : _fnSetGridNavigationMode(nTarget);
-            }
+                 jQuery(nTarget).attr('tabindex','0');
+         }
      }
 
       function _fnGetCellForSelectedComponent(nTarget)  {
@@ -1543,13 +1543,14 @@ function KeyTable ( oInit )
             jQuery(document).bind( "keydown", _fnKey );
         }
 
+
         if ( _oDatatable )
         {
             jQuery('tbody td', _oDatatable.fnSettings().nTable).on( 'click', _fnClick );
         }
         else
         {
-            jQuery('td', _nBody).on('click', _fnClick );
+            jQuery(compFocus, _nBody).on('click focus', _fnClick );
         }
 
         $("td").focus(function(e){
@@ -1558,8 +1559,7 @@ function KeyTable ( oInit )
             }
          });
 
-        jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS).on('focus', _fnClick);
-        /* Lose table focus when click outside the table */
+       /* Lose table focus when click outside the table */
        document.addEventListener('click', _fnReleaseFocus,true );
     }
 
