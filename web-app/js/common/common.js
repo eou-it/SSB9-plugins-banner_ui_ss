@@ -462,20 +462,22 @@ function formatTitleAndShortcut(title, shortcut) {
 }
 
 key = (function(key) {
-    var modifierCode = {
+    key.modifierCode = {
         SHIFT: 1,
         ALT: 2,
         CTRL: 4
         //META: 8 //windows key or command key (mac)
         //MOD: platform-specific, Ctrl on windows/unix or Command on Mac.  See 'mousetrap' library
         };
-    var modifierStrings = {
-        'shift':modifierCode.SHIFT,
-        'alt':modifierCode.ALT,
-        'ctrl':modifierCode.CTRL
+    key.modifierStrings = {
+        'shift':key.modifierCode.SHIFT,
+        'alt':key.modifierCode.ALT,
+        'ctrl':key.modifierCode.CTRL
     };
 
-    var keys = {
+    key.keys = {
+        backspace: 0x08,
+        tab: 0x09,
         'return': 0x0d,
         escape: 0x1b,
         space: 0x20,
@@ -486,7 +488,32 @@ key = (function(key) {
         left: 0x25,
         up: 0x26,
         right: 0x27,
-        down: 0x28
+        down: 0x28,
+        insert: 0x2d,
+        'delete': 0x30,
+        f1: 0x70,
+        f2: 0x71,
+        f3: 0x72,
+        f4: 0x73,
+        f5: 0x74,
+        f6: 0x75,
+        f7: 0x76,
+        f8: 0x77,
+        f9: 0x78,
+        f10: 0x79,
+        f11: 0x7a,
+        f12: 0x7b,
+        '`':0xc0,
+        '-':0xbd,
+        '=':0xbb,
+        '[':0xdb,
+        ']':0xdd,
+        '\\':0xdc,
+        ';': 0xba,
+        '\'': 0xde,
+        ',': 0xbc,
+        '.': 0xbe,
+        '/': 0xbf
     };
 
     key.KeyException = function (message) {
@@ -500,7 +527,7 @@ key = (function(key) {
         words.pop();
 
         _.each( words, function( word ) {
-            var value = modifierStrings[ word.toLowerCase() ];
+            var value = key.modifierStrings[ word.toLowerCase() ];
             if ( value ) {
                 modifiers |= value;
             } else {
@@ -513,7 +540,7 @@ key = (function(key) {
 
     key.parseKey = function( shortcut ) {
         var word = shortcut.split('+').pop(),
-            code = keys[word.toLowerCase()];
+            code = key.keys[word.toLowerCase()];
         if ( !code ) {
             if ( word.length > 1 ) {
                 throw new key.KeyException( "Unknown key name '" + word + "' in shortcut '" + shortcut + "'" );
@@ -535,20 +562,19 @@ key = (function(key) {
 
     key.eventHandler = function( event ) {
         _.each( key.boundKeys, function( boundKey ) {
-            var match = false;
-            if ( boundKey.modifiers ) {
-                if ( (boundKey.modifiers & modifierCode.SHIFT) && !event.shiftKey ) {
-                    return;
-                }
-                if ( (boundKey.modifiers & modifierCode.ALT) && !event.altKey ) {
-                    return;
-                }
-                if ( (boundKey.modifiers & modifierCode.CTRL) && !event.ctrlKey ) {
-                    return;
-                }
-            }
             if ( boundKey.code != event.keyCode ) {
                 return;
+            }
+            if ( boundKey.modifiers ) {
+                if ( (boundKey.modifiers & key.modifierCode.SHIFT) && !event.shiftKey ) {
+                    return;
+                }
+                if ( (boundKey.modifiers & key.modifierCode.ALT) && !event.altKey ) {
+                    return;
+                }
+                if ( (boundKey.modifiers & key.modifierCode.CTRL) && !event.ctrlKey ) {
+                    return;
+                }
             }
             boundKey.handler( event );
         });
@@ -557,17 +583,20 @@ key = (function(key) {
     /**
      * bind shortcut & handler pairs.
      * key.bind( 'shift+home', homeFunction, 'alt+m', menuFunction, ... )
+     *   or
+     * key.bind( ['shift+home', homeFunction, 'alt+m', menuFunction, ...] )
      */
     key.bind = function() {
+        var shortcuts = arguments.length > 1 ? arguments : arguments[0];
         var i = 0;
         if ( !key.boundKeys.length ) {
             // register page-level event handler only once
             $(document).on( 'keyup', key.eventHandler );
         }
 
-        for ( ; i < arguments.length; i += 2 ) {
-            shortcut = arguments[ i ];
-            handler = arguments[ i+1 ];
+        for ( ; i < shortcuts.length; i += 2 ) {
+            shortcut = shortcuts[ i ];
+            handler = shortcuts[ i+1 ];
             key.boundKeys.push( new BoundKey( shortcut, handler ));
         }
     };
