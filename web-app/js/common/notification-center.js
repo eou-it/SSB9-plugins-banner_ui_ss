@@ -1,3 +1,7 @@
+/*********************************************************************************
+ Copyright 2011-2015 Ellucian Company L.P. and its affiliates.
+**********************************************************************************/
+
 $(document).ready(function() {
 
     window.Notification = Backbone.Model.extend({
@@ -123,7 +127,7 @@ $(document).ready(function() {
                     notifications.removeComponentErrorStyle(model);
                 });
                 // Remove all models
-                this.reset();
+                this.remove(this.models);
             }
         },
         addNotificationsFromModel: function(model) {
@@ -383,7 +387,7 @@ $(document).ready(function() {
         navigateToErrorComponent: function(model) {
             var component = model.attributes.component;
             if(component){
-                if(model.attributes.componentType == "select2"){
+                if(model.attributes.componentType == "select2" && !component.hasClass('select2-focusser')){
                     component = component.find('.select2-focusser');
                 }
                 window.notificationCenter.closeNotificationFlyout();
