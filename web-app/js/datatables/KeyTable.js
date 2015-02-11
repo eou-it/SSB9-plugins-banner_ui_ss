@@ -731,7 +731,6 @@ function KeyTable ( oInit )
      * Inputs:   event:e - click event
      */
     function _fnClick ( e ) {
-        console.log(e.target,' here in fnClick   '+ e.type);
         var nTarget = this;
         var prevTarget;
         prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
@@ -740,7 +739,6 @@ function KeyTable ( oInit )
         nTarget = _fnGetCellForSelectedComponent(nTarget);
         isActionableComponentExists(nTarget) ? _fnSetGridActionableMode(nTarget, e) : _fnSetGridNavigationMode(nTarget);
         jQuery(nTarget).attr('tabindex','0');
-        console.log('end in fnClick '+e.type);
     }
 
     function _fnGetCellForSelectedComponent(nTarget)  {
@@ -973,11 +971,9 @@ function KeyTable ( oInit )
         switch( action )
         {
             case _Action.ACTION:
-                console.log('here in Action');
                 if(isActionableComponentExists(nTarget))    {
                     _fnSetGridActionableMode(nTarget,event);
                 }
-                console.log('end in Action');
                 return true;
             case _Action.ESCAPE:
                 if ( !_fnEventFire( "esc", _iOldX, _iOldY ) )
@@ -1416,7 +1412,6 @@ function KeyTable ( oInit )
      * Inputs: -
      */
     function _fnReleaseFocus(e) {
-        console.log('release focus called');
         var nTarget = e.target;
         var bTableClick = false;
         if(_that.isOutOfFocusMode())
@@ -1429,7 +1424,6 @@ function KeyTable ( oInit )
         {
             _fnBlur();
         }
-        console.log('end release focus called');
     }
 
     function _fnCheckTargetExistsInGrid(nTarget){
@@ -1565,12 +1559,10 @@ function KeyTable ( oInit )
         }
 
         $("td").focus(function(e){
-            console.log(e.target,' here in td focus   '+ e.type);
             if(!isFocusOnTheGrid() && _that.isOutOfFocusMode())   {
                 console.log(e.target,' executing td focus   '+ e.type);
                 _fnSetGridNavigationMode();
             }
-            console.log(e.target,'end here in td focus   '+ e.type);
         });
 
         /* Lose table focus when click outside the table */
@@ -1578,23 +1570,18 @@ function KeyTable ( oInit )
     }
 
     function _fnDummyClickEventOnComponent(e){
-        console.log(e.target,' component click called '+ e.type);
         e.stopPropagation();
         e.preventDefault();
     }
 
     function _fnPerformFocusOnComponent(e)  {
-        console.log(' component focus _fnPerformFocusOnComponent   '+ e.type);
         var nTarget = _fnGetCellForSelectedComponent(this);
         var prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
-        console.log(_iOldX,_iOldY,'the value of targetcomparision ',nTarget==prevTarget);
         if (prevTarget!=nTarget)    {
-            console.log(e.target,' component executing _fnPerformFocusOnComponent   '+ e.type);
             _fnSetGridActionableMode(nTarget,e);
             e.stopPropagation();
             e.preventDefault();
         }
-        console.log(' component focus _fnPerformFocusOnComponent end  '+ e.type);
     }
 
     this.fnCoordsFromCell = _fnCoordsFromCell; // expose, at least for debugging
