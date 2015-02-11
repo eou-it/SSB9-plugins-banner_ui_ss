@@ -145,13 +145,11 @@ function KeyTable ( oInit )
 
     var _ACTIONABLE_COMPONENTS_CONSTANT = "a, area, button, input, object, select, textarea";
 
-    var _ACTIONABLE_COMPONENTS_TO_SET_FOCUS = "input,select, textarea";
-
-    var compFocus = 'td,' +_ACTIONABLE_COMPONENTS_TO_SET_FOCUS;
+    var _ACTIONABLE_COMPONENTS_TO_SET_FOCUS = "input, select, textarea";
 
     /*
      * Clean up bound events
-    */
+     */
     this.fnDestroy = function() {
         jQuery(document).unbind( "keypress", _fnKey ).unbind( "keydown", _fnKey )
             .unbind( "click focus", _fnReleaseFocus );
@@ -161,7 +159,9 @@ function KeyTable ( oInit )
         }
         else
         {
-            jQuery(compFocus, _nBody).die( 'click focus', _fnClick );
+            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).die( 'click', _fnDummyClickEventOnComponent);
+            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).die( 'focus', _fnPerformFocusOnComponent );
+            jQuery('td', _nBody).die( 'click', _fnClick);
             /* When Grid is part of the form, KeyTable creates hidden input field this needs to be cleaned up on destroy*/
             jQuery(_sHiddenClass).remove();
         }
@@ -694,6 +694,7 @@ function KeyTable ( oInit )
      */
     function _fnBlur()
     {
+        console.log('start in _fnBlur');
         _fnSetGridOutOfFocusMode();
         _fnRemoveFocus( _nOldFocus );
         _fnAddTabIndexToFormObjs();
@@ -701,6 +702,7 @@ function KeyTable ( oInit )
         _fnReleaseKeys();
         jQuery(_nOldFocus).attr('tabindex', '0');
         _nOldFocus = null;
+        console.log('end in _fnBlur');
     }
 
 
@@ -728,26 +730,26 @@ function KeyTable ( oInit )
      * Returns:  -
      * Inputs:   event:e - click event
      */
-     function _fnClick ( e ) {
-         var nTarget = this;
-         var prevTarget;
-         prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
-         prevTarget = !prevTarget?_fnCellFromCoords(_iDefaultX,_iDefaultY):prevTarget;
-         if (_fnCheckTargetExistsInGrid(e.target) && prevTarget!=nTarget)  {
-                 jQuery(prevTarget).removeAttr('tabindex');
-                 nTarget = _fnGetCellForSelectedComponent(nTarget);
-                 isActionableComponentExists(nTarget) ? _fnSetGridActionableMode(nTarget, e) : _fnSetGridNavigationMode(nTarget);
-                 jQuery(nTarget).attr('tabindex','0');
-         }
-     }
+    function _fnClick ( e ) {
+        console.log(e.target,' here in fnClick   '+ e.type);
+        var nTarget = this;
+        var prevTarget;
+        prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
+        prevTarget = !prevTarget?_fnCellFromCoords(_iDefaultX,_iDefaultY):prevTarget;
+        jQuery(prevTarget).removeAttr('tabindex');
+        nTarget = _fnGetCellForSelectedComponent(nTarget);
+        isActionableComponentExists(nTarget) ? _fnSetGridActionableMode(nTarget, e) : _fnSetGridNavigationMode(nTarget);
+        jQuery(nTarget).attr('tabindex','0');
+        console.log('end in fnClick '+e.type);
+    }
 
-      function _fnGetCellForSelectedComponent(nTarget)  {
+    function _fnGetCellForSelectedComponent(nTarget)  {
         while ( nTarget && nTarget.nodeName != "TD" )
-         {
-             nTarget = nTarget.parentNode;
-         }
+        {
+            nTarget = nTarget.parentNode;
+        }
         return nTarget;
-     }
+    }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      * Key events
@@ -799,7 +801,7 @@ function KeyTable ( oInit )
      * Scope:    KeyTable - private
      */
     var _KeyCode = {
-                TAB: 9
+        TAB: 9
         ,       ENTER: 13
         ,       ESC: 27
         ,       LEFT_ARROW: 37
@@ -933,7 +935,7 @@ function KeyTable ( oInit )
     }
 
 
-    function _fnAction(action)
+    function _fnAction(action,event)
     {
         var
             x, y,
@@ -971,8 +973,11 @@ function KeyTable ( oInit )
         switch( action )
         {
             case _Action.ACTION:
-                 _fnEventFire( "action", _iOldX, _iOldY );
-                jQuery(nTarget).attr('tabindex','0');
+                console.log('here in Action');
+                if(isActionableComponentExists(nTarget))    {
+                    _fnSetGridActionableMode(nTarget,event);
+                }
+                console.log('end in Action');
                 return true;
             case _Action.ESCAPE:
                 if ( !_fnEventFire( "esc", _iOldX, _iOldY ) )
@@ -1107,7 +1112,7 @@ function KeyTable ( oInit )
     }
 
     function _fnSetGridMode(mode)   {
-       _that.gridCurrentMode = mode;
+        _that.gridCurrentMode = mode;
     }
 
 
@@ -1118,7 +1123,7 @@ function KeyTable ( oInit )
     }
 
 
-     function isFocusOnTheGrid(){
+    function isFocusOnTheGrid(){
         return _bKeyCapture?true:false;
     }
 
@@ -1131,13 +1136,13 @@ function KeyTable ( oInit )
 
         switch (e.keyCode) {
             case _KeyCode.TAB: // make TAB move LEFT (RIGHT with SHIFT)
-                _fnAction(_Action.ESCAPE);
+                _fnAction(_Action.ESCAPE, e);
                 var xy = e.shiftKey?_fnGetPreviousEditablePos():_fnGetNextEditablePos();
                 var nTarget = _fnCellFromCoords(xy[0], xy[1]);
                 _fnSetGridActionableMode(nTarget,e);
                 break;
             case _KeyCode.ESC:
-                _that.fnAction(_Action.ESCAPE);
+                _that.fnAction(_Action.ESCAPE, e);
                 break;
         }
         return true;
@@ -1153,7 +1158,7 @@ function KeyTable ( oInit )
             e.preventDefault();
             e.stopPropagation();
         }
-        var result = _fnAction(action);
+        var result = _fnAction(action,e);
         return result;
     }
 
@@ -1178,9 +1183,9 @@ function KeyTable ( oInit )
         }
 
         if (_that.isActionableMode()) {
-            return fnPerformActionableMode(e);
+             fnPerformActionableMode(e);
         } else if(_that.isNavigationMode()){
-            return fnPerformNavigationalMode(e);
+             fnPerformNavigationalMode(e);
         }
     }
 
@@ -1191,7 +1196,7 @@ function KeyTable ( oInit )
         var x = jQuery.inArray(_iOldX,arr);
         var y = _iOldY;
         if(!( x < (arrLen - 1)))  {
-           do {
+            do {
                 y = y + 1;
                 if(y == mapLength)  {
                     y = 0;
@@ -1411,8 +1416,11 @@ function KeyTable ( oInit )
      * Inputs: -
      */
     function _fnReleaseFocus(e) {
+        console.log('release focus called');
         var nTarget = e.target;
         var bTableClick = false;
+        if(_that.isOutOfFocusMode())
+            return ;
         if($(nTarget).parents('.keytable-popup').length) bTableClick = true;
         else    {
             bTableClick = _fnCheckTargetExistsInGrid(nTarget);
@@ -1421,6 +1429,7 @@ function KeyTable ( oInit )
         {
             _fnBlur();
         }
+        console.log('end release focus called');
     }
 
     function _fnCheckTargetExistsInGrid(nTarget){
@@ -1448,7 +1457,7 @@ function KeyTable ( oInit )
         var trArray = $(_nBody);
         var editableComponentExists;
         var trIndex;
-        $('tr',trArray).each(function()	{
+        $('tr',trArray).each(function()              {
             trIndex = $(this).index();
             tdArray = new Array();
             $(_ACTIONABLE_COMPONENTS_CONSTANT, this).each(function() {
@@ -1550,17 +1559,42 @@ function KeyTable ( oInit )
         }
         else
         {
-            jQuery(compFocus, _nBody).on('click focus', _fnClick );
+            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).on('focus', _fnPerformFocusOnComponent );
+            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).on('click', _fnDummyClickEventOnComponent);
+            jQuery('td', _nBody).on('click', _fnClick );
         }
 
         $("td").focus(function(e){
-            if(!isFocusOnTheGrid())   {
+            console.log(e.target,' here in td focus   '+ e.type);
+            if(!isFocusOnTheGrid() && _that.isOutOfFocusMode())   {
+                console.log(e.target,' executing td focus   '+ e.type);
                 _fnSetGridNavigationMode();
             }
-         });
+            console.log(e.target,'end here in td focus   '+ e.type);
+        });
 
-       /* Lose table focus when click outside the table */
-       document.addEventListener('click', _fnReleaseFocus,true );
+        /* Lose table focus when click outside the table */
+        document.addEventListener('click', _fnReleaseFocus,true );
+    }
+
+    function _fnDummyClickEventOnComponent(e){
+        console.log(e.target,' component click called '+ e.type);
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
+    function _fnPerformFocusOnComponent(e)  {
+        console.log(' component focus _fnPerformFocusOnComponent   '+ e.type);
+        var nTarget = _fnGetCellForSelectedComponent(this);
+        var prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
+        console.log(_iOldX,_iOldY,'the value of targetcomparision ',nTarget==prevTarget);
+        if (prevTarget!=nTarget)    {
+            console.log(e.target,' component executing _fnPerformFocusOnComponent   '+ e.type);
+            _fnSetGridActionableMode(nTarget,e);
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        console.log(' component focus _fnPerformFocusOnComponent end  '+ e.type);
     }
 
     this.fnCoordsFromCell = _fnCoordsFromCell; // expose, at least for debugging
