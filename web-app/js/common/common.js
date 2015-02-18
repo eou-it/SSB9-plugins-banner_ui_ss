@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 //IE fix to support indexOf method on Array objects
 Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
@@ -574,3 +574,21 @@ key = (function(key) {
 
     return key;
 })(window.key || {});
+
+function getNextTabbableElement( currentElement , container) {
+    var tabbableElements = getTabbableElements(container);
+    var currentIndex = tabbableElements.index(currentElement);
+    var nextTabbableElement = tabbableElements.eq(currentIndex + 1);
+    return nextTabbableElement;
+}
+
+function getPreviousTabbableElement( currentElement , container) {
+    var tabbableElements = getTabbableElements(container);
+    var currentIndex = tabbableElements.index(currentElement);
+    var previousTabbableElement = tabbableElements.eq(currentIndex - 1);
+    return previousTabbableElement;
+}
+
+function getTabbableElements(container){
+    return  _.isUndefined(container) ?  $(":tabbable") : container.find(":tabbable");
+}

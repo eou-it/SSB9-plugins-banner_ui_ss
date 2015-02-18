@@ -1087,6 +1087,7 @@ function KeyTable ( oInit )
         nTarget = !nTarget?_fnCellFromCoords(_iDefaultX,_iDefaultY):nTarget;
         _fnAddTabIndexToFormObjs();
         _fnSetFocusToCell(nTarget);
+        window.componentToFocusOnFlyoutClose = $(nTarget);
     }
 
     function _fnSetGridActionableMode(nTarget, e){
@@ -1097,6 +1098,7 @@ function KeyTable ( oInit )
         var temp = $(':first-child', nTarget);
         temp = temp.length ? temp[0] : nTarget;
         temp.focus();
+        window.componentToFocusOnFlyoutClose = $(temp);
         e.stopPropagation();
         e.preventDefault();
     }
@@ -1122,6 +1124,12 @@ function KeyTable ( oInit )
         return _bKeyCapture?true:false;
     }
 
+    function _checkIfNotificationExists(){
+        if(window.notificationCenter.notificationCenterFlyout.isDisplayed()){
+            window.notificationCenter.openNotificationFlyout();
+            _fnBlur();
+        }
+    }
 
 
 
@@ -1135,9 +1143,11 @@ function KeyTable ( oInit )
                 var xy = e.shiftKey?_fnGetPreviousEditablePos():_fnGetNextEditablePos();
                 var nTarget = _fnCellFromCoords(xy[0], xy[1]);
                 _fnSetGridActionableMode(nTarget,e);
+                _checkIfNotificationExists();
                 break;
             case _KeyCode.ESC:
                 _that.fnAction(_Action.ESCAPE, e);
+                _checkIfNotificationExists();
                 break;
         }
         return true;
@@ -1153,7 +1163,7 @@ function KeyTable ( oInit )
             e.preventDefault();
             e.stopPropagation();
         }
-       return _fnAction(action,e);
+        return _fnAction(action,e);
     }
 
     /*
@@ -1181,7 +1191,7 @@ function KeyTable ( oInit )
         } else if(_that.isNavigationMode()){
             result = fnPerformNavigationalMode(e);
         }
-       return result;
+        return result;
     }
 
     function _fnGetNextEditablePos(){
@@ -1521,29 +1531,7 @@ function KeyTable ( oInit )
         //set the tabindex to the first cell of the grid
         jQuery(_fnCellFromCoords(_iDefaultX,_iDefaultY)).attr('tabindex','0');
 
-        /*
-         * Add event listeners
-         * Well - I hate myself for doing this, but it would appear that key events in browsers are
-         * a complete mess, particulay when you consider arrow keys, which of course are one of the
-         * main areas of interest here. So basically for arrow keys, there is no keypress event in
-         * Safari and IE, while there is in Firefox and Opera. But Firefox and Opera don't repeat the
-         * keydown event for an arrow key. OUCH. See the following two articles for more:
-         *   http://www.quirksmode.org/dom/events/keys.html
-         *   https://lists.webkit.org/pipermail/webkit-dev/2007-December/002992.html
-         *   http://unixpapa.com/js/key.html
-         * PPK considers the IE / Safari method correct (good enough for me!) so we (urgh) detect
-         * Mozilla and Opera and apply keypress for them, while everything else gets keydown. If
-         * Mozilla or Opera change their implemention in future, this will need to be updated...
-         * although at the time of writing (14th March 2009) Minefield still uses the 3.0 behaviour.
-         */
-        if ( jQuery.browser.mozilla || jQuery.browser.opera )
-        {
-            jQuery(document).bind( "keypress", _fnKey );
-        }
-        else
-        {
-            jQuery(document).bind( "keydown", _fnKey );
-        }
+        jQuery(document).bind( "keydown", _fnKey );
 
 
         if ( _oDatatable )

@@ -1,6 +1,6 @@
 /*********************************************************************************
  Copyright 2011-2015 Ellucian Company L.P. and its affiliates.
-**********************************************************************************/
+ **********************************************************************************/
 
 $(document).ready(function() {
 
@@ -518,75 +518,74 @@ $(document).ready(function() {
             var self  = this;
             $(this.el).addClass("notification-center");
 
-            $(this.el).append( '<div class="notification-center-flyout"><ul role="alert"/></div>' );
+            $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
 
             $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
-            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle',
-                'clickOutsideToClose','pressEscToClose');
+            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','addNotificationOverlay','checkAndCloseFlyout');
             this.model.bind("add", this.addNotification);
             this.model.bind("remove", this.removeNotification);
+
+            document.addEventListener('mouseup',this.setComponentToFocusOnFlyoutClose,true);
+            document.addEventListener('keydown',this.setComponentToFocusOnFlyoutClose,true);
         },
         render: function() {
             return this;
         },
         addNotification: function(notification) {
-            this.toggle(true);
+            this.recreateNotificationOverlay();
+            this.openNotificationFlyout();
             this.configNotificationShim();
-
             return this;
         },
         removeNotification: function(notification) {
             if (this.model.length == 0) {
-                this.toggle(false);
+                this.closeNotificationFlyout();
+                this.removeNotificationOverlay();
             }
 
             this.configNotificationShim();
 
             return this;
         },
-        toggle: function(arg1) {
-            var showOrHide = _.isBoolean(arg1) ? arg1 : false;
-            if (showOrHide == false && this.notificationCenterAnchor.isDisplayed()) {
+        toggle: function() {
+            if (this.notificationCenterFlyout.isDisplayed()) {
                 this.closeNotificationFlyout();
-                window.lastFocusedElement.focus();
+                window.componentToFocusOnFlyoutClose.focus();
             }
-            else if (this.model.length > 0) {
-                if(!this.notificationCenterAnchor.isDisplayed() && !this.notificationCenterFlyout.isDisplayed()){
+            else {
+                if(this.model.length > 0){
                     this.openNotificationFlyout();
                 }
+                else{
+                    this.notificationCenterAnchor.$el.focus();
+                }
             }
-            else{
-                this.notificationCenterAnchor.$el.focus();
-            }
+
             return this;
         },
         openNotificationFlyout: function () {
-            window.lastFocusedElement = $(document.activeElement);
             this.notificationCenterAnchor.display();
             this.notificationCenterFlyout.display();
+            this.addNotificationOverlay();
             this.$('.notification-flyout-item:first').focus();
-            document.addEventListener('click', this.clickOutsideToClose , true );
-            $("body").on("keydown", this.pressEscToClose);
+            $('.notification-center-flyout')[0].addEventListener('keydown', this.pressEscToClose , true );
         },
         closeNotificationFlyout: function () {
             this.notificationCenterAnchor.hide();
             this.notificationCenterFlyout.hide();
-            document.removeEventListener('click',  this.clickOutsideToClose, true );
-            $("body").off("keydown", this.pressEscToClose);
-        },
-        clickOutsideToClose: function(e) {
-            var outside = $(e.target).closest(".notification-center").length == 0;
-            if (outside) {
-                this.closeNotificationFlyout();
-            }
+            this.removeClickListenerOnNotificationOverlay();
+            $('.notification-center-flyout')[0].removeEventListener('keydown',  this.pressEscToClose, true );
         },
         pressEscToClose: function(e) {
             if(e.keyCode == $.ui.keyCode.ESCAPE){
                 this.closeNotificationFlyout();
-                window.lastFocusedElement.focus();
+                if($('body .notification-center-shim').length == 0) {
+                    window.componentToFocusOnFlyoutClose.focus();
+                }
+                e.stopImmediatePropagation();
             }
         },
         configNotificationShim: function() {
@@ -606,6 +605,50 @@ $(document).ready(function() {
             else {
                 $(".notification-center-shim", target).remove();
             }
+        },
+        removeClickListenerOnNotificationOverlay: function(){
+            if($('#notification-center-div').length > 0) {
+                $('#notification-center-div')[0].removeEventListener('mousedown',this.checkAndCloseFlyout,true);
+            }
+        },
+        removeNotificationOverlay: function(){
+            if($('#notification-center-div').length > 0) {
+                $('#notification-center-div').children().unwrap();
+            }
+        },
+        addNotificationOverlay: function(){
+            if($('#notification-center-div').length == 0) {
+                var overlay = $('<div id="notification-center-div"></div>');
+                var elementsToBeWrapped = $('body').children().not('script');
+                elementsToBeWrapped.wrapAll(overlay);
+            }
+
+            $('#notification-center-div')[0].addEventListener('mousedown',this.checkAndCloseFlyout,true);
+        },
+        checkAndCloseFlyout: function(event){
+            if($(event.target).closest('.notification-center').length == 0){
+                this.closeNotificationFlyout();
+            }
+        },
+        setComponentToFocusOnFlyoutClose: function(e) {
+            if(e.type == "keydown"){
+                if ($(e.target).closest('.notification-center').length == 0) {
+                    if (e.keyCode == $.ui.keyCode.TAB && e.shiftKey) {
+                        window.componentToFocusOnFlyoutClose = getPreviousTabbableElement(e.target);
+                    }
+                    else if (e.keyCode == $.ui.keyCode.TAB && !e.shiftKey) {
+                        window.componentToFocusOnFlyoutClose = getNextTabbableElement(e.target);
+                    }
+                }
+            }
+            else{
+                window.componentToFocusOnFlyoutClose = $(e.target);
+            }
+        },
+        recreateNotificationOverlay: function(){
+            this.removeClickListenerOnNotificationOverlay();
+            this.removeNotificationOverlay();
+            this.addNotificationOverlay();
         }
     });
 
