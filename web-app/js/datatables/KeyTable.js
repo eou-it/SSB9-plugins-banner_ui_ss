@@ -1088,6 +1088,7 @@ function KeyTable ( oInit )
         _fnAddTabIndexToFormObjs();
         _fnSetFocusToCell(nTarget);
         window.componentToFocusOnFlyoutClose = $(nTarget);
+        nTarget.focus();
     }
 
     function _fnSetGridActionableMode(nTarget, e){
@@ -1119,10 +1120,6 @@ function KeyTable ( oInit )
         _fnApplyUIChangesForFocus(nTarget);
     }
 
-
-    function isFocusOnTheGrid(){
-        return _bKeyCapture?true:false;
-    }
 
     function _checkIfNotificationExists(){
         if(window.notificationCenter.notificationCenterFlyout.isDisplayed()){
@@ -1177,15 +1174,15 @@ function KeyTable ( oInit )
         if ( e.keytable_done || (e.originalEvent && e.originalEvent.keytable_done)) {
             return false; // this event has already been handled
         }
-        if (!_bKeyCapture ) // focus is not on this KeyTable
-        {
+        if (_that.isOutOfFocusMode()) // focus is not on this KeyTable
+   	{
             return true;
         }
         if (!$(':visible', _nBody).length) {
             //_log( "Not visible for #" + $(_nBody).closest('[id]').attr('id'));
             return true;
         }
-        var result;
+        var result = true;
         if (_that.isActionableMode()) {
             result = fnPerformActionableMode(e);
         } else if(_that.isNavigationMode()){
@@ -1435,6 +1432,7 @@ function KeyTable ( oInit )
         }
     }
 
+
     function _fnCheckTargetExistsInGrid(nTarget){
         var bTableClick = false;
         while ( nTarget )
@@ -1546,16 +1544,18 @@ function KeyTable ( oInit )
         }
 
         $("td").focus(function(e){
-            if(!isFocusOnTheGrid() && _that.isOutOfFocusMode())   {
-                _fnSetGridNavigationMode();
-            }
+           if(_that.isOutOfFocusMode())  {
+                _fnSetGridNavigationMode(e.target);
+		    }
         });
 
         /* Lose table focus when click outside the table */
-        document.addEventListener('click', _fnReleaseFocus,true );
-    }
+         document.addEventListener('click', _fnReleaseFocus,true );
+         document.addEventListener('focusout',_fnReleaseFocus, true);
+	}
 
-    function _fnClickListenerPlaceHolder(e){
+
+     function _fnClickListenerPlaceHolder(e){
         e.stopPropagation();
         e.preventDefault();
     }
