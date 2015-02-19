@@ -737,6 +737,7 @@ function KeyTable ( oInit )
         nTarget = _fnGetCellForSelectedComponent(nTarget);
         isActionableComponentExists(nTarget) ? _fnSetGridActionableMode(nTarget, e) : _fnSetGridNavigationMode(nTarget);
         jQuery(nTarget).attr('tabindex','0');
+        _checkIfNotificationExists();
     }
 
     function _fnGetCellForSelectedComponent(nTarget)  {
