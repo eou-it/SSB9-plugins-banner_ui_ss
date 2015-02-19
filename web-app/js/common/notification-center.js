@@ -528,7 +528,7 @@ $(document).ready(function() {
             this.model.bind("add", this.addNotification);
             this.model.bind("remove", this.removeNotification);
 
-            document.addEventListener('mouseup',this.setComponentToFocusOnFlyoutClose,true);
+            document.addEventListener('mousedown',this.setComponentToFocusOnFlyoutClose,true);
             document.addEventListener('keydown',this.setComponentToFocusOnFlyoutClose,true);
         },
         render: function() {
