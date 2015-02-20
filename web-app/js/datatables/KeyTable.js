@@ -1560,9 +1560,21 @@ function KeyTable ( oInit )
 
         /* Lose table focus when click outside the table */
         document.addEventListener('click', _fnReleaseFocus,true );
-        document.addEventListener('focusout',_fnReleaseFocus, true);
+        document.addEventListener('focusout', _fnReleaseFocusForShortCutKeys,true);
+
     }
 
+    function _fnReleaseFocusForShortCutKeys(e) {
+        var nTarget = e.target;
+        var bTableClick = false;
+        if(_that.isOutOfFocusMode())
+            return ;
+        bTableClick = _fnCheckTargetExistsInGrid(nTarget);
+        if ( bTableClick )
+        {
+            _fnBlur();
+        }
+    }
 
     function _fnClickListenerPlaceHolder(e){
         e.stopPropagation();
