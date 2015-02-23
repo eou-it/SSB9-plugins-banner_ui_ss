@@ -62,6 +62,7 @@
                 _.defer( function() {
                     $( "#splash" ).remove();
                 });
+                $(document.body).removeAttr("role");
             });
         </r:script>
 

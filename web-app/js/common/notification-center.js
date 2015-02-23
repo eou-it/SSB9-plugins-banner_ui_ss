@@ -320,6 +320,12 @@ $(document).ready(function() {
             var notificationType = this.model.get("type");
             var notificationClass = "notification-center-message-error";
 
+            var ariaNotificationItemText = $.i18n.prop("js.notification.flashmessage");
+
+            if (!this.model.get("flash")) {
+                ariaNotificationItemText=$.i18n.prop("js.notification.messageinfo", [this.options.notificationIdx,this.options.notificatioLength,this.model.get("type")]);
+            }
+
             switch (notificationType) {
                 case "error":
                     notificationClass = "notification-center-message-error";
@@ -346,6 +352,8 @@ $(document).ready(function() {
                     }
                 });
             }
+            var ariaNotificationItemTextElement = "<b class='offscreen' id='ariaNotificationCountText'>"+ariaNotificationItemText+"</b>";
+            $(messageContainer).prepend(ariaNotificationItemTextElement);
 
             messageContainer.addClass('notification-flyout-item');
 
@@ -430,7 +438,7 @@ $(document).ready(function() {
             else {
                 $(".notification-center-count", this.el).addClass( "notification-center-count-nil");
             }
-
+            $(".notification-center-count", this.el).attr('aria-label', displayedNotifications.length );
             $(".notification-center-count span", this.el).html( displayedNotifications.length );
             return this;
         },
@@ -456,28 +464,49 @@ $(document).ready(function() {
         initialize: function() {
             $(this.el).addClass( "notification-center-flyout" ).addClass( "notification-center-flyout-hidden" );
 
-            _.bindAll(this, "render", "isDisplayed", "display", "hide" );
+            _.bindAll(this, "render", "isDisplayed", "display", "hide","addAriaDescription" );
             this.model.bind("all", this.render);
         },
         render: function() {
             $("ul", this.el).empty();
+            var notificationIdx = 0;
+            var notificationCollection = this.model.grouped();
+            //In case of flash messages aria description regarding shortcuts is not required
+            if (!(notificationCollection.length == 1 && notificationCollection[0].get("flash"))) {
+                this.addAriaDescription(notificationCollection.length);
+            }
 
-            _.each(this.model.grouped(), function(notification) {
-                var view = new NotificationView( {model:notification} );
+            _.each(notificationCollection, function(notification) {
+                notificationIdx+=1;
+                var view = new NotificationView( {model:notification, notificationIdx:notificationIdx, notificatioLength:notificationCollection.length} );
                 $("ul", this.el).append( view.render().el );
             }, this);
 
-            if($("ul>li", this.el).find('.notification-item-prompts').length ){
-                $("ul", this.el).attr('role','alertdialog');
-            }
-            else{
-                $("ul", this.el).attr('role','alert');
-            }
             this.$('.notification-flyout-item:first').focus();
             return this;
         },
         isDisplayed: function() {
             return $(this.el).hasClass( "notification-center-flyout-displayed" );
+        },
+        addAriaDescription: function(count) {
+            if ($(this.el).children('#notificationCenterAriaInfo').length == 0 ) {
+                //First time notification info.
+                var notificationCenterAriaInfo = "<p tabindex='-1' class='offscreen' role='alert'  id='notificationCenterAriaInfo'>";
+                notificationCenterAriaInfo +=$.i18n.prop("js.notification.countlabel",[count]);
+                notificationCenterAriaInfo += $.i18n.prop("js.notification.help");
+                notificationCenterAriaInfo +="</p>";
+                $(this.el).prepend(notificationCenterAriaInfo);
+                $(this.el).attr('aria-describedby','notificationCenterAriaInfo');
+            } else {
+                //Further time notification info.
+                $(this.el).children('#notificationCenterCountAriaInfo').remove();
+                var notificationCenterCountAriaInfo = "<p tabindex='-1' class='offscreen' role='alert'  id='notificationCenterCountAriaInfo'>";
+                notificationCenterCountAriaInfo +=$.i18n.prop("js.notification.countlabel",[count]);
+                notificationCenterCountAriaInfo +="</p>";
+                $(this.el).prepend(notificationCenterCountAriaInfo);
+                $(this.el).attr('aria-describedby','notificationCenterCountAriaInfo');
+            }
+
         },
         display: function() {
             $(this.el).addClass( "notification-center-flyout-displayed" ).removeClass( "notification-center-flyout-hidden" );
