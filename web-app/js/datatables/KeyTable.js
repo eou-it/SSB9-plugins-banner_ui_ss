@@ -147,12 +147,14 @@ function KeyTable ( oInit )
 
     var _ACTIONABLE_COMPONENTS_TO_SET_FOCUS = "input, select, textarea";
 
+    var isGridKeyNavigationOperator;
     /*
      * Clean up bound events
      */
     this.fnDestroy = function() {
-        jQuery(document).unbind( "keypress", _fnKey ).unbind( "keydown", _fnKey )
-            .unbind( "click focus", _fnReleaseFocus );
+        jQuery(document).unbind( "click", _fnReleaseFocus );
+        jQuery(oInit.table).on( "keydown",_fnKey);
+        document.removeEventListener('click',_fnReleaseFocus);
         if ( _oDatatable )
         {
             jQuery('tbody td', _oDatatable.fnSettings().nTable).die( 'click', _fnClick );
@@ -163,6 +165,7 @@ function KeyTable ( oInit )
             jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).die( 'focus', _fnPerformFocusOnComponent );
             jQuery('td', _nBody).die( 'click', _fnClick);
             jQuery('td', _nBody).off('mousedown', _setComponentToFocusOnFlyoutClose );
+            jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).off('blur',_fnReleaseFocusForShortCutKeys);
             /* When Grid is part of the form, KeyTable creates hidden input field this needs to be cleaned up on destroy*/
             jQuery(_sHiddenClass).remove();
         }
@@ -702,6 +705,7 @@ function KeyTable ( oInit )
         _fnReleaseKeys();
         jQuery(_nOldFocus).attr('tabindex', '0');
         _nOldFocus = null;
+        isGridKeyNavigationOperator = false;
     }
 
 
@@ -974,6 +978,7 @@ function KeyTable ( oInit )
 
         _log( ' _fnKey action=' + action + ' ' + iTableWidth + '/' + iTableHeight );
         nTarget = _fnCellFromCoords(_iOldX,_iOldY);
+        isGridKeyNavigationOperator = true;
         switch( action )
         {
             case _Action.ACTION:
@@ -1144,14 +1149,16 @@ function KeyTable ( oInit )
 
         switch (e.keyCode) {
             case _KeyCode.TAB: // make TAB move LEFT (RIGHT with SHIFT)
+                isGridKeyNavigationOperator = true;
                 _fnAction(_Action.ESCAPE, e);
                 var xy = e.shiftKey?_fnGetPreviousEditablePos():_fnGetNextEditablePos();
                 var nTarget = _fnCellFromCoords(xy[0], xy[1]);
                 _fnSetGridActionableMode(nTarget,e);
-                _checkIfNotificationExists();
+                 _checkIfNotificationExists();
                 break;
             case _KeyCode.ESC:
-                _that.fnAction(_Action.ESCAPE, e);
+                isGridKeyNavigationOperator = true;
+                _fnAction(_Action.ESCAPE, e);
                 _checkIfNotificationExists();
                 break;
         }
@@ -1179,6 +1186,7 @@ function KeyTable ( oInit )
      */
     function _fnKey ( e )
     {
+        isGridKeyNavigationOperator = false;
         if ( e.keytable_done || (e.originalEvent && e.originalEvent.keytable_done)) {
             return false; // this event has already been handled
         }
@@ -1537,7 +1545,7 @@ function KeyTable ( oInit )
         //set the tabindex to the first cell of the grid
         jQuery(_fnCellFromCoords(_iDefaultX,_iDefaultY)).attr('tabindex','0');
 
-        jQuery(document).bind( "keydown", _fnKey );
+        $(oInit.table).on( "keydown", _fnKey );
 
 
         if ( _oDatatable )
@@ -1550,6 +1558,7 @@ function KeyTable ( oInit )
             jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).on('click', _fnClickListenerPlaceHolder);
             jQuery('td', _nBody).on('click', _fnClick );
             jQuery('td', _nBody).on('mousedown', _setComponentToFocusOnFlyoutClose );
+            jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).on('blur',_fnReleaseFocusForShortCutKeys);
         }
 
         $("td").focus(function(e){
@@ -1560,15 +1569,14 @@ function KeyTable ( oInit )
 
         /* Lose table focus when click outside the table */
         document.addEventListener('click', _fnReleaseFocus,true );
-        document.addEventListener('focusout', _fnReleaseFocusForShortCutKeys,true);
-
     }
 
     function _fnReleaseFocusForShortCutKeys(e) {
         var nTarget = e.target;
         var bTableClick = false;
-        if(_that.isOutOfFocusMode())
+        if(_that.isOutOfFocusMode() || isGridKeyNavigationOperator) {
             return ;
+        }
         bTableClick = _fnCheckTargetExistsInGrid(nTarget);
         if ( bTableClick )
         {
