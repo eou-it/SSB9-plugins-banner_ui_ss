@@ -152,8 +152,7 @@ function KeyTable ( oInit )
      * Clean up bound events
      */
     this.fnDestroy = function() {
-        jQuery(document).unbind( "click", _fnReleaseFocus );
-        jQuery(oInit.table).on( "keydown",_fnKey);
+        jQuery(oInit.table).off( "keydown",_fnKey);
         document.removeEventListener('click',_fnReleaseFocus);
         if ( _oDatatable )
         {
