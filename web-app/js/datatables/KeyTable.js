@@ -165,6 +165,7 @@ function KeyTable ( oInit )
             jQuery('td', _nBody).die( 'click', _fnClick);
             jQuery('td', _nBody).off('mousedown', _setComponentToFocusOnFlyoutClose );
             jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).off('blur',_fnReleaseFocusForShortCutKeys);
+            jQuery('th', $(oInit.table)).off('click', _fnReleseFocusOnHeaderClick );
             /* When Grid is part of the form, KeyTable creates hidden input field this needs to be cleaned up on destroy*/
             jQuery(_sHiddenClass).remove();
         }
@@ -748,6 +749,10 @@ function KeyTable ( oInit )
         isActionableComponentExists(nTarget) ? _fnSetGridActionableMode(nTarget, e) : _fnSetGridNavigationMode(nTarget);
         jQuery(nTarget).attr('tabindex','0');
         _checkIfNotificationExists();
+    }
+
+    function _fnReleseFocusOnHeaderClick(e){
+        _fnAction(_Action.ESCAPE, e);
     }
 
     function _fnGetCellForSelectedComponent(nTarget)  {
@@ -1597,6 +1602,7 @@ function KeyTable ( oInit )
             jQuery('td', _nBody).on('click', _fnClick );
             jQuery('td', _nBody).on('mousedown', _setComponentToFocusOnFlyoutClose );
             jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).on('blur',_fnReleaseFocusForShortCutKeys);
+            jQuery('th', $(oInit.table)).on('click', _fnReleseFocusOnHeaderClick );
         }
 
         $("td").focus(function(e){

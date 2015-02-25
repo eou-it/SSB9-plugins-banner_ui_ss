@@ -748,8 +748,6 @@ var dirtyCheckDefault = {
 
             window.ResizableColumns( this.table );
 
-            this.addDirtyCheckFor(view.sortElements, this.dirtyCheckDefault);
-
             if ( _.isFunction( this.options.afterRender ) )
                 this.options.afterRender.call( this );
         },
@@ -930,6 +928,8 @@ var dirtyCheckDefault = {
                 this.options.afterRefresh.call( this );
 
             this.generateColumnVisibilityMenuColumn();
+
+            this.addDirtyCheckFor(view.sortElements, this.dirtyCheckDefault);
         },
 
         generateColumnVisibilityMenuColumn: function(){
