@@ -160,9 +160,9 @@ function KeyTable ( oInit )
         }
         else
         {
-            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).die( 'click', _fnClickListenerPlaceHolder);
-            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).die( 'focus', _fnPerformFocusOnComponent );
-            jQuery('td', _nBody).die( 'click', _fnClick);
+            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).off( 'click', _fnClickListenerPlaceHolder);
+            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).off( 'focus', _fnPerformFocusOnComponent );
+            jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).off( 'click', _fnClick);
             jQuery('td', _nBody).off('mousedown', _setComponentToFocusOnFlyoutClose );
             jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).off('blur',_fnReleaseFocusForShortCutKeys);
             jQuery('th', $(oInit.table)).off('click', _fnReleseFocusOnHeaderClick );
@@ -742,12 +742,13 @@ function KeyTable ( oInit )
     function _fnClick ( e ) {
         var nTarget = this;
         var prevTarget;
-        prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
-        prevTarget = !prevTarget?_fnCellFromCoords(_iDefaultX,_iDefaultY):prevTarget;
+        prevTarget = _fnCellFromCoords(_iOldX, _iOldY);
+        prevTarget = !prevTarget ? _fnCellFromCoords(_iDefaultX, _iDefaultY) : prevTarget;
         jQuery(prevTarget).removeAttr('tabindex');
         nTarget = _fnGetCellForSelectedComponent(nTarget);
         isActionableComponentExists(nTarget) ? _fnSetGridActionableMode(nTarget, e) : _fnSetGridNavigationMode(nTarget);
-        jQuery(nTarget).attr('tabindex','0');
+        jQuery(nTarget).attr('tabindex', '0');
+        _fnFullRowSelect();
         _checkIfNotificationExists();
     }
 
@@ -986,9 +987,8 @@ function KeyTable ( oInit )
         switch( action )
         {
             case _Action.ACTION:
-                if(isActionableComponentExists(nTarget))    {
-                    _fnSetGridActionableMode(nTarget,event);
-                }
+                _fnEventFire( "action", _iOldX, _iOldY );
+                _fnFullRowSelect();
                 return true;
             case _Action.ESCAPE:
                 if ( !_fnEventFire( "esc", _iOldX, _iOldY ) )
@@ -1057,9 +1057,7 @@ function KeyTable ( oInit )
             case _Action.FULL_ROW_SELECT:
                 x = _iOldX;
                 y = _iOldY;
-                jQuery('tr',_nBody).filter('.add-row-selected').removeClass('add-row-selected');
-                jQuery('td',_nBody).filter('.add-row-selected').removeClass('add-row-selected');
-                jQuery('tr:eq('+_iOldY+')',_nBody).children("td").addClass("add-row-selected");
+                _fnFullRowSelect();
                 break;
             case _Action.BLUR:
             case _Action.PREVIOUS_CONTROL:
@@ -1076,6 +1074,12 @@ function KeyTable ( oInit )
         return false;
     }
     this.fnAction = _fnAction;
+
+    function _fnFullRowSelect(){
+        jQuery('tr',_nBody).filter('.add-row-selected').removeClass('add-row-selected');
+        jQuery('td',_nBody).filter('.add-row-selected').removeClass('add-row-selected');
+        jQuery('tr:eq('+_iOldY+')',_nBody).children("td").addClass("add-row-selected");
+    }
 
     function _fnAddTabIndexToFormObjs(){
         $(_ACTIONABLE_COMPONENTS_CONSTANT, _nBody).each(function() {
@@ -1599,7 +1603,7 @@ function KeyTable ( oInit )
         {
             jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).on('focus', _fnPerformFocusOnComponent );
             jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).on('click', _fnClickListenerPlaceHolder);
-            jQuery('td', _nBody).on('click', _fnClick );
+            jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).on('click', _fnClick );
             jQuery('td', _nBody).on('mousedown', _setComponentToFocusOnFlyoutClose );
             jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).on('blur',_fnReleaseFocusForShortCutKeys);
             jQuery('th', $(oInit.table)).on('click', _fnReleseFocusOnHeaderClick );
