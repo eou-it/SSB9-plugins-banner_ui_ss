@@ -749,7 +749,7 @@ function KeyTable ( oInit )
         isActionableComponentExists(nTarget) ? _fnSetGridActionableMode(nTarget, e) : _fnSetGridNavigationMode(nTarget);
         jQuery(nTarget).attr('tabindex', '0');
         _fnFullRowSelect();
-        _checkIfNotificationExists();
+        _openFlyoutIfNotificationExists();
     }
 
     function _fnReleseFocusOnHeaderClick(e){
@@ -1181,7 +1181,7 @@ function KeyTable ( oInit )
     }
 
 
-    function _checkIfNotificationExists(){
+    function _openFlyoutIfNotificationExists(){
         if(window.notificationCenter.notificationCenterFlyout.isDisplayed()){
             window.notificationCenter.openNotificationFlyout();
             _fnBlur();
@@ -1201,12 +1201,12 @@ function KeyTable ( oInit )
                 var xy = e.shiftKey?_fnGetPreviousEditablePos():_fnGetNextEditablePos();
                 var nTarget = _fnCellFromCoords(xy[0], xy[1]);
                 _fnSetGridActionableMode(nTarget,e);
-                _checkIfNotificationExists();
+                _openFlyoutIfNotificationExists();
                 break;
             case _KeyCode.ESC:
                 isGridKeyNavigationOperator = true;
                 _fnAction(_Action.ESCAPE, e);
-                _checkIfNotificationExists();
+                _openFlyoutIfNotificationExists();
                 break;
         }
         return true;
