@@ -614,6 +614,9 @@ $(document).ready(function() {
                 if($('body .notification-center-shim').length == 0) {
                     window.componentToFocusOnFlyoutClose.focus();
                 }
+                else{
+                    this.notificationCenterAnchor.$el.focus();
+                }
                 e.stopImmediatePropagation();
             }
         },
