@@ -46,6 +46,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    border-left: 1px solid #DDDDDD !important;
 }
 
 .grid button.sort-icon{
@@ -94,7 +95,7 @@
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
     padding: 0px 10px;
-    border-left: 1px solid #DDDDDD;
+    border-left: 1px solid #DDDDDD !important;
     min-height: 30px;
 }
 
@@ -163,7 +164,7 @@
 }
 
 .grid-main-wrapper .grid td{
-    border-right:none;
+   border-right:none;
 }
 
 .button-menu-container {
