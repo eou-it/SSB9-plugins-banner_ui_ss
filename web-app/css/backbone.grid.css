@@ -246,6 +246,10 @@
     border: 1px solid #f9dc87 !important;
 }
 
+.grid td.readonly {
+    background-color: #F5F6F7;
+    color:#676A6E;
+}
 
 /* editable component specific integration classes */
 
@@ -307,3 +311,4 @@
     text-overflow: clip;
     white-space: normal;
 }
+
