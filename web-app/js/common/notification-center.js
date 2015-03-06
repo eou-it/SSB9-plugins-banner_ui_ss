@@ -326,6 +326,11 @@ $(document).ready(function() {
                 ariaNotificationItemText=$.i18n.prop("js.notification.messageinfo", [this.options.notificationIdx,this.options.notificatioLength,this.model.get("type")]);
             }
 
+            if (this.model.hasPrompts()) {
+                ariaNotificationItemText+=" ";
+                ariaNotificationItemText+=$.i18n.prop("js.notification.promptmessage");
+            }
+
             switch (notificationType) {
                 case "error":
                     notificationClass = "notification-center-message-error";
@@ -415,12 +420,11 @@ $(document).ready(function() {
     window.NotificationCenterAnchor = Backbone.View.extend({
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
+            var notificationCountDiv = $('<div class="notification-center-count"><span/></div>' );
 
-            $(this.el).append(
-                $('<div class="notification-center-count"><span/></div>' )
-                    .screenReaderLabel($.i18n.prop("js.notification.label"))
-            ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
+            $(this.el).attr('aria-describedby',"notificationsdescription");
 
+            $(this.el).append( notificationCountDiv ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
             this.model.bind("add", this.render);
@@ -546,7 +550,8 @@ $(document).ready(function() {
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-
+            $(this.el).attr('title',formatTitleAndShortcut($.i18n.prop("js.notification.label"),$.i18n.prop("js.notification.shortcut")));
+            $(this.el).append('<span class="offscreen" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span>');
             $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
 
