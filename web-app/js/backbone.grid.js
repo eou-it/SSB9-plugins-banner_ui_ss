@@ -191,7 +191,8 @@ var dirtyCheckDefault = {
             notificationError:      "notification-error",
             componentError:         "component-error",
             pagingText:             "paging-text",
-            pagingContainer:        "paging-container"
+            pagingContainer:        "paging-container",
+            readOnly:               "readonly"
         },
 
         elements: {
@@ -249,6 +250,8 @@ var dirtyCheckDefault = {
             this.keyTable && this.keyTable.focus();
         },
 
+        editControls: 'a, area, button, input, object, select, textarea',
+
         /**
          * Enable edit mode when interacting with the contents of a cell to prevent the grid from acting on keyboard
          * events to move between cells.
@@ -274,7 +277,7 @@ var dirtyCheckDefault = {
          */
         editCell: function( cell ) {
             var tabs = $('[tabindex]', cell),
-                editControls = $('a, area, button, input, object, select, textarea', cell).filter(':not([tabindex])').filter(':visible'),
+                editControls = $(this.editControls, cell).filter(':not([tabindex])').filter(':visible'),
                 target = tabs.add( editControls ).first();
 
             if ( target.length)   {
@@ -903,7 +906,6 @@ var dirtyCheckDefault = {
                             td.css( "width", col.width );
 
                         td = view.determineColumnEditability( col, td, it );
-
                         tr.append( td );
                     });
 
@@ -1014,6 +1016,10 @@ var dirtyCheckDefault = {
                     });
 
                     el.editable( editableSubmitCallback, _.extend( defaults, options ) );
+                }
+
+                if($(view.editControls,el).length === 0) {
+                    el.addClass(view.css.readOnly);
                 }
             }
 
