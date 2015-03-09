@@ -144,11 +144,8 @@
 
 .grid-main-wrapper .column-visibility-menu{
     position: absolute;
-    right: 0px !important;
-    left: auto !important;
     top: 0px !important;
     z-index: 1101;
-    border-left: 1px solid #DDDDDD;
     background: url('../images/grid_customize.png') no-repeat center;
     width: 30px;
     padding:0px;
@@ -157,7 +154,6 @@
 
 .grid-main-wrapper .visibility-control-column {
     position:static;
-    width:1%;
     border-left: none;
     border-bottom:none;
     padding:0px;

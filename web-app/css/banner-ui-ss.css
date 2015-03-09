@@ -504,6 +504,8 @@ table.display tr.even.row_hover td.sorting_1 {
     padding: 0px !important;
     border: 0px !important;
     direction: ltr;
+    width: 100%;
+    overflow-x: hidden !important;
 }
 
 .ui-layout-pane-north, .ui-layout-pane-south {
