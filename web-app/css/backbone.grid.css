@@ -96,6 +96,7 @@
     -o-text-overflow: ellipsis;
     padding: 0px 10px;
     border-left: 1px solid #DDDDDD !important;
+    border-right: none !important;
     min-height: 30px;
 }
 
@@ -154,9 +155,11 @@
 
 .grid-main-wrapper .visibility-control-column {
     position:static;
-    border-left: none;
+    border-left: none !important;
+    border-right: 1px solid #DDDDDD !important;
     border-bottom:none;
     padding:0px;
+    width:1.5%;
 }
 
 .grid-main-wrapper .grid td{

@@ -936,7 +936,7 @@ var dirtyCheckDefault = {
 
         generateColumnVisibilityMenuColumn: function(){
             if ( this.features.visibility ) {
-                var tableCell = $(this.elements.td).addClass(this.css.visibilityControlColumn);
+                var tableCell = $(this.elements.td).addClass(this.css.visibilityControlColumn).addClass(this.css.readOnly);
                 this.table.find('tbody tr').append(tableCell);
             }
         },
