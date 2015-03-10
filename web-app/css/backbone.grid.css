@@ -47,6 +47,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     border-left: 1px solid #DDDDDD !important;
+    border-right: none !important;
 }
 
 .grid button.sort-icon{
