@@ -1070,7 +1070,6 @@ function KeyTable ( oInit )
         }
         nTarget = _fnCellFromCoords(x, y);
         _fnSetGridNavigationMode(nTarget);
-        _fnUpdateComponentAriaDataInformationForNavigationMode(nTarget);
         return false;
     }
     this.fnAction = _fnAction;
@@ -1103,7 +1102,6 @@ function KeyTable ( oInit )
     }
 
     function _fnSetGridNavigationMode(nTarget){
-        _fnUpdateAriaDetailsForModesInTable(_MODE.NAVIGATION);
         _fnSetGridMode(_MODE.NAVIGATION);
         _fnSetEnabledColumns(_columnsNavigationMode);
         nTarget = !nTarget?_fnCellFromCoords(_iOldX,_iOldY):nTarget;
@@ -1115,7 +1113,6 @@ function KeyTable ( oInit )
     }
 
     function _fnSetGridActionableMode(nTarget, e){
-        _fnUpdateAriaDetailsForModesInTable(_MODE.ACTIONABLE);
         _fnSetGridMode(_MODE.ACTIONABLE);
         _fnSetEnabledColumns(_columnsActionableMode);
         _fnRemoveTabIndexToFormObjs();
@@ -1131,48 +1128,11 @@ function KeyTable ( oInit )
 
 
     function _fnSetGridOutOfFocusMode(){
-        _fnRemoveAriaDetailsForModesInTable();
         _fnSetGridMode(_MODE.OUTOFFOCUS);
     }
 
     function _fnSetGridMode(mode)   {
         _that.gridCurrentMode = mode;
-    }
-
-    function _fnAddAriaDetailsForModesInTable() {
-        if ($( oInit.table.parentNode).find('#gridariaInfo').length == 0 ) {
-            var ariaInfo="<span id='gridariaInfo' class='offscreen' aria-live='assertive' aria-atomic='true'></span>";
-            ariaInfo+="<span id='griddata'  class='offscreen' aria-live='assertive' aria-atomic='true'></span>";
-            $( ariaInfo ).insertBefore( oInit.table );
-        }
-    }
-
-    function _fnUpdateAriaDetailsForModesInTable(selectedmode) {
-        if (_that.gridCurrentMode != selectedmode) {
-            if (selectedmode == _MODE.NAVIGATION) {
-                $('#gridariaInfo').text($.i18n.prop("js.grid.navigationmode"));
-            } else if (selectedmode == _MODE.ACTIONABLE) {
-                $('#gridariaInfo').text($.i18n.prop("js.grid.actionablemode"));
-            }
-        }
-    }
-
-    function _fnRemoveAriaDetailsForModesInTable() {
-        $(oInit.table.parentNode).find('#gridariaInfo').remove();
-        $(oInit.table.parentNode).find('#griddata').remove();
-    }
-
-    function _fnUpdateComponentAriaDataInformationForNavigationMode(nTarget) {
-        var component = $(_ACTIONABLE_COMPONENTS_CONSTANT, nTarget);
-        var text;
-        if ($(component).length != 0) {
-            var value= ($(component).val()=="") ? $(component).text() : $(component).val();
-            text = $(component).length > 0 ? value:"";
-            if (text == "") {
-                text="BLANK";
-            }
-            $('#griddata').text(text);
-        }
     }
 
     function _fnSetFocusToCell(nTarget) {
@@ -1611,7 +1571,6 @@ function KeyTable ( oInit )
 
         $("td").focus(function(e){
             if(_that.isOutOfFocusMode())  {
-                _fnAddAriaDetailsForModesInTable();
                 _fnSetGridNavigationMode(e.target);
             }
         });
@@ -1639,7 +1598,6 @@ function KeyTable ( oInit )
     }
 
     function _fnPerformFocusOnComponent(e)  {
-        _fnAddAriaDetailsForModesInTable();
         var nTarget = _fnGetCellForSelectedComponent(this);
         var prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
         _fnSetGridActionableMode(nTarget,e);
