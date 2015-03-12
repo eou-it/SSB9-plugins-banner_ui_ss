@@ -199,7 +199,7 @@
 
         input.on("change", function(e) {
             if (typeof(view.collection) != 'undefined') {
-                var target = input;
+                var target = $(input);
                 $.data(input, 'entered', $(input).val());
                 var userEnteredPage = $(input).val()
 
@@ -208,7 +208,7 @@
                     return;
                 }
 
-                var page = parseInt(target.data().entered, 10);
+                var page = parseInt(target.val().entered, 10);
                 var collection = view.collection;
                 var info = collection.pageInfo();
 
