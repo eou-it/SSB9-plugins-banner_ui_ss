@@ -208,7 +208,7 @@
                     return;
                 }
 
-                var page = parseInt(target.val().entered, 10);
+                var page = parseInt(target.val(), 10);
                 var collection = view.collection;
                 var info = collection.pageInfo();
 
