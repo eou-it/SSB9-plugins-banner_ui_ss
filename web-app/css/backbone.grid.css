@@ -103,6 +103,7 @@
 
 .grid td.focus {
     background-color:#CCDFE9 !important;
+    color:#000000 !important
 }
 
 .grid tbody tr td form input {
@@ -282,7 +283,7 @@
 
 .add-row-selected {
     border: 1px solid #005C96 !important;
-    color: #FFF;
+    color: #FFF !important;
     background-color: #005C96 !important;
 }
 
