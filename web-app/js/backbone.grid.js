@@ -939,16 +939,16 @@ var dirtyCheckDefault = {
             if ( this.features.visibility ) {
                 var readOnly = this.css.readOnly;
                 var editControls = this.editControls;
-                var temp, row;
+                var getTDPos, tdLen, tdAtPos, row, isActionableComponentExists;
                 var tableCell = $(this.elements.td).addClass(this.css.visibilityControlColumn);
                 this.table.find('tbody tr').append(tableCell);
                 $('tbody tr',this.table).each(function(){
                     row = $(this);
-                    temp = $(row).find('td').length;
-                    temp = $(row).find("td").eq(temp - 2);
-                    temp = $(temp).find(editControls);
-                    console.log('editable component length ',temp.length);
-                    if(temp.length == 0){
+                    tdLen = $(row).find('td').length;
+                    getTDPos = (tdLen>2)?(tdLen-2):0;
+                    tdAtPos = $(row).find("td").eq(getTDPos);
+                    isActionableComponentExists = $(tdAtPos).find(editControls).length;
+                    if(isActionableComponentExists == 0){
                         $(row).find('td').last().addClass(readOnly);
                     }
                 });
