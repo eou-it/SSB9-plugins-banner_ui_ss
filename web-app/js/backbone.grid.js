@@ -935,9 +935,23 @@ var dirtyCheckDefault = {
         },
 
         generateColumnVisibilityMenuColumn: function(){
+
             if ( this.features.visibility ) {
-                var tableCell = $(this.elements.td).addClass(this.css.visibilityControlColumn).addClass(this.css.readOnly);
+                var readOnly = this.css.readOnly;
+                var editControls = this.editControls;
+                var temp, row;
+                var tableCell = $(this.elements.td).addClass(this.css.visibilityControlColumn);
                 this.table.find('tbody tr').append(tableCell);
+                $('tbody tr',this.table).each(function(){
+                    row = $(this);
+                    temp = $(row).find('td').length;
+                    temp = $(row).find("td").eq(temp - 2);
+                    temp = $(temp).find(editControls);
+                    console.log('editable component length ',temp.length);
+                    if(temp.length == 0){
+                        $(row).find('td').last().addClass(readOnly);
+                    }
+                });
             }
         },
 
