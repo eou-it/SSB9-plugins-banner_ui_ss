@@ -90,7 +90,7 @@ function ColumnResize(table) {
 	// do changes columns widths
 	// returns true if success and false otherwise
         this.changeColumnWidth = function(no, w, columnsWidth) {
-            if (direction == 'rtl'){ // arabic
+            if (langDirection == 'rtl'){ // arabic
                 w = -w
 	    }
             if (w < 0 && no >= dragColumns.length) return false;
@@ -108,6 +108,8 @@ function ColumnResize(table) {
             if ($( '.sort-icon', dragColumns[no] )[ 0 ]) {
                 $( '.sort-icon', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
             }
+            $( '.title', dragColumns[no] )[ 0 ].style.display = lSortDisplay;
+
             dragColumns[no].style.width =  ( lCellWidth) + 'px';
 
             if (columnsWidth <= containerWidth) {

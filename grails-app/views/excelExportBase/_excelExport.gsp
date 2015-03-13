@@ -1,5 +1,5 @@
 <div class="modal-content">
-    <div class="excel-export-wizard ui-widget" id="excel-export-dialog" name="excel-export-dialog" role="dialog" tabindex="-1" aria-labeledBy="excel-export-title excel-export-description">
+    <div class="excel-export-wizard ui-widget" id="excel-export-dialog" name="excel-export-dialog" role="dialog" aria-labeledBy="excel-export-title excel-export-description">
         <div role="document">
             <div class="excel-export-wizard-content page-with-sidebar">
                 <div role="presentation" aria-hidden="true">
@@ -19,10 +19,10 @@
                 </div>
                 <div class="excel-export-wizard-content-north">
                     <div class="excel-export-wizard-header ui-widget-header" role="heading" aria-labeledby="excel-export-title">
-                        <span id="excel-export-title" name="excel-export-title" tabindex="0"></span>
+                        <span id="excel-export-title" name="excel-export-title"></span>
                     </div>
                 </div>
-                <div class="excel-export-wizard-content-center" id="excelExportWizardHeading" role="contentinfo" tabindex="1" aria-labelledby="excelExportWizardHeadingLabel">
+                <div class="excel-export-wizard-content-center" id="excelExportWizardHeading" role="contentinfo" aria-labelledby="excelExportWizardHeadingLabel">
                     <fieldset class="borderless-fieldset">
                         <legend><g:message code="net.hedtech.banner.export.ExcelExportBaseController.exportHeading"/></legend>
                         <ul class="excel-export-wizard-type-list">

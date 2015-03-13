@@ -3,51 +3,51 @@
  **********************************************************************************/
 
 /*
- var column = {
- editable: "Boolean | String | Object | Function", // define edit behavior of cell. Implies focus
- focus:    "Boolean", // mark cell as able to receive keyboard focus, used for editable cells that don't need jeditable
- freeze:   "Boolean",
- name:     "String",
- render:   "Function",
- sortable: "Boolean",
- title:    "String",
- width:    "Percentage | fixed"
- }
+var column = {
+  editable: "Boolean | String | Object | Function", // define edit behavior of cell. Implies focus
+  focus:    "Boolean", // mark cell as able to receive keyboard focus, used for editable cells that don't need jeditable
+  freeze:   "Boolean",
+  name:     "String",
+  render:   "Function",
+  sortable: "Boolean",
+  title:    "String",
+  width:    "Percentage | fixed"
+}
 
- column.editable = {
- type:      "String",
- validate:  "Function",
- condition: "Function",
- typeSpecificProperties: "0-N"
- }
+column.editable = {
+  type:      "String",
+  validate:  "Function",
+  condition: "Function",
+  typeSpecificProperties: "0-N"
+}
 
- var features = {
- resizable:  "Boolean",
- draggable:  "Boolean",
- freeze:     "Boolean",
- visibility: "Boolean",
- sharedVisibility: "Boolean"
- }
+var features = {
+  resizable:  "Boolean",
+  draggable:  "Boolean",
+  freeze:     "Boolean",
+  visibility: "Boolean",
+  sharedVisibility: "Boolean"
+}
 
- var events = {
- beforeRender:  "Function",
- afterRender:   "Function",
- beforeRefresh: "Function",
- afterRefresh:  "Function",
- rowSelected:   "Function( $row, backboneRowModel )"
- cellSelected:  "Function( $cell, backboneRowModel )" // if cellSelected is provided, caller must manage editMode to prevent grid from acting on keyboard events while cell is being edited.
- }
+var events = {
+  beforeRender:  "Function",
+  afterRender:   "Function",
+  beforeRefresh: "Function",
+  afterRefresh:  "Function",
+  rowSelected:   "Function( $row, backboneRowModel )"
+  cellSelected:  "Function( $cell, backboneRowModel )" // if cellSelected is provided, caller must manage editMode to prevent grid from acting on keyboard events while cell is being edited.
+}
 
- var data = {
- "success":     "Boolean",
- "totalCount":  "Number",
- "data":        [ { JSON }, ... ],
- "pageOffset":  "Number",
- "pageMaxSize": "Number"
- };
- */
-var direction = $('meta[name=dir]').attr('content');
-direction = ( direction === void 0 || direction !== "rtl" ? "ltr" : "rtl" );
+var data = {
+  "success":     "Boolean",
+  "totalCount":  "Number",
+  "data":        [ { JSON }, ... ],
+  "pageOffset":  "Number",
+  "pageMaxSize": "Number"
+};
+*/
+var langDirection = $('meta[name=dir]').attr('content');
+langDirection = ( langDirection === void 0 || langDirection !== "rtl" ? "ltr" : "rtl" );
 var dirtyCheckTargets = [];
 
 var dirtyCheckDefault = {
@@ -596,11 +596,11 @@ var dirtyCheckDefault = {
             this.$el.on( 'mouseenter', '.grid tr', matchHover )
                 .on( 'mouseleave', '.grid tr', removeMatchHover );
 
-            var lazyResizeHandler = _.debounce( function resizeHandler( e ) {
+	        var lazyResizeHandler = _.debounce( function resizeHandler( e ) {
                 view.recalcTitleWidths();
             }, 350 );
 
-            $( window ).on( 'resize', lazyResizeHandler );
+			$( window ).on( 'resize', lazyResizeHandler );
         },
         setupKeyTable: function () {
             this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
@@ -677,33 +677,49 @@ var dirtyCheckDefault = {
         },
 
         recalcTitleWidths: function () {
-            var predefinedWidth   = this.frozenTable === void 0 ? void 0 : this.frozenTable.css("width");
-            var frozenWidthString = this.options.frozenWidth || predefinedWidth || "auto";
-            var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString));
-            var outerWidth  = $(".grid-container .grid-wrapper").width();
+        var hasFrozenColumns = this.frozenTable === void 0 ? false : true
+        var predefinedWidth   = this.frozenTable === void 0 ? void 0 : this.frozenTable.css("width");
+        var frozenWidthString = this.options.frozenWidth || predefinedWidth || "auto";
+        var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString));
+        var outerWidth  = this.$el.find(".grid-wrapper").width();
 
-            var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString));
+        var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString));
+        if (!hasFrozenColumns) {
+            if (outerWidth === 0) {
+                mainWidthString = "100%"
+            }
+            else {
+                mainWidthString = "" + "100%"
+            }
+        }
 
-            $(".grid-container .grid-frozen-wrapper").css("width", frozenWidthString);
-            $(".grid-container .grid-main-wrapper").css({ "width": mainWidthString, "display": "block"});
+        this.$el.find(".grid-wrapper").css({ "display": "flex"});
 
-            _.each( $(".grid-container table th"), function( it ) {
-                var el = $( it );
-                var title = el.find('.title');
-                if ( title.length ) {
-                    title.css('width', 'auto');
-                    var padding = 5
-                    var titleWidth = parseInt(title.css( 'width')) + padding
-                    var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
-                    var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
-                    var cellWidth = el.width()
+        if (hasFrozenColumns) {
+            this.$el.find(".grid-frozen-wrapper").css("width", frozenWidthString);
+        }
+        this.$el.find(".grid-main-wrapper").css({ "width": mainWidthString, "display": "block"});
 
-                    if (titleWidth >= el.width()) {
-                        title.css('width', (cellWidth - handleWidth - iconWidth - padding) + "px");
-                    }
+        _.each( this.$el.find("table th"), function( it ) {
+            var el = $( it );
+            var title = el.find('.title');
+            if ( title.length ) {
+                title.css('width', 'auto');
+                var padding = 5
+                var titleWidth = parseInt(title.css( 'width')) + padding
+                var eWidth = parseInt(el.css( 'width')) + padding
+                var showTitle = eWidth <= 31 ? 'none' : 'inline'
+                title.css('display', showTitle);
+                var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
+                var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
+                var cellWidth = el.width()
+                // todo: better detection. This handles titles with ellipses
+                if (titleWidth + handleWidth + iconWidth + 6 >= el.width()) {
+                    title.css('width', (cellWidth - handleWidth - iconWidth - padding - 12 ) + "px");
                 }
-            });
-        },
+              }
+        });
+    },
 
         parseMeasurementType: function (sizeString) {
             var units = ["px", "%", "em"];
