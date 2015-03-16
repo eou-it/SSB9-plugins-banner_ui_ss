@@ -276,9 +276,10 @@ function showLoadingPopup( target ) {
     );
 }
 
-function hideLoadingPopup( target ) {
-    $(target).find('div.loading').fadeOut( 200, function() { $(this).remove(); } )
-}
+/**
+ * @deprecated use hideLoading
+ */
+var hideLoadingPopup = hideLoading;
 
 /* Usage:
      $(selector).loading();   // show loading indicator
@@ -289,14 +290,10 @@ $.fn.loading = function(isLoading) {
     return this;
 }
 
-/* Usage:
-     $(selector).loadingPopup();   // show loading indicator
-     $(selector).loadingPopup(false); // hide loading indicator
+/**
+ * @deprecated use $.fn.loading
 */
-$.fn.loadingPopup = function(isLoading) {
-    (isLoading||isLoading==undefined) ? showLoadingPopup( this ) : hideLoadingPopup( this );
-    return this;
-}
+$.fn.loadingPopup = $.fn.loading;
 
 
 $(document).ajaxError( function(event, jqXHR, ajaxOptions, thrownError) {
