@@ -3,49 +3,49 @@
  **********************************************************************************/
 
 /*
-var column = {
-  editable: "Boolean | String | Object | Function", // define edit behavior of cell. Implies focus
-  focus:    "Boolean", // mark cell as able to receive keyboard focus, used for editable cells that don't need jeditable
-  freeze:   "Boolean",
-  name:     "String",
-  render:   "Function",
-  sortable: "Boolean",
-  title:    "String",
-  width:    "Percentage | fixed"
-}
+ var column = {
+ editable: "Boolean | String | Object | Function", // define edit behavior of cell. Implies focus
+ focus:    "Boolean", // mark cell as able to receive keyboard focus, used for editable cells that don't need jeditable
+ freeze:   "Boolean",
+ name:     "String",
+ render:   "Function",
+ sortable: "Boolean",
+ title:    "String",
+ width:    "Percentage | fixed"
+ }
 
-column.editable = {
-  type:      "String",
-  validate:  "Function",
-  condition: "Function",
-  typeSpecificProperties: "0-N"
-}
+ column.editable = {
+ type:      "String",
+ validate:  "Function",
+ condition: "Function",
+ typeSpecificProperties: "0-N"
+ }
 
-var features = {
-  resizable:  "Boolean",
-  draggable:  "Boolean",
-  freeze:     "Boolean",
-  visibility: "Boolean",
-  sharedVisibility: "Boolean"
-}
+ var features = {
+ resizable:  "Boolean",
+ draggable:  "Boolean",
+ freeze:     "Boolean",
+ visibility: "Boolean",
+ sharedVisibility: "Boolean"
+ }
 
-var events = {
-  beforeRender:  "Function",
-  afterRender:   "Function",
-  beforeRefresh: "Function",
-  afterRefresh:  "Function",
-  rowSelected:   "Function( $row, backboneRowModel )"
-  cellSelected:  "Function( $cell, backboneRowModel )" // if cellSelected is provided, caller must manage editMode to prevent grid from acting on keyboard events while cell is being edited.
-}
+ var events = {
+ beforeRender:  "Function",
+ afterRender:   "Function",
+ beforeRefresh: "Function",
+ afterRefresh:  "Function",
+ rowSelected:   "Function( $row, backboneRowModel )"
+ cellSelected:  "Function( $cell, backboneRowModel )" // if cellSelected is provided, caller must manage editMode to prevent grid from acting on keyboard events while cell is being edited.
+ }
 
-var data = {
-  "success":     "Boolean",
-  "totalCount":  "Number",
-  "data":        [ { JSON }, ... ],
-  "pageOffset":  "Number",
-  "pageMaxSize": "Number"
-};
-*/
+ var data = {
+ "success":     "Boolean",
+ "totalCount":  "Number",
+ "data":        [ { JSON }, ... ],
+ "pageOffset":  "Number",
+ "pageMaxSize": "Number"
+ };
+ */
 var langDirection = $('meta[name=dir]').attr('content');
 langDirection = ( langDirection === void 0 || langDirection !== "rtl" ? "ltr" : "rtl" );
 var dirtyCheckTargets = [];
@@ -98,7 +98,20 @@ var dirtyCheckDefault = {
             // }
         }
     };
+    var getModelId = (function() {
+        var modelIdCounter = 0;
+        return function(model) {
 
+            if (!_.isUndefined( model.id )) {
+                return model.id;
+            } else {
+                if ( _.isUndefined( model.cid )) {
+                    model.cid = 'gridItem-' + ++this.modelIdCounter;
+                }
+                return model.cid;
+            }
+        }
+    })();
     var generateBackboneCollection = function( config ) {
 
         _.defaults( config, {
@@ -299,7 +312,6 @@ var dirtyCheckDefault = {
 
             if ( _.isFunction( this.options.rowSelected ) ) {
                 var data = this.collection.get( parseInt( tr.attr( "data-id" ) ) );
-
                 this.options.rowSelected.call( this, tr, data );
             }
 
@@ -314,12 +326,10 @@ var dirtyCheckDefault = {
                 // skip
             } else {
                 $( e.target ).data( "just-sorted", false );
-
                 var view      = this,
                     el        = $( e.target ).is( "th" ) ? $( e.target ) : $( e.target ).closest( "th" );
                 column    = $( el ).attr( "data-property" ),
                     direction = $( el ).attr( "data-sort-direction" );
-
                 if ( direction == "disabled" ) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -457,7 +467,8 @@ var dirtyCheckDefault = {
 
         initialize: function () {
             _.bindAll( this, 'notificationAdded', 'notificationRemoved', 'render' );
-
+            // Modify grid columns according to any extensibility information
+            this.applyExtensions();
             // make sure we have an id attribute
             if ( !this.$el.attr( 'id' ) )
                 this.$el.attr( 'id', _.uniqueId( 'grid-' ) );
@@ -465,7 +476,6 @@ var dirtyCheckDefault = {
             this.$el.addClass( this.css.gridContainer );
 
             this.defaultColumnValues();
-
             this.determineFeatures();
 
             var view  = this,
@@ -596,13 +606,143 @@ var dirtyCheckDefault = {
             this.$el.on( 'mouseenter', '.grid tr', matchHover )
                 .on( 'mouseleave', '.grid tr', removeMatchHover );
 
-	        var lazyResizeHandler = _.debounce( function resizeHandler( e ) {
+            var lazyResizeHandler = _.debounce( function resizeHandler( e ) {
                 view.recalcTitleWidths();
             }, 350 );
 
-			$( window ).on( 'resize', lazyResizeHandler );
+            $( window ).on( 'resize', lazyResizeHandler );
         },
-        setupKeyTable: function () {
+      
+
+        /***************************************************************************************************
+
+         Modify this grid instance based on extensibility information in xe.extensions
+         - determine grid's containing section. This HTML element will have a xe.attr.section attribute
+         - locate any extensbility information for this grid instance in xe.extensions
+         - modify the instantiation of this grid instance accordingly
+
+         ***************************************************************************************************/
+        applyExtensions: function() {
+
+            var dataXESection;
+            var gridExtensions;
+            var attr = "[" + xe.attr.section + "]";
+
+            if ( xe.extensions ) {
+
+                // determine the container of this grid instance
+                dataXESection = $(this.el).closest(attr).attr(xe.attr.section);
+
+                if ( dataXESection ) {
+
+                    gridExtensions = _.find(xe.extensions.sections, function(section) {
+                        return section.name == dataXESection;
+                    });
+
+                    if ( gridExtensions ) {
+                        this.removeColumns( gridExtensions );
+                        this.orderColumns( gridExtensions );
+                        this.replaceColumnAttributes( gridExtensions);
+                    }
+                }
+            }
+        },
+
+        /***************************************************************************************************
+
+         Remove any baseline columns from this grid instance as specified by extensibility information
+
+         ***************************************************************************************************/
+        removeColumns: function( pGridExtensions ) {
+
+            this.options.columns = _.filter( this.options.columns, function(baselineColumn) {
+                return !(_.find(pGridExtensions.fields, function(removedColumn) {
+                    return removedColumn.exclude && (removedColumn.name == baselineColumn.name);
+                }));
+            } );
+        },
+
+
+        /***************************************************************************************************
+
+         Reorder any baseline columns in this grid instance as specified by extensibility information
+
+         ***************************************************************************************************/
+
+        orderColumns: function( pGridExtensions ) {
+
+            var removedColumn;
+            var targetColumn;
+            var validJSON;
+            var thisGridInstance = this;
+            var baselineColumns = this.options.columns;
+
+            _.each( pGridExtensions.orderedFields, function(extension) {
+                if ( _.has(extension, "nextSibling") ) {
+
+                    validJSON = true;
+                    removedColumn = _.find(baselineColumns, function(column){
+                        return extension.name == column.name;
+                    });
+                    if ( !removedColumn ) {
+                        thisGridInstance.log("JSON item not found in page");
+                        validJSON = false;
+                    }
+
+                    if ( extension.nextSibling ) {
+                        targetColumn = _.find(baselineColumns, function(column){
+                            return extension.nextSibling == column.name;
+                        });
+                        if ( !targetColumn ) {
+                            thisGridInstance.log("JSON item not found in page");
+                            validJSON = false;
+                        }
+                    } else {
+                        targetColumn = null;
+                    }
+
+                    if ( validJSON ) {
+
+                        index = _.indexOf(baselineColumns, removedColumn);
+                        baselineColumns.splice(index,1);
+
+                        if ( !targetColumn ) {
+                            index = baselineColumns.length;
+                        } else {
+                            index = _.indexOf(baselineColumns, targetColumn);
+                        }
+                        baselineColumns.splice(index,0,removedColumn);
+                    }
+                }
+            })
+        },
+
+
+        /***************************************************************************************************
+         Replace any baseline column attributes from this grid instance as specified by extensibility information
+         ***************************************************************************************************/
+        replaceColumnAttributes: function( pGridExtensions ) {
+            var thisGrid = this;
+
+            _.each( pGridExtensions.fields, function(field) {
+
+                var baselineColumn = _.findWhere(thisGrid.options.columns,{name: field.name});
+                if (baselineColumn) {
+
+                    if ( field.attributes ) {
+                        if (_.has(field.attributes, "label") ) {
+                            baselineColumn.title = xe.i18n(field.attributes.label);
+                        }
+                        if (_.has(field.attributes, "placeholder") ) {
+                            baselineColumn.placeholder = xe.i18n(field.attributes.placeholder);
+                        }
+                    }
+
+                }
+            })
+        },
+
+  	setupKeyTable: function () {
             this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
 
             if ( window.KeyTable ) {
@@ -636,7 +776,6 @@ var dirtyCheckDefault = {
                 });
             }
         },
-
         getMenuContainer: function() {
             return this.menuContainer || this.$el.find( "." + this.css.gridWrapper + " thead tr" );
         },
@@ -677,44 +816,44 @@ var dirtyCheckDefault = {
         },
 
         recalcTitleWidths: function () {
-        var hasFrozenColumns = this.frozenTable === void 0 ? false : true
-        var predefinedWidth   = this.frozenTable === void 0 ? void 0 : this.frozenTable.css("width");
-        var frozenWidthString = this.options.frozenWidth || predefinedWidth || "auto";
-        var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString));
-        var outerWidth  = this.$el.find(".grid-wrapper").width();
+            var hasFrozenColumns = this.frozenTable === void 0 ? false : true
+            var predefinedWidth   = this.frozenTable === void 0 ? void 0 : this.frozenTable.css("width");
+            var frozenWidthString = this.options.frozenWidth || predefinedWidth || "auto";
+            var frozenWidth = ( "auto" == frozenWidthString ? 0 : parseInt(frozenWidthString));
+            var outerWidth  = this.$el.find(".grid-wrapper").width();
 
-        var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString));
-        if (!hasFrozenColumns) {
-            if (outerWidth === 0) {
-                mainWidthString = "100%"
-            }
-            else {
-                mainWidthString = "" + "100%"
-            }
-        }
-
-        if (hasFrozenColumns) {
-            this.$el.find(".grid-frozen-wrapper").css("width", frozenWidthString);
-        }
-        this.$el.find(".grid-main-wrapper").css({ "width": mainWidthString, "display": "block"});
-
-        _.each( this.$el.find("table th"), function( it ) {
-            var el = $( it );
-            var title = el.find('.title');
-            if ( title.length ) {
-                title.css('width', 'auto');
-                var padding = 5
-                var titleWidth = parseInt(title.css( 'width')) + padding
-                var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
-                var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
-                var cellWidth = el.width()
-                // todo: better detection. This handles titles with ellipses
-                if (titleWidth + handleWidth + iconWidth + 6 >= el.width()) {
-                    title.css('width', (cellWidth - handleWidth - iconWidth - padding - 12 ) + "px");
+            var mainWidthString = ( "auto" == frozenWidthString ? "auto" : (outerWidth - frozenWidth) + this.parseMeasurementType(frozenWidthString));
+            if (!hasFrozenColumns) {
+                if (outerWidth === 0) {
+                    mainWidthString = "100%"
                 }
-              }
-        });
-    },
+                else {
+                    mainWidthString = "" + "100%"
+                }
+            }
+
+            if (hasFrozenColumns) {
+                this.$el.find(".grid-frozen-wrapper").css("width", frozenWidthString);
+            }
+            this.$el.find(".grid-main-wrapper").css({ "width": mainWidthString, "display": "block"});
+
+            _.each( this.$el.find("table th"), function( it ) {
+                var el = $( it );
+                var title = el.find('.title');
+                if ( title.length ) {
+                    title.css('width', 'auto');
+                    var padding = 5
+                    var titleWidth = parseInt(title.css( 'width')) + padding
+                    var handleWidth = el.find( '.sort-handle' ).length > 0 ? parseInt(el.find( '.sort-handle' ).css( 'width')) : 0
+                    var iconWidth = el.find( '.sort-icon' ).length > 0 ? parseInt(el.find( '.sort-icon' ).css( 'width')) : 0
+                    var cellWidth = el.width()
+                    // todo: better detection. This handles titles with ellipses
+                    if (titleWidth + handleWidth + iconWidth + 6 >= el.width()) {
+                        title.css('width', (cellWidth - handleWidth - iconWidth - padding - 12 ) + "px");
+                    }
+                }
+            });
+        },
 
         parseMeasurementType: function (sizeString) {
             var units = ["px", "%", "em"];
@@ -887,45 +1026,47 @@ var dirtyCheckDefault = {
             if(view.collection.length == 0){
                 view.renderNoRecordsFound();
             } else {
-                view.toggleTableChrome( true );
-                _.each( view.collection.models, function ( model ) {
-                    var tr = $( view.elements.tr ),
+                view.toggleTableChrome(true);
+                _.each(view.collection.models, function (model) {
+                    var tr = $(view.elements.tr),
                         it = model.toJSON();
 
-                    tr.attr( "data-id", it.id );
-                    tr.addClass ( clz );
+          		tr.attr( "data-id", getModelId( model ));
+          		tr.addClass ( clz );
 
                     clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
 
-                    _.each( columnState, function (col) {
-                        if ( _.isBoolean( col.visible ) && !col.visible )
+                    _.each(columnState, function (col) {
+                        if (_.isBoolean(col.visible) && !col.visible)
                             return;
 
                         var piece,
-                            td = $( view.elements.td );
+                            td = $(view.elements.td);
 
                         if ( _.isFunction( col.render ) )
-                            td.append( col.render.call( this, it ) );
+                            td.append( col.render.call( this, it, col ) );
                         else {
                             td.text( view.resolveProperty( it, col.name ) || view.defaults.display );
                         }
 
-                        td.attr( "data-id", it.id );
+                        td.attr( "data-id", getModelId(model) );
                         td.attr( "data-property", col.name );
+                        //assign extensibility field id
+                        td.attr( xe.typePrefix + xe.type.field,col.name);
 
-                        if ( col.width )
-                            td.css( "width", col.width );
+                        if (col.width)
+                            td.css("width", col.width);
 
-                        td = view.determineColumnEditability( col, td, it );
-                        tr.append( td );
+                        td = view.determineColumnEditability(col, td, it);
+                        tr.append(td);
                     });
 
-                    if ( _.isFunction( view.options.processRow ) ) {
-                        var processedRow = view.options.processRow.call( view, tr, it );
-                        tr = ( !_.isUndefined( processedRow ) ? processedRow : tr );
+                    if (_.isFunction(view.options.processRow)) {
+                        var processedRow = view.options.processRow.call(view, tr, it);
+                        tr = ( !_.isUndefined(processedRow) ? processedRow : tr );
                     }
 
-                    tbody.append( tr );
+                    tbody.append(tr);
                 });
             }
 
@@ -1009,7 +1150,7 @@ var dirtyCheckDefault = {
                             view.editMode( false );
                             $( 'form', this ).submit();
                         },
-                        placeholder: ""
+                        placeholder: column.placeholder && "<span class='xe-placeholder'>"+xe.i18n(column.placeholder)+"</span>"
                     };
 
                 if ( _.isBoolean( column.editable ) && column.editable )
@@ -1065,8 +1206,8 @@ var dirtyCheckDefault = {
                 _.each( view.getDataAsJson(), function ( it ) {
                     var tr = $( view.elements.tr );
 
-                    tr.attr( "data-id", it.id );
-                    tr.addClass ( clz );
+        	 tr.attr( "data-id", getModelId(it) );
+       		 tr.addClass ( clz );
 
                     clz = ( clz == view.strings.odd ? view.strings.even : view.strings.odd );
 
@@ -1077,13 +1218,13 @@ var dirtyCheckDefault = {
                         var piece,
                             td = $( view.elements.td );
 
-                        if ( _.isFunction( col.render ) )
-                            td.append( col.render.call( this, it ) );
-                        else {
-                            td.text( it[ col.name ] || view.defaults.display );
-                        }
+		          if ( _.isFunction( col.render ) )
+		            td.append( col.render.call( this, it, col ) );
+		          else {
+		            td.text( it[ col.name ] || view.defaults.display );
+		          }
 
-                        td.attr( "data-id", it.id );
+                        td.attr( "data-id", getModelId( it ));
                         td.attr( "data-property", col.name );
 
                         if ( col.width )
@@ -1229,6 +1370,8 @@ var dirtyCheckDefault = {
 
                 th.addClass( _.string.dasherize( it.name ) + "-col" + " " + view.css.uiStateDefault );
                 th.attr( "data-property", it.name );
+                //assign extensibility field id
+                th.attr( xe.typePrefix + xe.type.field,it.name);
 
                 if ( it.width )
                     th.css( "width", it.width );
@@ -1381,15 +1524,14 @@ var dirtyCheckDefault = {
             this.frozenTable.append( $( this.elements.tbody ) );
         },
 
-
         getModelFromNotification: function( notification ) {
             var m = notification.get( "model" );
-            if( _.isNull( m ) || _.isUndefined( m ) || _.isUndefined( m.id ) )
+            if( _.isNull( m ) || _.isUndefined( m ) || (_.isUndefined( m.id ) && _.isUndefined( m.cid )))
                 return false;
 
-            var model = this.collection.find( function( it ) {
-                return it.get( "id" ) === m.id;
-            });
+            var model = this.collection.get( getModelId( m ));
+
+
 
             return ( _.isNull( model ) ? false : model );
         },
