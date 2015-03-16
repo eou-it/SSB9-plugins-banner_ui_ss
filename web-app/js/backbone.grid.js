@@ -693,8 +693,6 @@ var dirtyCheckDefault = {
             }
         }
 
-        this.$el.find(".grid-wrapper").css({ "display": "flex"});
-
         if (hasFrozenColumns) {
             this.$el.find(".grid-frozen-wrapper").css("width", frozenWidthString);
         }
