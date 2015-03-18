@@ -14,7 +14,11 @@ class BannerUiSsBootStrap {
             servletContext.setAttribute( "transactionTimeout", timeoutSeconds )
 
         servletContext.setAttribute( "loginEndpoint", grailsApplication.config?.loginEndpoint?: "" )
-        servletContext.setAttribute( "logoutEndpoint", grailsApplication.config?.logoutEndpoint?: "" )
+        if("saml".equalsIgnoreCase(grailsApplication.config?.banner?.sso?.authenticationProvider.toString())) {
+            servletContext.setAttribute( "logoutEndpoint", "saml/logout" )
+        } else {
+            servletContext.setAttribute( "logoutEndpoint", grailsApplication.config?.logoutEndpoint?: "" )
+        }
 
         if ((true == grailsApplication.config?.guestAuthenticationEnabled) && (!"default".equalsIgnoreCase(grailsApplication.config?.banner?.sso?.authenticationProvider.toString()))) {
             servletContext.setAttribute("guestLoginEnabled", true)
