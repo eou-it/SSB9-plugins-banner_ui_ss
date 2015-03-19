@@ -1,4 +1,6 @@
-0/*********************************************************************************
+package net.hedtech.banner.webtailor
+
+/*********************************************************************************
  Copyright 2009-2012 SunGard Higher Education. All Rights Reserved.
  This copyrighted software contains confidential and proprietary information of 
  SunGard Higher Education and its subsidiaries. Any use of this software is limited 
@@ -9,8 +11,6 @@
  Banner and Luminis are either registered trademarks or trademarks of SunGard Higher 
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
-package net.hedtech.banner.webtailor
-
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.Before
 import org.junit.Test
@@ -19,7 +19,6 @@ import org.junit.Test
  * This is a helper class that is used to access Web Tailor
  *
  */
-
 
 class WebTailorUtilityIntegrationTests extends BaseIntegrationTestCase {
 
