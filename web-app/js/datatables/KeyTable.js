@@ -160,9 +160,9 @@ function KeyTable ( oInit )
         }
         else
         {
-            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).off( 'click', _fnClickListenerPlaceHolder);
             jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).off( 'focus', _fnPerformFocusOnComponent );
-            jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).off( 'click', _fnClick);
+            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).off('click',_fnClickOnComponent);
+            jQuery('td', _nBody).off( 'click', _fnClick);
             jQuery('td', _nBody).off('mousedown', _setComponentToFocusOnFlyoutClose );
             jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).off('blur',_fnReleaseFocusForShortCutKeys);
             jQuery('th', $(oInit.table)).off('click', _fnReleseFocusOnHeaderClick );
@@ -1112,7 +1112,7 @@ function KeyTable ( oInit )
         nTarget.focus();
     }
 
-    function _fnSetGridActionableMode(nTarget, e){
+    function _fnSetGridActionableMode(nTarget){
         _fnSetGridMode(_MODE.ACTIONABLE);
         _fnSetEnabledColumns(_columnsActionableMode);
         _fnRemoveTabIndexToFormObjs();
@@ -1121,8 +1121,6 @@ function KeyTable ( oInit )
         temp = temp.length ? temp[0] : nTarget;
         temp.focus();
         window.componentToFocusOnFlyoutClose = $(temp);
-        e.stopPropagation();
-        e.preventDefault();
     }
 
 
@@ -1160,8 +1158,10 @@ function KeyTable ( oInit )
                 _fnAction(_Action.ESCAPE, e);
                 var xy = e.shiftKey?_fnGetPreviousEditablePos():_fnGetNextEditablePos();
                 var nTarget = _fnCellFromCoords(xy[0], xy[1]);
-                _fnSetGridActionableMode(nTarget,e);
+                _fnSetGridActionableMode(nTarget);
                 _openFlyoutIfNotificationExists();
+                e.stopPropagation();
+                e.preventDefault();
                 break;
             case _KeyCode.ESC:
                 isGridKeyNavigationOperator = true;
@@ -1562,8 +1562,8 @@ function KeyTable ( oInit )
         else
         {
             jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).on('focus', _fnPerformFocusOnComponent );
-            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).on('click', _fnClickListenerPlaceHolder);
-            jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS, _nBody).on('click', _fnClick );
+            jQuery(_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).on('click',_fnClickOnComponent);
+            jQuery('td', _nBody).on('click', _fnClick );
             jQuery('td', _nBody).on('mousedown', _setComponentToFocusOnFlyoutClose );
             jQuery('td, td '+_ACTIONABLE_COMPONENTS_TO_SET_FOCUS,_nBody).on('blur',_fnReleaseFocusForShortCutKeys);
             jQuery('th', $(oInit.table)).on('click', _fnReleseFocusOnHeaderClick );
@@ -1579,6 +1579,11 @@ function KeyTable ( oInit )
         document.addEventListener('click', _fnReleaseFocus,true );
     }
 
+    function _fnClickOnComponent(e) {
+        nTarget = _fnGetCellForSelectedComponent(e.target);
+        _fnSetGridActionableMode(nTarget);
+        e.stopPropagation();
+    }
     function _fnReleaseFocusForShortCutKeys(e) {
         var nTarget = e.target;
         var bTableClick = false;
@@ -1592,17 +1597,13 @@ function KeyTable ( oInit )
         }
     }
 
-    function _fnClickListenerPlaceHolder(e){
-        e.stopPropagation();
-        e.preventDefault();
-    }
-
     function _fnPerformFocusOnComponent(e)  {
         var nTarget = _fnGetCellForSelectedComponent(this);
         var prevTarget = _fnCellFromCoords(_iOldX,_iOldY);
-        _fnSetGridActionableMode(nTarget,e);
-        e.stopPropagation();
-        e.preventDefault();
+        if(_that.isOutOfFocusMode())    {
+            _fnSetGridActionableMode(nTarget);
+            e.stopImmediatePropagation();
+        }
     }
 
     this.fnCoordsFromCell = _fnCoordsFromCell; // expose, at least for debugging
