@@ -303,18 +303,8 @@
     border-bottom: 1px solid #BBBBBB !important;
 }
 
-.grid tr td {
-    overflow: hidden;
-    word-wrap: break-word;
-    white-space: normal;
-}
-
 .grid thead th {
     background-color: #EDF0F4 !important;
 }
 
-.grid thead th .title {
-    text-overflow: clip;
-    white-space: normal;
-}
 
