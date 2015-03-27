@@ -587,7 +587,6 @@ $(document).ready(function() {
         toggle: function() {
             if (this.notificationCenterFlyout.isDisplayed()) {
                 this.closeNotificationFlyout();
-                window.componentToFocusOnFlyoutClose.focus();
             }
             else {
                 if(this.model.length > 0){
@@ -601,6 +600,9 @@ $(document).ready(function() {
             return this;
         },
         openNotificationFlyout: function () {
+            if(window.componentToFocusOnFlyoutClose == null){
+                window.componentToFocusOnFlyoutClose = $(document.activeElement);
+            }
             this.notificationCenterAnchor.display();
             this.notificationCenterFlyout.display();
             this.addNotificationOverlay();
@@ -612,16 +614,20 @@ $(document).ready(function() {
             this.notificationCenterFlyout.hide();
             this.removeClickListenerOnNotificationOverlay();
             $('.notification-center-flyout')[0].removeEventListener('keydown',  this.pressEscToClose, true );
+            this.focusComponentOnFlyoutClose();
+            window.componentToFocusOnFlyoutClose = null;
         },
-        pressEscToClose: function(e) {
-            if(e.keyCode == $.ui.keyCode.ESCAPE){
-                this.closeNotificationFlyout();
+        focusComponentOnFlyoutClose: function(){
                 if($('body .notification-center-shim').length == 0) {
                     window.componentToFocusOnFlyoutClose.focus();
                 }
                 else{
                     this.notificationCenterAnchor.$el.focus();
                 }
+        },
+        pressEscToClose: function(e) {
+            if(e.keyCode == $.ui.keyCode.ESCAPE){
+                this.closeNotificationFlyout();
                 e.stopImmediatePropagation();
             }
         },
