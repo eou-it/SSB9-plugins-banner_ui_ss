@@ -1099,10 +1099,8 @@ var dirtyCheckDefault = {
                     tdLen = $(row).find('td').length;
                     getTDPos = (tdLen>2)?(tdLen-2):0;
                     tdAtPos = $(row).find("td").eq(getTDPos);
-                    isActionableComponentExists = $(tdAtPos).find(editControls).length;
-                    if(isActionableComponentExists == 0){
-                        $(row).find('td').last().addClass(readOnly);
-                    }
+                    allClasses = $(tdAtPos).attr('class');
+                    $(row).find('td').last().addClass(allClasses);
                 });
             }
         },

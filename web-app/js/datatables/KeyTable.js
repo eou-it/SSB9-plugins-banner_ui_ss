@@ -147,6 +147,8 @@ function KeyTable ( oInit )
 
     var _ACTIONABLE_COMPONENTS_TO_SET_FOCUS = "input, select, textarea";
 
+    var _INVISIBLE_COLUMN_CSS = '.visibility-control-column';
+
     var isGridKeyNavigationOperator;
     /*
      * Clean up bound events
@@ -721,6 +723,7 @@ function KeyTable ( oInit )
         jQuery(nTarget).removeClass( _sFocusClass );
         jQuery(nTarget).parent().removeClass( _sFocusClass );
         jQuery(nTarget).removeAttr('tabindex');
+        jQuery(_INVISIBLE_COLUMN_CSS).removeClass(_sFocusClass);
         if ( nTarget !== null ) {
             _fnEventFire( "blur", _iOldX, _iOldY );
         }
@@ -780,6 +783,7 @@ function KeyTable ( oInit )
      * Scope:    KeyTable - private
      */
     var _actionCount = 0;
+
     /*
      * Variable: _Action
      * Purpose:  Enumerated Actions known to KeyTable. Higher-level representation of key events.
@@ -1134,8 +1138,18 @@ function KeyTable ( oInit )
     }
 
     function _fnSetFocusToCell(nTarget) {
+        var getTDPos, tdAtPos,tdLen;
         _fnCaptureKeys();
         _fnApplyUIChangesForFocus(nTarget);
+        var trelement = $(nTarget).closest('tr');
+        var tdelements = $(trelement).find('td');
+        tdLen = tdelements.length;
+        getTDPos = (tdLen>2)?(tdLen-2):0;
+        if(getTDPos === $(nTarget).index()) {
+            var prevtdclass = $(nTarget).attr('class');
+            $(nTarget).css('cssText','outline:0px !important');
+            $(trelement).find(_INVISIBLE_COLUMN_CSS).addClass(prevtdclass);
+        }
     }
 
 
