@@ -1146,9 +1146,8 @@ function KeyTable ( oInit )
         tdLen = tdelements.length;
         getTDPos = (tdLen>2)?(tdLen-2):0;
         if(getTDPos === $(nTarget).index()) {
-            var prevtdclass = $(nTarget).attr('class');
             $(nTarget).css('cssText','outline:0px !important');
-            $(trelement).find(_INVISIBLE_COLUMN_CSS).addClass(prevtdclass);
+            $(trelement).find(_INVISIBLE_COLUMN_CSS).addClass(_sFocusClass);
         }
     }
 
