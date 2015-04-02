@@ -404,6 +404,7 @@ $(document).ready(function() {
                     component = component.find('.select2-focusser');
                 }
                 window.notificationCenter.closeNotificationFlyout();
+                window.componentToFocusOnFlyoutClose = null;
                 component.focus();
             }
         }
@@ -558,7 +559,7 @@ $(document).ready(function() {
             $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
-            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','addNotificationOverlay','checkAndCloseFlyout');
+            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','closeNotificationFlyoutAndSetFocus','addNotificationOverlay','checkAndCloseFlyout');
             this.model.bind("add", this.addNotification);
             this.model.bind("remove", this.removeNotification);
 
@@ -586,7 +587,7 @@ $(document).ready(function() {
         },
         toggle: function() {
             if (this.notificationCenterFlyout.isDisplayed()) {
-                this.closeNotificationFlyout();
+                this.closeNotificationFlyoutAndSetFocus();
             }
             else {
                 if(this.model.length > 0){
@@ -614,6 +615,10 @@ $(document).ready(function() {
             this.notificationCenterFlyout.hide();
             this.removeClickListenerOnNotificationOverlay();
             $('.notification-center-flyout')[0].removeEventListener('keydown',  this.pressEscToClose, true );
+
+        },
+        closeNotificationFlyoutAndSetFocus: function(){
+            this.closeNotificationFlyout();
             this.focusComponentOnFlyoutClose();
             window.componentToFocusOnFlyoutClose = null;
         },
@@ -627,7 +632,7 @@ $(document).ready(function() {
         },
         pressEscToClose: function(e) {
             if(e.keyCode == $.ui.keyCode.ESCAPE){
-                this.closeNotificationFlyout();
+                this.closeNotificationFlyoutAndSetFocus();
                 e.stopImmediatePropagation();
             }
         },
@@ -670,7 +675,7 @@ $(document).ready(function() {
         },
         checkAndCloseFlyout: function(event){
             if($(event.target).closest('.notification-center').length == 0){
-                this.closeNotificationFlyout();
+                this.closeNotificationFlyoutAndSetFocus();
             }
         },
         setComponentToFocusOnFlyoutClose: function(e) {
