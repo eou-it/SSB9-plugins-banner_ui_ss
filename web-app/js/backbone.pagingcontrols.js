@@ -1,4 +1,4 @@
-/* Copyright 2013-2014 Ellucian Company L.P. and its affiliates. */
+/* Copyright 2013-2015 Ellucian Company L.P. and its affiliates. */
 
 ;(function ( $, _, Backbone ) {
     Backbone.PagingControls = Backbone.View.extend({
@@ -162,6 +162,7 @@
 
       if ( pageInfo.pages == 1 ) {
           input.hide();
+          this.disableComponents([ first, last, prev, next ]);
       } else {
           input.show();
 
@@ -174,6 +175,9 @@
               enabled = enabled.concat( [ first, last, prev, next ] );
           }
           _.each( enabled, function (it) { it.addClass( view.css.enabled ).attr('tabindex',0) });
+
+          var buttonsToDisable = _.difference([ first, last, prev, next ], enabled);
+          this.disableComponents(buttonsToDisable);
       }
 
 	_.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap], function (it) {
@@ -267,6 +271,11 @@
             cancelCallback: resetPageSize},
             this.dirtyCheckDefault));
         view.pageActions.push(first, prev, input, next, last, select);
+    },
+    disableComponents: function (componentsToDisable) {
+        _.each(componentsToDisable, function (it) {
+            it.attr('disabled', 'disabled');
+        });
     },
     getPagesActions: function(){
         return this.pageActions;
