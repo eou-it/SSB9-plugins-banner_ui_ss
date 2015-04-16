@@ -621,3 +621,27 @@ function getPreviousTabbableElement( currentElement , container) {
 function getTabbableElements(container){
     return  _.isUndefined(container) ?  $(":tabbable") : container.find(":tabbable");
 }
+
+var isMobile = function(){
+    var isMobile = window.matchMedia("only screen and (min-device-width: 0px) and (max-device-width: 768px)");
+    if (isMobile.matches) {
+        return true;
+    }
+    return false;
+}
+
+var isTablet = function(){
+    var isTablet = window.matchMedia("only screen and (min-device-width: 769px) and (max-device-width:1024px)");
+    if (isTablet.matches) {
+           return true;
+       }
+    return false;
+}
+
+var isDesktop = function(){
+    var isDesktop = window.matchMedia("only screen and (min-device-width:1025px)");
+      if (isDesktop.matches) {
+             return true;
+         }
+    return false;
+}
