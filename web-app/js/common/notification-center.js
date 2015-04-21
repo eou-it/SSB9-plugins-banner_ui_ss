@@ -424,8 +424,8 @@ $(document).ready(function() {
             var notificationCountDiv = $('<div class="notification-center-count"><span/></div>' );
 
             $(this.el).attr('aria-describedby',"notificationsdescription");
-
-            $(this.el).append( notificationCountDiv ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
+            $(this.el).append( notificationCountDiv );
+           // $(this.el).append( notificationCountDiv ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
             this.model.bind("add", this.render);
@@ -703,7 +703,8 @@ $(document).ready(function() {
     if ( !_.isUndefined( window[ "EventDispatcher" ] ) ) {
         EventDispatcher.addEventListener( Application.events.initialized, function() {
             var nc = $("<div><div id='notification-center'></div></div>" );
-            ControlBar.append( nc );
+            //TODO: HRU:5803 cleanup
+            //ControlBar.append( nc );
             window.notificationCenter = new NotificationCenter({
                 el: $("#notification-center"),
                 model: notifications

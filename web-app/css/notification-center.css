@@ -24,8 +24,7 @@
 }
 
 .notification-center-count.notification-center-count-nil {
-    background-color: #FFFFFF;
-    color: #C8DCE8;
+    display: none;
 }
 
 .notification-center-label {
