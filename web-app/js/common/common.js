@@ -398,6 +398,7 @@ $(document).ready(function() {
                 areas_label_branding:                   $.i18n.prop( "aurora.areas_label_branding" ),
                 areas_label_opened_shortcut :           $.i18n.prop( "aurora.areas_label_opened_shortcut" ),
                 areas_label_tools_shortcut :            $.i18n.prop( "aurora.areas_label_tools_shortcut" ),
+                areas_label_avatar_shortcut :           $.i18n.prop( "aurora.areas_label_avatar_shortcut" ),
                 openitems_label_closeSelected :         $.i18n.prop( "aurora.openitems_label_closeSelected" ),
                 openitems_label_closeAll :              $.i18n.prop( "aurora.openitems_label_closeAll" ),
                 preferences_label :                     $.i18n.prop( "aurora.preferences_label" ),
