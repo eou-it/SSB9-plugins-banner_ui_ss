@@ -1,27 +1,27 @@
-.notification-center {
-    color: #000000;
-    margin-top: -6px;
-    padding-left: 5px;
-    direction: ltr;
-}
+/*.notification-center {*/
+    /*color: #000000;*/
+    /*margin-top: -6px;*/
+    /*padding-left: 5px;*/
+    /*direction: ltr;*/
+/*}*/
 
 .notification-center-hidden {
     visibility: hidden;
     display: none;
 }
 
-.notification-center-count {
-    float: left;
-    text-align: center;
-    min-width: 16px;
-    min-height: 16px;
-    font-size: 1.1em;
-    color: #FFFFFF;
-    background-color:#DB7F33;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-}
+/*.notification-center-count {*/
+    /*float: left;*/
+    /*text-align: center;*/
+    /*min-width: 16px;*/
+    /*min-height: 16px;*/
+    /*font-size: 1.1em;*/
+    /*color: #FFFFFF;*/
+    /*background-color:#DB7F33;*/
+    /*border-radius: 4px;*/
+    /*-moz-border-radius: 4px;*/
+    /*-webkit-border-radius: 4px;*/
+/*}*/
 
 .notification-center-count.notification-center-count-nil {
     display: none;
