@@ -932,26 +932,6 @@ ul.ui-autocomplete a.ui-state-hover {
 }
 
 
-
-/* Tools Menu in Aurora */
-#toolsCanvas .menu-item {
-    background: none repeat scroll 0 0 #FFFFFF;
-    color: #333333;
-}
-
-#toolsCanvas .menu-item.disabled {
-    color: #CCCCCC;
-}
-
-#toolsCanvas .menu-item:hover {
-    background: none repeat scroll 0 0 #D8E6EE;
-    color: #333333;
-}
-
-#toolsCanvas .menu-item.disabled:hover {
-    color: #CCCCCC;
-}
-
 .loading {
     opacity:0.4;
     filter:alpha(opacity=40); /* IE8 */
