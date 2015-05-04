@@ -622,7 +622,7 @@ function getTabbableElements(container){
 }
 
 var isMobile = function(){
-    var isMobile = window.matchMedia("only screen and (min-device-width: 0px) and (max-device-width: 768px)");
+    var isMobile = window.matchMedia("only screen and (min-width: 0px) and (max-width: 768px)");
     if (isMobile.matches) {
         return true;
     }
@@ -630,7 +630,7 @@ var isMobile = function(){
 }
 
 var isTablet = function(){
-    var isTablet = window.matchMedia("only screen and (min-device-width: 769px) and (max-device-width:1024px)");
+    var isTablet = window.matchMedia("only screen and (min-width: 769px) and (max-width:1024px)");
     if (isTablet.matches) {
            return true;
        }
@@ -638,7 +638,7 @@ var isTablet = function(){
 }
 
 var isDesktop = function(){
-    var isDesktop = window.matchMedia("only screen and (min-device-width:1025px)");
+    var isDesktop = window.matchMedia("only screen and (min-width:1025px)");
       if (isDesktop.matches) {
              return true;
          }
