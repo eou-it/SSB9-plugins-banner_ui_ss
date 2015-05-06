@@ -49,14 +49,15 @@ var _datepickerConfig = {
       // Don't cancel inline editing onblur to allow clicking datepicker
       // this is the jeditable settings, not the datepicker options
       settings.onblur = 'nothing';
+      var datepickerSettings = settings.datepicker || {};
 
 
-      var datepicker = jQuery.extend( {}, settings.datepicker, {
+      var datepicker = jQuery.extend( {}, datepickerSettings, {
         onSelect: function() {
           // clicking specific day in the calendar should
           // submit the form and close the input field
           form.submit();
-          var handler = settings.datepicker.onSelect;
+          var handler = datepickerSettings.onSelect;
           return handler && handler.apply( this, arguments );
         },
 
@@ -73,7 +74,7 @@ var _datepickerConfig = {
               // so lets submit the form and close the input field
               form.submit();
             }
-            var handler = settings.datepicker.onClose;
+            var handler = datepickerSettings.onClose;
             return handler && handler.apply( this, arguments );
 
             // the delay is necessary; calendar must be already
