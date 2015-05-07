@@ -82,12 +82,7 @@
 }
 
 
-.notification-center-anchor.notification-center-anchor-hidden:hover {
-    background: #0071A7;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-}
+
 
 .notification-center-anchor.notification-center-anchor-displayed {
     background: #0071A7;
