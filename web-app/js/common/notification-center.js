@@ -438,10 +438,10 @@ $(document).ready(function() {
             var displayedNotifications = this.model.grouped();
 
             if (displayedNotifications.length > 0) {
-                $(".notification-center-count", this.el).removeClass( "notification-center-count-nil");
+                $(this.el).removeClass( "notification-center-count-nil");
             }
             else {
-                $(".notification-center-count", this.el).addClass( "notification-center-count-nil");
+                $(this.el).addClass( "notification-center-count-nil");
             }
             $(".notification-center-count", this.el).attr('aria-label', displayedNotifications.length );
             $(".notification-center-count span", this.el).html( displayedNotifications.length );

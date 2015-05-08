@@ -3,7 +3,6 @@
 *******************************************************************************/
 body {
     background: #f8f8f8;
-    font: 10px Arial,Helvetica,sans-serif;
     overflow-y: hidden !important;
 }
 
@@ -1143,4 +1142,8 @@ div.infoicon {
 .component-error:focus {
     border-width:2px;
     outline: none;
+}
+
+#content{
+    font: 10px Arial,Helvetica,sans-serif; /* TODO: This font styling is removed from the body tag as header font is styled in em. Once the content section is styled in em this should be removed */
 }
