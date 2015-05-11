@@ -1,3 +1,5 @@
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
 /*******************************************************************************
 Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
@@ -15,7 +17,12 @@ class BannerUiSsBootStrap {
 
         servletContext.setAttribute( "loginEndpoint", grailsApplication.config?.loginEndpoint?: "" )
         if("saml".equalsIgnoreCase(grailsApplication.config?.banner?.sso?.authenticationProvider.toString())) {
-            servletContext.setAttribute( "logoutEndpoint", "saml/logout" )
+            def localLogout=grailsApplication.config?.banner?.sso?.authentication.saml.localLogout
+            if(localLogout=='true'){
+                servletContext.setAttribute( "logoutEndpoint", "saml/logout?local=true" )
+            }else{
+                servletContext.setAttribute( "logoutEndpoint", "saml/logout" )
+            }
         } else {
             servletContext.setAttribute( "logoutEndpoint", grailsApplication.config?.logoutEndpoint?: "" )
         }
