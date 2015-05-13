@@ -28,7 +28,7 @@ $.datepicker._doKeyDown = _.wrap( $.datepicker._doKeyDown, function(func, event)
     }
 });
 
-$.editable.addInputType( 'datepicker', {
+var _datepickerConfig = {
 
     /* create input element */
     element: function( settings, original ) {
@@ -47,13 +47,18 @@ $.editable.addInputType( 'datepicker', {
           input = form.find( "input" );
 
       // Don't cancel inline editing onblur to allow clicking datepicker
+      // this is the jeditable settings, not the datepicker options
       settings.onblur = 'nothing';
+      var datepickerSettings = settings.datepicker || {};
 
-      datepicker = {
+
+      var datepicker = jQuery.extend( {}, datepickerSettings, {
         onSelect: function() {
           // clicking specific day in the calendar should
           // submit the form and close the input field
           form.submit();
+          var handler = datepickerSettings.onSelect;
+          return handler && handler.apply( this, arguments );
         },
 
         onClose: function() {
@@ -69,18 +74,19 @@ $.editable.addInputType( 'datepicker', {
               // so lets submit the form and close the input field
               form.submit();
             }
+            var handler = datepickerSettings.onClose;
+            return handler && handler.apply( this, arguments );
 
             // the delay is necessary; calendar must be already
             // closed for the above :focus checking to work properly;
             // without a delay the form is submitted in all scenarios, which is wrong
           }, 150 );
         }
-      };
-
-      if (settings.datepicker) {
-        jQuery.extend(datepicker, settings.datepicker);
-      }
+      });
 
       input.datepicker(datepicker);
     }
-} );
+}
+$.editable.addInputType( 'datepicker', _datepickerConfig ); // note that this is usually hidden by i18n_core jquery.jeditable.multi.datepicker.js
+
+$.editable.addInputType( 'datepicker.jquery', _datepickerConfig );
