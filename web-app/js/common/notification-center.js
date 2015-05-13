@@ -362,7 +362,7 @@ $(document).ready(function() {
 
             messageContainer.addClass('notification-flyout-item');
 
-            var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html(messageContainer.append( this.model.get("message" ) ) );
+            var messageDiv = $("<div></div>").addClass( "notification-item-message vertical-align" ).html(messageContainer.append( this.model.get("message" ) ) );
 
             // Manage the prompts if available
             var promptsDiv;
@@ -421,11 +421,10 @@ $(document).ready(function() {
     window.NotificationCenterAnchor = Backbone.View.extend({
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
-            var notificationCountDiv = $('<div class="notification-center-count"><span/></div>' );
+            var notificationCountDiv = $('<div class="notification-center-count vertical-align"><span/></div>' );
 
             $(this.el).attr('aria-describedby',"notificationsdescription");
             $(this.el).append( notificationCountDiv );
-           // $(this.el).append( notificationCountDiv ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
             this.model.bind("add", this.render);
@@ -516,12 +515,6 @@ $(document).ready(function() {
         display: function() {
             $(this.el).addClass( "notification-center-flyout-displayed" ).removeClass( "notification-center-flyout-hidden" );
 
-            // This really should be encapsulated in the notificationCenter
-            $(this.el).position({
-                my: "right top",
-                at: "right bottom",
-                of: this.options.parent
-            });
 
             return this;
         },
@@ -553,10 +546,10 @@ $(document).ready(function() {
             $(this.el).addClass("notification-center");
             $(this.el).attr('title',formatTitleAndShortcut($.i18n.prop("js.notification.label"),$.i18n.prop("js.notification.shortcut")));
             $(this.el).append('<span class="offscreen" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span>');
-            $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
-            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
-
             $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
+            $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
+
+            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','closeNotificationFlyoutAndSetFocus','addNotificationOverlay','checkAndCloseFlyout');
@@ -611,7 +604,6 @@ $(document).ready(function() {
             $('.notification-center-flyout')[0].addEventListener('keydown', this.pressEscToClose , true );
         },
         closeNotificationFlyout: function () {
-            this.notificationCenterAnchor.hide();
             this.notificationCenterFlyout.hide();
             this.removeClickListenerOnNotificationOverlay();
             $('.notification-center-flyout')[0].removeEventListener('keydown',  this.pressEscToClose, true );
