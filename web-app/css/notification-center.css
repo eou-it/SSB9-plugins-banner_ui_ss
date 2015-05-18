@@ -23,6 +23,8 @@
     padding-left: 0px;
     padding-right: 0px;
     direction: ltr;
+    max-height: 30em;
+    overflow: auto;
 }
 
 .notification-center-flyout ul li .notification-icon{
@@ -149,8 +151,12 @@ body > .notification-center-shim {
     }
 
     .notification-center-flyout li div.notification-item-message {
-           font-size: 0.75em;
-       }
+        font-size: 0.75em;
+    }
+
+    .notification-center-flyout ul {
+        max-height: 20em;
+    }
 
 }
 
