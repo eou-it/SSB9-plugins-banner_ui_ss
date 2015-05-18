@@ -1,8 +1,4 @@
 
-.notification-center-anchor.notification-center-count-nil {
-    display: none;
-}
-
 .notification-center-flyout {
     position: absolute;
     width: 30%;
@@ -15,25 +11,13 @@
     left : auto;
 }
 
-.notification-center-flyout ul {
-    background-color: #FFFFFF;
-    margin: 0;
-    max-height: 30em;
-    overflow: auto;
-}
-
-#header-main-section li a.notification-center-anchor {
-    cursor: pointer;
-    display: block;
-}
-
 .notification-center-flyout-displayed {
     visibility: visible;
     right:0;
     left:auto;
 }
 
-.notification-center-flyout.notification-center-flyout ul {
+.notification-center-flyout ul {
     list-style-type: none;
     margin: 0;
     padding-left: 0px;
@@ -41,49 +25,40 @@
     direction: ltr;
 }
 
-.notification-center-flyout li:first-child {
-    border-bottom-style: none;
-}
-
-.notification-center-flyout li.notification-center-message-with-prompts {
-    padding-bottom: 0px;
-}
-
-.notification-center-flyout li div.notification-item-message {
-    min-height: 2.5em;
-    text-align: left;
-    font-size: 0.85em;
-    padding-bottom: 0.25em;
-    padding-top: 0.25em;
+.notification-center-flyout ul li .notification-icon{
+    padding-left: 0.25em;
     padding-right: 0.25em;
-}
-
-.notification-center-flyout li:first-child div.notification-item-message {
-    min-height: 2.5em;
-}
-
-.notification-center-flyout ul li div.notification-item-message:before{
-    content: '';
-    width: 1.75em;
     height: 1.5em;
-    padding-right: 0.75em;
-    min-width: 1.75em;
+    width: 1.25em;
+    display: table-cell;
+    float: left;
 }
 
-.notification-center-flyout ul li.notification-center-message-warning.notification-center-message-with-prompts:first-child div.notification-item-message {
-    background-color: #FFF6B3;
-    border-bottom-style: none;
+.notification-item-message{
+    display: table-cell;
 }
 
-.notification-center-flyout ul li.notification-center-message-success div.notification-item-message:before {
+.notification-center-flyout ul li.notification-item{
+    padding: 0.5em 0.25em 0.5em 0.25em;
+}
+
+.notification-center-flyout ul li:first-of-type.notification-center-message-warning.notification-center-message-with-prompts{
+    padding: 0.5em 0em 0em 0em;
+}
+
+.notification-center-flyout ul li.notification-center-message-warning.notification-center-message-with-prompts .notification-item-prompts{
+    margin-top : 0.5em;
+}
+
+.notification-center-flyout ul li.notification-center-message-success .notification-icon {
     background: url("images/success.svg") no-repeat center;
 }
 
-.notification-center-flyout ul li.notification-center-message-error div.notification-item-message:before{
+.notification-center-flyout ul li.notification-center-message-error .notification-icon{
     background: url("images/error.svg") no-repeat center;
 }
 
-.notification-center-flyout ul li.notification-center-message-warning div.notification-item-message:before {
+.notification-center-flyout ul li.notification-center-message-warning .notification-icon{
     background: url("images/warning.svg") no-repeat center;
 }
 
@@ -127,12 +102,11 @@ li:first-child span.notification-item-prompt-message {
     background-color: #908989;
     border-color: #908989;
     color: white;
-    height: 1.65em;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    padding: 2px 7px;
     border: none;
+    height: 2em;
 }
 
 li:first-child .notification-item-prompts {
@@ -141,9 +115,7 @@ li:first-child .notification-item-prompts {
     background-color: #EBEBEB;
     border: 1px solid #C6CBCD;
     text-align: right;
-    vertical-align: middle;
-    padding-right: 0.25em;
-    line-height: 1.65em;
+    padding: 0.25em 0.25em 0.25em 0;
 }
 
 body > .notification-center-shim {

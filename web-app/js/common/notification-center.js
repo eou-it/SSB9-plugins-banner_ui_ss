@@ -362,7 +362,7 @@ $(document).ready(function() {
 
             messageContainer.addClass('notification-flyout-item');
 
-            var messageDiv = $("<div></div>").addClass( "notification-item-message vertical-align" ).html(messageContainer.append( this.model.get("message" ) ) );
+            var messageDiv = $("<span></span>").addClass( "notification-item-message" ).html(messageContainer.append( this.model.get("message" ) ) );
 
             // Manage the prompts if available
             var promptsDiv;
@@ -384,7 +384,8 @@ $(document).ready(function() {
                 }, this );
             }
 
-            $(this.el).html( messageDiv );
+            $(this.el).append("<a class='notification-icon'></a>");
+            $(this.el).append( messageDiv );
 
 
             if (promptsDiv) {
@@ -421,7 +422,7 @@ $(document).ready(function() {
     window.NotificationCenterAnchor = Backbone.View.extend({
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
-            var notificationCountDiv = $('<div class="notification-center-count vertical-align"><span/></div>' );
+            var notificationCountDiv = $('<div class="notification-center-count"><span/></div>' );
 
             $(this.el).attr('aria-describedby',"notificationsdescription");
             $(this.el).append( notificationCountDiv );
