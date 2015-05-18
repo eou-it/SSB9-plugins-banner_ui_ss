@@ -644,3 +644,19 @@ var isDesktop = function(){
          }
     return false;
 }
+
+var isRTLMode = function(){
+    var result = false;
+    if($.i18n.prop('default.language.direction') == "rtl"){
+        return true
+    }
+    return result;
+}
+
+var isLTRMode = function(){
+    var result = false;
+    if($.i18n.prop('default.language.direction') == "ltr"){
+        return true
+    }
+    return result;
+}
