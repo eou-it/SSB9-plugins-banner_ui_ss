@@ -146,12 +146,12 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols-rtl.css'],  attrs:[media:'screen, projection']
     }
 
-    'bannerAngularLTR' {
+    'bannerWebLTR' {
         dependsOn "bannerSelfServiceCommonLTR, angular, extensibilityAngular"
 //        defaultBundle environment == "development" ? false : "bannerSelfServiceLTR"
     }
 
-    'bannerAngularRTL' {
+    'bannerWebRTL' {
         dependsOn "bannerSelfServiceCommonRTL, angular, extensibilityAngularRTL"
 //        defaultBundle environment == "development" ? false : "bannerSelfServiceRTL"
     }

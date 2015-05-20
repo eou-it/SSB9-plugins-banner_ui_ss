@@ -7,10 +7,10 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 <html lang="${message(code: 'default.language.locale')}">
     <head>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-            <r:require modules="bannerAngularRTL"/>
+            <r:require modules="bannerWebRTL"/>
         </g:if>
         <g:else>
-            <r:require modules="bannerAngularLTR"/>
+            <r:require modules="bannerWebLTR"/>
         </g:else>
 
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
