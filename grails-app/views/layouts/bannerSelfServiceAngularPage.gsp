@@ -7,11 +7,12 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 <html lang="${message(code: 'default.language.locale')}">
     <head>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-            <r:require modules="bannerSelfServiceRTL"/>
+            <r:require modules="bannerAngularRTL"/>
         </g:if>
         <g:else>
-            <r:require modules="bannerSelfService"/>
+            <r:require modules="bannerAngularLTR"/>
         </g:else>
+
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
 
         <meta charset="${message(code: 'default.character.encoding')}"/>
@@ -57,7 +58,6 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
                 _.defer( function() {
                     $( "#splash" ).remove();
                 });
-                $(document.body).removeAttr("role");
             });
         </r:script>
 
