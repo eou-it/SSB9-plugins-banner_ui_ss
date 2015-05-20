@@ -1,5 +1,5 @@
 /** *****************************************************************************
- Copyright 2013-2014 Ellucian Company L.P. and its affiliates.
+ Copyright 2013-2015 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 /*
 Version: @@ver@@ Timestamp: @@timestamp@@
@@ -699,6 +699,8 @@ disabled look for disabled choices in the results dropdown
     }
 }
 
-.select2-container.select2-container-active.component-error .select2-choice{
+.select2-container.select2-container-active.component-error .select2-choice,
+.grid tr.notification-error td.notification-error .select2-container,
+.grid tr.notification-error td.notification-error .select2-container.select2-container-active .select2-choice{
     border: 1px solid #cc0000;
 }

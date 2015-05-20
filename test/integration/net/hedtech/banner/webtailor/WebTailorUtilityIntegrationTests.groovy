@@ -1,3 +1,5 @@
+package net.hedtech.banner.webtailor
+
 /*********************************************************************************
  Copyright 2009-2012 SunGard Higher Education. All Rights Reserved.
  This copyrighted software contains confidential and proprietary information of 
@@ -9,24 +11,25 @@
  Banner and Luminis are either registered trademarks or trademarks of SunGard Higher 
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
-package net.hedtech.banner.webtailor
-
 import net.hedtech.banner.testing.BaseIntegrationTestCase
+import org.junit.Before
+import org.junit.Test
 
 /**
  * This is a helper class that is used to access Web Tailor
  *
  */
 
-
 class WebTailorUtilityIntegrationTests extends BaseIntegrationTestCase {
 
-    protected void setUp() {
+    @Before
+    void setUp() {
         formContext = ['SFAALST']
         super.setUp()
     }
 
 
+    @Test
     def testGetInfoText() {
         
         def infoText = WebTailorUtility.getInfoText('twbkwbis.P_ValLogin', 'WELCOME')
@@ -34,6 +37,7 @@ class WebTailorUtilityIntegrationTests extends BaseIntegrationTestCase {
         
     }
 
+    @Test
      def testGetNullInfoText(){
          def infoText = WebTailorUtility.getInfoText('bwckctlg.catalog_label_text', 'ATTRIBUTE_SUFFIX')
          assertEquals "", infoText
