@@ -400,8 +400,6 @@ $(document).ready(function() {
                 userdetails_signout :                   $.i18n.prop( "aurora.userdetails_signout" ),
                 userdetails_signin_title :              $.i18n.prop( "aurora.userdetails_signin_title" ),
                 userdetails_signin_description :        $.i18n.prop( "aurora.userdetails_signin_description" ),
-                userdetails_guestsignin_title :         $.i18n.prop( "aurora.userdetails_guestsignin_title" ),
-                userdetails_guestsignin_description :   $.i18n.prop( "aurora.userdetails_guestsignin_description" ),
                 userdetails_profile_title :             $.i18n.prop( "aurora.areas_label_profile_title" ),
                 userdetails_profile_description :       $.i18n.prop( "aurora.areas_label_profile_description" ),
                 guestuserdetails_signin :               $.i18n.prop( "aurora.guestuserdetails_signin" ),
