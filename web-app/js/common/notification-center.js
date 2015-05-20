@@ -424,7 +424,6 @@ $(document).ready(function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
             var notificationCountDiv = $('<div class="notification-center-count"><span/></div>' );
 
-            $(this.el).attr('aria-describedby',"notificationsdescription");
             $(this.el).append( notificationCountDiv );
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
@@ -545,9 +544,8 @@ $(document).ready(function() {
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-            $(this.el).attr('title',formatTitleAndShortcut($.i18n.prop("js.notification.label"),$.i18n.prop("js.notification.shortcut")));
-            $(this.el).append('<span class="offscreen" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span>');
-            $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
+            $(this.el).attr('title',$.i18n.prop("js.notification.title"));
+            $(this.el).append( '<a href="#" class="notification-center-anchor"><span class="offscreen" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span></a>' );
             $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
 
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
