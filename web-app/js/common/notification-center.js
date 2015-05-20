@@ -362,7 +362,7 @@ $(document).ready(function() {
 
             messageContainer.addClass('notification-flyout-item');
 
-            var messageDiv = $("<span></span>").addClass( "notification-item-message" ).html(messageContainer.append( this.model.get("message" ) ) );
+            var messageDiv = $("<div></div>").addClass( "notification-item-message vertical-align" ).html(messageContainer.append( this.model.get("message" ) ) );
 
             // Manage the prompts if available
             var promptsDiv;
@@ -384,7 +384,7 @@ $(document).ready(function() {
                 }, this );
             }
 
-            $(this.el).append("<a class='notification-icon'></a>");
+            $(this.el).append("<span class='notification-icon'></span>");
             $(this.el).append( messageDiv );
 
 
@@ -422,8 +422,9 @@ $(document).ready(function() {
     window.NotificationCenterAnchor = Backbone.View.extend({
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
-            var notificationCountDiv = $('<div class="notification-center-count"><span><p class="offscreen" tabindex="-1">'+$.i18n.prop("js.notification.label")+'</p></span></div>' );
+            var notificationCountDiv = $('<div class="notification-center-count vertical-align"><span/></div>' );
 
+            $(this.el).attr('aria-describedby',"notificationsdescription");
             $(this.el).append( notificationCountDiv );
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
@@ -443,7 +444,7 @@ $(document).ready(function() {
                 $(this.el).addClass( "notification-center-anchor-hidden");
             }
             $(".notification-center-count", this.el).attr('aria-label', displayedNotifications.length );
-            $(".notification-center-count span", this.el).prepend( displayedNotifications.length );
+            $(".notification-center-count span", this.el).html( displayedNotifications.length );
             return this;
         },
         isDisplayed: function() {
@@ -544,9 +545,9 @@ $(document).ready(function() {
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-            $(this.el).attr('title',$.i18n.prop("js.notification.title"));
-            $(this.el).append('<span class="offscreen" tabindex="-1" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span>');
-            $(this.el).append( '<a href="#" class="notification-center-anchor" aria-describedby="notificationsdescription"></a>' );
+            $(this.el).attr('title',formatTitleAndShortcut($.i18n.prop("js.notification.label"),$.i18n.prop("js.notification.shortcut")));
+            $(this.el).append('<span class="offscreen" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span>');
+            $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
             $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
 
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });

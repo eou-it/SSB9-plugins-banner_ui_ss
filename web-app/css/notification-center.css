@@ -11,10 +11,11 @@
     left : auto;
 }
 
-.notification-center-flyout-displayed {
+#header-main-section div .notification-center-flyout-displayed {
     visibility: visible;
     right:0;
     left:auto;
+    height: auto;
 }
 
 .notification-center-flyout ul {
@@ -142,6 +143,11 @@ body > .notification-center-shim {
     border-left: none;
 }
 
+#notification-center div{
+    height: inherit;
+}
+
+
 /*Mobile device*/
 
 @media only screen and (min-width: 0px) and (max-width: 767px) {
@@ -165,6 +171,10 @@ body > .notification-center-shim {
 
     .notification-item-prompts button{
         height: 1.75em;
+    }
+
+    #header-main-section div .notification-center-flyout-displayed{
+        position: fixed;
     }
 }
 
