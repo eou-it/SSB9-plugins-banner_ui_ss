@@ -403,7 +403,8 @@ $(document).ready(function() {
                 userdetails_profile_title :             $.i18n.prop( "aurora.areas_label_profile_title" ),
                 userdetails_profile_description :       $.i18n.prop( "aurora.areas_label_profile_description" ),
                 guestuserdetails_signin :               $.i18n.prop( "aurora.guestuserdetails_signin" ),
-                userdetails_help :                      $.i18n.prop( "aurora.userdetails_help" )
+                userdetails_help :                      $.i18n.prop( "aurora.userdetails_help" ),
+                notification_title :                    $.i18n.prop( "js.notification.title" )
             },
             handler : function( data ) {
             }
