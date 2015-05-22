@@ -19,7 +19,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <meta name="logLevel" content="${g.logLevel()}"/>
         <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
         <meta name="transactionTimeout" content="${session.getServletContext().transactionTimeout}"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="images/applicationIcon.png" />
         <link rel="apple-touch-startup-image" href="images/applicationStartup.png">
