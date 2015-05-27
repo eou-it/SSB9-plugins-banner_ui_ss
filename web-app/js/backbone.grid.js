@@ -255,8 +255,7 @@ var dirtyCheckDefault = {
         },
 
         events: {
-            "click td":                               "selectCell",
-            "click th":                               "sort"
+            "click td":                               "selectCell"
         },
 
         focus: function() {
@@ -611,6 +610,10 @@ var dirtyCheckDefault = {
             }, 350 );
 
             $( window ).on( 'resize', lazyResizeHandler );
+
+            $('.grid th').on('click',function (e) {
+                view.sort.call(view, e);
+            });
         },
       
 
