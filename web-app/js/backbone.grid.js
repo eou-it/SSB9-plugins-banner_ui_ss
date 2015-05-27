@@ -298,6 +298,7 @@ var dirtyCheckDefault = {
             }
         },
 
+
         selectCell: function (eventOrElement) {
             var target = $(eventOrElement.target || eventOrElement),
                 td = target.closest( "td" ),
