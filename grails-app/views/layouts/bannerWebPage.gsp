@@ -45,7 +45,9 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
                 transactionTimeoutPadding = 10 * 1000,
                 transactionTimeoutMilli   = ( transactionTimeoutSeconds * 1000 ) + transactionTimeoutPadding,
                 extensibilityPluginPath   = "${resource(plugin:'web-app-extensibility', dir:'html')}",
-                extensibilityAdmin        = ${net.hedtech.extensibility.SecurityService.userHasAdminRole()};
+                extensibilityAdmin        = ${net.hedtech.extensibility.SecurityService.userHasAdminRole()}  ,
+                extensibilityJSON         = ${raw(net.hedtech.extensibility.metadata.ExtensionService.loadExtensionsJSON(request.getRequestURI()))},
+                extensibilityResourcesJSON  = ${raw(net.hedtech.extensibility.metadata.ResourceService.loadResourcesJSON(request.getRequestURI()))};
 
             $.ajaxSetup( { timeout: transactionTimeoutMilli } );
 
