@@ -35,7 +35,7 @@
     overflow-x: scroll;
 }
 
-.grid thead th {
+table.grid > thead > tr > th {
     background-color: #EDF0F4 !important;
     border-bottom: 2px solid #AAAAAA;
     cursor: pointer;
@@ -50,17 +50,19 @@
     border-right: none !important;
 }
 
-.grid button.sort-icon{
-    background-color: transparent;
+table.grid > thead > tr > th .sort-icon {
+    top:8px;
+    background-color:transparent;
     border: 0;
     cursor: pointer;
+    margin-right: 1px;
 }
 
 .grid th.sort-disabled {
     cursor: default;
 }
 
-.grid thead th .title {
+table.grid > thead > tr > th .title {
     float: left;
     overflow: hidden;
     text-overflow: ellipsis;
