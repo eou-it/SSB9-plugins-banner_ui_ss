@@ -611,10 +611,6 @@ var dirtyCheckDefault = {
             }, 350 );
 
             $( window ).on( 'resize', lazyResizeHandler );
-
-            $('.grid th').on('click',function (e) {
-                view.sort.call(view, e);
-            });
         },
       
 
@@ -1088,6 +1084,7 @@ var dirtyCheckDefault = {
             this.generateColumnVisibilityMenuColumn();
 
             this.addDirtyCheckFor(view.sortElements, this.dirtyCheckDefault);
+
         },
 
         generateColumnVisibilityMenuColumn: function(){
@@ -1384,7 +1381,9 @@ var dirtyCheckDefault = {
 
             thead.append ( tr );
             table.append ( thead );
-
+            $('.grid th').on('click',function (e) {
+                view.sort.call(view, e);
+            });
             this.generateColumnControlMenuHeader(table);
         },
 
