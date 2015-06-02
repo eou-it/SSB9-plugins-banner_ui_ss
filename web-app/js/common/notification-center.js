@@ -362,7 +362,7 @@ $(document).ready(function() {
 
             messageContainer.addClass('notification-flyout-item');
 
-            var messageDiv = $("<span></span>").addClass( "notification-item-message" ).html(messageContainer.append( this.model.get("message" ) ) );
+            var messageDiv = $("<div></div>").addClass( "notification-item-message vertical-align" ).html(messageContainer.append( this.model.get("message" ) ) );
 
             // Manage the prompts if available
             var promptsDiv;
@@ -384,7 +384,7 @@ $(document).ready(function() {
                 }, this );
             }
 
-            $(this.el).append("<a class='notification-icon'></a>");
+            $(this.el).append("<span class='notification-icon'></span>");
             $(this.el).append( messageDiv );
 
 
@@ -422,7 +422,7 @@ $(document).ready(function() {
     window.NotificationCenterAnchor = Backbone.View.extend({
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
-            var notificationCountDiv = $('<div class="notification-center-count"><span/></div>' );
+            var notificationCountDiv = $('<div class="notification-center-count vertical-align"><span/></div>' );
 
             $(this.el).attr('aria-describedby',"notificationsdescription");
             $(this.el).append( notificationCountDiv );
@@ -443,8 +443,8 @@ $(document).ready(function() {
             else {
                 $(this.el).addClass( "notification-center-anchor-hidden");
             }
-            $(".notification-center-count", this.el).attr('aria-label', displayedNotifications.length );
-            $(".notification-center-count span", this.el).html( displayedNotifications.length );
+            var notificationCountInfo = displayedNotifications.length+" <p class='offscreen'>"+$.i18n.prop("js.notification.label")+"</p>"
+            $(".notification-center-count span", this.el).html( notificationCountInfo );
             return this;
         },
         isDisplayed: function() {
@@ -545,7 +545,6 @@ $(document).ready(function() {
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-            $(this.el).attr('title',formatTitleAndShortcut($.i18n.prop("js.notification.label"),$.i18n.prop("js.notification.shortcut")));
             $(this.el).append('<span class="offscreen" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span>');
             $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
             $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );

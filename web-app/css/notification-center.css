@@ -11,10 +11,11 @@
     left : auto;
 }
 
-.notification-center-flyout-displayed {
+#header-main-section div .notification-center-flyout-displayed {
     visibility: visible;
     right:0;
     left:auto;
+    height: auto;
 }
 
 .notification-center-flyout ul {
@@ -64,7 +65,7 @@
     background: url("images/warning.svg") no-repeat center;
 }
 
-.notification-center-flyout ul li.notification-center-message-information div.notification-item-message {
+.notification-center-flyout ul li.notification-center-message-information .notification-item-message {
     background-image: url(../images/icon-info-16x16.png);
 }
 
@@ -142,6 +143,11 @@ body > .notification-center-shim {
     border-left: none;
 }
 
+#notification-center div{
+    height: inherit;
+}
+
+
 /*Mobile device*/
 
 @media only screen and (min-width: 0px) and (max-width: 767px) {
@@ -150,7 +156,7 @@ body > .notification-center-shim {
         min-width: 250px;
     }
 
-    .notification-center-flyout li div.notification-item-message {
+    .notification-center-flyout li .notification-item-message {
         font-size: 0.75em;
     }
 
@@ -158,12 +164,24 @@ body > .notification-center-shim {
         max-height: 20em;
     }
 
+    .notification-center-flyout ul li .notification-icon {
+        width: 1em;
+        height: 1em;
+}
+
+    .notification-item-prompts button{
+        height: 1.75em;
+    }
+
+    #header-main-section div .notification-center-flyout-displayed{
+        position: fixed;
+    }
 }
 
 /*Tablet device*/
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
-    .notification-center-flyout li div.notification-item-message {
+    .notification-center-flyout li .notification-item-message {
         font-size: 0.75em;
     }
 }
