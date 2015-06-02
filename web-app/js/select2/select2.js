@@ -693,6 +693,7 @@ var requestTimeout
 
             // initialize the container
             this.initContainer();
+            $(this.container).attr("role", "listbox");
 
             installFilteredMouseMove(this.results);
             this.dropdown.on("mousemove-filtered touchstart touchmove touchend", resultsSelector, this.bind(this.highlightUnderEvent));
@@ -843,14 +844,14 @@ var requestTimeout
 
                             compound=result.children && result.children.length > 0;
 
-                            node=$("<li role='option'></li>");
+                            node=$("<li role='option' tabindex='-1' ></li>");
                             node.addClass("select2-results-dept-"+depth);
                             node.addClass("select2-result");
                             node.addClass(selectable ? "select2-result-selectable" : "select2-result-unselectable");
                             if (disabled) { node.addClass("select2-disabled"); }
                             if (compound) { node.addClass("select2-result-with-children"); }
                             node.addClass(self.opts.formatResultCssClass(result));
-
+                            node.attr('id',result.id);
                             label=$(document.createElement("div"));
                             label.addClass("select2-result-label");
 
@@ -1439,11 +1440,12 @@ var requestTimeout
             if (index >= choices.length) index = choices.length - 1;
             if (index < 0) index = 0;
 
-            this.results.find(".select2-highlighted").removeClass("select2-highlighted");
+            this.results.find(".select2-highlighted").removeClass("select2-highlighted").removeAttr("aria-live");
 
             choice = $(choices[index]);
             choice.addClass("select2-highlighted");
-
+            choice.attr("aria-live",'assertive');
+            $(".select2-input").attr("aria-activedescendant", choice.id);
             this.ensureHighlightVisible();
 
             data = choice.data("select2-data");
@@ -1559,14 +1561,14 @@ var requestTimeout
             if (maxSelSize >=1) {
                 data = this.data();
                 if ($.isArray(data) && data.length >= maxSelSize && checkFormatter(opts.formatSelectionTooBig, "formatSelectionTooBig")) {
-            	    render("<li class='select2-selection-limit'>" + opts.formatSelectionTooBig(maxSelSize) + "</li>");
+            	    render("<li class='select2-selection-limit' role='option' tabindex='-1' aria-live='assertive'>" + opts.formatSelectionTooBig(maxSelSize) + "</li>");
             	    return;
                 }
             }
 
             if (search.val().length < opts.minimumInputLength) {
                 if (checkFormatter(opts.formatInputTooShort, "formatInputTooShort")) {
-                    render("<li class='select2-no-results'>" + opts.formatInputTooShort(search.val(), opts.minimumInputLength) + "</li>");
+                    render("<li class='select2-no-results' role='option' tabindex='-1' aria-live='assertive'>" + opts.formatInputTooShort(search.val(), opts.minimumInputLength) + "</li>");
                 } else {
                     render("");
                 }
@@ -1576,7 +1578,7 @@ var requestTimeout
 
             if (opts.maximumInputLength && search.val().length > opts.maximumInputLength) {
                 if (checkFormatter(opts.formatInputTooLong, "formatInputTooLong")) {
-                    render("<li class='select2-no-results'>" + opts.formatInputTooLong(search.val(), opts.maximumInputLength) + "</li>");
+                    render("<li class='select2-no-results' role='option' tabindex='-1' aria-live='assertive'>" + opts.formatInputTooLong(search.val(), opts.maximumInputLength) + "</li>");
                 } else {
                     render("");
                 }
@@ -1584,7 +1586,7 @@ var requestTimeout
             }
 
             if (opts.formatSearching && this.findHighlightableChoices().length === 0) {
-                render("<li class='select2-searching'>" + opts.formatSearching() + "</li>");
+                render("<li class='select2-searching' role='option' tabindex='-1' aria-busy='true'>" + opts.formatSearching() + "</li>");
             }
 
             search.addClass("select2-active");
@@ -1628,7 +1630,7 @@ var requestTimeout
                 }
 
                 if (data.results.length === 0 && checkFormatter(opts.formatNoMatches, "formatNoMatches")) {
-                    render("<li class='select2-no-results'>" + opts.formatNoMatches(search.val()) + "</li>");
+                    render("<li class='select2-no-results' role='option' tabindex='-1' aria-live='assertive'>" + opts.formatNoMatches(search.val()) + "</li>");
                     return;
                 }
 
@@ -1636,7 +1638,7 @@ var requestTimeout
                 self.opts.populateResults.call(this, results, data.results, {term: search.val(), page: this.resultsPage, context:null});
 
                 if (data.more === true && checkFormatter(opts.formatLoadMore, "formatLoadMore")) {
-                    results.append("<li class='select2-more-results'>" + self.opts.escapeMarkup(opts.formatLoadMore(this.resultsPage)) + "</li>");
+                    results.append("<li class='select2-more-results' role='option' tabindex='-1' aria-live='assertive'>" + self.opts.escapeMarkup(opts.formatLoadMore(this.resultsPage)) + "</li>");
                     window.setTimeout(function() { self.loadMoreIfNeeded(); }, 10);
                 }
 
@@ -1777,9 +1779,9 @@ var requestTimeout
                 "<input class='select2-focusser select2-offscreen' type='text'/>",
                 "<div class='select2-drop select2-display-none'>" ,
                 "   <div class='select2-search'>" ,
-                "       <input type='text' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input'/>" ,
+                "       <input type='text' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input'  aria-expanded='true' aria-label='combobox' role='combobox' aria-owns='select2-results' />" ,
                 "   </div>" ,
-                "   <ul class='select2-results'>" ,
+                "   <ul class='select2-results' aria-expanded='false' tabindex='-1'>" ,
                 "   </ul>" ,
                 "</div>"].join(""));
             return container;
@@ -1823,6 +1825,7 @@ var requestTimeout
 
             this.focusser.prop("disabled", true).val("");
             this.updateResults(true);
+            $(".select2-results").find('ul').attr("aria-expanded", true);
             this.opts.element.trigger($.Event("select2-open"));
         },
 
@@ -1830,6 +1833,7 @@ var requestTimeout
         close: function () {
             if (!this.opened()) return;
             this.parent.close.apply(this, arguments);
+            $(".select2-results").find('ul').attr("aria-expanded", false);
             this.focusser.removeAttr("disabled");
             this.focusser.focus();
         },
@@ -3143,7 +3147,7 @@ var requestTimeout
         formatSearching: function () {
             return $.i18n.prop("select2.format.searching");
         },
-      
+
         minimumResultsForSearch: 0,
         minimumInputLength: 0,
         maximumInputLength: null,

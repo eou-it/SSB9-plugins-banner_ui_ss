@@ -1,3 +1,7 @@
+/*********************************************************************************
+ Copyright 2011-2015 Ellucian Company L.P. and its affiliates.
+ **********************************************************************************/
+
 $(document).ready(function() {
 
     window.Notification = Backbone.Model.extend({
@@ -37,6 +41,10 @@ $(document).ready(function() {
     });
 
     window.Notifications = Backbone.Collection.extend({
+        initialize: function () {
+            this.bind('add', this.addComponentErrorStyle, this);
+            this.bind('remove', this.removeComponentErrorStyle, this);
+        },
         model: Notification,
         addNotification: function( notification ) {
             var foundNotification = this.find( function(n) {
@@ -48,7 +56,6 @@ $(document).ready(function() {
             }
             else {
                 this.add( notification );
-
                 // If the notification gets orphaned remove it from the collection.
                 if (notification.has( "model" ) && notification.get( "model" )) {
                     var model = notification.get( "model" );
@@ -116,8 +123,11 @@ $(document).ready(function() {
                 }
             }
             else {
+                _.each(this.models,function(model){
+                    notifications.removeComponentErrorStyle(model);
+                });
                 // Remove all models
-                this.reset();
+                this.remove(this.models);
             }
         },
         addNotificationsFromModel: function(model) {
@@ -147,7 +157,7 @@ $(document).ready(function() {
                                 });
 
                                 _.each( associatedNotifications, function( n ) {
-                                     n.get( "flash" ) || notifications.remove( n );
+                                    n.get( "flash" ) || notifications.remove( n );
                                 });
                             }, this );
                         }, this);
@@ -274,6 +284,25 @@ $(document).ready(function() {
             });
 
             return groupedModels;
+        },
+        addComponentErrorStyle: function( notification ) {
+            var errorComponent = this.getNotificationComponent(notification);
+            if(!_.isUndefined(errorComponent)){
+                $(errorComponent).addClass("component-error");
+            }
+        },
+        removeComponentErrorStyle: function( notification ) {
+            var errorComponent = this.getNotificationComponent(notification);
+            if(!_.isUndefined(errorComponent)){
+                $(errorComponent).removeClass("component-error");
+            }
+        },
+        getNotificationComponent: function( notification ){
+            var notificationType = notification.get("type");
+            if (notificationType == "error") {
+                var errorComponent = notification.attributes.component;
+            }
+            return errorComponent;
         }
     });
 
@@ -291,6 +320,17 @@ $(document).ready(function() {
             var notificationType = this.model.get("type");
             var notificationClass = "notification-center-message-error";
 
+            var ariaNotificationItemText = $.i18n.prop("js.notification.flashmessage");
+
+            if (!this.model.get("flash")) {
+                ariaNotificationItemText=$.i18n.prop("js.notification.messageinfo", [this.options.notificationIdx,this.options.notificatioLength,this.model.get("type")]);
+            }
+
+            if (this.model.hasPrompts()) {
+                ariaNotificationItemText+=" ";
+                ariaNotificationItemText+=$.i18n.prop("js.notification.promptmessage");
+            }
+
             switch (notificationType) {
                 case "error":
                     notificationClass = "notification-center-message-error";
@@ -305,7 +345,24 @@ $(document).ready(function() {
 
             $(this.el).addClass( notificationClass );
 
-            var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html( $("<span></span>" ).append( this.model.get("message" ) ) );
+            var view = this;
+            var messageContainer = $("<span tabindex='0'></span>");
+            var component = this.model.get("component");
+            if(notificationType=="error" && component){
+                messageContainer = $("<a href='#'></a>");
+                messageContainer.addClass('notification-message');
+                messageContainer.on('click', function(){
+                    if($('body .notification-center-shim').length == 0) {
+                        view.navigateToErrorComponent(view.model);
+                    }
+                });
+            }
+            var ariaNotificationItemTextElement = "<b class='offscreen' id='ariaNotificationCountText'>"+ariaNotificationItemText+"</b>";
+            $(messageContainer).prepend(ariaNotificationItemTextElement);
+
+            messageContainer.addClass('notification-flyout-item');
+
+            var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html(messageContainer.append( this.model.get("message" ) ) );
 
             // Manage the prompts if available
             var promptsDiv;
@@ -313,15 +370,16 @@ $(document).ready(function() {
 
                 $(this.el).addClass( "notification-center-message-with-prompts" );
 
-                if (this.model.get( "promptMessage" )) {
-                    var promptSpan = $("<span></span>").addClass("notification-item-prompt-message").html( "  " + this.model.get( "promptMessage" ));
-                    messageDiv.append( promptSpan );
+                var promptMessage = this.model.get( "promptMessage" );
+                if (promptMessage) {
+                    messageContainer.append( promptMessage );
                 }
 
                 promptsDiv = $( "<div></div>" ).addClass( "notification-item-prompts" );
 
                 _.each(this.model.get( "prompts" ), function(prompt) {
                     var b = $("<button></button>").html( prompt.label ).click( prompt.action );
+                    b.addClass('notification-flyout-item');
                     promptsDiv.append( b );
                 }, this );
             }
@@ -338,6 +396,17 @@ $(document).ready(function() {
             if (this.model === notification) {
                 $(this.el).fadeOut( 1000 ).remove();
             }
+        },
+        navigateToErrorComponent: function(model) {
+            var component = model.attributes.component;
+            if(component){
+                if(model.attributes.componentType == "select2" && !component.hasClass('select2-focusser')){
+                    component = component.find('.select2-focusser');
+                }
+                window.notificationCenter.closeNotificationFlyout();
+                window.componentToFocusOnFlyoutClose = null;
+                component.focus();
+            }
         }
     });
 
@@ -352,12 +421,11 @@ $(document).ready(function() {
     window.NotificationCenterAnchor = Backbone.View.extend({
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
+            var notificationCountDiv = $('<div class="notification-center-count"><span/></div>' );
 
-            $(this.el).append(
-              $('<div class="notification-center-count"><span/></div>' )
-                .screenReaderLabel($.i18n.prop("js.notification.label"))
-            ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
+            $(this.el).attr('aria-describedby',"notificationsdescription");
 
+            $(this.el).append( notificationCountDiv ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
             this.model.bind("add", this.render);
@@ -375,7 +443,7 @@ $(document).ready(function() {
             else {
                 $(".notification-center-count", this.el).addClass( "notification-center-count-nil");
             }
-
+            $(".notification-center-count", this.el).attr('aria-label', displayedNotifications.length );
             $(".notification-center-count span", this.el).html( displayedNotifications.length );
             return this;
         },
@@ -394,29 +462,56 @@ $(document).ready(function() {
 
 
     window.NotificationCenterFlyout = Backbone.View.extend({
+        events: {
+            "keydown .notification-flyout-item:first":"focusLastMessageItem",
+            "keydown .notification-flyout-item:last":"focusFirstMessageItem"
+        },
         initialize: function() {
             $(this.el).addClass( "notification-center-flyout" ).addClass( "notification-center-flyout-hidden" );
 
-            _.bindAll(this, "render", "display", "hide" );
+            _.bindAll(this, "render", "isDisplayed", "display", "hide","addAriaDescription" );
             this.model.bind("all", this.render);
         },
         render: function() {
             $("ul", this.el).empty();
+            var notificationIdx = 0;
+            var notificationCollection = this.model.grouped();
+            //In case of flash messages aria description regarding shortcuts is not required
+            if (!(notificationCollection.length == 1 && notificationCollection[0].get("flash"))) {
+                this.addAriaDescription(notificationCollection.length);
+            }
 
-            _.each(this.model.grouped(), function(notification) {
-                var view = new NotificationView( {model:notification} );
+            _.each(notificationCollection, function(notification) {
+                notificationIdx+=1;
+                var view = new NotificationView( {model:notification, notificationIdx:notificationIdx, notificatioLength:notificationCollection.length} );
                 $("ul", this.el).append( view.render().el );
             }, this);
 
-            if($("ul>li", this.el).find('.notification-item-prompts').length ){
-                $("ul", this.el).attr('role','alertdialog');
-                $("ul>li", this.el).find('.notification-item-prompts button:first').focus();
-            }
-            else{
-                $("ul", this.el).attr('role','alert');
+            this.$('.notification-flyout-item:first').focus();
+            return this;
+        },
+        isDisplayed: function() {
+            return $(this.el).hasClass( "notification-center-flyout-displayed" );
+        },
+        addAriaDescription: function(count) {
+            if ($(this.el).children('#notificationCenterAriaInfo').length == 0 ) {
+                //First time notification info.
+                var notificationCenterAriaInfo = "<p tabindex='-1' class='offscreen' role='alert'  id='notificationCenterAriaInfo'>";
+                notificationCenterAriaInfo +=$.i18n.prop("js.notification.countlabel",[count]);
+                notificationCenterAriaInfo += $.i18n.prop("js.notification.help");
+                notificationCenterAriaInfo +="</p>";
+                $(this.el).prepend(notificationCenterAriaInfo);
+                $(this.el).attr('aria-describedby','notificationCenterAriaInfo');
+            } else {
+                //Further time notification info.
+                $(this.el).children('#notificationCenterCountAriaInfo').remove();
+                var notificationCenterCountAriaInfo = "<p tabindex='-1' class='offscreen' role='alert'  id='notificationCenterCountAriaInfo'>";
+                notificationCenterCountAriaInfo +=$.i18n.prop("js.notification.countlabel",[count]);
+                notificationCenterCountAriaInfo +="</p>";
+                $(this.el).prepend(notificationCenterCountAriaInfo);
+                $(this.el).attr('aria-describedby','notificationCenterCountAriaInfo');
             }
 
-            return this;
         },
         display: function() {
             $(this.el).addClass( "notification-center-flyout-displayed" ).removeClass( "notification-center-flyout-hidden" );
@@ -433,6 +528,18 @@ $(document).ready(function() {
         hide: function() {
             $(this.el).addClass( "notification-center-flyout-hidden" ).removeClass( "notification-center-flyout-displayed" );
             return this;
+        },
+        focusLastMessageItem: function(e){
+            if (e.keyCode == $.ui.keyCode.TAB && e.shiftKey) {
+                $('.notification-flyout-item:last').focus();
+                e.preventDefault();
+            }
+        },
+        focusFirstMessageItem: function(e){
+            if (e.keyCode == $.ui.keyCode.TAB && !e.shiftKey) {
+                $('.notification-flyout-item:first').focus();
+                e.preventDefault();
+            }
         }
     });
 
@@ -444,57 +551,89 @@ $(document).ready(function() {
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-
-            $(this.el).append( '<div class="notification-center-flyout"><ul role="alert"/></div>' );
+            $(this.el).attr('title',formatTitleAndShortcut($.i18n.prop("js.notification.label"),$.i18n.prop("js.notification.shortcut")));
+            $(this.el).append('<span class="offscreen" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span>');
+            $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
 
-            $(this.el).append( '<div class="notification-center-anchor"></div>' );
+            $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
-            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle',
-                      'clickOutsideToClose' );
+            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','closeNotificationFlyoutAndSetFocus','addNotificationOverlay','checkAndCloseFlyout');
             this.model.bind("add", this.addNotification);
             this.model.bind("remove", this.removeNotification);
+
+            document.addEventListener('mousedown',this.setComponentToFocusOnFlyoutClose,true);
+            document.addEventListener('keydown',this.setComponentToFocusOnFlyoutClose,true);
         },
         render: function() {
             return this;
         },
         addNotification: function(notification) {
-            this.toggle(true);
+            this.recreateNotificationOverlay();
+            this.openNotificationFlyout();
             this.configNotificationShim();
-
             return this;
         },
         removeNotification: function(notification) {
             if (this.model.length == 0) {
-                this.toggle(false);
+                this.closeNotificationFlyout();
+                this.removeNotificationOverlay();
             }
 
             this.configNotificationShim();
 
             return this;
         },
-        toggle: function(arg1) {
-            var showOrHide = _.isBoolean(arg1) ? arg1 : false;
-            if (showOrHide == false && this.notificationCenterAnchor.isDisplayed()) {
-                this.notificationCenterAnchor.hide();
-                this.notificationCenterFlyout.hide();
-                $("body").off( "click", this.clickOutsideToClose );
+        toggle: function() {
+            if (this.notificationCenterFlyout.isDisplayed()) {
+                this.closeNotificationFlyoutAndSetFocus();
             }
-            else if (this.model.length > 0) {
-                this.notificationCenterAnchor.display();
-                this.notificationCenterFlyout.display();
-                _.delay( function() {
-                    $("body").on( "click", this.clickOutsideToClose );
-                }, 50 );
+            else {
+                if(this.model.length > 0){
+                    this.openNotificationFlyout();
+                }
+                else{
+                    this.notificationCenterAnchor.$el.focus();
+                }
             }
 
             return this;
         },
-        clickOutsideToClose: function(e) {
-            var outside = $(e.target).closest(".notification-center").length == 0;
-            if ( outside ) {
-                this.toggle(false);
+        openNotificationFlyout: function () {
+            if(window.componentToFocusOnFlyoutClose == null){
+                window.componentToFocusOnFlyoutClose = $(document.activeElement);
+            }
+            this.notificationCenterAnchor.display();
+            this.notificationCenterFlyout.display();
+            this.addNotificationOverlay();
+            this.$('.notification-flyout-item:first').focus();
+            $('.notification-center-flyout')[0].addEventListener('keydown', this.pressEscToClose , true );
+        },
+        closeNotificationFlyout: function () {
+            this.notificationCenterAnchor.hide();
+            this.notificationCenterFlyout.hide();
+            this.removeClickListenerOnNotificationOverlay();
+            $('.notification-center-flyout')[0].removeEventListener('keydown',  this.pressEscToClose, true );
+
+        },
+        closeNotificationFlyoutAndSetFocus: function(){
+            this.closeNotificationFlyout();
+            this.focusComponentOnFlyoutClose();
+            window.componentToFocusOnFlyoutClose = null;
+        },
+        focusComponentOnFlyoutClose: function(){
+                if($('body .notification-center-shim').length == 0) {
+                    window.componentToFocusOnFlyoutClose.focus();
+                }
+                else{
+                    this.notificationCenterAnchor.$el.focus();
+                }
+        },
+        pressEscToClose: function(e) {
+            if(e.keyCode == $.ui.keyCode.ESCAPE){
+                this.closeNotificationFlyoutAndSetFocus();
+                e.stopImmediatePropagation();
             }
         },
         configNotificationShim: function() {
@@ -514,6 +653,50 @@ $(document).ready(function() {
             else {
                 $(".notification-center-shim", target).remove();
             }
+        },
+        removeClickListenerOnNotificationOverlay: function(){
+            if($('#notification-center-div').length > 0) {
+                $('#notification-center-div')[0].removeEventListener('mousedown',this.checkAndCloseFlyout,true);
+            }
+        },
+        removeNotificationOverlay: function(){
+            if($('#notification-center-div').length > 0) {
+                $('#notification-center-div').children().unwrap();
+            }
+        },
+        addNotificationOverlay: function(){
+            if($('#notification-center-div').length == 0) {
+                var overlay = $('<div id="notification-center-div"></div>');
+                var elementsToBeWrapped = $('body').children().not('script');
+                elementsToBeWrapped.wrapAll(overlay);
+            }
+
+            $('#notification-center-div')[0].addEventListener('mousedown',this.checkAndCloseFlyout,true);
+        },
+        checkAndCloseFlyout: function(event){
+            if($(event.target).closest('.notification-center').length == 0){
+                this.closeNotificationFlyoutAndSetFocus();
+            }
+        },
+        setComponentToFocusOnFlyoutClose: function(e) {
+            if(e.type == "keydown"){
+                if ($(e.target).closest('.notification-center').length == 0) {
+                    if (e.keyCode == $.ui.keyCode.TAB && e.shiftKey) {
+                        window.componentToFocusOnFlyoutClose = getPreviousTabbableElement(e.target);
+                    }
+                    else if (e.keyCode == $.ui.keyCode.TAB && !e.shiftKey) {
+                        window.componentToFocusOnFlyoutClose = getNextTabbableElement(e.target);
+                    }
+                }
+            }
+            else{
+                window.componentToFocusOnFlyoutClose = $(e.target);
+            }
+        },
+        recreateNotificationOverlay: function(){
+            this.removeClickListenerOnNotificationOverlay();
+            this.removeNotificationOverlay();
+            this.addNotificationOverlay();
         }
     });
 

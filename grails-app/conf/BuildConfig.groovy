@@ -44,7 +44,6 @@ grails.project.dependency.resolution = {
         compile ':spring-security-core:1.2.7.3'
 
         compile ':cache-headers:1.1.5'
-        compile ':codenarc:0.18.1'
         compile ':csv:0.3.1'
         compile ':feeds:1.5'
 

@@ -504,6 +504,8 @@ table.display tr.even.row_hover td.sorting_1 {
     padding: 0px !important;
     border: 0px !important;
     direction: ltr;
+    width: 100%;
+    overflow-x: hidden !important;
 }
 
 .ui-layout-pane-north, .ui-layout-pane-south {
@@ -1152,4 +1154,13 @@ div.infoicon {
     left: -200em;
     right: auto;
     top: -20em;
+}
+
+.component-error {
+    border:1px solid #cc0000;
+}
+
+.component-error:focus {
+    border-width:2px;
+    outline: none;
 }

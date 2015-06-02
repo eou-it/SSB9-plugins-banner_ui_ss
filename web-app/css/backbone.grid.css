@@ -1,11 +1,15 @@
+/*******************************************************************************
+ Copyright 2012-2015 Ellucian Company L.P. and its affiliates.
+*******************************************************************************/
+
 .grid {
     margin: 0 auto;
     width: 100%;
     float: left;
     clear: none;
-    border-collapse: collapse;
     table-layout: fixed;
     border-spacing: 0;
+    position: relative;
 }
 
 .grid-container .bottom {
@@ -31,7 +35,7 @@
     overflow-x: scroll;
 }
 
-.grid thead th {
+table.grid > thead > tr > th {
     background-color: #EDF0F4 !important;
     border-bottom: 2px solid #AAAAAA;
     cursor: pointer;
@@ -42,19 +46,23 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    border-left: 1px solid #DDDDDD !important;
+    border-right: none !important;
 }
 
-.grid button.sort-icon{
-    background-color: transparent;
+table.grid > thead > tr > th .sort-icon {
+    top:8px;
+    background-color:transparent;
     border: 0;
     cursor: pointer;
+    margin-right: 1px;
 }
 
 .grid th.sort-disabled {
     cursor: default;
 }
 
-.grid thead th .title {
+table.grid > thead > tr > th .title {
     float: left;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -90,12 +98,14 @@
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
     padding: 0px 10px;
-    border-left: 1px solid #DDDDDD;
+    border-left: 1px solid #DDDDDD !important;
+    border-right: none !important;
     min-height: 30px;
 }
 
 .grid td.focus {
-  /*background: #e4e4e4;*/
+    background-color:#CCDFE9 !important;
+    color:#000000 !important
 }
 
 .grid tbody tr td form input {
@@ -137,16 +147,31 @@
     width: 15px;
 }
 
-.column-visibility-menu {
+.grid-main-wrapper .column-visibility-menu{
     position: absolute;
-    right: 0px;
-    left: auto;
-    top: 0px;
+    top: 0px !important;
     z-index: 1101;
-    border-left: 1px solid #DDDDDD;
-    background: url('../images/grid_customize.png') no-repeat center center;
+    background: url('../images/grid_customize.png') no-repeat center;
     width: 30px;
-    height: 30px;
+    padding:0px;
+    cursor: pointer;
+}
+
+.grid-main-wrapper .visibility-control-column {
+    position:static;
+    border-left: none !important;
+    border-right: 1px solid #DDDDDD !important;
+    border-bottom:none;
+    padding:0px;
+    width:1.5%;
+}
+
+.grid-main-wrapper .grid th.visibility-control-column {
+    border-bottom:1px solid #DDDDDD !important;
+}
+
+.grid-main-wrapper .grid td{
+   border-right:none;
 }
 
 .button-menu-container {
@@ -199,37 +224,39 @@
     border-right: 1px solid #DDDDDD;
 }
 
-.grid tr.notification-error td:first-child {
-    background:url("../images/icon-error-16x16-plus7.png") no-repeat left center
-}
-
-.grid tr.notification-success td:first-child {
-    background:url("../images/icon-success-16x16-plus7.png") no-repeat left center
-}
-
-.grid tr.notification-warning td:first-child {
-    background:url("../images/icon-warning-16x16-plus7.png") no-repeat left center
-}
-
 .grid tr.notification-success {
-    background-color: #DDF4C9;
+    background-color: #DDF4C9 !important;
 }
 
 .grid tr.notification-error {
-    background-color: #EBCFCF;
+    background-color: #EBCFCF !important;
 }
 
 .grid tr.notification-error {
-    background-color: #EBCFCF;
+    background-color: #EBCFCF !important;
 }
 
 .grid tr.notification-warning {
-    background-color: #FFF6B3;
+    background-color: #FFF6B3 !important;
 }
 
 .grid tr.notification-warning {
     border: 1px solid #f9dc87;
-    background-color: #FFF6B3;
+    background-color: #FFF6B3 !important;
+}
+
+.grid tr.notification-error td.notification-error {
+    padding-left:20px;
+    background:url("../images/icon-error-16x16.png") no-repeat left center;
+}
+
+.grid td.notification-warning {
+    border: 1px solid #f9dc87 !important;
+}
+
+.grid td.readonly {
+    background-color: #F5F6F7;
+    color:#676A6E;
 }
 
 /* editable component specific integration classes */
@@ -241,3 +268,45 @@
     margin: 0 -22px 0 0 !important;
     padding: 0 0 0 0 !important;
 }
+
+
+.focus-by-row .grid tr.focus {
+    background-color:#CCDFE9 !important; /* TODO: !important is required because .grid tr td:first-child is flagged !important. */
+}
+
+.focus-by-cell .grid td.focus {
+    background-color:#CCDFE9 !important; /* TODO: !important is required because .add-row-selected is flagged !important. */
+}
+
+.add-row-hover {
+    background-color: #B2CEDE !important;
+    border: 1px solid #B1CEE0 !important;
+}
+
+.add-row-selected {
+    border: 1px solid #005C96 !important;
+    color: #FFF !important;
+    background-color: #005C96 !important;
+}
+
+.grid tr td:first-child {
+    padding-left: 10px;
+}
+
+.grid tr.selected {
+    background-color: #FFF !important;
+}
+
+.grid tr.hover {
+    background-color: #FFF;
+}
+
+.grid tr {
+    border-bottom: 1px solid #BBBBBB !important;
+}
+
+.grid thead th {
+    background-color: #EDF0F4 !important;
+}
+
+

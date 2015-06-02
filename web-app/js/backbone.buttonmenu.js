@@ -1,6 +1,8 @@
-/* Copyright 2013-2014 Ellucian Company L.P. and its affiliates. */
+/*********************************************************************************
+ Copyright 2012-2014 Ellucian Company L.P. and its affiliates.
+ *********************************************************************************/
 
-;
+
 (function ($, _, Backbone) {
 
     Backbone.ButtonMenu = Backbone.View.extend({
@@ -11,7 +13,8 @@
         css:{
             buttonMenuItemCheckbox:"button-menu-item-checkbox",
             buttonMenuContainer:"button-menu-container",
-            buttonMenuOverlay:"button-menu-overlay"
+            buttonMenuOverlay:"button-menu-overlay",
+            columnVisibilityMenu:"column-visibility-menu"
         },
 
         elements:{
@@ -19,12 +22,13 @@
             ul:"<ul></ul>",
             li:"<li></li>",
             label:"<label></label>",
-            checkbox:"<input type='checkbox'/>",
+            checkbox:"<input type='checkbox'/>"
         },
 
         events:{
             "click .button-menu-item-checkbox":"toggleItem",
-            "click":"toggleMenu"
+            "click":"toggleMenu",
+            "keydown":"renderMenuContainerOnKeyPress"
         },
 
         strings:{
@@ -32,25 +36,69 @@
             itemIdPrefix:"menuItemId"
         },
 
-        toggleMenu:function (e) {
-            var view = this;
+        keycode:{
+            ENTER : 13,
+            ESC : 27,
+            TAB : 9
+        },
 
-            if ($("." + this.css.buttonMenuContainer).is(":visible")) {
-                $("." + this.css.buttonMenuOverlay).unbind("click").remove();
-            } else {
-                var overlay = $(this.elements.div).addClass(this.css.buttonMenuOverlay)
-                    .height($(document).height())
-                    .click(function (e) {
-                        view.toggleMenu();
-                    });
-                $("body").append(overlay);
-            }
-
+        toggleMenu:function () {
             if ($("." + this.css.buttonMenuContainer).is(":visible")) {
                 this.removeMenu();
             } else {
-                this.renderMenu();
+                this.renderMenuContainer();
             }
+        },
+
+        renderMenuContainerOnKeyPress:function(e){
+            if(e.keyCode == this.keycode.ENTER){
+                this.renderMenuContainer();
+            }
+        },
+
+        removeMenuContainerOnKeyPress:function(e){
+            if( e.keyCode == this.keycode.ESC){
+                this.removeMenu();
+                this.focusColumnVisibilityMenu();
+            }
+        },
+
+        focusColumnVisibilityMenu: function(){
+            this.gridWrapper.find("."+ this.css.columnVisibilityMenu).focus();
+        },
+
+        renderMenuContainer: function () {
+            this.renderMenu();
+            this.makeDocumentAsOverlay();
+        },
+
+        makeDocumentAsOverlay: function () {
+            var view = this;
+
+            var closeButtonMenu = function(event) {
+
+                var element = $(event.target);
+
+                if(view.shouldCloseMenuContainer(element)) {
+                    view.removeMenu();
+                    document.removeEventListener('click', closeButtonMenu, true );
+                }
+
+                if(element.hasClass(view.css.columnVisibilityMenu)) {
+                    element.focus();
+                    event.stopPropagation();
+                }
+            };
+
+            document.addEventListener('click', closeButtonMenu , true );
+        },
+
+        shouldCloseMenuContainer: function(element){
+            var closeMenuContainer = true;
+            if(element.hasClass(this.css.buttonMenuContainer) || element.parents().hasClass(this.css.buttonMenuContainer)){
+                closeMenuContainer =  false;
+            }
+            return closeMenuContainer;
         },
 
         toggleItem:function (e) {
@@ -61,8 +109,11 @@
 
             item.checked = ( item.checked == true ? false : true );
 
-            if (_.isFunction(this.callback))
+            if (_.isFunction(this.callback)) {
                 this.callback.call(this, item, e);
+            }
+
+            $(e.target).focus();
         },
 
         initialize:function () {
@@ -72,6 +123,7 @@
             this.items = this.options.items || [ ];
             this.callback = this.options.callback || null;
             this.container = this.options.container || this.$el.parent();
+            this.gridWrapper = this.options.gridWrapper || null;
 
             var self = this;
             var resizeButton = function () {
@@ -94,8 +146,9 @@
         },
 
         removeMenu:function () {
-            $("." + this.css.buttonMenuContainer + " input[type=checkbox]").unbind("click");
-            $("." + this.css.buttonMenuContainer).remove();
+            var menuContainer =   $("." + this.css.buttonMenuContainer);
+            menuContainer.children().off();
+            menuContainer.off().remove();
         },
 
         renderMenu:function () {
@@ -117,7 +170,7 @@
                 if (!_.isUndefined(it.name))
                     input.attr("data-name", it.name);
 
-                input.click(function (e) {
+                input.on("click",function (e) {
                     view.toggleItem.call(view, e);
                 });
 
@@ -130,12 +183,44 @@
 
             $("body").remove(this.css.buttonMenuContainer).append($(this.elements.div).addClass(this.css.buttonMenuContainer).append(ul));
 
-            $("." + this.css.buttonMenuContainer).position({
-                of:this.$el,
-                my:"right top",
-                at:"right bottom",
-                collision:"fit"
+            this.addEventListeners();
+
+            this.positionContainerAndFocusMenuItem();
+        },
+
+        addEventListeners: function () {
+            var view = this;
+
+            $("." + this.css.buttonMenuContainer).on("keydown",function (e) {
+                view.removeMenuContainerOnKeyPress(e);
             });
+
+            $("." + this.css.buttonMenuContainer + " ul li:first-child input").on("keydown", function (e) {
+                if (e.keyCode == view.keycode.TAB && e.shiftKey) {
+                    $("." + view.css.buttonMenuContainer + " ul li:last-child input").focus();
+                    e.preventDefault();
+                }
+            });
+
+            $("." + this.css.buttonMenuContainer + " ul li:last-child input").on("keydown",function (e) {
+                if (e.keyCode == view.keycode.TAB && !e.shiftKey) {
+                    $("." + view.css.buttonMenuContainer + " ul li:first-child input").focus();
+                    e.preventDefault();
+                }
+            });
+        },
+
+        positionContainerAndFocusMenuItem: function () {
+            $("." + this.css.buttonMenuContainer)
+                .attr('tabindex', '0')
+                .position({
+                    of: this.$el,
+                    my: "right top",
+                    at: "right bottom",
+                    collision: "fit"
+                });
+
+            $("." + this.css.buttonMenuContainer + " ul li:first-child input").focus();
         },
 
         render:function () {

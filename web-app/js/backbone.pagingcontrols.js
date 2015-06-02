@@ -1,8 +1,10 @@
-/* Copyright 2013-2014 Ellucian Company L.P. and its affiliates. */
+/* Copyright 2013-2015 Ellucian Company L.P. and its affiliates. */
 
 ;(function ( $, _, Backbone ) {
-  Backbone.PagingControls = Backbone.View.extend({
+    Backbone.PagingControls = Backbone.View.extend({
     pageLengths: [5, 50, 250, 500],
+    dirtyCheckDefault: null,
+
 
     defaults: {
       pageLengths: [5, 50, 250, 500]
@@ -10,7 +12,7 @@
 
     initialize: function () {
       var view = this;
-
+      this.dirtyCheckDefault = this.options.dirtyCheckDefault;
       if ( _.isArray( this.options.pageLengths ) ) {
         var validPageLengths = _.all( this.options.pageLengths, function ( it ) {
           return _.isNumber( it ) && it > 0;
@@ -24,14 +26,14 @@
         view.render();
       });
     },
-    events: {
-      "change .page-size-select":               "selectPageSize",
-      "click .paging-control.first.enabled":    "gotoFirstPage",
-      "click .paging-control.last.enabled":     "gotoLastPage",
-      "click .paging-control.previous.enabled": "gotoPreviousPage",
-      "click .paging-control.next.enabled":     "gotoNextPage",
-      "change .page-number.enabled":            "gotoSpecificPage"
-    },
+//    events: {
+//      "change .page-size-select":               "selectPageSize",
+//      "click .paging-control.first.enabled":    "gotoFirstPage",
+//      "click .paging-control.last.enabled":     "gotoLastPage",
+//      "click .paging-control.previous.enabled": "gotoPreviousPage",
+//      "click .paging-control.next.enabled":     "gotoNextPage",
+//      "change .page-number.enabled":            "gotoSpecificPage"
+//    },
     css: {
       pagingContainer:       "paging-container",
       enabled:               "enabled",
@@ -55,9 +57,9 @@
       div:    "<div></div>",
       span:   "<span></span>",
       pageLabel:  "<div><label></label></div>",
-      text:   "<input type='text' id='page1'></input>",
+      text:   "<input type='text'></input>",
       sizeLabel:  "<label></label>",
-      select: "<select id='size1'></select>",
+      select: "<select ></select>",
       option: "<option></option>"
     },
     strings: {
@@ -120,7 +122,7 @@
     },
     render: function () {
       this.$el.empty();
-
+      this.pageActions = [];
       var dir = $( "meta[name=dir]" ).attr( "content" );
       dir = ( dir === void 0 || dir === "ltr" ? "ltr" : "rtl" );
 
@@ -150,7 +152,7 @@
 
         if ( it == pageInfo.pageMaxSize ) {
             option.attr( "selected", "selected" );
-            select.screenReaderLabel( $.i18n.prop('backbone.paging.controls.count.per.page', [it]));
+            select.attr("aria-label", $.i18n.prop('backbone.paging.controls.count.per.page', [it]));
         }
 
         select.append( option );
@@ -160,6 +162,7 @@
 
       if ( pageInfo.pages == 1 ) {
           input.hide();
+          this.disableComponents([ first, last, prev, next ]);
       } else {
           input.show();
 
@@ -172,11 +175,110 @@
               enabled = enabled.concat( [ first, last, prev, next ] );
           }
           _.each( enabled, function (it) { it.addClass( view.css.enabled ).attr('tabindex',0) });
+
+          var buttonsToDisable = _.difference([ first, last, prev, next ], enabled);
+          this.disableComponents(buttonsToDisable);
       }
 
 	_.each( [ first, prev, page, input, of, pages, next, last, divider, perPage, selWrap], function (it) {
         view.$el.append( it );
       });
+
+        first.on("click",function (e) {
+            view.gotoFirstPage(e);
+        });
+        next.on("click",function (e) {
+            view.gotoNextPage(e);
+        });
+        prev.on("click",function (e) {
+            view.gotoPreviousPage(e);
+        });
+        last.on("click",function (e) {
+            view.gotoLastPage(e);
+        });
+
+        function resetPageNumberInput() {
+            var target = input;
+            if (target.data().initial) {
+                target.val(target.data().initial);
+            }
+            return;
+        }
+
+        input.on("change", function(e) {
+            if (typeof(view.collection) != 'undefined') {
+                var target = $(input);
+                $.data(input, 'entered', $(input).val());
+                var userEnteredPage = $(input).val()
+
+                if (userEnteredPage == "" || userEnteredPage.match(/[^0-9]/)) {
+                    resetPageNumberInput();
+                    return;
+                }
+
+                var page = parseInt(target.val(), 10);
+                var collection = view.collection;
+                var info = collection.pageInfo();
+
+                if (page < 1 || page > info.pages) {
+                    resetPageNumberInput();
+                } else {
+                    view.gotoSpecificPage(e);
+                }
+            }
+            return;
+
+        });
+
+        input.on("keypress",function(e){
+            if(e.keyCode == 13){
+                $(input).trigger('blur');
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+        input.focus(function(e) {
+            $.data(this, 'initial', this.value);
+        });
+
+        input.dirtyCheck( _.defaults({
+                eventType: "change",
+                cancelCallback: resetPageNumberInput
+            }, this.dirtyCheckDefault)
+        );
+
+        select.focus(function(e) {
+            $.data( this, 'initial', this.value );
+        });
+
+        select.on("change",function (e) {
+            view.selectPageSize(e);
+        });
+
+        function resetPageSize() {
+            var target = select;
+            if (target.data().initial) {
+                target.val(target.data().initial);
+            }
+            return;
+        }
+
+        first.dirtyCheck(this.dirtyCheckDefault);
+        next.dirtyCheck(this.dirtyCheckDefault);
+        prev.dirtyCheck(this.dirtyCheckDefault);
+        last.dirtyCheck(this.dirtyCheckDefault);
+        select.dirtyCheck(_.defaults({eventType:"change",
+            cancelCallback: resetPageSize},
+            this.dirtyCheckDefault));
+        view.pageActions.push(first, prev, input, next, last, select);
+    },
+    disableComponents: function (componentsToDisable) {
+        _.each(componentsToDisable, function (it) {
+            it.attr('disabled', 'disabled');
+        });
+    },
+    getPagesActions: function(){
+        return this.pageActions;
     }
   });
 }).call (this, $, _, Backbone);
