@@ -11,23 +11,8 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-ui-1.8.15.custom.js'], disposition: 'head'
     }
 
-    'angular' {
-        defaultBundle environment == "development" ? false : "angular"
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular.min.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-resource.min.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-route.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-sanitize.min.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-animate.min.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-ui-router.min.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/ui-bootstrap-tpls-0.10.0.min.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/lrInfiniteScroll.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/moment.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-common.js']
-     }
-
     'bootstrap' {
         dependsOn "jquery"
-
         defaultBundle environment == "development" ? false : "bootstrap"
 
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap.css'],            attrs: [media: 'screen, projection']
@@ -111,6 +96,10 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
+
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'],            attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'],  attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.css'],           attrs:[media:'screen, projection']
     }
 
@@ -122,37 +111,30 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center-rtl.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip-rtl.css'], attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl.css'],           attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis-rtl.css'],        attrs:[media:'screen, projection']
+
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid-rtl.css'],            attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols-rtl.css'],  attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl.css'],           attrs:[media:'screen, projection']
+
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl-patch.css'],       attrs:[media:'screen, projection']
         resource url:[plugin: 'i18n-core', file: 'css/multiCalendar-rtl-patch.css']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl-patch.css'],     attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl-patch.css'],     attrs:[media:'screen, projection']
     }
 
     'bannerSelfService' {
         dependsOn "bannerSelfServiceCommonLTR, extensibilityJQuery"
-        defaultBundle environment == "development" ? false : "bannerSelfServiceLTR"
-
-        resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'],            attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'],  attrs:[media:'screen, projection']
     }
 
     'bannerSelfServiceRTL' {
         dependsOn "bannerSelfServiceCommonRTL, extensibilityJQueryRTL"
-        defaultBundle environment == "development" ? false : "bannerSelfServiceRTL"
-
-        resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis-rtl.css'],        attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid-rtl.css'],            attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols-rtl.css'],  attrs:[media:'screen, projection']
     }
 
     'bannerWebLTR' {
         dependsOn "bannerSelfServiceCommonLTR, angular, extensibilityAngular"
-//        defaultBundle environment == "development" ? false : "bannerSelfServiceLTR"
     }
 
     'bannerWebRTL' {
         dependsOn "bannerSelfServiceCommonRTL, angular, extensibilityAngularRTL"
-//        defaultBundle environment == "development" ? false : "bannerSelfServiceRTL"
     }
 }
