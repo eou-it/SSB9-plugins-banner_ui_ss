@@ -423,8 +423,7 @@ $(document).ready(function() {
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
             var notificationCountDiv = $('<div class="notification-center-count vertical-align"><span/></div>' );
-
-            $(this.el).attr('aria-describedby',"notificationsdescription");
+            $(this.el).screenReaderLabel( $.i18n.prop("js.notification.description") );
             $(this.el).append( notificationCountDiv );
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
@@ -439,9 +438,11 @@ $(document).ready(function() {
 
             if (displayedNotifications.length > 0) {
                 $(this.el).removeClass( "notification-center-anchor-hidden");
+                $("#notification-center").removeClass("notification-center-hidden").addClass("notification-center-displayed");
             }
             else {
                 $(this.el).addClass( "notification-center-anchor-hidden");
+                $("#notification-center").removeClass("notification-center-displayed").addClass("notification-center-hidden");
             }
             var notificationCountInfo = displayedNotifications.length+" <p class='offscreen'>"+$.i18n.prop("js.notification.label")+"</p>"
             $(".notification-center-count span", this.el).html( notificationCountInfo );
@@ -545,7 +546,6 @@ $(document).ready(function() {
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-            $(this.el).append('<span class="offscreen" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span>');
             $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
             $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
 
