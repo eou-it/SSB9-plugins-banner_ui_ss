@@ -255,8 +255,7 @@ var dirtyCheckDefault = {
         },
 
         events: {
-            "click td":                               "selectCell",
-            "click th":                               "sort"
+            "click td":                               "selectCell"
         },
 
         focus: function() {
@@ -298,6 +297,7 @@ var dirtyCheckDefault = {
                 target.focus();
             }
         },
+
 
         selectCell: function (eventOrElement) {
             var target = $(eventOrElement.target || eventOrElement),
@@ -1090,6 +1090,7 @@ var dirtyCheckDefault = {
             this.generateColumnVisibilityMenuColumn();
 
             this.addDirtyCheckFor(view.sortElements, this.dirtyCheckDefault);
+
         },
 
         generateColumnVisibilityMenuColumn: function(){
@@ -1386,7 +1387,9 @@ var dirtyCheckDefault = {
 
             thead.append ( tr );
             table.append ( thead );
-
+            $('.grid th').on('click',function (e) {
+                view.sort.call(view, e);
+            });
             this.generateColumnControlMenuHeader(table);
         },
 

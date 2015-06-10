@@ -362,7 +362,7 @@ $(document).ready(function() {
 
             messageContainer.addClass('notification-flyout-item');
 
-            var messageDiv = $("<div></div>").addClass( "notification-item-message" ).html(messageContainer.append( this.model.get("message" ) ) );
+            var messageDiv = $("<div></div>").addClass( "notification-item-message vertical-align" ).html(messageContainer.append( this.model.get("message" ) ) );
 
             // Manage the prompts if available
             var promptsDiv;
@@ -384,7 +384,8 @@ $(document).ready(function() {
                 }, this );
             }
 
-            $(this.el).html( messageDiv );
+            $(this.el).append("<span class='notification-icon'></span>");
+            $(this.el).append( messageDiv );
 
 
             if (promptsDiv) {
@@ -421,11 +422,9 @@ $(document).ready(function() {
     window.NotificationCenterAnchor = Backbone.View.extend({
         initialize: function() {
             $(this.el).addClass( "notification-center-anchor" ).addClass( "notification-center-anchor-hidden");
-            var notificationCountDiv = $('<div class="notification-center-count"><span/></div>' );
-
-            $(this.el).attr('aria-describedby',"notificationsdescription");
-
-            $(this.el).append( notificationCountDiv ).append( '<div class="notification-center-label"><span>' + $.i18n.prop("js.notification.label") + '</span></div>');
+            var notificationCountDiv = $('<div class="notification-center-count vertical-align"><span/></div>' );
+            $(this.el).screenReaderLabel( $.i18n.prop("js.notification.description") );
+            $(this.el).append( notificationCountDiv );
             _.bindAll(this, "render", "isDisplayed", "display", "hide");
 
             this.model.bind("add", this.render);
@@ -438,13 +437,15 @@ $(document).ready(function() {
             var displayedNotifications = this.model.grouped();
 
             if (displayedNotifications.length > 0) {
-                $(".notification-center-count", this.el).removeClass( "notification-center-count-nil");
+                $(this.el).removeClass( "notification-center-anchor-hidden");
+                $("#notification-center").removeClass("notification-center-hidden").addClass("notification-center-displayed");
             }
             else {
-                $(".notification-center-count", this.el).addClass( "notification-center-count-nil");
+                $(this.el).addClass( "notification-center-anchor-hidden");
+                $("#notification-center").removeClass("notification-center-displayed").addClass("notification-center-hidden");
             }
-            $(".notification-center-count", this.el).attr('aria-label', displayedNotifications.length );
-            $(".notification-center-count span", this.el).html( displayedNotifications.length );
+            var notificationCountInfo = displayedNotifications.length+" <p class='offscreen'>"+$.i18n.prop("js.notification.label")+"</p>"
+            $(".notification-center-count span", this.el).html( notificationCountInfo );
             return this;
         },
         isDisplayed: function() {
@@ -516,12 +517,6 @@ $(document).ready(function() {
         display: function() {
             $(this.el).addClass( "notification-center-flyout-displayed" ).removeClass( "notification-center-flyout-hidden" );
 
-            // This really should be encapsulated in the notificationCenter
-            $(this.el).position({
-                my: "right top",
-                at: "right bottom",
-                of: this.options.parent
-            });
 
             return this;
         },
@@ -551,12 +546,10 @@ $(document).ready(function() {
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-            $(this.el).attr('title',formatTitleAndShortcut($.i18n.prop("js.notification.label"),$.i18n.prop("js.notification.shortcut")));
-            $(this.el).append('<span class="offscreen" id="notificationsdescription">'+$.i18n.prop("js.notification.description")+'</span>');
-            $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
-            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
-
             $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
+            $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
+
+            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','closeNotificationFlyoutAndSetFocus','addNotificationOverlay','checkAndCloseFlyout');
@@ -611,7 +604,6 @@ $(document).ready(function() {
             $('.notification-center-flyout')[0].addEventListener('keydown', this.pressEscToClose , true );
         },
         closeNotificationFlyout: function () {
-            this.notificationCenterAnchor.hide();
             this.notificationCenterFlyout.hide();
             this.removeClickListenerOnNotificationOverlay();
             $('.notification-center-flyout')[0].removeEventListener('keydown',  this.pressEscToClose, true );
@@ -703,7 +695,8 @@ $(document).ready(function() {
     if ( !_.isUndefined( window[ "EventDispatcher" ] ) ) {
         EventDispatcher.addEventListener( Application.events.initialized, function() {
             var nc = $("<div><div id='notification-center'></div></div>" );
-            ControlBar.append( nc );
+            //TODO: HRU:5803 cleanup
+            //ControlBar.append( nc );
             window.notificationCenter = new NotificationCenter({
                 el: $("#notification-center"),
                 model: notifications

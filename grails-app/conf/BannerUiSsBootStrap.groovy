@@ -1,9 +1,12 @@
+
 /*******************************************************************************
 Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
-
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import net.hedtech.banner.controllers.ControllerUtils
 class BannerUiSsBootStrap {
-
+    public static String localLogoutEnable="saml/logout?local=true";
+    public static String globalLogoutEnable="saml/logout";
     def grailsApplication
 
 	def init = { servletContext ->
@@ -14,7 +17,15 @@ class BannerUiSsBootStrap {
             servletContext.setAttribute( "transactionTimeout", timeoutSeconds )
 
         servletContext.setAttribute( "loginEndpoint", grailsApplication.config?.loginEndpoint?: "" )
-        servletContext.setAttribute( "logoutEndpoint", grailsApplication.config?.logoutEndpoint?: "" )
+        if(ControllerUtils.isSamlEnabled()) {
+            if(ControllerUtils.isLocalLogoutEnabled()){
+                servletContext.setAttribute( "logoutEndpoint", localLogoutEnable )
+            }else{
+                servletContext.setAttribute( "logoutEndpoint", globalLogoutEnable )
+            }
+        } else {
+            servletContext.setAttribute( "logoutEndpoint", grailsApplication.config?.logoutEndpoint?: "" )
+        }
 
         if ((true == grailsApplication.config?.guestAuthenticationEnabled) && (!"default".equalsIgnoreCase(grailsApplication.config?.banner?.sso?.authenticationProvider.toString()))) {
             servletContext.setAttribute("guestLoginEnabled", true)

@@ -1,225 +1,126 @@
-.notification-center {
-    color: #000000;
-    margin-top: -6px;
-    padding-left: 5px;
-    direction: ltr;
-}
-
-.notification-center-hidden {
-    visibility: hidden;
-    display: none;
-}
-
-.notification-center-count {
-    float: left;
-    text-align: center;
-    min-width: 16px;
-    min-height: 16px;
-    font-size: 1.1em;
-    color: #FFFFFF;
-    background-color:#DB7F33;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-}
-
-.notification-center-count.notification-center-count-nil {
-    background-color: #FFFFFF;
-    color: #C8DCE8;
-}
-
-.notification-center-label {
-    float: right;
-    font-size: 1.1em;
-    color: #FFFFFF;
-    padding-left: 3px;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-}
 
 .notification-center-flyout {
     position: absolute;
-    min-width: 400px;
+    width: 30%;
+    min-width: 25em;
     background-color: #0071A7;
-    border-color: #0071A7;
-    border-width: 5px;
-    border-style: solid;
     font-size: 1.2em;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-top-left-radius: 5px;
-    -moz-border-bottom-left-radius: 4px;
-    -moz-border-bottom-right-radius: 4px;
-    -moz-border-top-left-radius: 4px;
-    -webkit-border-bottom-left-radius: 4px;
-    -webkit-border-bottom-right-radius: 4px;
-    -webkit-border-top-left-radius: 4px;
-    -moz-box-shadow: 3px 3px 3px #888888;
-    -webkit-box-shadow: 3px 3px 3px #888888;
-    box-shadow: 3px 3px 3px #888888;
+    box-shadow: 0 1px 1px #000000;
+    z-index: 1000;
+    right : 0;
+    left : auto;
+}
+
+#header-main-section div .notification-center-flyout-displayed {
+    visibility: visible;
+    right:0;
+    left:auto;
+    height: auto;
 }
 
 .notification-center-flyout ul {
-    background-color: #FFFFFF;
-    margin: 0;
-    max-height: 30em;
-    border-radius: .2em;
-    -moz-border-radius: .2em;
-    -webkit-border-radius: .2em;
-    overflow: auto;
-}
-
-#globalNav li a.notification-center-anchor {
-    height: 20px;
-    padding-left: 3px;
-    padding-right: 5px;
-    padding-top: 5px;
-    cursor: pointer;
-    display: block;
-}
-
-
-.notification-center-anchor.notification-center-anchor-hidden:hover {
-    background: #0071A7;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-}
-
-.notification-center-anchor.notification-center-anchor-displayed {
-    background: #0071A7;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    -moz-border-top-right-radius: 4px;
-    -moz-border-top-left-radius: 4px;
-    -webkit-border-top-right-radius: 4px;
-    -webkit-border-top-left-radius: 4px;
-    -moz-box-shadow: 3px 3px 3px #888888;
-    -webkit-box-shadow: 3px 3px 3px #888888;
-    box-shadow: 3px 3px 3px #888888;
-}
-
-.notification-center-flyout-hidden {
-    visibility: hidden;
-    display: none;
-}
-
-.notification-center-flyout-displayed {
-    visibility: visible;
-    display: block;
-}
-
-.notification-center-message {
-    background-color: rgba(235, 207, 207, 0.95);
-    border-color: #808080;
-    border-style: solid;
-    border-width: 1px;
-    margin-left: 50px;
-}
-
-.notification-center-flyout.notification-center-flyout ul {
     list-style-type: none;
     margin: 0;
     padding-left: 0px;
     padding-right: 0px;
     direction: ltr;
+    max-height: 30em;
+    overflow: auto;
 }
 
-.notification-center-flyout li:first-child {
-    border-bottom-style: none;
+.notification-center-flyout ul li .notification-icon{
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    height: 1.5em;
+    width: 1.25em;
+    display: table-cell;
+    float: left;
 }
 
-.notification-center-flyout li {
-    padding-top: 5px;
-    padding-bottom: 5px;
+.notification-item-message{
+    display: table-cell;
 }
 
-.notification-center-flyout li.notification-center-message-with-prompts {
-    padding-bottom: 0px;
+.notification-center-flyout ul li.notification-item{
+    padding: 0.5em 0.25em 0.5em 0.25em;
 }
 
-.notification-center-flyout li div.notification-item-message {
-    background-position: 5px 5px;
-    background-repeat: no-repeat;
-    margin-left: 5px;
-    margin-right: 5px;
-    padding-left: 27px;
-    padding-right: 0px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    min-height: 2.4em;
-    border-bottom: 1px solid #CCCCCC;
-    text-align: left;
+.notification-center-flyout ul li:first-of-type.notification-center-message-warning.notification-center-message-with-prompts{
+    padding: 0.5em 0em 0em 0em;
 }
 
-.notification-center-flyout li:last-child div.notification-item-message {
-    border-bottom-style: none;
+.notification-center-flyout ul li.notification-center-message-warning.notification-center-message-with-prompts .notification-item-prompts{
+    margin-top : 0.5em;
 }
 
-.notification-center-flyout li:first-child div.notification-item-message {
-    background-position: 5px 8px;
-    min-height: 2.4em;
-    padding-top: 10px;
+.notification-center-flyout ul li.notification-center-message-success .notification-icon {
+    background: url("images/success.svg") no-repeat center;
 }
 
-.notification-center-flyout ul li.notification-center-message-error div.notification-item-message {
-    background-image: url(../images/icon-error-16x16.png);
+.notification-center-flyout ul li.notification-center-message-error .notification-icon{
+    background: url("images/error.svg") no-repeat center;
 }
 
-.notification-center-flyout ul li.notification-center-message-warning.notification-center-message-with-prompts:first-child div.notification-item-message {
-    background-color: #FFF6B3;
-    border-bottom-style: none;
+.notification-center-flyout ul li.notification-center-message-warning .notification-icon{
+    background: url("images/warning.svg") no-repeat center;
 }
 
-.notification-center-flyout ul li.notification-center-message-warning div.notification-item-message {
-    background-image: url(../images/icon-warning-16x16.png);
-}
-
-.notification-center-flyout ul li.notification-center-message-information div.notification-item-message {
+.notification-center-flyout ul li.notification-center-message-information .notification-item-message {
     background-image: url(../images/icon-info-16x16.png);
 }
 
-.notification-center-flyout ul li.notification-center-message-success div.notification-item-message {
+.notification-center-flyout ul li.notification-center-message-success {
     background-color: #DDF4C9;
-    background-image: url(../images/icon-success-16x16.png);
-    border-bottom-style: none;
+    border: 1px solid #B0C3A0;
+    border-bottom: 2px solid #B0C3A0;
+    color: #04661B;
 }
 
-li span.notification-item-prompt-message {
+.notification-center-flyout ul li.notification-center-message-error{
+    background-color: #FAEDED;
+    border: 1px solid #E7C2C2;
+    border-bottom: 2px solid #EED2D2;
+    color: #CD3939;
+}
+
+.notification-center-flyout ul li.notification-center-message-warning {
+    background-color: #FFF6B3;
+    border: 1px solid #F3E58E;
+    border-bottom: 2px solid #F3E688;
+    color: #8B572A;
+    border-width: 1px 0px 0px 0px;
+}
+
+li span.notification-item-prompt-message, li .notification-item-prompts, .notification-center-flyout-hidden, .notification-center-hidden {
     visibility: hidden;
     display: none;
 }
-
 
 li:first-child span.notification-item-prompt-message {
     visibility: visible;
     display: inline;
 }
 
-li .notification-item-prompts {
-    visibility: hidden;
-    display: none;
+.notification-item-prompts button{
+    background-color: #908989;
+    border-color: #908989;
+    color: white;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: none;
+    height: 2em;
+    margin: 0 0.2em;
+    padding: 0.3em;
 }
 
 li:first-child .notification-item-prompts {
     visibility: visible;
     display: block;
-    padding-top: 5px;
-    background-color: #EFEFEF;
-    padding-bottom: 5px;
-    border-top-color: #F2F2F2;
-    border-top-style: solid;
-    border-top-width: 1px;
-    border-bottom-color: #CCCCCC;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    margin-top: 5px;
+    background-color: #EBEBEB;
+    border: 1px solid #C6CBCD;
     text-align: right;
-    vertical-align: middle;
-    padding-right: 5px;
+    padding: 0.25em 0.25em 0.25em 0;
 }
 
 body > .notification-center-shim {
@@ -234,9 +135,55 @@ body > .notification-center-shim {
     filter: alpha(opacity = 30);
 }
 
-#globalNav li a.notification-message{
+#header-main-section li a.notification-message{
     color: #ff0000;
     text-decoration: underline;
     cursor: pointer;
-    padding:0;
+}
+
+.notification-center-flyout li{
+    border-left: none;
+}
+
+#notification-center div{
+    height: inherit;
+}
+
+
+/*Mobile device*/
+
+@media only screen and (min-width: 0px) and (max-width: 767px) {
+    .notification-center-flyout{
+        width: 100%;
+        min-width: 250px;
+    }
+
+    .notification-center-flyout li .notification-item-message {
+        font-size: 0.75em;
+    }
+
+    .notification-center-flyout ul {
+        max-height: 20em;
+    }
+
+    .notification-center-flyout ul li .notification-icon {
+        width: 1em;
+        height: 1em;
+}
+
+    .notification-item-prompts button{
+        height: 1.75em;
+    }
+
+    #header-main-section div .notification-center-flyout-displayed{
+        position: fixed;
+    }
+}
+
+/*Tablet device*/
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    .notification-center-flyout li .notification-item-message {
+        font-size: 0.75em;
+    }
 }
