@@ -563,10 +563,8 @@ key = (function(key) {
             if ( boundKey.code != event.keyCode ) {
                 return;
             }
-            if ( boundKey.modifiers ) {
-                if ( boundKey.modifiers != modifierKeysPressed(event) ) {
-                    return;
-                }
+            if ( boundKey.modifiers != modifierKeysPressed(event) ) {
+                return;
             }
             boundKey.handler( event );
         });
