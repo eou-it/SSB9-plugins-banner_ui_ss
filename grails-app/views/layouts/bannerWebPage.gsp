@@ -6,6 +6,10 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 <!DOCTYPE html>
 <html lang="${message(code: 'default.language.locale')}">
     <head>
+        <script>
+            var extensibilityInfo =
+                    ${raw(net.hedtech.extensibility.InfoService.getJSON(controllerName, resource(plugin:'web-app-extensibility', dir:'html')))};
+        </script>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
             <r:require modules="bannerWebRTL"/>
         </g:if>
@@ -43,11 +47,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
             var transactionTimeoutMeta    = $( "meta[name=transactionTimeout]" ),
                 transactionTimeoutSeconds = ( transactionTimeoutMeta.length == 1 ? parseInt( transactionTimeoutMeta.attr( "content" ) ) : 30 ),
                 transactionTimeoutPadding = 10 * 1000,
-                transactionTimeoutMilli   = ( transactionTimeoutSeconds * 1000 ) + transactionTimeoutPadding,
-                extensibilityPluginPath   = "${resource(plugin:'web-app-extensibility', dir:'html')}",
-                extensibilityAdmin        = ${net.hedtech.extensibility.SecurityService.userHasAdminRole()}  ,
-                extensibilityJSON         = ${raw(net.hedtech.extensibility.metadata.ExtensionService.loadExtensionsJSON(request.getRequestURI()))},
-                extensibilityResourcesJSON  = ${raw(net.hedtech.extensibility.metadata.ResourceService.loadResourcesJSON(request.getRequestURI()))};
+                transactionTimeoutMilli   = ( transactionTimeoutSeconds * 1000 ) + transactionTimeoutPadding;
 
             $.ajaxSetup( { timeout: transactionTimeoutMilli } );
 
