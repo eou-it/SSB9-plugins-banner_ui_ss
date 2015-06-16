@@ -6,6 +6,13 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 <!DOCTYPE html>
 <html lang="${message(code: 'default.language.locale')}">
     <head>
+        <script>
+            var extensibilityInfo = {
+                application: "${grails.util.Metadata.current.getApplicationName()}",
+                page: "${controllerName}",
+                url: "${g.createLink(uri:'/')}"
+                };
+        </script>
         <r:require module="bannerSelfService"/>
 
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
@@ -81,4 +88,3 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <g:customJavaScriptIncludes/>
     </body>
 </html>
-
