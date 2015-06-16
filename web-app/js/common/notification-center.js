@@ -349,7 +349,7 @@ $(document).ready(function() {
             var messageContainer = $("<span tabindex='0'></span>");
             var component = this.model.get("component");
             if(notificationType=="error" && component){
-                messageContainer = $("<a href='#'></a>");
+                messageContainer = $("<a ></a>");
                 messageContainer.addClass('notification-message');
                 messageContainer.on('click', function(){
                     if($('body .notification-center-shim').length == 0) {
@@ -546,7 +546,7 @@ $(document).ready(function() {
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-            $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
+            $(this.el).append( '<a  class="notification-center-anchor"></a>' );
             $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
 
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
