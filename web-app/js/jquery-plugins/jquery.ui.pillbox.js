@@ -1,13 +1,13 @@
 ( function ( $, _ ) {
     $.widget("ui.pillbox", {
         options: {
-            sunday: { name: $.i18n.prop( "pillbox.sunday" ), abbreviation: $.i18n.prop( "pillbox.sunday.abbreviation"), enabled: true, highlight:true},
-            monday: { name: $.i18n.prop( "pillbox.monday" ), abbreviation: $.i18n.prop( "pillbox.monday.abbreviation"), enabled: true,  highlight:true },
-            tuesday: { name: $.i18n.prop( "pillbox.tuesday" ), abbreviation: $.i18n.prop( "pillbox.tuesday.abbreviation"),enabled: true,  highlight:true},
-            wednesday: { name: $.i18n.prop( "pillbox.wednesday" ), abbreviation: $.i18n.prop( "pillbox.wednesday.abbreviation"), enabled: true,  highlight:true},
-            thursday: {  name: $.i18n.prop( "pillbox.thursday" ), abbreviation: $.i18n.prop( "pillbox.thursday.abbreviation"),  enabled: true,  highlight:true},
-            friday: { name: $.i18n.prop( "pillbox.friday" ), abbreviation: $.i18n.prop( "pillbox.friday.abbreviation"),    enabled: true,  highlight:true },
-            saturday: { name: $.i18n.prop( "pillbox.saturday" ), abbreviation: $.i18n.prop( "pillbox.saturday.abbreviation"),  enabled: true, highlight:true},
+            sunday: { enabled: true, highlight:false },
+            monday: { enabled: true,  highlight:false },
+            tuesday: { enabled: true,  highlight:false },
+            wednesday: { enabled: true,  highlight:false },
+            thursday: { enabled: true,  highlight:false },
+            friday: {  enabled: true,  highlight:false },
+            saturday: { enabled: true, highlight:false },
             styles: {
                 container: "ui-pillbox",
                 highlight: "ui-state-highlight",
@@ -49,10 +49,26 @@
             //editable:$( this.element ).screenReaderLabel( tooltipText, 'assertive' );
             $( "." + this.options.styles.summary, this.element ).screenReaderOnly().text( tooltipText );
         },
+        _initializeLabels: function() {
+            this.options.sunday.name = $.i18n.prop( "pillbox.sunday" );
+            this.options.sunday.abbreviation= $.i18n.prop( "pillbox.sunday.abbreviation");
+            this.options.monday.name = $.i18n.prop( "pillbox.monday" );
+            this.options.monday.abbreviation= $.i18n.prop( "pillbox.monday.abbreviation");
+            this.options.tuesday.name = $.i18n.prop( "pillbox.tuesday" );
+            this.options.tuesday.abbreviation= $.i18n.prop( "pillbox.tuesday.abbreviation");
+            this.options.wednesday.name = $.i18n.prop( "pillbox.wednesday" );
+            this.options.wednesday.abbreviation= $.i18n.prop( "pillbox.wednesday.abbreviation");
+            this.options.thursday.name = $.i18n.prop( "pillbox.thursday" );
+            this.options.thursday.abbreviation= $.i18n.prop( "pillbox.thursday.abbreviation");
+            this.options.friday.name = $.i18n.prop( "pillbox.friday" );
+            this.options.friday.abbreviation= $.i18n.prop( "pillbox.friday.abbreviation");
+            this.options.saturday.name = $.i18n.prop( "pillbox.saturday" );
+            this.options.saturday.abbreviation= $.i18n.prop( "pillbox.saturday.abbreviation");
+        },
         _reOrderPillBoxElements: function() {
             var firstDayOfWeek=$.i18n.prop( "default.firstDayOfTheWeek" );
             var unOrderedElements = [this.options.sunday, this.options.monday, this.options.tuesday, this.options.wednesday, this.options.thursday, this.options.friday, this.options.saturday];
-            var orderedElements = unOrderedElements.slice(firstDayOfWeek,unOrderedElements.length-1);
+            var orderedElements = unOrderedElements.slice(firstDayOfWeek,unOrderedElements.length);
             orderedElements = orderedElements.concat(unOrderedElements.slice(0,firstDayOfWeek));
             return orderedElements;
         },
@@ -63,6 +79,7 @@
                 el      = $( this.element );
 
             el.addClass( this.options.styles.container ).attr( "tabindex", 0 ).attr('role','group');
+            this._initializeLabels();
             this.options.items = this._reOrderPillBoxElements();
             var toggleSelected = function ( el ) {
                 if ( !$( el ).hasClass( self.options.styles.disabled ) ) {
