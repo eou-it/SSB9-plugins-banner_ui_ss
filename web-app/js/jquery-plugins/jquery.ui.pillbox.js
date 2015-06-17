@@ -1,6 +1,13 @@
 ( function ( $, _ ) {
     $.widget("ui.pillbox", {
         options: {
+            sunday: { name: $.i18n.prop( "pillbox.sunday" ), abbreviation: $.i18n.prop( "pillbox.sunday.abbreviation"), enabled: true, highlight:true},
+            monday: { name: $.i18n.prop( "pillbox.monday" ), abbreviation: $.i18n.prop( "pillbox.monday.abbreviation"), enabled: true,  highlight:true },
+            tuesday: { name: $.i18n.prop( "pillbox.tuesday" ), abbreviation: $.i18n.prop( "pillbox.tuesday.abbreviation"),enabled: true,  highlight:true},
+            wednesday: { name: $.i18n.prop( "pillbox.wednesday" ), abbreviation: $.i18n.prop( "pillbox.wednesday.abbreviation"), enabled: true,  highlight:true},
+            thursday: {  name: $.i18n.prop( "pillbox.thursday" ), abbreviation: $.i18n.prop( "pillbox.thursday.abbreviation"),  enabled: true,  highlight:true},
+            friday: { name: $.i18n.prop( "pillbox.friday" ), abbreviation: $.i18n.prop( "pillbox.friday.abbreviation"),    enabled: true,  highlight:true },
+            saturday: { name: $.i18n.prop( "pillbox.saturday" ), abbreviation: $.i18n.prop( "pillbox.saturday.abbreviation"),  enabled: true, highlight:true},
             styles: {
                 container: "ui-pillbox",
                 highlight: "ui-state-highlight",
@@ -42,6 +49,13 @@
             //editable:$( this.element ).screenReaderLabel( tooltipText, 'assertive' );
             $( "." + this.options.styles.summary, this.element ).screenReaderOnly().text( tooltipText );
         },
+        _reOrderPillBoxElements: function() {
+            var firstDayOfWeek=$.i18n.prop( "default.firstDayOfTheWeek" );
+            var unOrderedElements = [this.options.sunday, this.options.monday, this.options.tuesday, this.options.wednesday, this.options.thursday, this.options.friday, this.options.saturday];
+            var orderedElements = unOrderedElements.slice(firstDayOfWeek,unOrderedElements.length-1);
+            orderedElements = orderedElements.concat(unOrderedElements.slice(0,firstDayOfWeek));
+            return orderedElements;
+        },
         _create: function() {
             var self    = this,
                 summary = $( this.elements.div ).addClass(this.options.styles.summary),
@@ -49,7 +63,7 @@
                 el      = $( this.element );
 
             el.addClass( this.options.styles.container ).attr( "tabindex", 0 ).attr('role','group');
-
+            this.options.items = this._reOrderPillBoxElements();
             var toggleSelected = function ( el ) {
                 if ( !$( el ).hasClass( self.options.styles.disabled ) ) {
                     self.updateItemState( el );
