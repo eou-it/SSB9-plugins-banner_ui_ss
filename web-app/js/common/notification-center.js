@@ -349,7 +349,7 @@ $(document).ready(function() {
             var messageContainer = $("<span tabindex='0'></span>");
             var component = this.model.get("component");
             if(notificationType=="error" && component){
-                messageContainer = $("<a ></a>");
+                messageContainer = $("<a tabindex='0'></a>");
                 messageContainer.addClass('notification-message');
                 messageContainer.on('click', function(){
                     if($('body .notification-center-shim').length == 0) {
@@ -659,7 +659,7 @@ $(document).ready(function() {
         addNotificationOverlay: function(){
             if($('#notification-center-div').length == 0) {
                 var overlay = $('<div id="notification-center-div"></div>');
-                var elementsToBeWrapped = $('body').children().not('script');
+                var elementsToBeWrapped = $('#header-main-section').children().not('script');
                 elementsToBeWrapped.wrapAll(overlay);
             }
 
