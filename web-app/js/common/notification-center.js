@@ -355,7 +355,7 @@ $(document).ready(function() {
                     view.navigateToErrorComponent(view.model);
                 });
                 messageContainer.on('keydown', function(e) {
-                    if (e.keyCode == 13 || e.which == 13) {
+                    if (e.keyCode == $.ui.keyCode.ENTER || e.which == $.ui.keyCode.ENTER) {
                         view.navigateToErrorComponent(view.model);
                     }
                 });
@@ -607,7 +607,7 @@ $(document).ready(function() {
         },
 
         toggleIfEnterPressed: function(e) {
-            if (e.keyCode == 13 || e.which == 13) {
+            if (e.keyCode == $.ui.keyCode.ENTER || e.which == $.ui.keyCode.ENTER) {
                 this.toggle ();
             }
         },
