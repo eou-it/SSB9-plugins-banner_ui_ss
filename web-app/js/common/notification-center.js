@@ -357,6 +357,7 @@ $(document).ready(function() {
                 messageContainer.on('keydown', function(e) {
                     if (e.keyCode == $.ui.keyCode.ENTER || e.which == $.ui.keyCode.ENTER) {
                         view.navigateToErrorComponent(view.model);
+                        e.preventDefault();
                     }
                 });
             }
