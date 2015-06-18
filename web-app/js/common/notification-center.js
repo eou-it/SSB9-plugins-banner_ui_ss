@@ -352,7 +352,10 @@ $(document).ready(function() {
                 messageContainer = $("<a tabindex='0'></a>");
                 messageContainer.addClass('notification-message');
                 messageContainer.on('click', function(){
-                    if($('body .notification-center-shim').length == 0) {
+                    view.navigateToErrorComponent(view.model);
+                });
+                messageContainer.on('keydown', function(e) {
+                    if ((e.keyCode || e.which) == 13) {
                         view.navigateToErrorComponent(view.model);
                     }
                 });
@@ -399,14 +402,16 @@ $(document).ready(function() {
             }
         },
         navigateToErrorComponent: function(model) {
-            var component = model.attributes.component;
-            if(component){
-                if(model.attributes.componentType == "select2" && !component.hasClass('select2-focusser')){
-                    component = component.find('.select2-focusser');
+            if($('body .notification-center-shim').length == 0) {
+                var component = model.attributes.component;
+                if (component) {
+                    if (model.attributes.componentType == "select2" && !component.hasClass('select2-focusser')) {
+                        component = component.find('.select2-focusser');
+                    }
+                    window.notificationCenter.closeNotificationFlyout();
+                    window.componentToFocusOnFlyoutClose = null;
+                    component.focus();
                 }
-                window.notificationCenter.closeNotificationFlyout();
-                window.componentToFocusOnFlyoutClose = null;
-                component.focus();
             }
         }
     });
@@ -467,6 +472,13 @@ $(document).ready(function() {
             "keydown .notification-flyout-item:first":"focusLastMessageItem",
             "keydown .notification-flyout-item:last":"focusFirstMessageItem"
         },
+
+        navigateToErrorComponent: function () {
+            if($('body .notification-center-shim').length == 0) {
+                this.navigateToErrorComponent(this.model);
+            }
+        },
+
         initialize: function() {
             $(this.el).addClass( "notification-center-flyout" ).addClass( "notification-center-flyout-hidden" );
 
@@ -541,12 +553,14 @@ $(document).ready(function() {
 
     window.NotificationCenter = Backbone.View.extend({
         events: {
-            "click .notification-center-anchor":"toggle"
+            "click .notification-center-anchor":"toggle",
+            "keydown .notification-center-anchor":"toggle"
+
         },
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-            $(this.el).append( '<a  class="notification-center-anchor"></a>' );
+            $(this.el).append( '<a tabindex="0" class="notification-center-anchor"></a>' );
             $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
 
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
