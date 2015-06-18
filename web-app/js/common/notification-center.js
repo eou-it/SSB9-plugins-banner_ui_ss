@@ -355,7 +355,7 @@ $(document).ready(function() {
                     view.navigateToErrorComponent(view.model);
                 });
                 messageContainer.on('keydown', function(e) {
-                    if ((e.keyCode || e.which) == 13) {
+                    if (e.keyCode == 13 || e.which == 13) {
                         view.navigateToErrorComponent(view.model);
                     }
                 });
@@ -554,7 +554,7 @@ $(document).ready(function() {
     window.NotificationCenter = Backbone.View.extend({
         events: {
             "click .notification-center-anchor":"toggle",
-            "keydown .notification-center-anchor":"toggle"
+            "keydown .notification-center-anchor":"toggleIfEnterPressed"
 
         },
         initialize: function() {
@@ -605,6 +605,13 @@ $(document).ready(function() {
 
             return this;
         },
+
+        toggleIfEnterPressed: function(e) {
+            if (e.keyCode == 13 || e.which == 13) {
+                this.toggle ();
+            }
+        },
+
         openNotificationFlyout: function () {
             if(window.componentToFocusOnFlyoutClose == null){
                 window.componentToFocusOnFlyoutClose = $(document.activeElement);
