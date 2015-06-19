@@ -349,11 +349,15 @@ $(document).ready(function() {
             var messageContainer = $("<span tabindex='0'></span>");
             var component = this.model.get("component");
             if(notificationType=="error" && component){
-                messageContainer = $("<a href='#'></a>");
+                messageContainer = $("<a tabindex='0'></a>");
                 messageContainer.addClass('notification-message');
                 messageContainer.on('click', function(){
-                    if($('body .notification-center-shim').length == 0) {
+                    view.navigateToErrorComponent(view.model);
+                });
+                messageContainer.on('keydown', function(e) {
+                    if (e.keyCode == $.ui.keyCode.ENTER || e.which == $.ui.keyCode.ENTER) {
                         view.navigateToErrorComponent(view.model);
+                        e.preventDefault();
                     }
                 });
             }
@@ -399,14 +403,16 @@ $(document).ready(function() {
             }
         },
         navigateToErrorComponent: function(model) {
-            var component = model.attributes.component;
-            if(component){
-                if(model.attributes.componentType == "select2" && !component.hasClass('select2-focusser')){
-                    component = component.find('.select2-focusser');
+            if($('body .notification-center-shim').length == 0) {
+                var component = model.attributes.component;
+                if (component) {
+                    if (model.attributes.componentType == "select2" && !component.hasClass('select2-focusser')) {
+                        component = component.find('.select2-focusser');
+                    }
+                    window.notificationCenter.closeNotificationFlyout();
+                    window.componentToFocusOnFlyoutClose = null;
+                    component.focus();
                 }
-                window.notificationCenter.closeNotificationFlyout();
-                window.componentToFocusOnFlyoutClose = null;
-                component.focus();
             }
         }
     });
@@ -467,6 +473,13 @@ $(document).ready(function() {
             "keydown .notification-flyout-item:first":"focusLastMessageItem",
             "keydown .notification-flyout-item:last":"focusFirstMessageItem"
         },
+
+        navigateToErrorComponent: function () {
+            if($('body .notification-center-shim').length == 0) {
+                this.navigateToErrorComponent(this.model);
+            }
+        },
+
         initialize: function() {
             $(this.el).addClass( "notification-center-flyout" ).addClass( "notification-center-flyout-hidden" );
 
@@ -541,18 +554,20 @@ $(document).ready(function() {
 
     window.NotificationCenter = Backbone.View.extend({
         events: {
-            "click .notification-center-anchor":"toggle"
+            "click .notification-center-anchor":"toggle",
+            "keydown .notification-center-anchor":"toggleIfEnterPressed"
+
         },
         initialize: function() {
             var self  = this;
             $(this.el).addClass("notification-center");
-            $(this.el).append( '<a href="#" class="notification-center-anchor"></a>' );
+            $(this.el).append( '<a tabindex="0" class="notification-center-anchor"></a>' );
             $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
 
             this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
 
-            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','closeNotificationFlyoutAndSetFocus','addNotificationOverlay','checkAndCloseFlyout');
+            _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','closeNotificationFlyoutAndSetFocus','configureNotificationOverlay','checkAndCloseFlyout');
             this.model.bind("add", this.addNotification);
             this.model.bind("remove", this.removeNotification);
 
@@ -563,7 +578,6 @@ $(document).ready(function() {
             return this;
         },
         addNotification: function(notification) {
-            this.recreateNotificationOverlay();
             this.openNotificationFlyout();
             this.configNotificationShim();
             return this;
@@ -571,7 +585,6 @@ $(document).ready(function() {
         removeNotification: function(notification) {
             if (this.model.length == 0) {
                 this.closeNotificationFlyout();
-                this.removeNotificationOverlay();
             }
 
             this.configNotificationShim();
@@ -593,19 +606,25 @@ $(document).ready(function() {
 
             return this;
         },
+
+        toggleIfEnterPressed: function(e) {
+            if (e.keyCode == $.ui.keyCode.ENTER || e.which == $.ui.keyCode.ENTER) {
+                this.toggle ();
+            }
+        },
+
         openNotificationFlyout: function () {
             if(window.componentToFocusOnFlyoutClose == null){
                 window.componentToFocusOnFlyoutClose = $(document.activeElement);
             }
             this.notificationCenterAnchor.display();
             this.notificationCenterFlyout.display();
-            this.addNotificationOverlay();
+            this.configureNotificationOverlay();
             this.$('.notification-flyout-item:first').focus();
             $('.notification-center-flyout')[0].addEventListener('keydown', this.pressEscToClose , true );
         },
         closeNotificationFlyout: function () {
             this.notificationCenterFlyout.hide();
-            this.removeClickListenerOnNotificationOverlay();
             $('.notification-center-flyout')[0].removeEventListener('keydown',  this.pressEscToClose, true );
 
         },
@@ -624,8 +643,10 @@ $(document).ready(function() {
         },
         pressEscToClose: function(e) {
             if(e.keyCode == $.ui.keyCode.ESCAPE){
+                if ($(".notification-center-shim").length === 0) {
                 this.closeNotificationFlyoutAndSetFocus();
                 e.stopImmediatePropagation();
+            }
             }
         },
         configNotificationShim: function() {
@@ -646,24 +667,15 @@ $(document).ready(function() {
                 $(".notification-center-shim", target).remove();
             }
         },
-        removeClickListenerOnNotificationOverlay: function(){
-            if($('#notification-center-div').length > 0) {
-                $('#notification-center-div')[0].removeEventListener('mousedown',this.checkAndCloseFlyout,true);
+        configureNotificationOverlay: function(){
+            var closeFlyout = function(event) {
+                if($(event.target).closest('.notification-center').length == 0 && $('.notification-center-shim').length == 0) {
+                    notificationCenter.closeNotificationFlyout();
+                    $('body').off('mousedown', closeFlyout);
             }
-        },
-        removeNotificationOverlay: function(){
-            if($('#notification-center-div').length > 0) {
-                $('#notification-center-div').children().unwrap();
-            }
-        },
-        addNotificationOverlay: function(){
-            if($('#notification-center-div').length == 0) {
-                var overlay = $('<div id="notification-center-div"></div>');
-                var elementsToBeWrapped = $('body').children().not('script');
-                elementsToBeWrapped.wrapAll(overlay);
-            }
+            };
 
-            $('#notification-center-div')[0].addEventListener('mousedown',this.checkAndCloseFlyout,true);
+            $('body').on('mousedown', closeFlyout);
         },
         checkAndCloseFlyout: function(event){
             if($(event.target).closest('.notification-center').length == 0){
@@ -684,11 +696,6 @@ $(document).ready(function() {
             else{
                 window.componentToFocusOnFlyoutClose = $(e.target);
             }
-        },
-        recreateNotificationOverlay: function(){
-            this.removeClickListenerOnNotificationOverlay();
-            this.removeNotificationOverlay();
-            this.addNotificationOverlay();
         }
     });
 
