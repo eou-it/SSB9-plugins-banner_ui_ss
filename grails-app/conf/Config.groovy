@@ -1,12 +1,12 @@
 /*********************************************************************************
  Copyright 2009-2012 SunGard Higher Education. All Rights Reserved.
- This copyrighted software contains confidential and proprietary information of 
- SunGard Higher Education and its subsidiaries. Any use of this software is limited 
- solely to SunGard Higher Education licensees, and is further subject to the terms 
- and conditions of one or more written license agreements between SunGard Higher 
+ This copyrighted software contains confidential and proprietary information of
+ SunGard Higher Education and its subsidiaries. Any use of this software is limited
+ solely to SunGard Higher Education licensees, and is further subject to the terms
+ and conditions of one or more written license agreements between SunGard Higher
  Education and the licensee in question. SunGard is either a registered trademark or
  trademark of SunGard Data Systems in the U.S.A. and/or other regions and/or countries.
- Banner and Luminis are either registered trademarks or trademarks of SunGard Higher 
+ Banner and Luminis are either registered trademarks or trademarks of SunGard Higher
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
 
@@ -32,9 +32,9 @@ grails.config.locations = [] // leave this initialized to an empty list, and add
 
 def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
 
-// Since this configuration is only needed for testing, we'll just use the Faculty Grade Entry configuration for convenience. 
+// Since this configuration is only needed for testing, we'll just use the Faculty Grade Entry configuration for convenience.
 [ BANNER_APP_CONFIG:                 "banner_configuration.groovy",
-  BANNER_FACULTY_GRADE_ENTRY_CONFIG: "${appName}_configuration.groovy",
+  BANNER_FACULTY_GRADE_ENTRY_CONFIG: "banner_core_testapp_configuration.groovy",
 ].each { envName, defaultFileName -> locationAdder(envName, defaultFileName) }
 
 
@@ -43,17 +43,17 @@ grails.project.groupId = "net.hedtech" // used when deploying to a maven repo
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
-        xml: ['text/xml', 'application/xml', 'application/vnd.sungardhe.student.v0.01+xml'],
-        text: 'text/plain',
-        js: 'text/javascript',
-        rss: 'application/rss+xml',
-        atom: 'application/atom+xml',
-        css: 'text/css',
-        csv: 'text/csv',
-        all: '*/*',
-        json: ['application/json', 'text/json'],
-        form: 'application/x-www-form-urlencoded',
-        multipartForm: 'multipart/form-data'
+                     xml: ['text/xml', 'application/xml', 'application/vnd.sungardhe.student.v0.01+xml'],
+                     text: 'text/plain',
+                     js: 'text/javascript',
+                     rss: 'application/rss+xml',
+                     atom: 'application/atom+xml',
+                     css: 'text/css',
+                     csv: 'text/csv',
+                     all: '*/*',
+                     json: ['application/json', 'text/json'],
+                     form: 'application/x-www-form-urlencoded',
+                     multipartForm: 'multipart/form-data'
 ]
 
 // The default codec used to encode data with ${}
@@ -74,15 +74,15 @@ grails.views.gsp.sitemesh.preprocess = true
 
 // set per-environment serverURL stem for creating absolute links
 environments {
-    production {
-        grails.serverURL = "http://NOT_USED:8080/${appName}"
-    }
-    development {
-        grails.serverURL = "http://NOT_USED:8080/${appName}"
-    }
-    test {
-        grails.serverURL = "http://NOT_USED:8080/${appName}"
-    }
+        production {
+                grails.serverURL = "http://NOT_USED:8080/${appName}"
+        }
+        development {
+                grails.serverURL = "http://NOT_USED:8080/${appName}"
+        }
+        test {
+                grails.serverURL = "http://NOT_USED:8080/${appName}"
+        }
 }
 
 // ******************************************************************************
@@ -225,7 +225,7 @@ formControllerMap = [
         'sectionstatus': ['STVSSTS'],
         'partofterm': ['STVPTRM'],
         'sessioncode': ['STVSESS'],
-		'schedule': ['SSASECT'],
+        'schedule': ['SSASECT'],
         'reservedseatsinquiry': ['SSIRESV'],
         'section': ['SSASECT'],
         'specialapproval': ['STVSAPR'],
@@ -278,7 +278,7 @@ formControllerMap = [
         'sectionolrregistrationstatus': ['SSARULE'],
         'sectionolrextensionrule': ['SSARULE'],
         'sectionolrrefunding': ['SSARULE'],
-		'waitlistautomationsectioncontrol'    : [ 'SSAWLSC'] ,
+        'waitlistautomationsectioncontrol'    : [ 'SSAWLSC'] ,
         'sectionprerequisiteandtestscorerestrictions': ['SSAPREQ'],
         'scheduleprerequisiteandtestscorerestrictions': ['SSAPREQ'],
         'sectionfeeassessmentcontrol':['SSADFEE'],
@@ -336,8 +336,8 @@ formControllerMap = [
         'vocationaleducation': ['STVVOED', 'SGASTDN'],
         'registrationstudentcourseregistration': ['SFAREGS'] ,
         'sectionwebcontrols'                  : [ 'SSAWSEC' ],
-     	'schedulerestrictions'   			  : [ 'SSARRES' ],
-     	'sectiondepartmentrestriction'        : [ 'SSARRES' ],
+        'schedulerestrictions'   			  : [ 'SSARRES' ],
+        'sectiondepartmentrestriction'        : [ 'SSARRES' ],
         'scheduleacademiccalendarrules' : [ 'SSAACRL' ],
         'academiccalendarrulequery': ['SSAQCRL'],
         'scheduleevaluation' : ['SSAEVAL'],
@@ -351,16 +351,16 @@ formControllerMap = [
         'banner'  : ['SCACRSE'],
         'mainpage' : ['GUAGMNU'],
         'menu' : ['GUAGMNU'],
-		'facultygradeentry' : ['SIIINST', 'SIAINST'],
-		'facultysection' : ['SIIINST', 'SIAINST']
+        'facultygradeentry' : ['SIIINST', 'SIAINST'],
+        'facultysection' : ['SIIINST', 'SIAINST']
 ]
 
 grails.plugins.springsecurity.useRequestMapDomainClass = false
 //grails.plugins.springsecurity.rejectIfNoRule = true
 
 grails.plugins.springsecurity.filterChain.chainMap = [
-    '/api/**': 'authenticationProcessingFilter,basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
-    '/**': 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
+        '/api/**': 'authenticationProcessingFilter,basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
+        '/**': 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
 ]
 
 grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
@@ -399,12 +399,12 @@ grails.plugins.springsecurity.interceptUrlMap = [
         // by explicitly specifying true roles instead -- as long as ROLE_DETERMINED_DYNAMICALLY
         // is NOT specified.
         //
-       '/**': [ 'ROLE_DETERMINED_DYNAMICALLY' ]
+        '/**': [ 'ROLE_DETERMINED_DYNAMICALLY' ]
 ]
 
 // Uncomment and edit the following lines to start using Grails encoding & escaping improvements
 
-/* remove this line 
+/* remove this line
 // GSP settings
 grails {
     views {
@@ -425,3 +425,4 @@ grails {
     }
 }
 remove this line */
+
