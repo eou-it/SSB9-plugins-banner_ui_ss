@@ -53,7 +53,6 @@ grails.project.dependency.resolution = {
         compile ':feeds:1.5'
 
         compile ':selenium:0.8'
-        compile ':selenium-rc:1.0.2'
     }
 
     dependencies {
