@@ -32,10 +32,13 @@ grails.config.locations = [] // leave this initialized to an empty list, and add
 
 def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
 
-// Since this configuration is only needed for testing, we'll just use the Faculty Grade Entry configuration for convenience.
 [ BANNER_APP_CONFIG:                 "banner_configuration.groovy",
-  BANNER_FACULTY_GRADE_ENTRY_CONFIG: "banner_core_testapp_configuration.groovy",
+  BANNER_CORE_TESTAPP_CONFIG: "banner_core_testapp_configuration.groovy",
 ].each { envName, defaultFileName -> locationAdder(envName, defaultFileName) }
+// In case logging is problematic, we'll just write this to the console immediately
+grails.config.locations.each {
+        println "Using configuration: " + it
+}
 
 
 grails.project.groupId = "net.hedtech" // used when deploying to a maven repo

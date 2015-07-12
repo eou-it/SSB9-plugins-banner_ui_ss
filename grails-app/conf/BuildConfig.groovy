@@ -24,7 +24,7 @@ grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
     }
-    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {
 
         flatDir name:'banner_ui_ss_repo', dirs:'../banner_ui_ss.git/lib'
@@ -60,6 +60,12 @@ grails.project.dependency.resolution = {
         // rome dependency is required for the feeds plugin. Otherwise it throws multiple compilation error
         // for import com.sun.syndication.io.SyndFeedOutput
         compile 'rome:rome:0.9'
+        test ':poi:3.7-20101029'
+        test ':poi-ooxml:3.7-20101029'
+        test ':poi-ooxml-schemas:3.7-20101029'
+        test ':poi-scratchpad:3.7-20101029'
+        test ':xmlbeans:2.3.0'
+
     }
 }
 

@@ -1,3 +1,5 @@
+import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsAnnotationConfiguration
+
 /*********************************************************************************
  Copyright 2009-2012 SunGard Higher Education. All Rights Reserved.
  This copyrighted software contains confidential and proprietary information of 
@@ -9,35 +11,37 @@
  Banner and Luminis are either registered trademarks or trademarks of SunGard Higher 
  Education in the U.S.A. and/or other regions and/or countries.
  **********************************************************************************/
-//excluded during package-plugin
+
 dataSource {
-  	pooled = true
-	driverClassName = "oracle.jdbc.OracleDriver"
-    dialect = "org.hibernate.dialect.Oracle10gDialect"
-	username = "banproxy"
-	password = "u_pick_it"
+	configClass = GrailsAnnotationConfiguration.class
+	dialect = "org.hibernate.dialect.Oracle10gDialect"
+	loggingSql = false
 }
+
+
 hibernate {
-    dialect = "org.hibernate.dialect.Oracle10gDialect"
-    cache.use_second_level_cache=true
-    cache.use_query_cache=true
-    cache.provider_class='net.sf.ehcache.hibernate.EhCacheProvider'
+	cache.use_second_level_cache = true
+	cache.use_query_cache = true
+	cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
+	hbm2ddl.auto = null
+	show_sql = false
+	dialect = "org.hibernate.dialect.Oracle10gDialect"
+	config.location = ["classpath:hibernate-banner-core.cfg.xml"]
 }
+
+
 // environment specific settings
 environments {
 	development {
 		dataSource {
-			url = "jdbc:oracle:thin:@winxp-50174ccec:1521:ban83"
 		}
 	}
 	test {
 		dataSource {
-			url = "jdbc:oracle:thin:@localhost:1521:ban83"
 		}
 	}
 	production {
 		dataSource {
-			url = "jdbc:oracle:thin:@winxp-50174ccec:1521:ban83"
 		}
 	}
 }
