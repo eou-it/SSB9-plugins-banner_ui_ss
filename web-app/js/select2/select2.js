@@ -3508,6 +3508,7 @@
         formatLoadMore: function (pageNumber) { return "Loading more results…"; },
         formatSearching: function () { return "Searching…"; }
     };
+    
 
     $.extend($.fn.select2.defaults, $.fn.select2.locales['en']);
 
