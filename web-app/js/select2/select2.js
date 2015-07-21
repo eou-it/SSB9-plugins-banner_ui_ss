@@ -3509,15 +3509,15 @@ var requestTimeout
     $.fn.select2.locales['en'] = {
         formatMatches: function (matches) {
             if (matches === 1) {
-                return "One result is available, press enter to select it.";
+                return $.i18n.prop("select2.format.one.result");
             }
-            return matches + " results are available, use up and down arrow keys to navigate.";
+            return $.i18n.prop("select2.format.multiple.result",[matches]);
         },
         formatNoMatches: function () {
             return $.i18n.prop("select2.no.matches");
         },
         formatAjaxError: function (jqXHR, textStatus, errorThrown) {
-            return "Loading failed";
+            return $.i18n.prop("select2.format.loading.failed");
         },
         formatInputTooShort: function (input, min) {
             if (input.length == (min - 1)) {
