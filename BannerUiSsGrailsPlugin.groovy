@@ -18,7 +18,7 @@ class BannerUiSsGrailsPlugin {
 
     String groupId = "net.hedtech"
 
-    def version = "2.10.1.2"
+    def version = "2.10.1.4"
 
     def grailsVersion = "2.2.1 > *"
 
@@ -123,7 +123,8 @@ class BannerUiSsGrailsPlugin {
                             }
                         }
                     }
-                    originalRenderMap.invoke(delegate, args)
+                    //originalRenderMap.invoke(delegate, args)
+                    originalMap.invoke(delegate, args)
                 }
             }
 
@@ -143,7 +144,8 @@ class BannerUiSsGrailsPlugin {
                     catch (Exception e) {
                         println e
                     }
-                    originalRenderString.invoke(delegate, txt)
+                    //originalRenderString.invoke(delegate, txt)
+                    originalString.invoke(delegate, txt)
                 }
             }
         }
