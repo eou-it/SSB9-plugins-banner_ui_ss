@@ -123,7 +123,8 @@ class BannerUiSsGrailsPlugin {
                             }
                         }
                     }
-                    originalRenderMap.invoke(delegate, args)
+                    //originalRenderMap.invoke(delegate, args)
+                    originalMap.invoke(delegate, args)
                 }
             }
 
@@ -143,7 +144,8 @@ class BannerUiSsGrailsPlugin {
                     catch (Exception e) {
                         println e
                     }
-                    originalRenderString.invoke(delegate, txt)
+                    //originalRenderString.invoke(delegate, txt)
+                    originalString.invoke(delegate, txt)
                 }
             }
         }
