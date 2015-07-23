@@ -756,7 +756,7 @@ var requestTimeout
 
             // initialize the container
             this.initContainer();
-            $(this.container).attr("role", "listbox");
+
             this.container.on("click", killEvent);
 
             installFilteredMouseMove(this.results);
@@ -956,20 +956,19 @@ var requestTimeout
 
                             compound=result.children && result.children.length > 0;
 
-                            node=$("<li role='option' tabindex='-1'></li>");
+                            node=$("<li role='option'></li>");
                             node.addClass("select2-results-dept-"+depth);
                             node.addClass("select2-result");
                             node.addClass(selectable ? "select2-result-selectable" : "select2-result-unselectable");
                             if (disabled) { node.addClass("select2-disabled"); }
                             if (compound) { node.addClass("select2-result-with-children"); }
                             node.addClass(self.opts.formatResultCssClass(result));
-//                           node.attr("role", "presentation");
-                            node.attr('id',result.id);
+                            node.attr("role", "presentation");
+
                             label=$(document.createElement("div"));
                             label.addClass("select2-result-label");
-                            var labelid= "select2-result-label-" + nextUid();
-                            label.attr("id", labelid);
-                            //label.attr("role", "option");
+                            label.attr("id", "select2-result-label-" + nextUid());
+                            label.attr("role", "option");
 
                             formatted=opts.formatResult(result, label, query, self.opts.escapeMarkup);
                             if (formatted!==undefined) {
@@ -979,8 +978,8 @@ var requestTimeout
 
 
                             if (compound) {
-                                node.attr('aria-expanded','true');
-                                innerContainer=$("<ul role='group' aria-labelledby='"+labelid+"'></ul>");
+
+                                innerContainer=$("<ul></ul>");
                                 innerContainer.addClass("select2-result-sub");
                                 populate(result.children, innerContainer, depth+1);
                                 node.append(innerContainer);
@@ -1591,8 +1590,7 @@ var requestTimeout
 
             choice = $(choices[index]);
             choice.addClass("select2-highlighted");
-            choice.attr("aria-live",'assertive');
-            $(".select2-input").attr("aria-activedescendant", choice.id);
+
             // ensure assistive technology can determine the active choice
             this.search.attr("aria-activedescendant", choice.find(".select2-result-label").attr("id"));
 
@@ -1607,7 +1605,7 @@ var requestTimeout
         },
 
         removeHighlight: function() {
-            this.results.find(".select2-highlighted").removeClass("select2-highlighted").removeAttr("aria-live");;
+            this.results.find(".select2-highlighted").removeClass("select2-highlighted");
         },
 
         touchMoved: function() {
@@ -1734,14 +1732,14 @@ var requestTimeout
             if (maxSelSize >=1) {
                 data = this.data();
                 if ($.isArray(data) && data.length >= maxSelSize && checkFormatter(opts.formatSelectionTooBig, "formatSelectionTooBig")) {
-                    render("<li class='select2-selection-limit'  role='option' tabindex='-1' aria-live='assertive'>" + evaluate(opts.formatSelectionTooBig, opts.element, maxSelSize) + "</li>");
+                    render("<li class='select2-selection-limit'>" + evaluate(opts.formatSelectionTooBig, opts.element, maxSelSize) + "</li>");
                     return;
                 }
             }
 
             if (search.val().length < opts.minimumInputLength) {
                 if (checkFormatter(opts.formatInputTooShort, "formatInputTooShort")) {
-                    render("<li class='select2-no-results'  role='option' tabindex='-1' aria-live='assertive'>" + evaluate(opts.formatInputTooShort, opts.element, search.val(), opts.minimumInputLength) + "</li>");
+                    render("<li class='select2-no-results'>" + evaluate(opts.formatInputTooShort, opts.element, search.val(), opts.minimumInputLength) + "</li>");
                 } else {
                     render("");
                 }
@@ -1751,7 +1749,7 @@ var requestTimeout
 
             if (opts.maximumInputLength && search.val().length > opts.maximumInputLength) {
                 if (checkFormatter(opts.formatInputTooLong, "formatInputTooLong")) {
-                    render("<li class='select2-no-results'  role='option' tabindex='-1' aria-live='assertive'>" + evaluate(opts.formatInputTooLong, opts.element, search.val(), opts.maximumInputLength) + "</li>");
+                    render("<li class='select2-no-results'>" + evaluate(opts.formatInputTooLong, opts.element, search.val(), opts.maximumInputLength) + "</li>");
                 } else {
                     render("");
                 }
@@ -1759,7 +1757,7 @@ var requestTimeout
             }
 
             if (opts.formatSearching && this.findHighlightableChoices().length === 0) {
-                render("<li class='select2-searching'  role='option' tabindex='-1' aria-busy='true'>" + evaluate(opts.formatSearching, opts.element) + "</li>");
+                render("<li class='select2-searching'>" + evaluate(opts.formatSearching, opts.element) + "</li>");
             }
 
             search.addClass("select2-active");
@@ -1816,7 +1814,7 @@ var requestTimeout
                     }
 
                     if (data.results.length === 0 && checkFormatter(opts.formatNoMatches, "formatNoMatches")) {
-                        render("<li class='select2-no-results'  role='option' tabindex='-1' aria-live='assertive'>" + evaluate(opts.formatNoMatches, opts.element, search.val()) + "</li>");
+                        render("<li class='select2-no-results'>" + evaluate(opts.formatNoMatches, opts.element, search.val()) + "</li>");
                         return;
                     }
 
@@ -1824,7 +1822,7 @@ var requestTimeout
                     self.opts.populateResults.call(this, results, data.results, {term: search.val(), page: this.resultsPage, context:null});
 
                     if (data.more === true && checkFormatter(opts.formatLoadMore, "formatLoadMore")) {
-                        results.append("<li class='select2-more-results'  role='option' tabindex='-1' aria-live='assertive'>" + opts.escapeMarkup(evaluate(opts.formatLoadMore, opts.element, this.resultsPage)) + "</li>");
+                        results.append("<li class='select2-more-results'>" + opts.escapeMarkup(evaluate(opts.formatLoadMore, opts.element, this.resultsPage)) + "</li>");
                         window.setTimeout(function() { self.loadMoreIfNeeded(); }, 10);
                     }
 
@@ -1974,9 +1972,9 @@ var requestTimeout
                 "   <div class='select2-search'>",
                 "       <label for='' class='select2-offscreen'></label>",
                 "       <input type='text' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input' role='combobox' aria-expanded='true'",
-                "       aria-autocomplete='list' aria-owns='select2-results' />",
+                "       aria-autocomplete='list' />",
                 "   </div>",
-                "   <ul class='select2-results' role='listbox'  aria-expanded='false' tabindex='-1'>",
+                "   <ul class='select2-results' role='listbox'>",
                 "   </ul>",
                 "</div>"].join(""));
             return container;
@@ -2031,7 +2029,6 @@ var requestTimeout
 
             this.focusser.prop("disabled", true).val("");
             this.updateResults(true);
-            $(".select2-results").find('ul').attr("aria-expanded", true);
             this.opts.element.trigger($.Event("select2-open"));
         },
 
@@ -2039,7 +2036,7 @@ var requestTimeout
         close: function () {
             if (!this.opened()) return;
             this.parent.close.apply(this, arguments);
-            $(".select2-results").find('ul').attr("aria-expanded", false);
+
             this.focusser.prop("disabled", false);
 
             if (this.opts.shouldFocusInput(this)) {
