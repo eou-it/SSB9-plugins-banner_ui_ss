@@ -287,11 +287,11 @@ $(document).ready(function() {
             var ariaLabelledbyText = screenReaderText[notificationType] ;
 
             if(notificationType == "error"){
-                messageContainer.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage);
+                messageContainer.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage, "off", "aria-labelledby");
             }
             else if(notificationType == "warning"){
                 var actionButton = promptsDiv.find('button:first');
-                actionButton.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage+ " " + actionButton.text());
+                actionButton.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage+ " " + actionButton.text(), "off", "aria-labelledby");
             }
             else{
                 var ariaNotificationItemTextElement = "<b class='offscreen' id='ariaNotificationCountText'>"+ariaLabelledbyText+"</b>";
@@ -476,8 +476,9 @@ $(document).ready(function() {
             $(this.el).append( '<a tabindex="0" class="notification-center-anchor"></a>' );
             $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul class="flash-container" role="alert" aria-live="assertive"/><ul class="prompt-container" /><ul class="error-container"/></div>' );
 
-            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
+
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
+            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','closeNotificationFlyoutAndSetFocus','configureNotificationOverlay','checkAndCloseFlyout');
             this.model.bind("add", this.addNotification);
