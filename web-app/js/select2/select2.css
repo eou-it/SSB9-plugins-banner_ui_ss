@@ -1,3 +1,6 @@
+/** *****************************************************************************
+ Copyright 2015 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 /*
 Version: 3.5.2 Timestamp: Sat Nov  1 14:43:36 EDT 2014
 */
@@ -14,7 +17,7 @@ Version: 3.5.2 Timestamp: Sat Nov  1 14:43:36 EDT 2014
 .select2-container,
 .select2-drop,
 .select2-search,
-.select2-search input {
+.select2-search input{
     /*
       Force border-box so that % widths fit the parent
       container without overlap because of margin/padding.
@@ -191,7 +194,8 @@ html[dir="rtl"] .select2-container .select2-choice > .select2-chosen {
     position: absolute;
     right: 0;
     top: 0;
-
+    left: auto;
+    border-right: medium none;
     border-left: 1px solid #aaa;
     border-radius: 0 4px 4px 0;
 
@@ -371,6 +375,30 @@ html[dir="rtl"] .select2-results {
     padding-left: 0;
 }
 
+
+.select2-results ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
+    padding-left: 40px
+}
+
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
+    padding-left: 60px
+}
+
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
+    padding-left: 80px
+}
+
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
+    padding-left: 100px
+}
+
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
+    padding-left: 110px
+}
+
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label {
+    padding-left: 120px
+}
 .select2-results li {
     list-style: none;
     display: list-item;
@@ -606,7 +634,7 @@ html[dir="rtl"] .select2-container-multi .select2-choices .select2-search-choice
     height: 13px;
     position: absolute;
     right: 3px;
-    top: 4px;
+    top: 3px;
 
     font-size: 1px;
     outline: none;
@@ -701,4 +729,10 @@ html[dir="rtl"] .select2-container-multi .select2-search-choice-close {
     .select2-search input {
         background-position: 100% -21px !important;
     }
+}
+
+.select2-container.select2-container-active.component-error .select2-choice,
+.grid tr.notification-error td.notification-error .select2-container,
+.grid tr.notification-error td.notification-error .select2-container.select2-container-active .select2-choice{
+    border: 1px solid #cc0000;
 }
