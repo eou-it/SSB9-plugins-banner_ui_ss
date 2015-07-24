@@ -703,6 +703,7 @@ var requestTimeout
             this.container = this.createContainer();
 
             this.liveRegion = $('.select2-hidden-accessible');
+            this.liveChoicestStusRegion = $('.select2-choice-status-hidden-accessible');
             this.liveRegionClassSelector = '.select2-hidden-accessible';
             if (this.liveRegion.length == 0) {
                 this.liveRegion = $("<span>", {
@@ -710,6 +711,14 @@ var requestTimeout
                     "aria-live": "polite"
                 })
                     .addClass("select2-hidden-accessible")
+                    .appendTo(document.body);
+            }
+            if (this.liveChoicestStusRegion.length == 0) {
+                this.liveChoicestStusRegion = $("<span>", {
+                    role: "status",
+                    "aria-live": "polite"
+                })
+                    .addClass("select2-choice-status-hidden-accessible")
                     .appendTo(document.body);
             }
 
@@ -849,6 +858,12 @@ var requestTimeout
             if (this.autofocus) this.focus();
 
             this.search.attr("placeholder", opts.searchInputPlaceholder);
+            this.opts.element.on("select2-removed", function(e) {
+                e.liveChoicestStusRegion.text("Removed choice "+e.choice.text);
+            });
+            this.opts.element.on("select2-selected", function(e) {
+                e.liveChoicestStusRegion.text("selected choice "+e.choice.text);
+            });
         },
 
         // abstract
@@ -992,8 +1007,7 @@ var requestTimeout
 
                         // bulk append the created nodes
                         container.append(nodes);
-                        //TODO:Select3.5.2 Verify this for all testcases
-                       // liveRegion.text(opts.formatMatches(results.length));
+                       liveRegion.text(opts.formatMatches(results.length));
                     };
 
                     populate(results, container, 0);
@@ -2108,7 +2122,7 @@ var requestTimeout
 
             // add aria associations
             selection.find(".select2-chosen").attr("id", "select2-chosen-"+idSuffix);
-            var ariaText = "Use Arrow Keys To Navigate and Enter to Select ";
+            var ariaText = "Single Select Dropdown Use Arrow Keys To Navigate and Enter to Select ";
             if ( this.opts.screenReaderText != undefined) {
                 ariaText=ariaText+" "+this.opts.screenReaderText;
             }
@@ -2312,7 +2326,7 @@ var requestTimeout
                 this.setPlaceholder();
 
                 if (triggerChange !== false){
-                    this.opts.element.trigger({ type: "select2-removed", val: this.id(data), choice: data });
+                    this.opts.element.trigger({ type: "select2-removed", val: this.id(data), choice: data, liveChoicestStusRegion:this.liveChoicestStusRegion  });
                     this.triggerChange({removed:data});
                 }
             }
@@ -2470,8 +2484,7 @@ var requestTimeout
             this.opts.element.val(this.id(data));
             this.updateSelection(data);
 
-            this.opts.element.trigger({ type: "select2-selected", val: this.id(data), choice: data });
-
+            this.opts.element.trigger({ type: "select2-selected", val: this.id(data), choice: data , liveChoicestStusRegion:this.liveChoicestStusRegion });
             this.nextSearchTerm = this.opts.nextSearchTerm(data, this.search.val());
             this.close();
 
@@ -2709,7 +2722,7 @@ var requestTimeout
 
             this.searchContainer = this.container.find(".select2-search-field");
             this.selection = selection = this.container.find(selector);
-            var text = "Use Arrow Keys To Navigate and Enter to Select";
+            var text = "Multi Select Dropdown Use Arrow Keys To Navigate and Enter to Select";
             if (this.getPlaceholder() != undefined) {
                 text=text+" "+this.getPlaceholder();
             }
@@ -3021,8 +3034,7 @@ var requestTimeout
 
             this.addSelectedChoice(data);
 
-            this.opts.element.trigger({ type: "selected", val: this.id(data), choice: data });
-
+            this.opts.element.trigger({ type: "select2-selected", val: this.id(data), choice: data , liveChoicestStusRegion:this.liveChoicestStusRegion});
             // keep track of the search's value before it gets cleared
             this.nextSearchTerm = this.opts.nextSearchTerm(data, this.search.val());
 
@@ -3159,7 +3171,7 @@ var requestTimeout
 
             selected.remove();
 
-            this.opts.element.trigger({ type: "select2-removed", val: this.id(data), choice: data });
+            this.opts.element.trigger({ type: "select2-removed", val: this.id(data), choice: data, liveChoicestStusRegion:this.liveChoicestStusRegion});
             this.triggerChange({ removed: data });
 
             return true;
