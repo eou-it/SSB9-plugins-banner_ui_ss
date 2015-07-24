@@ -703,6 +703,7 @@ var requestTimeout
             this.container = this.createContainer();
 
             this.liveRegion = $('.select2-hidden-accessible');
+            this.liveRegionClassSelector = '.select2-hidden-accessible';
             if (this.liveRegion.length == 0) {
                 this.liveRegion = $("<span>", {
                     role: "status",
@@ -979,7 +980,7 @@ var requestTimeout
 
                             if (compound) {
 
-                                innerContainer=$("<ul></ul>");
+                                innerContainer=$("<ul ></ul>");
                                 innerContainer.addClass("select2-result-sub");
                                 populate(result.children, innerContainer, depth+1);
                                 node.append(innerContainer);
@@ -991,7 +992,8 @@ var requestTimeout
 
                         // bulk append the created nodes
                         container.append(nodes);
-                        liveRegion.text(opts.formatMatches(results.length));
+                        //TODO:Select3.5.2 Verify this for all testcases
+                       // liveRegion.text(opts.formatMatches(results.length));
                     };
 
                     populate(results, container, 0);
@@ -1712,12 +1714,13 @@ var requestTimeout
 
             function postRender() {
                 search.removeClass("select2-active");
+                var liveRegionArea = $('body').find(self.liveRegionClassSelector);
                 self.positionDropdown();
                 if (results.find('.select2-no-results,.select2-selection-limit,.select2-searching').length) {
-                    self.liveRegion.text(results.text());
+                    liveRegionArea.text(results.text());
                 }
                 else {
-                    self.liveRegion.text(self.opts.formatMatches(results.find('.select2-result-selectable:not(".select2-selected")').length));
+                    liveRegionArea.text(self.opts.formatMatches(results.find('.select2-result-selectable:not(".select2-selected")').length));
                 }
             }
 
@@ -1977,6 +1980,7 @@ var requestTimeout
                 "   <ul class='select2-results' role='listbox'>",
                 "   </ul>",
                 "</div>"].join(""));
+
             return container;
         },
 
@@ -2104,6 +2108,12 @@ var requestTimeout
 
             // add aria associations
             selection.find(".select2-chosen").attr("id", "select2-chosen-"+idSuffix);
+            var ariaText = "Use Arrow Keys To Navigate and Enter to Select ";
+            if ( this.opts.screenReaderText != undefined) {
+                ariaText=ariaText+" "+this.opts.screenReaderText;
+            }
+            this.focusser.screenReaderLabel(ariaText,null,"aria-describedby");
+
             this.focusser.attr("aria-labelledby", "select2-chosen-"+idSuffix);
             this.results.attr("id", "select2-results-"+idSuffix);
             this.search.attr("aria-owns", "select2-results-"+idSuffix);
@@ -2699,6 +2709,14 @@ var requestTimeout
 
             this.searchContainer = this.container.find(".select2-search-field");
             this.selection = selection = this.container.find(selector);
+            var text = "Use Arrow Keys To Navigate and Enter to Select";
+            if (this.getPlaceholder() != undefined) {
+                text=text+" "+this.getPlaceholder();
+            }
+            if ( this.opts.screenReaderText != undefined) {
+                text=text+" "+this.opts.screenReaderText;
+            }
+            this.search.screenReaderLabel(text);
 
             var _this = this;
             this.selection.on("click", ".select2-container:not(.select2-container-disabled) .select2-search-choice:not(.select2-locked)", function (e) {
