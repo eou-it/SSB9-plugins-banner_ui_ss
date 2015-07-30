@@ -71,6 +71,7 @@ $(document).ready(function() {
                 if (notification.get( "flash" )) {
                     var removeNotification = function() {
                         this.remove( notification );
+                        window.notificationCenter.closeNotificationFlyout();
                     };
 
                     removeNotification = _.bind( removeNotification, this );
@@ -186,104 +187,14 @@ $(document).ready(function() {
                 }
             }
         },
-        generateCompareHash: function ( notification ) {
-            var prefix;
-
-            if (notification.get("type") === "success") {
-                prefix = "0";
-            } else if (notification.hasPrompts()) {
-                prefix = "1";
-            }
-            else {
-                prefix = "2";
-            }
-
-            if ( notification.has( "model" ) && notification.get( "model" ) ) {
-                var model = notification.get( "model" );
-
-                if ( !_.isUndefined( model.collection ) ) {
-                    var idx = model.collection.indexOf( model );
-
-                    prefix += "-" + model.collection.getCid() + "-" + idx;
-                }
-            }
-
-            return prefix + "-" + notification.get("type") + notification.get( "message" );
-        },
-        comparator: function( a, b ) {
-            var x = this.generateCompareHash( a ),
-                y = this.generateCompareHash( b );
-
-            x = x.replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
-            y = y.replace( /\\\s/g, " " ).split( /(\d+)/ ); // the split formatting is imperative, everything else can change
-
-            for ( var i = 0; i < x.length; i++ ) {
-                if ( x[ i ] && !y[ i ] || isFinite( x[ i ] ) && !isFinite( y[ i ] ) ) {
-                    return -1;
-                } else if ( !x[ i ] && y[ i ] || !isFinite(y[ i ] ) && isFinite( y[ i ] ) ) {
-                    return 1;
-                } else if ( !isFinite( x[ i ] ) && !isFinite( y[ i ] ) ) {
-                    x[ i ] = x[ i ].toLowerCase(); y[ i ] = y[ i ].toLowerCase();
-
-                    if ( x[ i ] < y[ i ]) return -1;
-                    if ( x[ i ] > y[ i ]) return 1;
-                } else {
-                    x[ i ] = parseFloat( x[ i ] );
-                    y[ i ] = parseFloat( y[ i ] );
-
-                    if ( x[ i ] < y[ i ] ) return -1;
-                    if ( x[ i ] > y[ i ] ) return 1;
-                }
-            }
-
-            return 0;
-        },
         hasErrors: function() {
             return this.find( function(model) { return model.get( "type" ) === "error" } );
         },
-        grouped: function() {
-            var grouper = function( notifications ) {
-                return notifications.groupBy( function( notification ) {
-                    var props = ["message", "type", "model", "field", "ignoreForGroupBy" ];
-
-                    var key = "";
-                    _.each( props, function(p) {
-                        if (key !== "") {
-                            key += "|";
-                        }
-
-                        var value = notification.get( p );
-
-                        // We can uniquely identify the model through the cid.  If the value is not null we should use the cid.
-                        if (p === "model" && value) {
-                            value = value.cid;
-                        }
-
-                        if (notification.has( "ignoreForGroupBy" )) {
-                            if (_.include( notification.get( "ignoreForGroupBy" ), p )) {
-                                value = "+";  // '+' is shorthand to show a value is grouped.
-                            }
-                        }
-
-                        key += p + ":" + value;
-                    });
-
-                    return key;
-                });
-            }
-
-            var groupedModels = [];
-            var groupedNotificationsSet = grouper( this );
-
-            // The grouper function will return a set of models key'd by a unique key
-            // This loop is to pluck out the first model for each key since we only need one to pass back
-            // in the collection.
-            _.each( groupedNotificationsSet, function(p) {
-                // Push the first notification in the group.
-                groupedModels.push( p[0] );
-            });
-
-            return groupedModels;
+        hasFlash: function() {
+            return this.find( function(model) { return model.get( "type" ) === "success" } );
+        },
+        hasPrompt: function() {
+            return this.find( function(model) { return model.hasPrompts() } );
         },
         addComponentErrorStyle: function( notification ) {
             var errorComponent = this.getNotificationComponent(notification);
@@ -318,38 +229,12 @@ $(document).ready(function() {
         render: function() {
             //  Evaluate the notification type to determine what css class to append to the notification.
             var notificationType = this.model.get("type");
-            var notificationClass = "notification-center-message-error";
-
-            var ariaNotificationItemText = $.i18n.prop("js.notification.flashmessage");
-
-            if (!this.model.get("flash")) {
-                ariaNotificationItemText=$.i18n.prop("js.notification.messageinfo", [this.options.notificationIdx,this.options.notificatioLength,this.model.get("type")]);
-            }
-
-            if (this.model.hasPrompts()) {
-                ariaNotificationItemText+=" ";
-                ariaNotificationItemText+=$.i18n.prop("js.notification.promptmessage");
-            }
-
-            switch (notificationType) {
-                case "error":
-                    notificationClass = "notification-center-message-error";
-                    break;
-                case "warning":
-                    notificationClass = "notification-center-message-warning";
-                    break;
-                case "success":
-                    notificationClass = "notification-center-message-success";
-                    break;
-            }
-
-            $(this.el).addClass( notificationClass );
-
             var view = this;
-            var messageContainer = $("<span tabindex='0'></span>");
+            var notificationMessage = this.model.get("message" );
+            var messageContainer = $("<span></span>");
             var component = this.model.get("component");
             if(notificationType=="error" && component){
-                messageContainer = $("<a tabindex='0'></a>");
+                messageContainer = $("<a tabindex='0' role='link' class='notification-flyout-item'></a>");
                 messageContainer.addClass('notification-message');
                 messageContainer.on('click', function(){
                     view.navigateToErrorComponent(view.model);
@@ -361,12 +246,8 @@ $(document).ready(function() {
                     }
                 });
             }
-            var ariaNotificationItemTextElement = "<b class='offscreen' id='ariaNotificationCountText'>"+ariaNotificationItemText+"</b>";
-            $(messageContainer).prepend(ariaNotificationItemTextElement);
 
-            messageContainer.addClass('notification-flyout-item');
-
-            var messageDiv = $("<div></div>").addClass( "notification-item-message vertical-align" ).html(messageContainer.append( this.model.get("message" ) ) );
+            var messageDiv = $("<div></div>").addClass( "notification-item-message vertical-align" ).html(messageContainer.append( notificationMessage ) );
 
             // Manage the prompts if available
             var promptsDiv;
@@ -382,7 +263,11 @@ $(document).ready(function() {
                 promptsDiv = $( "<div></div>" ).addClass( "notification-item-prompts" );
 
                 _.each(this.model.get( "prompts" ), function(prompt) {
-                    var b = $("<button></button>").html( prompt.label ).click( prompt.action );
+                    var b = $("<button></button>").html( prompt.label )
+                        .on('click', function(){
+                            notificationCenter.closeNotificationFlyout();
+                            prompt.action();
+                        });
                     b.addClass('notification-flyout-item');
                     promptsDiv.append( b );
                 }, this );
@@ -395,6 +280,26 @@ $(document).ready(function() {
             if (promptsDiv) {
                 $(this.el).append( promptsDiv );
             }
+            var notificationStyleClass = {error:"notification-center-message-error",warning:"notification-center-message-warning",success:"notification-center-message-success"};
+            $(this.el).addClass( notificationStyleClass[notificationType] );
+
+            var screenReaderText = {error: $.i18n.prop("screenreader.notification.error"),warning:$.i18n.prop("screenreader.notification.warning"),success:$.i18n.prop("screenreader.notification.flash")};
+            var ariaLabelledbyText = screenReaderText[notificationType] ;
+
+            if(notificationType == "error"){
+                messageContainer.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage, "off", "aria-labelledby");
+            }
+            else if(notificationType == "warning"){
+                var actionButton = promptsDiv.find('button:first');
+                actionButton.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage+ " " + actionButton.text(), "off", "aria-labelledby");
+            }
+            else{
+                var ariaNotificationItemTextElement = "<b class='offscreen' id='ariaNotificationCountText'>"+ariaLabelledbyText+"</b>";
+                $(messageContainer).addClass('notification-flyout-item')
+                    .attr('tabindex','0')
+                    .prepend(ariaNotificationItemTextElement);
+            }
+
             return this;
         },
         removeNotification: function(notification) {
@@ -440,9 +345,9 @@ $(document).ready(function() {
             this.render();
         },
         render: function() {
-            var displayedNotifications = this.model.grouped();
+            var notifications = this.model.models;
 
-            if (displayedNotifications.length > 0) {
+            if (notifications.length > 0) {
                 $(this.el).removeClass( "notification-center-anchor-hidden");
                 $("#notification-center").removeClass("notification-center-hidden").addClass("notification-center-displayed");
             }
@@ -450,8 +355,9 @@ $(document).ready(function() {
                 $(this.el).addClass( "notification-center-anchor-hidden");
                 $("#notification-center").removeClass("notification-center-displayed").addClass("notification-center-hidden");
             }
-            var notificationCountInfo = displayedNotifications.length+" <p class='offscreen'>"+$.i18n.prop("js.notification.label")+"</p>"
-            $(".notification-center-count span", this.el).html( notificationCountInfo );
+
+            var ariaCountLabel = "<b class='offscreen'>"+$.i18n.prop("js.notification.label")+"</b>";
+            $(".notification-center-count span", this.el).html(notifications.length).append(ariaCountLabel);
             return this;
         },
         isDisplayed: function() {
@@ -483,25 +389,36 @@ $(document).ready(function() {
         initialize: function() {
             $(this.el).addClass( "notification-center-flyout" ).addClass( "notification-center-flyout-hidden" );
 
-            _.bindAll(this, "render", "isDisplayed", "display", "hide","addAriaDescription" );
-            this.model.bind("all", this.render);
+            _.bindAll(this, "render", "isDisplayed", "display", "hide","addAriaDescription","addNotificationToFlyout");
+            this.model.bind("add", this.addNotificationToFlyout);
         },
-        render: function() {
-            $("ul", this.el).empty();
-            var notificationIdx = 0;
-            var notificationCollection = this.model.grouped();
+        addNotificationToFlyout: function(notification) {
+            var view = new NotificationView( {model:notification} );
+            var type = notification.get("type");
+            var notificationCollection = this.model.models;
             //In case of flash messages aria description regarding shortcuts is not required
             if (!(notificationCollection.length == 1 && notificationCollection[0].get("flash"))) {
                 this.addAriaDescription(notificationCollection.length);
             }
 
-            _.each(notificationCollection, function(notification) {
-                notificationIdx+=1;
-                var view = new NotificationView( {model:notification, notificationIdx:notificationIdx, notificatioLength:notificationCollection.length} );
-                $("ul", this.el).append( view.render().el );
-            }, this);
+            if(type == "success"){
+                $(".notification-center-count span").removeAttr('role');
+            }
+            else{
+                $(".notification-center-count span").attr('role','alert');
+            }
 
-            this.$('.notification-flyout-item:first').focus();
+            var listItem = view.render().el;
+            if(type == "warning"){
+                $("ul.prompt-container", this.el).prepend( listItem);
+            }
+            else if(type== "error"){
+                $("ul.error-container", this.el).prepend( listItem);
+            }
+            else{
+                $("ul.flash-container", this.el).prepend( listItem);
+                window.elementToFocusOnFlash = notification.get("elementToFocus") || document.activeElement;
+            }
             return this;
         },
         isDisplayed: function() {
@@ -519,11 +436,6 @@ $(document).ready(function() {
             } else {
                 //Further time notification info.
                 $(this.el).children('#notificationCenterCountAriaInfo').remove();
-                var notificationCenterCountAriaInfo = "<p tabindex='-1' class='offscreen' role='alert'  id='notificationCenterCountAriaInfo'>";
-                notificationCenterCountAriaInfo +=$.i18n.prop("js.notification.countlabel",[count]);
-                notificationCenterCountAriaInfo +="</p>";
-                $(this.el).prepend(notificationCenterCountAriaInfo);
-                $(this.el).attr('aria-describedby','notificationCenterCountAriaInfo');
             }
 
         },
@@ -562,10 +474,11 @@ $(document).ready(function() {
             var self  = this;
             $(this.el).addClass("notification-center");
             $(this.el).append( '<a tabindex="0" class="notification-center-anchor"></a>' );
-            $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul role="alert"/></div>' );
+            $(this.el).append( '<div class="notification-center-flyout" tabindex="0"><ul class="flash-container" role="alert" aria-live="assertive"/><ul class="prompt-container" /><ul class="error-container"/></div>' );
 
-            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
+
             this.notificationCenterAnchor = new NotificationCenterAnchor({el: $(".notification-center-anchor", this.el), model: this.model });
+            this.notificationCenterFlyout = new NotificationCenterFlyout({el: $(".notification-center-flyout", this.el), model: this.model, parent: this.el });
 
             _.bindAll(this, 'render', 'addNotification', 'removeNotification', 'toggle','pressEscToClose','closeNotificationFlyout','closeNotificationFlyoutAndSetFocus','configureNotificationOverlay','checkAndCloseFlyout');
             this.model.bind("add", this.addNotification);
@@ -620,8 +533,13 @@ $(document).ready(function() {
             this.notificationCenterAnchor.display();
             this.notificationCenterFlyout.display();
             this.configureNotificationOverlay();
-            this.$('.notification-flyout-item:first').focus();
             $('.notification-center-flyout')[0].addEventListener('keydown', this.pressEscToClose , true );
+            if(_.isUndefined(notifications.hasFlash())){
+                $('.notification-flyout-item:first').focus();
+            }
+            else{
+                $(elementToFocusOnFlash).focus();
+            }
         },
         closeNotificationFlyout: function () {
             this.notificationCenterFlyout.hide();

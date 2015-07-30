@@ -563,20 +563,16 @@ key = (function(key) {
             if ( boundKey.code != event.keyCode ) {
                 return;
             }
-            if ( boundKey.modifiers ) {
-                if ( (boundKey.modifiers & key.modifierCode.SHIFT) && !event.shiftKey ) {
-                    return;
-                }
-                if ( (boundKey.modifiers & key.modifierCode.ALT) && !event.altKey ) {
-                    return;
-                }
-                if ( (boundKey.modifiers & key.modifierCode.CTRL) && !event.ctrlKey ) {
-                    return;
-                }
+            if ( boundKey.modifiers != modifierKeysPressed(event) ) {
+                return;
             }
             boundKey.handler( event );
         });
     };
+
+    function modifierKeysPressed(event){
+        return (( event.shiftKey && key.modifierCode.SHIFT ) | ( event.altKey && key.modifierCode.ALT ) | ( event.ctrlKey && key.modifierCode.CTRL ));
+    }
 
     /**
      * bind shortcut & handler pairs.
