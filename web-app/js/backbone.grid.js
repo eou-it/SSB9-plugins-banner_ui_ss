@@ -468,7 +468,7 @@ var dirtyCheckDefault = {
         initialize: function () {
             _.bindAll( this, 'notificationAdded', 'notificationRemoved', 'render' );
             // Modify grid columns according to any extensibility information
-            this.applyExtensions();
+            this.options.columns = this.applyExtensions(this.options.columns);
             // make sure we have an id attribute
             if ( !this.$el.attr( 'id' ) )
                 this.$el.attr( 'id', _.uniqueId( 'grid-' ) );
@@ -612,7 +612,7 @@ var dirtyCheckDefault = {
 
             $( window ).on( 'resize', lazyResizeHandler );
         },
-      
+
 
         /***************************************************************************************************
 
@@ -621,8 +621,8 @@ var dirtyCheckDefault = {
          - locate any extensbility information for this grid instance in xe.extensions
          - modify the instantiation of this grid instance accordingly
 
-         ***************************************************************************************************/
-        applyExtensions: function() {
+    ***************************************************************************************************/
+        applyExtensions: function(columnList) {
 
             var dataXESection;
             var gridExtensions;
@@ -639,28 +639,31 @@ var dirtyCheckDefault = {
                         return section.name == dataXESection;
                     });
 
-                    if ( gridExtensions ) {
-                        this.removeColumns( gridExtensions );
-                        this.orderColumns( gridExtensions );
-                        this.replaceColumnAttributes( gridExtensions);
-                    }
+                if ( gridExtensions ) {
+                    columnList = this.removeColumns( gridExtensions, columnList );
+                    columnList = this.orderColumns( gridExtensions, columnList );
+                    columnList = this.replaceColumnAttributes( gridExtensions, columnList);
                 }
             }
-        },
+        }
+        return columnList;
+    },
 
         /***************************************************************************************************
 
          Remove any baseline columns from this grid instance as specified by extensibility information
 
-         ***************************************************************************************************/
-        removeColumns: function( pGridExtensions ) {
+    ***************************************************************************************************/
+    removeColumns: function( pGridExtensions, columnList ) {
+        var extendedColumns = columnList;
 
-            this.options.columns = _.filter( this.options.columns, function(baselineColumn) {
-                return !(_.find(pGridExtensions.fields, function(removedColumn) {
-                    return removedColumn.exclude && (removedColumn.name == baselineColumn.name);
-                }));
-            } );
-        },
+        extendedColumns = _.filter( extendedColumns, function(baselineColumn) {
+            return !(_.find(pGridExtensions.fields, function(removedColumn) {
+                return removedColumn.exclude && (removedColumn.name == baselineColumn.name);
+            }));
+        } );
+        return extendedColumns;
+    },
 
 
         /***************************************************************************************************
@@ -669,65 +672,66 @@ var dirtyCheckDefault = {
 
          ***************************************************************************************************/
 
-        orderColumns: function( pGridExtensions ) {
+    orderColumns: function( pGridExtensions, columnList ) {
 
-            var removedColumn;
-            var targetColumn;
-            var validJSON;
-            var thisGridInstance = this;
-            var baselineColumns = this.options.columns;
+        var removedColumn;
+        var targetColumn;
+        var validJSON;
+        var thisGridInstance = this;
+        var extendedColumns = columnList;
 
-            _.each( pGridExtensions.orderedFields, function(extension) {
-                if ( _.has(extension, "nextSibling") ) {
+        _.each(pGridExtensions.orderedFields, function (extension) {
+            if (_.has(extension, "nextSibling")) {
 
-                    validJSON = true;
-                    removedColumn = _.find(baselineColumns, function(column){
-                        return extension.name == column.name;
+                validJSON = true;
+                removedColumn = _.find(extendedColumns, function (column) {
+                    return extension.name == column.name;
+                });
+                if (!removedColumn) {
+                    thisGridInstance.log("JSON item not found in page");
+                    validJSON = false;
+                }
+
+                if (extension.nextSibling) {
+                    targetColumn = _.find(extendedColumns, function (column) {
+                        return extension.nextSibling == column.name;
                     });
-                    if ( !removedColumn ) {
+                    if (!targetColumn) {
                         thisGridInstance.log("JSON item not found in page");
                         validJSON = false;
                     }
-
-                    if ( extension.nextSibling ) {
-                        targetColumn = _.find(baselineColumns, function(column){
-                            return extension.nextSibling == column.name;
-                        });
-                        if ( !targetColumn ) {
-                            thisGridInstance.log("JSON item not found in page");
-                            validJSON = false;
-                        }
-                    } else {
-                        targetColumn = null;
-                    }
-
-                    if ( validJSON ) {
-
-                        index = _.indexOf(baselineColumns, removedColumn);
-                        baselineColumns.splice(index,1);
-
-                        if ( !targetColumn ) {
-                            index = baselineColumns.length;
-                        } else {
-                            index = _.indexOf(baselineColumns, targetColumn);
-                        }
-                        baselineColumns.splice(index,0,removedColumn);
-                    }
+                } else {
+                    targetColumn = null;
                 }
-            })
-        },
+
+                if (validJSON) {
+                    index = _.indexOf(extendedColumns, removedColumn);
+                    extendedColumns.splice(index, 1);
+
+                    if (!targetColumn) {
+                        index = extendedColumns.length;
+                    } else {
+                        index = _.indexOf(extendedColumns, targetColumn);
+                    }
+                    extendedColumns.splice(index, 0, removedColumn);
+                }
+            }
+        });
+        return extendedColumns;
+    },
 
 
-        /***************************************************************************************************
-         Replace any baseline column attributes from this grid instance as specified by extensibility information
-         ***************************************************************************************************/
-        replaceColumnAttributes: function( pGridExtensions ) {
-            var thisGrid = this;
+    /***************************************************************************************************
+    Replace any baseline column attributes from this grid instance as specified by extensibility information
+    ***************************************************************************************************/
+    replaceColumnAttributes: function( pGridExtensions, columnList ) {
+        var thisGrid = this;
+        var extendedColumns = columnList;
 
             _.each( pGridExtensions.fields, function(field) {
 
-                var baselineColumn = _.findWhere(thisGrid.options.columns,{name: field.name});
-                if (baselineColumn) {
+            var baselineColumn = _.findWhere(extendedColumns,{name: field.name});
+            if (baselineColumn) {
 
                     if ( field.attributes ) {
                         if (_.has(field.attributes, "label") ) {
@@ -738,9 +742,10 @@ var dirtyCheckDefault = {
                         }
                     }
 
-                }
-            })
-        },
+            }
+        });
+        return extendedColumns;
+    },
 
   	setupKeyTable: function () {
             this.log( "setupKeyTable (" + !_.isUndefined( window.KeyTable ) + "): " + !_.isUndefined( this.keyTable ) );
@@ -997,6 +1002,7 @@ var dirtyCheckDefault = {
 
             if ( fullRefresh ) {
                 this.$el.find( "table" ).empty();
+                this.columns = this.applyExtensions(this.columns);
 
                 this.generateHead();
 

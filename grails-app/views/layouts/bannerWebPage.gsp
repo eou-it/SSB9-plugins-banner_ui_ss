@@ -11,11 +11,12 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
                     ${raw(net.hedtech.extensibility.InfoService.getJSON(controllerName, resource(plugin:'web-app-extensibility', dir:'html')))};
         </script>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-            <r:require modules="bannerSelfServiceRTL"/>
+            <r:require modules="bannerWebRTL"/>
         </g:if>
         <g:else>
-            <r:require modules="bannerSelfService"/>
+            <r:require modules="bannerWebLTR"/>
         </g:else>
+
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
 
         <meta charset="${message(code: 'default.character.encoding')}"/>
@@ -24,7 +25,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <meta name="logLevel" content="${g.logLevel()}"/>
         <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
         <meta name="transactionTimeout" content="${session.getServletContext().transactionTimeout}"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="images/applicationIcon.png" />
         <link rel="apple-touch-startup-image" href="images/applicationStartup.png">
@@ -37,7 +38,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 
         <title><g:layoutTitle default="Banner"/></title>
 
-        <link rel="shortcut icon" href="${resource(plugin: 'banner-ui-ss', dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
+        <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 
 
         <r:script>
@@ -59,7 +60,6 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
                 _.defer( function() {
                     $( "#splash" ).remove();
                 });
-                $(document.body).removeAttr("role");
             });
         </r:script>
 
@@ -84,3 +84,4 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <g:customJavaScriptIncludes/>
     </body>
 </html>
+
