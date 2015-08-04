@@ -1,17 +1,9 @@
-/*********************************************************************************
- Copyright 2009-2012 SunGard Higher Education. All Rights Reserved.
- This copyrighted software contains confidential and proprietary information of
- SunGard Higher Education and its subsidiaries. Any use of this software is limited
- solely to SunGard Higher Education licensees, and is further subject to the terms
- and conditions of one or more written license agreements between SunGard Higher
- Education and the licensee in question. SunGard is either a registered trademark or
- trademark of SunGard Data Systems in the U.S.A. and/or other regions and/or countries.
- Banner and Luminis are either registered trademarks or trademarks of SunGard Higher
- Education in the U.S.A. and/or other regions and/or countries.
- **********************************************************************************/
+/*******************************************************************************
+Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
+*******************************************************************************/
 
 import net.hedtech.banner.configuration.ApplicationConfigurationUtils as ConfigFinder
-import grails.plugins.springsecurity.SecurityConfigType
+import grails.plugin.springsecurity.SecurityConfigType
 
 
 
@@ -63,7 +55,7 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
 grails.views.default.codec = "html" // none, html, base64  **** Charlie note: Setting this to html will ensure html is escaped, to prevent XSS attack ****
 grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
-grails.plugins.springsecurity.logout.afterLogoutUrl = "/banner.zul?page=mainPage"
+grails.plugin.springsecurity.logout.afterLogoutUrl = "/banner.zul?page=mainPage"
 grails.converters.domain.include.version = true
 grails.converters.json.date = "default"
 grails.converters.json.pretty.print = true
@@ -358,15 +350,15 @@ formControllerMap = [
         'facultysection' : ['SIIINST', 'SIAINST']
 ]
 
-grails.plugins.springsecurity.useRequestMapDomainClass = false
-//grails.plugins.springsecurity.rejectIfNoRule = true
+grails.plugin.springsecurity.useRequestMapDomainClass = false
+//grails.plugin.springsecurity.rejectIfNoRule = true
 
-grails.plugins.springsecurity.filterChain.chainMap = [
+grails.plugin.springsecurity.filterChain.chainMap = [
         '/api/**': 'authenticationProcessingFilter,basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
         '/**': 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
 ]
 
-grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
+grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
 
 
 // ******************************************************************************
@@ -375,7 +367,7 @@ grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptU
 //
 // ******************************************************************************
 
-grails.plugins.springsecurity.interceptUrlMap = [
+grails.plugin.springsecurity.interceptUrlMap = [
         '/': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/zkau/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/zkau**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
