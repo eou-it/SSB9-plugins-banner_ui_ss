@@ -1,32 +1,17 @@
 /*******************************************************************************
- Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.export
 
 import grails.test.mixin.*
+import grails.test.runtime.FreshRuntime
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(ExcelExportBaseController)
+@FreshRuntime
 class ExcelExportBaseControllerTests {
-
-    def originalHasAccess
-    def originalRetreiveData
-    def originalGetFilename
-
-    void setUp() {
-        originalHasAccess = ExcelExportBaseController.metaClass.hasAccess
-        originalRetreiveData = ExcelExportBaseController.metaClass.retrieveData
-        originalGetFilename = ExcelExportBaseController.metaClass.getFileName
-    }
-
-
-    void tearDown() {
-        ExcelExportBaseController.metaClass.hasAccess = originalHasAccess
-        ExcelExportBaseController.metaClass.retrieveData = originalRetreiveData
-        ExcelExportBaseController.metaClass.getFileName = originalGetFilename
-    }
 
     void testDefaultSecurity() {
         controller.exportExcelFile()

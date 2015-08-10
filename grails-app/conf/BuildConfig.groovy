@@ -32,7 +32,7 @@ grails.project.dependency.resolution = {
 
     plugins {
         compile ":spring-security-core:2.0-RC5"
-       // compile ':cache-headers:1.1.5'
+        compile ':cache-headers:1.1.7'
         compile ':csv:0.3.1'
         compile ':feeds:1.5'
         compile ':selenium:0.8'
@@ -42,10 +42,10 @@ grails.project.dependency.resolution = {
         // rome dependency is required for the feeds plugin. Otherwise it throws multiple compilation error
         // for import com.sun.syndication.io.SyndFeedOutput
         compile 'rome:rome:0.9'
-        test 'org.apache.poi:poi:3.7'
-        test 'org.apache.poi:poi-ooxml:3.7'
-        test 'org.apache.poi:poi-ooxml-schemas:3.7'
-        test 'org.apache.poi:poi-scratchpad:3.7'
+        test 'org.apache.poi:poi:3.12'
+        test 'org.apache.poi:poi-ooxml:3.12'
+        test 'org.apache.poi:poi-ooxml-schemas:3.12'
+        test 'org.apache.poi:poi-scratchpad:3.12'
         test 'org.apache.xmlbeans:xmlbeans:2.3.0'
     }
 }
