@@ -152,11 +152,11 @@ window.InactivityTimer = ActivityTimer.extend({
         // If it is when the timer fires, we are goign to automatically call the logoutAction.
 
         window.setTimeout( _.bind( function() {
-            if (notifications.find( function( notification ) { return notification === n; })) {
-                this.logoutAction();
-            }
-        }, this ),
-            60 * 1000 /** 60 seconds */ );
+                if (notifications.find( function( notification ) { return notification === n; })) {
+                    this.logoutAction();
+                }
+            }, this ),
+                60 * 1000 /** 60 seconds */ );
 
     },
     activityEvents: [ "ajaxStart" ],
@@ -282,9 +282,9 @@ function showLoadingPopup( target ) {
 var hideLoadingPopup = hideLoading;
 
 /* Usage:
-     $(selector).loading();   // show loading indicator
-     $(selector).loading(false); // hide loading indicator
-*/
+ $(selector).loading();   // show loading indicator
+ $(selector).loading(false); // hide loading indicator
+ */
 $.fn.loading = function(isLoading) {
     (isLoading||isLoading==undefined) ? showLoading( this ) : hideLoading( this );
     return this;
@@ -292,7 +292,7 @@ $.fn.loading = function(isLoading) {
 
 /**
  * @deprecated use $.fn.loading
-*/
+ */
 $.fn.loadingPopup = $.fn.loading;
 
 
@@ -386,27 +386,25 @@ $(document).ready(function() {
             langDir: $.i18n.prop( "default.language.direction" ),
             resourceMap : {
                 skip_link_text :                        $.i18n.prop( "aurora.skip_link_text" ),
-                areas_label_browse :                    $.i18n.prop( "aurora.areas_label_browse" ),
-                areas_label_opened :                    $.i18n.prop( "aurora.areas_label_opened" ),
-                areas_label_tools :                     $.i18n.prop( "aurora.areas_label_tools" ),
-                areas_label_browse_shortcut :           $.i18n.prop( "aurora.areas_label_browse_shortcut" ),
                 areas_label_browse_description :        $.i18n.prop( "aurora.areas_label_browse_description" ),
                 areas_label_browse_title :              $.i18n.prop( "aurora.areas_label_browse_title" ),
                 areas_label_home_title :                $.i18n.prop( "aurora.areas_label_home_title" ),
                 areas_label_home_description :          $.i18n.prop( "aurora.areas_label_home_description" ),
-                areas_label_home_shortcut :             $.i18n.prop( "aurora.areas_label_home_shortcut" ),
                 areas_label_branding:                   $.i18n.prop( "aurora.areas_label_branding" ),
-                areas_label_opened_shortcut :           $.i18n.prop( "aurora.areas_label_opened_shortcut" ),
-                areas_label_tools_shortcut :            $.i18n.prop( "aurora.areas_label_tools_shortcut" ),
+                areas_label_tools_title :               $.i18n.prop( "aurora.areas_label_tools_title" ),
+                areas_label_tools_description :         $.i18n.prop( "aurora.areas_label_tools_description" ),
                 openitems_label_closeSelected :         $.i18n.prop( "aurora.openitems_label_closeSelected" ),
                 openitems_label_closeAll :              $.i18n.prop( "aurora.openitems_label_closeAll" ),
                 preferences_label :                     $.i18n.prop( "aurora.preferences_label" ),
                 userdetails_signin :                    $.i18n.prop( "aurora.userdetails_signin" ),
                 userdetails_signout :                   $.i18n.prop( "aurora.userdetails_signout" ),
-                userdetails_signout_shortCut :          $.i18n.prop( "aurora.userdetails_signout_shortCut" ),
-                userdetails_signout_description :       $.i18n.prop( "aurora.userdetails_signout_description" ),
+                userdetails_signin_title :              $.i18n.prop( "aurora.userdetails_signin_title" ),
+                userdetails_signin_description :        $.i18n.prop( "aurora.userdetails_signin_description" ),
+                userdetails_profile_title :             $.i18n.prop( "aurora.areas_label_profile_title" ),
+                userdetails_profile_description :       $.i18n.prop( "aurora.areas_label_profile_description" ),
                 guestuserdetails_signin :               $.i18n.prop( "aurora.guestuserdetails_signin" ),
-                userdetails_help :                      $.i18n.prop( "aurora.userdetails_help" )
+                userdetails_help :                      $.i18n.prop( "aurora.userdetails_help" ),
+                notification_title :                    $.i18n.prop( "js.notification.title" )
             },
             handler : function( data ) {
             }
@@ -468,7 +466,7 @@ key = (function(key) {
         CTRL: 4
         //META: 8 //windows key or command key (mac)
         //MOD: platform-specific, Ctrl on windows/unix or Command on Mac.  See 'mousetrap' library
-        };
+    };
     key.modifierStrings = {
         'shift':key.modifierCode.SHIFT,
         'alt':key.modifierCode.ALT,
@@ -620,4 +618,44 @@ function getPreviousTabbableElement( currentElement , container) {
 
 function getTabbableElements(container){
     return  _.isUndefined(container) ?  $(":tabbable") : container.find(":tabbable");
+}
+
+var isMobile = function(){
+    var isMobile = window.matchMedia("only screen and (min-width: 0px) and (max-width: 768px)");
+    if (isMobile.matches) {
+        return true;
+    }
+    return false;
+}
+
+var isTablet = function(){
+    var isTablet = window.matchMedia("only screen and (min-width: 769px) and (max-width:1024px)");
+    if (isTablet.matches) {
+        return true;
+    }
+    return false;
+}
+
+var isDesktop = function(){
+    var isDesktop = window.matchMedia("only screen and (min-width:1025px)");
+    if (isDesktop.matches) {
+        return true;
+    }
+    return false;
+}
+
+var isRTLMode = function(){
+    var result = false;
+    if($.i18n.prop('default.language.direction') == "rtl"){
+        return true
+    }
+    return result;
+}
+
+var isLTRMode = function(){
+    var result = false;
+    if($.i18n.prop('default.language.direction') == "ltr"){
+        return true
+    }
+    return result;
 }
