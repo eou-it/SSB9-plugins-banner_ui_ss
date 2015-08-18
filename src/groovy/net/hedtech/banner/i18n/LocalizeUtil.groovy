@@ -103,7 +103,7 @@ class LocalizeUtil {
         String value = "";
         if (key) {
             if (!locale) locale = Locale.getDefault()
-            MessageSource messageSource = Holders.application.mainContext.getBean("messageSource")
+            MessageSource messageSource = Holders.grailsApplication.mainContext.getBean("messageSource")
             value = messageSource.getMessage(key, args, locale)
         }
         return value
