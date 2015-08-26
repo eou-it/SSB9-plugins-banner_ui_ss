@@ -137,4 +137,18 @@ modules = {
     'bannerWebRTL' {
         dependsOn "bannerSelfServiceCommonRTL, angular, extensibilityAngularRTL"
     }
+
+    'angularApp' {
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/controllers/number-controller.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/currency-directive.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/decimal-directive.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/percent-directive.js']
+        /*resource url:[plugin: 'banner-ui-ss',file: 'js/text-box.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'css/angular-components/text-box.css'],     attrs:[media:'screen, projection']*/
+
+
+
+    }
+
 }
