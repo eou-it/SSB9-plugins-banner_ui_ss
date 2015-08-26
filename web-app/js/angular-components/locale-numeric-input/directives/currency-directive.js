@@ -1,6 +1,6 @@
-module.directive('currencyInput', function ($timeout, $filter,$http) {
+module.directive('currencyInput',['$timeout','$filter','readonly', function($timeout, $filter,readonly) {
     return {
-        restrict: 'EA',
+        restrict: 'E',
         template: '<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber"/>',
         scope:{
             ngModel : "="
@@ -41,22 +41,10 @@ module.directive('currencyInput', function ($timeout, $filter,$http) {
                 $scope.formatted = formatted;
             }, true);
 
+            readonly.init($elm);
 
 
 
-
-            /*
-                $scope.toRemoteCurrencyFormat = function(){
-                    var locale = $attrs.currencycode;
-                    var scriptEle = $("script[src*='angular-locale_']");
-                    var path = scriptEle.attr('src');
-                    var clientLocaleCurrencycode = path.match(/angular-locale_(.+).js/i)[1];
-                    console.log('client code is '+ clientLocaleCurrencycode);
-                    var remoteLocalepath = path.replace(clientLocaleCurrencycode,$attrs.currencycode);
-                    scriptEle.remove();
-                    $.getScript("https://code.angularjs.org/1.0.7/i18n/angular-locale_" + locale + ".js");
-                }
-            */
         }
     };
-});
+}]);

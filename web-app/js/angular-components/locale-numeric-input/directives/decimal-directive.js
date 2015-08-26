@@ -1,6 +1,6 @@
-module.directive('decimalInput', function ($timeout, $filter) {
+module.directive('decimalInput',['$timeout', '$filter','readonly', function($timeout, $filter,readonly) {
     return {
-        restrict: 'EA',
+        restrict: 'E',
         template: '<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber"/>',
         scope:{
             ngModel : "="
@@ -39,6 +39,7 @@ module.directive('decimalInput', function ($timeout, $filter) {
 
             }, true);
 
+            readonly.init($elm);
         }
     };
-});
+}]);
