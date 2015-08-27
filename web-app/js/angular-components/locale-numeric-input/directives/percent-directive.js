@@ -1,4 +1,4 @@
-module.directive('percentInput', ['$timeout', '$filter','readonly', function($timeout, $filter,readonly) {
+module.directive('percentInput', ['$timeout', '$filter','readonlysvc', function($timeout, $filter,readonlysvc) {
     return {
         restrict: 'E',
         template: '<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber"/>',
@@ -32,6 +32,13 @@ module.directive('percentInput', ['$timeout', '$filter','readonly', function($ti
                     }, 50)
                 }
             },true);
+
+            $scope.$watch(function() { return $elm.attr('ng-readonly') },function(value){
+                if(value !== undefined){
+                    readonlysvc.toggle($elm,$elm.attr('ng-readonly'));
+                }
+            });
+
             $scope.$watch('ngModel', function(){
                 var formatted;
                 formatted = $filter("number")($scope.ngModel, $attrs.decimals);
@@ -41,8 +48,6 @@ module.directive('percentInput', ['$timeout', '$filter','readonly', function($ti
                 $scope.formatted = formatted;
 
             }, true);
-
-            readonly.init($elm);
         }
     };
 }]);

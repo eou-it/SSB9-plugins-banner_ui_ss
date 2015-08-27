@@ -1,4 +1,4 @@
-module.directive('decimalInput',['$timeout', '$filter','readonly', function($timeout, $filter,readonly) {
+module.directive('decimalInput',['$timeout', '$filter','readonlysvc', function($timeout, $filter,readonlysvc) {
     return {
         restrict: 'E',
         template: '<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber"/>',
@@ -32,6 +32,13 @@ module.directive('decimalInput',['$timeout', '$filter','readonly', function($tim
                     }, 50)
                 }
             },true);
+
+            $scope.$watch(function() { return $elm.attr('ng-readonly') },function(value){
+                if(value !== undefined){
+                    readonlysvc.toggle($elm,$elm.attr('ng-readonly'));
+                }
+            });
+
             $scope.$watch('ngModel', function(){
                 var formatted;
                 formatted = $filter("number")($scope.ngModel, $attrs.decimals);
@@ -39,7 +46,6 @@ module.directive('decimalInput',['$timeout', '$filter','readonly', function($tim
 
             }, true);
 
-            readonly.init($elm);
         }
     };
 }]);
