@@ -1,4 +1,16 @@
-module.directive('decimalInput',['$timeout', '$filter','readonlysvc', function($timeout, $filter,readonlysvc) {
+module.directive('decimalInput',['$timeout', '$filter','readonlysvc', '$compile',function($timeout, $filter,readonlysvc,$compile) {
+    var withoutDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" only-number/><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber" only-number/>';
+    var withDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber" />';
+    var getTemplate = function(decimalLength){
+        var template = '';
+        decimalLength = decimalLength||0;
+        if(decimalLength==0) {
+            template = withoutDecimal;
+        } else {
+            template = withDecimal;
+        }
+        return template;
+    };
     return {
         restrict: 'E',
         template: '<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber"/>',
@@ -8,6 +20,8 @@ module.directive('decimalInput',['$timeout', '$filter','readonlysvc', function($
         link: function($scope, $elm, $attrs) {
             var result=parseFloat($attrs.value||0);
             $scope.ngModel=result;
+            $elm.html(getTemplate($attrs.decimals));
+            $compile($elm.contents())($scope);
             $scope.showNumber = false;
             $scope.numberBlurred = function(){
                 $scope.showNumber = false;
