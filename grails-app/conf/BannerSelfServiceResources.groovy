@@ -140,7 +140,8 @@ modules = {
 
     'angularApp' {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular.js']
-        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/load-angular-locale.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/locales/angular-locale_en-us.js']
+        //resource url:[plugin: 'banner-ui-ss',file: 'js/angular/load-angular-locale.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/custom-number-input.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/currency-directive.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/decimal-directive.js']

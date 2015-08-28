@@ -15,4 +15,4 @@ var len = fullUrl.lastIndexOf("/");
 //console.log('file location src',len);
 fullUrl = fullUrl.substring(0,len)+localeFileName;
 //console.log('file location src',fullUrl);
-document.write('<script src='+fullUrl+'><\/script>');
+//document.write('<script src='+fullUrl+'><\/script>');
