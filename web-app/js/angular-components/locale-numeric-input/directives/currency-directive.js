@@ -22,6 +22,25 @@ module.directive('currencyInput',['$timeout','$filter','readonlysvc','$compile',
             var result=parseFloat($attrs.value||0);
             $scope.ngModel=result;
             $elm.html(getTemplate($attrs.decimals));
+            var liveRegion= $('.number-input-accessible');
+            if (liveRegion.length == 0) {
+                liveRegion = $("<span>", {
+                    role: "status",
+                    "aria-live": "assertive",
+                    "aria-atomic":"true"
+                })
+                    .addClass("number-input-accessible screen-reader")
+                    .appendTo(document.body);
+            }
+            $elm.find('input[type=number]').focus(function() {
+                var ariaText=$.i18n.prop("numeric.currency.value");
+                var editUnavailableText=$.i18n.prop("numeric.edit.unavailable");
+                if ($elm.find('input').attr('readonly')) {
+                    ariaText = ariaText+" "+editUnavailableText;
+                }
+                liveRegion.text(ariaText);
+            });
+
             $compile($elm.contents())($scope);
             $scope.showNumber = false;
             $scope.numberBlurred = function(){
