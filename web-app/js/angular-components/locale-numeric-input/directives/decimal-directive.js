@@ -77,7 +77,7 @@ module.directive('decimalInput',['$timeout', '$filter','readonlysvc', '$compile'
                 $scope.formatted = formatted;
 
             }, true);
-
+           // readonlysvc.moveCursor($elm);
         }
     };
 }]);
