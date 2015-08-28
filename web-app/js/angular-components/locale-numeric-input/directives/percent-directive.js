@@ -1,6 +1,6 @@
 module.directive('percentInput', ['$timeout', '$filter','readonlysvc','$compile', function($timeout, $filter,readonlysvc,$compile) {
-    var withoutDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" only-number/><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber" only-number/>';
-    var withDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber" />';
+    var withoutDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" only-number/><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-focus="textFocused()" ng-hide="showNumber" only-number/>';
+    var withDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" class="form-control" ng-click="textFocused()"  ng-focus="textFocused()" ng-hide="showNumber" />';
     var getTemplate = function(decimalLength){
         var template = '';
         decimalLength = decimalLength||0;
