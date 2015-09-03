@@ -41,11 +41,11 @@ grails.project.dependency.resolution = {
         // rome dependency is required for the feeds plugin. Otherwise it throws multiple compilation error
         // for import com.sun.syndication.io.SyndFeedOutput
         compile 'rome:rome:0.9'
-        test 'org.apache.poi:poi:3.12'
-        test 'org.apache.poi:poi-ooxml:3.12'
-        test 'org.apache.poi:poi-ooxml-schemas:3.12'
-        test 'org.apache.poi:poi-scratchpad:3.12'
-        test 'org.apache.xmlbeans:xmlbeans:2.3.0'
+        compile 'org.apache.poi:poi:3.12'
+        compile 'org.apache.poi:poi-ooxml:3.12'
+        compile 'org.apache.poi:poi-ooxml-schemas:3.12'
+        compile 'org.apache.poi:poi-scratchpad:3.12'
+        compile 'org.apache.xmlbeans:xmlbeans:2.3.0'
     }
 }
 
