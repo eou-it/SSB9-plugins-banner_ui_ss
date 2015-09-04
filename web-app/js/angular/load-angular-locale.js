@@ -1,11 +1,5 @@
 var local=_.isUndefined(navigator.languages)? navigator.language || navigator.userLanguage : navigator.languages[0] || navigator.userLanguage;
 var locale=local.toLowerCase();
-console.log("locale "+locale);
-//console.log("locale "+(locale=="ar"));
-/*if(locale=="ar") {
-   // console.log("here in false "+(locale=="ar-sa"));
-    locale="en-us";
-}else*/
  if(!(locale=="en-us"|| locale=="en-au"|| locale=="en-gb"|| locale=="en-ie"|| locale=="en-in"|| locale=="en" || locale=="fr" || locale=="fr-ca" || locale=="pt" || locale=="es" )){
     var countryLocale=locale.split("-");
     console.log("Generic Language Locale: "+countryLocale[0]);
