@@ -1,1 +1,1 @@
-var module = angular.module('numericApp', []);
+var numericApp = angular.module('numericApp', []);

@@ -1,4 +1,4 @@
-var local=_.isUndefined(navigator.languages)? navigator.language || navigator.userLanguage : navigator.languages[0] || navigator.userLanguage;
+var local=angular.isDefined(navigator.languages)? navigator.language || navigator.userLanguage : navigator.languages[0] || navigator.userLanguage;
 var locale=local.toLowerCase();
 console.log("locale "+locale);
 console.log("locale "+(locale=="ar"));
