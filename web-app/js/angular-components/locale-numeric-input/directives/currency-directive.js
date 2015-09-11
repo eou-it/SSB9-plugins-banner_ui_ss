@@ -81,8 +81,6 @@ numericApp.directive('currencyInput',['$timeout','$filter','readonlysvc','$compi
                 }
                 $scope.formatted = formatted;
             }, true);
-
-         //   readonlysvc.moveCursor($elm);
-         }
+        }
     };
 }]);

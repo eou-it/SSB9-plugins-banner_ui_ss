@@ -77,7 +77,6 @@ numericApp.directive('decimalInput',['$timeout', '$filter','readonlysvc', '$comp
                 $scope.formatted = formatted;
 
             }, true);
-           // readonlysvc.moveCursor($elm);
         }
     };
 }]);

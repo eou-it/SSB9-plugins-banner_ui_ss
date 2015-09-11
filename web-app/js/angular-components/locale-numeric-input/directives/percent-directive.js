@@ -80,7 +80,6 @@ numericApp.directive('percentInput', ['$timeout', '$filter','readonlysvc','$comp
                 $scope.formatted = formatted;
 
             }, true);
-          //  readonlysvc.moveCursor($elm);
         }
     };
 }]);
