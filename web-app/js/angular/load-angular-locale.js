@@ -1,13 +1,12 @@
-var local=angular.isDefined(navigator.languages)? navigator.language || navigator.userLanguage : navigator.languages[0] || navigator.userLanguage;
-var locale=local.toLowerCase();
+ var locale = $('meta[name=userLocale]').attr("content")
+ locale = locale.replace('_','-');
+ locale = locale.toLowerCase();
  if(!(locale=="en-us"|| locale=="en-au"|| locale=="en-gb"|| locale=="en-ie"|| locale=="en-in"|| locale=="en" || locale=="fr" || locale=="fr-ca" || locale=="pt" || locale=="es" )){
     var countryLocale=locale.split("-");
-    console.log("Generic Language Locale: "+countryLocale[0]);
     if(countryLocale[0]=="ar"){
         locale="en-us";
-    }
-    else
-    locale=countryLocale[0];
+    } else
+        locale=countryLocale[0];
  }
 switch(locale)  {
     case "en-us" :
