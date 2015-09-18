@@ -1,5 +1,5 @@
 numericApp.directive('currencyInput',['$timeout','$filter','readonlysvc','$compile', function($timeout, $filter,readonlysvc,$compile) {
-    var withoutDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" only-number/><input value="{{formatted}}" id="{{id}}" class="form-control" ng-click="textFocused()" ng-focus="textFocused()" ng-hide="showNumber" only-number/>';
+    var withoutDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" maxlength="4" only-number/><input value="{{formatted}}" id="{{id}}" class="form-control" ng-click="textFocused()" ng-focus="textFocused()" ng-hide="showNumber" only-number/>';
     var withDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" id="{{id}}" class="form-control" ng-click="textFocused()" ng-focus="textFocused()" ng-hide="showNumber" />';
     var getTemplate = function(decimalLength){
         var template = '';
@@ -82,6 +82,10 @@ numericApp.directive('currencyInput',['$timeout','$filter','readonlysvc','$compi
                     formatted = $filter("currency")($scope.ngModel,$attrs.currency,$attrs.decimals);
                 }
                 $scope.formatted = formatted;
+                if($scope.ngModel.toString().length >= parseInt($attrs.maxlength)) {
+                    $scope.ngModel= parseFloat($scope.ngModel.toString().slice(0, $attrs.maxlength));
+                }
+
             }, true);
         }
     };

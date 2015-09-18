@@ -80,7 +80,9 @@ numericApp.directive('percentInput', ['$timeout', '$filter','readonlysvc','$comp
                         formatted = formatted + "%";
                     }
                 $scope.formatted = formatted;
-
+                if($scope.ngModel.toString().length >= parseInt($attrs.maxlength)) {
+                    $scope.ngModel= parseFloat($scope.ngModel.toString().slice(0, $attrs.maxlength));
+                }
             }, true);
         }
     };
