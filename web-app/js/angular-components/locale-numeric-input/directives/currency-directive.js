@@ -14,15 +14,12 @@ numericApp.directive('currencyInput',['$timeout','$filter','readonlysvc','$compi
 
     return {
         restrict: 'E',
-        template: '<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" class="form-control" ng-click="textFocused()" ng-hide="showNumber"/>',
         scope:{
             ngModel : "=",
             id : "@"
         },
         link: function($scope, $elm, $attrs) {
             $elm.removeAttr('id');
-            var result=parseFloat($attrs.value||0);
-            $scope.ngModel=result;
             $elm.html(getTemplate($attrs.decimals));
             var liveRegion= $('.number-input-accessible');
             if (liveRegion.length == 0) {
