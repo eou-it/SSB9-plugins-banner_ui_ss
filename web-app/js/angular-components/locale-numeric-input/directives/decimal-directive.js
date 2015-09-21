@@ -77,9 +77,6 @@ numericApp.directive('decimalInput',['$timeout', '$filter','readonlysvc', '$comp
                 var formatted;
                 formatted = $filter("number")($scope.ngModel, $attrs.decimals);
                 $scope.formatted = formatted;
-                if($scope.ngModel.toString().length >= parseInt($attrs.maxlength)) {
-                    $scope.ngModel= parseFloat($scope.ngModel.toString().slice(0, $attrs.maxlength));
-                }
 
             }, true);
         }
