@@ -27,7 +27,7 @@ modules = {
     }
 
     'bannerSelfServiceWithoutAurora' {
-        dependsOn "jquery, i18n-core, angularApp"
+        dependsOn "jquery, i18n-core"
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/html5shim.js'],
             disposition: 'head',
@@ -131,14 +131,15 @@ modules = {
     }
 
     'bannerWebLTR' {
-        dependsOn "bannerSelfServiceCommonLTR,  extensibilityAngular"
+        dependsOn "bannerSelfServiceCommonLTR, angularApp, extensibilityAngular"
     }
 
     'bannerWebRTL' {
-        dependsOn "bannerSelfServiceCommonRTL,  extensibilityAngularRTL"
+        dependsOn "bannerSelfServiceCommonRTL, angularApp, extensibilityAngularRTL"
     }
 
     'angularApp' {
+        dependsOn "extensibilityCommon"
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/load-angular-locale.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-resource.min.js']
