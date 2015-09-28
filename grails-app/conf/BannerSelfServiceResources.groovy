@@ -1,10 +1,8 @@
-/* Copyright 2009-2013 Ellucian Company L.P. and its affiliates. */
+/*******************************************************************************
+Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
+*******************************************************************************/
 
 modules = {
-
-    'bannerSelfService' {
-        dependsOn "bannerSelfServiceWithoutAurora, aurora, extensibilityJQuery"
-    }
 
     'jquery' {
         resource url:[plugin: 'banner-ui-ss', file: 'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme/jquery-ui-1.8.13.custom.css'], attrs:[media:'screen, projection']
@@ -15,12 +13,10 @@ modules = {
 
     'bootstrap' {
         dependsOn "jquery"
-
         defaultBundle environment == "development" ? false : "bootstrap"
 
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap.css'],            attrs: [media: 'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/bootstrap-fixes.css'],                attrs: [media: 'screen, projection']
-
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
     }
 
@@ -33,21 +29,9 @@ modules = {
     'bannerSelfServiceWithoutAurora' {
         dependsOn "jquery, i18n-core"
 
-        defaultBundle environment == "development" ? false : "bannerSelfService"
-
         resource url:[plugin: 'banner-ui-ss', file: 'js/html5shim.js'],
             disposition: 'head',
             wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
-
-        resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss.css'],             attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
-
-        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'], attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'], attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.css'], attrs: [media: 'screen, projection']
-
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.string.js']
@@ -100,20 +84,30 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/backbone.grid.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/grid-support/resizable.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/grid-support/columnreorder.js']
-
         resource url:[plugin: 'banner-ui-ss', file: 'js/detectmobilebrowser.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/detecttabletbrowser.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
-
-
     }
 
-    'bannerSelfServiceRTL' {
-        dependsOn "bannerSelfService, auroraRTL, extensibilityJQueryRTL"
+    'bannerSelfServiceCommonLTR' {
+        dependsOn "bannerSelfServiceWithoutAurora, aurora"
+        defaultBundle environment == "development" ? false : "bannerSelfServiceLTR"
+
+        resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss.css'],             attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
+
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'],            attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'],  attrs:[media:'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.css'],           attrs:[media:'screen, projection']
+    }
+
+    'bannerSelfServiceCommonRTL' {
+        dependsOn "bannerSelfServiceWithoutAurora, auroraRTL"
         defaultBundle environment == "development" ? false : "bannerSelfServiceRTL"
 
         resource id: 'themeRTL', url:[plugin:'banner-ui-ss', dir:'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme', file:'jquery-ui-1.8.13.custom-rtl.css'], attrs:[media:'screen, projection']
-
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center-rtl.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip-rtl.css'], attrs:[media:'screen, projection']
@@ -121,10 +115,26 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid-rtl.css'],            attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols-rtl.css'],  attrs:[media:'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl.css'],           attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl.css'],           attrs:[media:'screen, projection']
 
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl-patch.css'],       attrs:[media:'screen, projection']
         resource url:[plugin: 'i18n-core', file: 'css/multiCalendar-rtl-patch.css']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl-patch.css'],     attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl-patch.css'],     attrs:[media:'screen, projection']
+    }
+
+    'bannerSelfService' {
+        dependsOn "bannerSelfServiceCommonLTR, extensibilityJQuery"
+    }
+
+    'bannerSelfServiceRTL' {
+        dependsOn "bannerSelfServiceCommonRTL, extensibilityJQueryRTL"
+    }
+
+    'bannerWebLTR' {
+        dependsOn "bannerSelfServiceCommonLTR, angular, extensibilityAngular"
+    }
+
+    'bannerWebRTL' {
+        dependsOn "bannerSelfServiceCommonRTL, angular, extensibilityAngularRTL"
     }
 }
