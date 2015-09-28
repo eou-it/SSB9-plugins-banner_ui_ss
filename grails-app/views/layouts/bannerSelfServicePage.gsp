@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="org.springframework.context.i18n.LocaleContextHolder" %>
 
 <%--
 Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
@@ -34,6 +35,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <meta name="loginEndpoint" content="${session.getServletContext().loginEndpoint}"/>
         <meta name="logoutEndpoint" content="${session.getServletContext().logoutEndpoint}"/>
         <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
+        <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
 
         <title><g:layoutTitle default="Banner"/></title>
 
