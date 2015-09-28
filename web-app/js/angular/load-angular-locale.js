@@ -1,17 +1,24 @@
-var local=_.isUndefined(navigator.languages)? navigator.language || navigator.userLanguage : navigator.languages[0] || navigator.userLanguage;
-var locale=local.toLowerCase();
+/*******************************************************************************
+ Copyright 2015 Ellucian Company L.P. and its affiliates.
+ ******************************************************************************/
+ /*currency-directive, decimal directive and percentage-directive does the number formatting through $filter.
+ $filter uses the locale specific angular locale files for formatting the number. This file loads the angular locale
+ logics as per the browser locale that would be used by $filter. Also, this would do a fall back logic.
+ say if we selectthe locale which we don't support fr-fr and it has to fallback to fr.
+ */
+
+var locale = $('meta[name=userLocale]').attr("content")
+ locale = locale.replace('_','-');
+ locale = locale.toLowerCase();
  if(!(locale=="en-us"|| locale=="en-au"|| locale=="en-gb"|| locale=="en-ie"|| locale=="en-in"|| locale=="en" || locale=="fr" || locale=="fr-ca" || locale=="pt" || locale=="es" )){
     var countryLocale=locale.split("-");
-    console.log("Generic Language Locale: "+countryLocale[0]);
     if(countryLocale[0]=="ar"){
         locale="en-us";
-    }
-    else
-    locale=countryLocale[0];
+    } else
+        locale=countryLocale[0];
  }
 switch(locale)  {
     case "en-us" :
-        console.log("en-us "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             function getDecimals(n) {
@@ -136,7 +143,6 @@ switch(locale)  {
         }]);
     break;
     case "en-au" :
-        console.log("en-au "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             function getDecimals(n) {
@@ -261,7 +267,6 @@ switch(locale)  {
         }]);
     break;
     case "en-gb" :
-        console.log("en-gb "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             function getDecimals(n) {
@@ -386,7 +391,6 @@ switch(locale)  {
         }]);
         break;
     case "en-ie" :
-        console.log("en-ie "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             function getDecimals(n) {
@@ -511,7 +515,6 @@ switch(locale)  {
         }]);
         break;
     case "en-in" :
-        console.log("en-in "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             function getDecimals(n) {
@@ -636,7 +639,6 @@ switch(locale)  {
         }]);
         break;
     case "en" :
-        console.log("en "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             function getDecimals(n) {
@@ -761,7 +763,6 @@ switch(locale)  {
         }]);
         break;
     case "fr" :
-        console.log("fr "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             $provide.value("$locale", {
@@ -868,7 +869,6 @@ switch(locale)  {
         }]);
         break;
     case "fr-ca" :
-        console.log("fr-ca "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             $provide.value("$locale", {
@@ -975,7 +975,6 @@ switch(locale)  {
         }]);
         break;
     case "pt" :
-        console.log("pt "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             $provide.value("$locale", {
@@ -1082,7 +1081,6 @@ switch(locale)  {
         }]);
         break;
     case "es" :
-        console.log("es "+locale);
         angular.module("ngLocale", [], ["$provide", function($provide) {
             var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
             $provide.value("$locale", {

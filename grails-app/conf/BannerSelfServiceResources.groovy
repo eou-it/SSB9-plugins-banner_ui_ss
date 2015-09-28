@@ -131,16 +131,26 @@ modules = {
     }
 
     'bannerWebLTR' {
-        dependsOn "bannerSelfServiceCommonLTR, angular, extensibilityAngular"
+        dependsOn "bannerSelfServiceCommonLTR, angularApp, extensibilityAngular"
     }
 
     'bannerWebRTL' {
-        dependsOn "bannerSelfServiceCommonRTL, angular, extensibilityAngularRTL"
+        dependsOn "bannerSelfServiceCommonRTL, angularApp, extensibilityAngularRTL"
     }
 
     'angularApp' {
+        dependsOn "extensibilityCommon"
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/load-angular-locale.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-resource.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-route.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-sanitize.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-animate.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-ui-router.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls-0.10.0.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/lrInfiniteScroll.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/moment.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-common.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/custom-number-input.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/currency-directive.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/decimal-directive.js']
