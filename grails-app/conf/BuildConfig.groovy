@@ -1,6 +1,6 @@
 /*******************************************************************************
-Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
-*******************************************************************************/
+ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
@@ -8,9 +8,7 @@ grails.project.test.reports.dir = "target/test-reports"
 grails.project.dependency.resolver="maven"
 
 grails.plugin.location.'banner-core'="../banner_core.git"
-grails.plugin.location.'banner-codenarc'="../banner_codenarc.git"
 grails.plugin.location.'sghe-aurora'="../sghe_aurora.git"
-grails.plugin.location.'i18n_core'="../i18n_core.git"
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
