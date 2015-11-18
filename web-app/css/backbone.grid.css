@@ -171,7 +171,7 @@ table.grid > thead > tr > th .title {
 }
 
 .grid-main-wrapper .grid td{
-   border-right:none;
+    border-right:none;
 }
 
 .button-menu-container {
@@ -281,9 +281,10 @@ table.grid > thead > tr > th .title {
 .add-row-hover {
     background-color: #B2CEDE !important;
     border: 1px solid #B1CEE0 !important;
+    color:#000000 !important
 }
 
-.add-row-selected {
+.add-row-selected,.add-row-selected a {
     border: 1px solid #005C96 !important;
     color: #FFF !important;
     background-color: #005C96 !important;
@@ -309,4 +310,9 @@ table.grid > thead > tr > th .title {
     background-color: #EDF0F4 !important;
 }
 
+.grid tr.add-row-hover td.readonly,.grid tr.add-row-hover td.add-row-selected,.grid tr.add-row-hover td.add-row-selected a{
+    background-color: #B2CEDE !important;
+    border: 1px solid #B1CEE0 !important;
+    color:#000000 !important
+}
 
