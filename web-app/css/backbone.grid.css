@@ -103,7 +103,7 @@ table.grid > thead > tr > th .title {
     min-height: 30px;
 }
 
-.grid td.focus {
+.grid td.focus, .grid td.focus a{
     background-color:#CCDFE9 !important;
     color:#000000 !important
 }
