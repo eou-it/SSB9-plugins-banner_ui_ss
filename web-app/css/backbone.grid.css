@@ -284,7 +284,7 @@ table.grid > thead > tr > th .title {
     color:#000000 !important
 }
 
-.add-row-selected,.add-row-selected a {
+.add-row-selected,.add-row-selected a:not(.select2-choice) {
     border: 1px solid #005C96 !important;
     color: #FFF !important;
     background-color: #005C96 !important;
