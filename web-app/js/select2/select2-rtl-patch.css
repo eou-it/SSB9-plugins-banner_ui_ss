@@ -17,7 +17,12 @@
 }
 
 .select2-search input  {
-    background-position:-38px -21px !important;
+    background-position:left;
+    background:#fff url('select2-rtl.png') no-repeat 0px 4px !important;
+    background:url('select2-rtl.png') no-repeat 0px 4px, -webkit-gradient(linear, left bottom, left top, color-stop(0.85, #fff), color-stop(0.99, #eee))!important;
+    background:url('select2-rtl.png') no-repeat 0px 4px, -webkit-linear-gradient(to bottom, #fff 85%, #eee 99%) !important;
+    background:url('select2-rtl.png') no-repeat 0px 4px, -moz-linear-gradient(to bottom, #fff 85%, #eee 99%) !important;
+    background:url('select2-rtl.png') no-repeat 0px 4px, linear-gradient(to bottom, #fff 85%, #eee 99%) 0 0 !important;
 }
 
 
