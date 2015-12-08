@@ -131,26 +131,33 @@ modules = {
     }
 
     'bannerWebLTR' {
-        dependsOn "bannerSelfServiceCommonLTR, angularApp, extensibilityAngular"
+        dependsOn "bannerSelfServiceCommonLTR, extensibilityCommon, angular, extensibilityAngular, common-components,  angularApp "
     }
 
     'bannerWebRTL' {
-        dependsOn "bannerSelfServiceCommonRTL, angularApp, extensibilityAngularRTL"
+        dependsOn "bannerSelfServiceCommonRTL, extensibilityCommon, angular, common-components, angularApp, extensibilityAngularRTL "
     }
 
-    'angularApp' {
-        dependsOn "extensibilityCommon"
+    'angular'{
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-touch.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/load-angular-locale.js']
-        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-resource.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-resource.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-route.js']
-        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-sanitize.min.js']
-        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-animate.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-sanitize.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-animate.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-aria.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-cookies.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-translate.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-ui-router.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls-0.10.0.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/lrInfiniteScroll.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/moment.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-common.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-messages.js'] //TODO : added new file
+    }
+
+    'angularApp' {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/custom-number-input.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/currency-directive.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/decimal-directive.js']
@@ -158,6 +165,11 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/only-number.js']
         resource url:[plugin: 'banner-ui-ss',file: 'css/custom-number-input/custom-number-input.css'],     attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/services/readonly-service.js']
+    }
+
+    'common-components' {
+        resource url:[plugin: 'banner-ui-ss', file: 'angular-components/js/xe-ui-components.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'angular-components/css/xe-ui-components.min.css'],     attrs:[media:'screen, projection']
     }
 
 }
