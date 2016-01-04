@@ -71,7 +71,6 @@ $(document).ready(function() {
                 if (notification.get( "flash" )) {
                     var removeNotification = function() {
                         this.remove( notification );
-                        window.notificationCenter.closeNotificationFlyout();
                     };
 
                     removeNotification = _.bind( removeNotification, this );
@@ -527,6 +526,8 @@ $(document).ready(function() {
         },
 
         openNotificationFlyout: function () {
+            var promptElementToFocus = $('.prompt-container .notification-flyout-item:first');
+            var errorElementToFocus = $('.error-container .notification-flyout-item:first')
             if(window.componentToFocusOnFlyoutClose == null){
                 window.componentToFocusOnFlyoutClose = $(document.activeElement);
             }
@@ -535,10 +536,18 @@ $(document).ready(function() {
             this.configureNotificationOverlay();
             $('.notification-center-flyout')[0].addEventListener('keydown', this.pressEscToClose , true );
             if(_.isUndefined(notifications.hasFlash())){
-                $('.notification-flyout-item:first').focus();
+                promptElementToFocus.focus();
             }
             else{
-                $(elementToFocusOnFlash).focus();
+                if(promptElementToFocus.length) {
+                    promptElementToFocus.focus();
+                }
+                else if(errorElementToFocus.length){
+                    errorElementToFocus.focus();
+                }
+                else{
+                    $(elementToFocusOnFlash).focus();
+                }
             }
         },
         closeNotificationFlyout: function () {
