@@ -536,7 +536,7 @@ $(document).ready(function() {
             this.configureNotificationOverlay();
             $('.notification-center-flyout')[0].addEventListener('keydown', this.pressEscToClose , true );
             if(_.isUndefined(notifications.hasFlash())){
-                promptElementToFocus.focus();
+                $('.notification-flyout-item:first').focus();
             }
             else{
                 if(promptElementToFocus.length) {
