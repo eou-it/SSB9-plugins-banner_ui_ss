@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2011-2015 Ellucian Company L.P. and its affiliates.
+ Copyright 2011-2016 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 
 $(document).ready(function() {
