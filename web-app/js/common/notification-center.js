@@ -25,12 +25,11 @@ $(document).ready(function() {
         },
         isEqual: function( that ) {
 
-            var comparisonAttributes = [ "message", "type", "model", "attribute", "ignoreForGroupBy" ]
-
+            var comparisonAttributes = [ "message", "type", "attribute", "ignoreForGroupBy" ]
             var returnValue = true;
 
             _.each( comparisonAttributes, function(attribute) {
-                if (returnValue && (this.get( attribute ) !== that.get( attribute ))) {
+                if (returnValue && (!_.isEqual(this.get( attribute ),that.get( attribute )))) {
                     returnValue = false;
                 }
             }, this );
@@ -48,10 +47,24 @@ $(document).ready(function() {
         model: Notification,
         addNotification: function( notification ) {
             var foundNotification = this.find( function(n) {
-                return _.isEqual( n, notification );
+                if(notification.get("type")=="error")
+                    return false;
+                else
+                    return notification.isEqual(n);
             });
 
             if (foundNotification) {
+                window.notificationCenter.openNotificationFlyout();
+                this.remove( foundNotification );
+                this.add( notification );
+                if (notification.get( "flash" )) {
+                    var removeNotification = function() {
+                        this.remove( notification );
+                    };
+
+                    removeNotification = _.bind( removeNotification, this );
+                    _.delay( removeNotification, 5000 );
+                }
                 return foundNotification;
             }
             else {
