@@ -63,7 +63,7 @@ $(document).ready(function() {
                     };
 
                     removeNotification = _.bind( removeNotification, this );
-                    _.delay( removeNotification, 5000 );
+                    _.delay( removeNotification, 10000 );
                 }
                 return foundNotification;
             }
@@ -87,7 +87,7 @@ $(document).ready(function() {
                     };
 
                     removeNotification = _.bind( removeNotification, this );
-                    _.delay( removeNotification, 5000 );
+                    _.delay( removeNotification, 10000 );
                 }
                 return notification;
             }
