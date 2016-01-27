@@ -575,10 +575,10 @@ $(document).ready(function() {
         },
         focusComponentOnFlyoutClose: function(){
                 if($('body .notification-center-shim').length == 0) {
-                    window.componentToFocusOnFlyoutClose.focus();
+                    this.notificationCenterAnchor.$el.focus();
                 }
                 else{
-                    this.notificationCenterAnchor.$el.focus();
+                    window.componentToFocusOnFlyoutClose.focus();
                 }
         },
         pressEscToClose: function(e) {
