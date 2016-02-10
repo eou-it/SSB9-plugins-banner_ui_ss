@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2011-2015 Ellucian Company L.P. and its affiliates.
+ Copyright 2011-2016 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 
 $(document).ready(function() {
@@ -25,12 +25,11 @@ $(document).ready(function() {
         },
         isEqual: function( that ) {
 
-            var comparisonAttributes = [ "message", "type", "model", "attribute", "ignoreForGroupBy" ]
-
+            var comparisonAttributes = [ "message", "type", "attribute", "ignoreForGroupBy" ]
             var returnValue = true;
 
             _.each( comparisonAttributes, function(attribute) {
-                if (returnValue && (this.get( attribute ) !== that.get( attribute ))) {
+                if (returnValue && (!_.isEqual(this.get( attribute ),that.get( attribute )))) {
                     returnValue = false;
                 }
             }, this );
@@ -48,10 +47,24 @@ $(document).ready(function() {
         model: Notification,
         addNotification: function( notification ) {
             var foundNotification = this.find( function(n) {
-                return _.isEqual( n, notification );
+                if(notification.get("type")=="error")
+                    return false;
+                else
+                    return notification.isEqual(n);
             });
 
             if (foundNotification) {
+                window.notificationCenter.openNotificationFlyout();
+                this.remove( foundNotification );
+                this.add( notification );
+                if (notification.get( "flash" )) {
+                    var removeNotification = function() {
+                        this.remove( notification );
+                    };
+
+                    removeNotification = _.bind( removeNotification, this );
+                    _.delay( removeNotification, 10000 );
+                }
                 return foundNotification;
             }
             else {
@@ -71,11 +84,10 @@ $(document).ready(function() {
                 if (notification.get( "flash" )) {
                     var removeNotification = function() {
                         this.remove( notification );
-                        window.notificationCenter.closeNotificationFlyout();
                     };
 
                     removeNotification = _.bind( removeNotification, this );
-                    _.delay( removeNotification, 5000 );
+                    _.delay( removeNotification, 10000 );
                 }
                 return notification;
             }
@@ -527,6 +539,8 @@ $(document).ready(function() {
         },
 
         openNotificationFlyout: function () {
+            var promptElementToFocus = $('.prompt-container .notification-flyout-item:first');
+            var errorElementToFocus = $('.error-container .notification-flyout-item:first')
             if(window.componentToFocusOnFlyoutClose == null){
                 window.componentToFocusOnFlyoutClose = $(document.activeElement);
             }
@@ -538,7 +552,15 @@ $(document).ready(function() {
                 $('.notification-flyout-item:first').focus();
             }
             else{
-                $(elementToFocusOnFlash).focus();
+                if(promptElementToFocus.length) {
+                    promptElementToFocus.focus();
+                }
+                else if(errorElementToFocus.length){
+                    errorElementToFocus.focus();
+                }
+                else{
+                    $(elementToFocusOnFlash).focus();
+                }
             }
         },
         closeNotificationFlyout: function () {
