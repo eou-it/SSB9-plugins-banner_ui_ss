@@ -1,8 +1,8 @@
 
 /*******************************************************************************
-Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
 import net.hedtech.banner.controllers.ControllerUtils
 class BannerUiSsBootStrap {
     public static String localLogoutEnable="saml/logout?local=true";

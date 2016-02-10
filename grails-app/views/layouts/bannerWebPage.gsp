@@ -62,7 +62,6 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
                 _.defer( function() {
                     $( "#splash" ).remove();
                 });
-               // $(document.body).removeAttr("role");
             });
         </r:script>
 
