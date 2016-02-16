@@ -582,7 +582,7 @@ $(document).ready(function() {
         },
         pressEscToClose: function(e) {
             if(e.keyCode == $.ui.keyCode.ESCAPE){
-                if ($(".notification-center-shim").length === 0) {
+                if ($(".notification-center-shim").length >= 0) {
                     this.closeNotificationFlyoutAndSetFocus();
                     e.stopImmediatePropagation();
                 }
