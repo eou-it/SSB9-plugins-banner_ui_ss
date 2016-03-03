@@ -1,13 +1,13 @@
 angular.module('datePickerApp', [])
     .directive('datePicker',['$filter',function($filter){
         return{
-        restrict: "EA",
+        restrict: "A",
         require: '?ngModel',
         scope:{
             date:"=",
             showOn: "@",
-            onSelect:"&onSelect",
-            onClose:"&onClose"
+            onSelect:"&",
+            onClose:"&"
         },
 
         link:function($scope, $ele,controller) {
@@ -17,33 +17,17 @@ angular.module('datePickerApp', [])
                 onSelect:$scope.onSelect(),
                 onClose:$scope.onClose()
             })
-            /*$ele.bind("blur", function () {
-                var target = $ele.val();
-                controller.$setViewValue(target);
-                var validDateFormat = true;
-                if (target === '') {
-                    validDateFormat = true;
-                } else {
-                    try {
-                        $.multicalendar.parse(target, calendarType);
-                        validDateFormat = true;
-                    } catch (e) {
-                        validDateFormat = false;
-                    }
-                }
 
-                controller.$setValidity('dateFormat', validDateFormat);
-                $scope.$apply();
-            });*/
+
         }}
     }])
     .controller('datePickerController',function($scope){
 
         $scope.onSelect = function(date){
-            console.error("date Selected"+date);
+            console.info("Date Selected Event: "+date);
         };
         $scope.onClose = function(date){
-            console.error("date in Close");
+            console.info("Date Picker Closed Event");
         };
     });
 
