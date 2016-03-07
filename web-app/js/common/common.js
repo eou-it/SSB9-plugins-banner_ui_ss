@@ -383,7 +383,7 @@ $(document).ready(function() {
             header : true,
             footer : true,
             showHelp: false,
-            iframe: (window.location != window.parent.location) ? true : false,
+            externalApp:  false,
             langDir: $.i18n.prop( "default.language.direction" ),
             resourceMap : {
                 skip_link_text :                        $.i18n.prop( "aurora.skip_link_text" ),

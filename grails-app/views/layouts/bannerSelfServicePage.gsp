@@ -37,6 +37,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
         <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
         <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
+        <meta name="externalApp" content="${grails.util.Holders.config.externalApp}">
         <title><g:layoutTitle default="Banner"/></title>
 
         <link rel="shortcut icon" href="${resource(plugin: 'banner-ui-ss', dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
