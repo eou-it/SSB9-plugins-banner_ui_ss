@@ -384,6 +384,7 @@ $(document).ready(function() {
             footer : true,
             showHelp: false,
             externalApp:  false,
+            iframe: (window.location != window.parent.location) ? true : false,
             langDir: $.i18n.prop( "default.language.direction" ),
             resourceMap : {
                 skip_link_text :                        $.i18n.prop( "aurora.skip_link_text" ),
