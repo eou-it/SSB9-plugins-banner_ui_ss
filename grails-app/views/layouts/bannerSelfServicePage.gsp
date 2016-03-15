@@ -18,6 +18,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
             <r:require modules="bannerSelfService"/>
         </g:else>
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
+        <g:set var="ssbApps" value="${session.ssbApps?session.ssbApps: params?.ssbApps? params.ssbApps:false} " scope="session" />
 
         <meta charset="${message(code: 'default.character.encoding')}"/>
         <meta name="dir" content="${message(code:'default.language.direction')}"/>
@@ -37,7 +38,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
         <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
         <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
-        <meta name="externalApp" content="${grails.util.Holders.config.externalApp}">
+        <meta name="ssbApps" content="${session?.ssbApps?.trim()}">
         <title><g:layoutTitle default="Banner"/></title>
 
         <link rel="shortcut icon" href="${resource(plugin: 'banner-ui-ss', dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
