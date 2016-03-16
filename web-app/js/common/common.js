@@ -383,7 +383,7 @@ $(document).ready(function() {
             header : true,
             footer : true,
             showHelp: false,
-            ssbApps:  false,
+            hideSSBHeaderComps:  false,
             iframe: (window.location != window.parent.location) ? true : false,
             langDir: $.i18n.prop( "default.language.direction" ),
             resourceMap : {
