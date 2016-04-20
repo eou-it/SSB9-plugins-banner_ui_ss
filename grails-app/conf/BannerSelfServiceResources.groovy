@@ -88,9 +88,13 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/detecttabletbrowser.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
     }
+    'bannerBackboneGrid' {
+        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'],            attrs:[media:'screen, projection']
+    }
 
     'bannerSelfServiceCommonLTR' {
-        dependsOn "bannerSelfServiceWithoutAurora, aurora"
+
+        dependsOn "bannerBackboneGrid, bannerSelfServiceWithoutAurora, aurora"
         defaultBundle environment == "development" ? false : "bannerSelfServiceLTR"
 
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss.css'],             attrs:[media:'screen, projection']
@@ -98,9 +102,9 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
 
-        resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'],            attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'],  attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.css'],           attrs:[media:'screen, projection']
+
     }
 
     'bannerSelfServiceCommonRTL' {
