@@ -17,8 +17,25 @@ angular.module('datePickerApp', [])
                 onClose:$scope.onClose()
             })
 
-
         }}
     });
+
+
+var hideCalender=function(){
+
+    if($('#checkId').is(":checked")){
+
+        $('#multiCalendar1').hide()
+        $('#multiCalendar2').show()
+    }
+    else{
+        $('#multiCalendar2').hide()
+        $('#multiCalendar1').show()
+    }
+}
+
+
+
+
 
 
