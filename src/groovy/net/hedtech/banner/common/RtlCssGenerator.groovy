@@ -27,8 +27,12 @@ class RtlCssGenerator {
     }
 
 
-    def getCSSDSL(srcFile) {
-        def CSSClasses = srcFile.split("}")
+    def getCSSDSL(srcText) {
+        // comments with { or } will mess up the splits below, because
+        // comments will appear to span CSSClasses
+        Pattern unsafeComments = Pattern.compile( "/\\*.*?[{}].*?\\*/", Pattern.DOTALL )
+        def safeText = unsafeComments.matcher( srcText ).replaceAll( '' )
+        def CSSClasses = safeText.split("}")
         def CSSDSL = [];
 
         CSSClasses.each { fs ->
