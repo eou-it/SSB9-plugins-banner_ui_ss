@@ -4,6 +4,7 @@
 package net.hedtech.banner.common
 
 
+import java.util.regex.Pattern
 import grails.util.BuildSettingsHolder
 import groovy.io.FileType
 
@@ -26,8 +27,12 @@ class RtlCssGenerator {
     }
 
 
-    def getCSSFileDSL(srcFile) {
-        def CSSClasses = srcFile.split("}")
+    def getCSSDSL(srcText) {
+        // comments with { or } will mess up the splits below, because
+        // comments will appear to span CSSClasses
+        Pattern unsafeComments = Pattern.compile( "/\\*.*?[{}].*?\\*/", Pattern.DOTALL )
+        def safeText = unsafeComments.matcher( srcText ).replaceAll( '' )
+        def CSSClasses = safeText.split("}")
         def CSSDSL = [];
 
         CSSClasses.each { fs ->
@@ -254,14 +259,10 @@ class RtlCssGenerator {
     }
 
 
-    def createRTLCSSFile(destFileName, RTLCSSDSL , rtlMediaQueries) {
+    def createRTLCSSFile(destFileName, rtlCss ) {
         File destFile = new File(destFileName)
         destFile.delete()
-        destFile.append(createCSSEntryFromDSL(RTLCSSDSL))
-        if(rtlMediaQueries){
-            destFile.append("\n/*** Media Query Section ***/\n")
-            destFile.append(rtlMediaQueries)
-        }
+        destFile.append( rtlCss )
     }
 
     def createCSSEntryFromDSL(CSS_DSL) {
@@ -286,34 +287,40 @@ class RtlCssGenerator {
         return rtlFile
     }
 
+    def transformCss( String srcText ) {
+        List mediaQueries = getMediaQueries(srcText)
 
-    def transformFile( File source, File target) {
-        List mediaQueries = getMediaQueries(source)
-
-        def sourceWithoutMediaQueries = removeMediaQueriesFromSource(source, mediaQueries);
+        def textWithoutMediaQueries = removeMediaQueriesFromSource(srcText, mediaQueries);
         String rtlMediaQueries = convertMediaQueriesToRTL(mediaQueries);
 
-        def CSS_DSL = getCSSFileDSL(sourceWithoutMediaQueries)
+        def CSS_DSL = getCSSDSL(textWithoutMediaQueries)
         def RTL_CSS_DSL = convertCSSDSLToRTL(CSS_DSL)
-        createRTLCSSFile(target.path, RTL_CSS_DSL, rtlMediaQueries)
 
+        def rtlCss = createCSSEntryFromDSL( RTL_CSS_DSL ) + (
+            rtlMediaQueries ? ( "\n/*** Media Query Section ***/\n" + rtlMediaQueries ) : "" )
+
+        return rtlCss
     }
 
-    List getMediaQueries(srcFile) {
+    def transformFile( File source, File target) {
+        String rtlCss = transformCss( source.text )
+        createRTLCSSFile( target.path, rtlCss )
+    }
+
+    List getMediaQueries(srcText) {
         def mediaQueryRegExp = /(?m)@media[\S\s]*?}[\s]*[*\/]*[\s]*}/;
         List mediaQueryList = new ArrayList();
 
-        String srcFileText = srcFile.text;
-        srcFileText.eachMatch(mediaQueryRegExp) { match ->
+        srcText.eachMatch(mediaQueryRegExp) { match ->
             mediaQueryList.add(match);
         }
         return mediaQueryList
     }
 
-    String removeMediaQueriesFromSource(srcFile, List mediaQueries) {
+    String removeMediaQueriesFromSource(srcText, List mediaQueries) {
         int numberOfMediaQueries = mediaQueries.size();
 
-        String textFileWithoutMediaQueries = srcFile.text;
+        String textFileWithoutMediaQueries = srcText;
         for(int counter = 0; counter < numberOfMediaQueries; counter++) {
             textFileWithoutMediaQueries = textFileWithoutMediaQueries.replace(mediaQueries.get(counter), "");
         }
@@ -330,7 +337,7 @@ class RtlCssGenerator {
             def matcher = mediaQuery =~ /@media[\S\s]*?\{/
             String mediaLine = matcher[0];
             String mediaQueryCss = mediaQueries[counter].replace(mediaLine, "");
-            def CSS_DSL = getCSSFileDSL(mediaQueryCss)
+            def CSS_DSL = getCSSDSL(mediaQueryCss)
             def RTL_CSS_DSL = convertCSSDSLToRTL(CSS_DSL)
 
             StringBuilder rtlCss = new StringBuilder(mediaLine);
