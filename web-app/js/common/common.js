@@ -658,3 +658,15 @@ var isLTRMode = function(){
     }
     return result;
 }
+
+
+
+var DirtyCheck = {
+
+    addDirtyCheckCallback: function( isDirty ) {
+        CommonContext.isAppDirty=isDirty;
+    },
+    isDirty : function() {
+        return CommonContext.isAppDirty();
+    }
+}
