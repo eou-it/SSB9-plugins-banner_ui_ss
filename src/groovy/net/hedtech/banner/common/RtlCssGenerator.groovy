@@ -30,7 +30,19 @@ class RtlCssGenerator {
     def getCSSDSL(srcText) {
         // comments with { or } will mess up the splits below, because
         // comments will appear to span CSSClasses
-        Pattern unsafeComments = Pattern.compile( "/\\*.*?[{}].*?\\*/", Pattern.DOTALL )
+
+        // $/ ... /$ - groovy "dollar slashy" string avoids need to escape backslash \
+        //   /\* ... \*/ - CSS comment begin/end, with exact-match * character
+        //     ((?!\*/).) - negative lookahead - match characters that aren't preceded by */
+        //     [{}] match either { or }
+        // collectively:
+        //     match comment open
+        //     all characters not preceded by comment close
+        //     at least one { or }
+        //     all characters not preceded by comment close
+        //     comment close.
+        String unsafeCommentPattern = $//\*((?!\*/).)*[{}]((?!\*/).)*\*//$
+        Pattern unsafeComments = Pattern.compile( unsafeCommentPattern, Pattern.DOTALL )
         def safeText = unsafeComments.matcher( srcText ).replaceAll( '' )
         def CSSClasses = safeText.split("}")
         def CSSDSL = [];

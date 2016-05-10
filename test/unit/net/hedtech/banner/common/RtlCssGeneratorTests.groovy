@@ -42,4 +42,16 @@ class RtlCssGeneratorTests extends GrailsUnitTestCase {
         def desiredCss = '.class { color:blue; background:none; }'
         assertEquals desiredCss, transform( commentsInProperties )
     }
+
+    void 'test comments before and after blocks'() {
+        def inputCss = '/* Beginning comment */.class { color:blue; }/* Ending comment */'
+        def desiredCss = '/* Beginning comment */.class { color:blue; }'
+        assertEquals desiredCss, transform( inputCss )
+    }
+
+    void 'test comments with braces before and after blocks'() {
+        def inputCss = '/* Beginning } comment */.class { color:blue; }/* Ending { comment */'
+        def desiredCss = '.class { color:blue; }'
+        assertEquals desiredCss, transform( inputCss )
+    }
 }
