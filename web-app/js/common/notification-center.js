@@ -528,7 +528,6 @@ $(document).ready(function() {
                     this.notificationCenterAnchor.$el.focus();
                 }
             }
-
             return this;
         },
 
@@ -574,19 +573,19 @@ $(document).ready(function() {
             window.componentToFocusOnFlyoutClose = null;
         },
         focusComponentOnFlyoutClose: function(){
-                if($('body .notification-center-shim').length == 0) {
-                    window.componentToFocusOnFlyoutClose.focus();
-                }
-                else{
-                    this.notificationCenterAnchor.$el.focus();
-                }
+            if($('body.notification-center-shim').length == 0) {
+                window.componentToFocusOnFlyoutClose.focus();
+            }
+            else{
+                this.notificationCenterAnchor.$el.focus();
+            }
         },
         pressEscToClose: function(e) {
             if(e.keyCode == $.ui.keyCode.ESCAPE){
-                if ($(".notification-center-shim").length === 0) {
-                this.closeNotificationFlyoutAndSetFocus();
-                e.stopImmediatePropagation();
-            }
+                if ($(".notification-center-shim").length >= 0) {
+                    this.closeNotificationFlyoutAndSetFocus();
+                    e.stopImmediatePropagation();
+                }
             }
         },
         configNotificationShim: function() {
@@ -612,7 +611,7 @@ $(document).ready(function() {
                 if($(event.target).closest('.notification-center').length == 0 && $('.notification-center-shim').length == 0) {
                     notificationCenter.closeNotificationFlyout();
                     $('body').off('mousedown', closeFlyout);
-            }
+                }
             };
 
             $('body').on('mousedown', closeFlyout);
@@ -634,8 +633,9 @@ $(document).ready(function() {
                 }
             }
             else{
-                window.componentToFocusOnFlyoutClose = $(e.target);
+                window.componentToFocusOnFlyoutClose = this.notificationCenterAnchor;
             }
+
         }
     });
 
