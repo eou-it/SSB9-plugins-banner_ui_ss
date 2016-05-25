@@ -162,8 +162,9 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/only-number.js']
         resource url:[plugin: 'banner-ui-ss',file: 'css/custom-number-input/custom-number-input.css'],     attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/services/readonly-service.js']
-
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/date-picker/directives/date-picker-directive.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-messages.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-translate.min.js']
     }
 
 }
