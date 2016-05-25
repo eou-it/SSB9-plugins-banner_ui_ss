@@ -151,6 +151,8 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-sanitize.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-animate.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-ui-router.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-messages.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-translate.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls-0.10.0.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/lrInfiniteScroll.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/moment.js']
@@ -163,8 +165,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'css/custom-number-input/custom-number-input.css'],     attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/services/readonly-service.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/date-picker/directives/date-picker-directive.js']
-        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-messages.js']
-        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-translate.min.js']
     }
 
 }
