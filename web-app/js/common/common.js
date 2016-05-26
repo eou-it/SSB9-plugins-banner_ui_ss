@@ -383,6 +383,9 @@ $(document).ready(function() {
             header : true,
             footer : true,
             showHelp: false,
+            hideSSBHeaderComps:  false,
+            iframe: (window.location != window.parent.location) ? true : false,
+            isAppDirty: function(){},
             langDir: $.i18n.prop( "default.language.direction" ),
             resourceMap : {
                 skip_link_text :                        $.i18n.prop( "aurora.skip_link_text" ),
@@ -654,4 +657,16 @@ var isLTRMode = function(){
         return true
     }
     return result;
+}
+
+
+
+var DirtyCheck = {
+
+    addDirtyCheckCallback: function( isDirty ) {
+        CommonContext.isAppDirty=isDirty;
+    },
+    isDirty : function() {
+        return CommonContext.isAppDirty();
+    }
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
-Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
-*******************************************************************************/
+ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 
 modules = {
 
@@ -30,8 +30,8 @@ modules = {
         dependsOn "jquery, i18n-core"
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/html5shim.js'],
-            disposition: 'head',
-            wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
+                disposition: 'head',
+                wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.string.js']
@@ -89,7 +89,9 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
     }
 
+
     'bannerSelfServiceCommonLTR' {
+
         dependsOn "bannerSelfServiceWithoutAurora, aurora"
         defaultBundle environment == "development" ? false : "bannerSelfServiceLTR"
 
@@ -97,10 +99,10 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
-
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'],            attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'],  attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.css'],           attrs:[media:'screen, projection']
+
     }
 
     'bannerSelfServiceCommonRTL' {
@@ -118,7 +120,9 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl.css'],           attrs:[media:'screen, projection']
 
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl-patch.css'],       attrs:[media:'screen, projection']
-        resource url:[plugin: 'i18n-core', file: 'css/multiCalendar-rtl-patch.css']
+
+        resource url:[plugin: 'i18n-core', file: 'css/multiCalendar-rtl.css'],               attrs:[media:'screen, projection']
+        resource url:[plugin: 'i18n-core', file: 'css/multiCalendar-rtl-patch.css'],         attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2-rtl-patch.css'],     attrs:[media:'screen, projection']
     }
 
@@ -147,6 +151,8 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-sanitize.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-animate.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-ui-router.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-messages.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-translate.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls-0.10.0.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/lrInfiniteScroll.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/moment.js']
@@ -158,6 +164,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/only-number.js']
         resource url:[plugin: 'banner-ui-ss',file: 'css/custom-number-input/custom-number-input.css'],     attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/services/readonly-service.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/date-picker/directives/date-picker-directive.js']
     }
 
 }
