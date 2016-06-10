@@ -56,7 +56,7 @@ table.grid > thead > tr > th .sort-icon {
     border: 0;
     cursor: pointer;
     margin-right: 1px;
-    height: 1.5em;
+    height: 1.4em;
 }
 
 .grid th.sort-disabled {
