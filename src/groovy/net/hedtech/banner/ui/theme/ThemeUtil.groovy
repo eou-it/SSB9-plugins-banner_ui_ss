@@ -35,7 +35,7 @@ class ThemeUtil {
         def names = []
         dir.eachFileRecurse( FileType.FILES ) { file ->
             if ( file.getName().endsWith( '.json' )) {
-                def name = file.getName().replaceAll( /^theme\./, '' ).replaceAll( /\.json/, '' )
+                def name = file.getName().replaceAll( /^theme\./, '' ).replaceAll( /\.json$/, '' )
                 names << name
             }
         }
