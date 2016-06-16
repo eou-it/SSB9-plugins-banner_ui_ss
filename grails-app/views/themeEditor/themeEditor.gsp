@@ -33,8 +33,9 @@
 }
 
 .header {
-    color: /*color1_text*/ #ffffff;
+    color: /*color1_text*/ #ffffff; /* use text version of chosen color */
 }
+
 
 .header h3 {
     margin: 0;
@@ -75,20 +76,20 @@
 }
 
 .properties a:first-child {
-    border-right: 1px solid #CCCCCC;
-    padding-right: 10px;
+/*    border-right: 1px solid #CCCCCC;*/
+    padding: 0 10px;
 }
 
 .properties input {
-    border: 2px solid /*color1*/#206E9F;
+    border: 2px solid /*color1-3*/#206E9F;
     padding: 10px;
     border-radius: 5px;
-    background-color: /*color1_dark_text*/#FFFFFF;
+    background-color: /*color1-5*/#FFFFFF;
     width: 55%;
 }
 
 .themes h4, .properties h4 {
-    background-color: /*color1*/#206E9F;
+    background-color: /*color1*/#206E9F; /*use chosen color */
     color: /*color1_text*/#FFFFFF;
     padding: 10px;
     margin: 0;
@@ -122,10 +123,10 @@
     padding: 10px 20px;
     margin: 10px 20px;
     border-radius: 5px;
-    border: 1px solid /*color3*/#3b6a63;
-    box-shadow: 0 -4px 0 0 /*color3*/ #3b6a63 inset;
-    background-color: /*color3_light*/ #6aaca2;
-    color: /*color3_light_text*/ #393939;
+    border: 1px solid /*color3-1*/#3b6a63;
+    box-shadow: 0 -4px 0 0 /*color3-1*/ #3b6a63 inset;
+    background-color: /*color3-5*/ #6aaca2;
+    color: /*color3-2*/ #393939;
 }
 
 .properties button {
@@ -180,8 +181,8 @@
 .preview .notification {
     text-align: center;
     margin: 0 5px 0 5px;
-    background-color: /*color2_dark*/#FECF7F;
-    color: /*color2_dark_text*/#ffffff;
+    background-color: /*color2-3*/#FECF7F;
+    color: #ffffff;
 }
 
 .preview .notification-flyout {
@@ -192,12 +193,12 @@
 }
 
 .preview .notification-flyout .message {
-    background-color: /*color2_light*/ #FFFEEA;
+    background-color: /*color2-5*/ #FFFEEA;
     padding: 20px;
-    border: 1px solid /*color2_dark*/ #846011;
-    color: /*color2_dark*/ #846011;
+    border: 1px solid /*color2-2*/ #846011;
+    color: /*color2-2*/ #846011;
     font-size: 1.1em;
-    box-shadow: 0 -6px 0 0 /*color2_dark*/#ECE6C8 inset;
+    box-shadow: 0 -6px 0 0 /*color2-4*/#ECE6C8 inset;
 }
 
 .preview .notification-flyout .buttons {
@@ -360,17 +361,17 @@ span.approved {
 }
 
 button.primary {
-    color:/*color3_light_text*/ #393939;
-    background-color: /*color3_light*/ #16fc16;
-    border-color: /*color3*/ #00a400;
-    box-shadow: /*color3*/ #00a400 0px -4px 0px 0px inset;
+    color: /*color3-3*/ #393939;
+    background-color: /*color3-5*/ #16fc16;
+    border-color: /*color3-2*/ #00a400;
+    box-shadow: /*color3-2*/ #00a400 0px -4px 0px 0px inset;
 }
 
 button.secondary {
-    color: /*color2_light_text*/ #393939;
-    background-color: /*color2_light*/ #b9b9b9;
-    border-color: /*color2*/ #797979;
-    box-shadow: /*color2*/ #797979 0px -4px 0px 0px inset;
+    color: /*color2-3*/ #393939;
+    background-color: /*color2-5*/ #b9b9b9;
+    border-color: /*color2-2*/ #797979;
+    box-shadow: /*color2-2*/ #797979 0px -4px 0px 0px inset;
 }
 
 button.tertiary {
@@ -385,11 +386,11 @@ button.tertiary {
 }
 
 .colors-dark-headerBackground {
-    color: /*color1*/ #a40000;
+    color: /*color1*/ #a40000; /* Use chosen color */
 }
 
 .border-colors-dark-headerBackground {
-    border-color: /*color1*/ #a40000;
+    border-color: /*color1-3*/ #a40000;
 }
 
 .bg-colors-dark-headerBackground {
@@ -406,7 +407,7 @@ button.tertiary {
 }
 
 .colors-dark-globalNavMobileTextColor {
-    color: /*color3_dark*/ #008b00;
+    color: /*color3-2*/ #008b00;
 }
 
 .bg-colors-dark-cardListTextColor {
@@ -414,7 +415,7 @@ button.tertiary {
 }
 
 .colors-dark-globalNavMobileTextColor {
-    color: /*color3_dark*/ #008b00;
+    color: /*color3-2*/ #008b00;
 }
 
 .colors-dark-overlayContainerBorder {
@@ -483,6 +484,10 @@ dev[ng-model="theme"] {
     display: inline-block;
     width:20%;
 }
+.w10 {
+    display: inline-block;
+    width:15%;
+}
 .center {
     text-align: center;
 }
@@ -505,9 +510,9 @@ dev[ng-model="theme"] {
               color-picker-alpha="false"
               ></color-picker>
             <span class="derived">
-              <span class="swatch" style="color:{{color1_dark_text}};background-color:{{color1_dark}}">#</span>
+              <span class="swatch" style="color:{{color1-4}};background-color:{{color1-1}}">#</span>
               <span>{{color1_dark}}</span>
-              <span class="swatch" style="color:{{color1_light_text}};background-color:{{color1_light}}">#</span>
+              <span class="swatch" style="color:{{color1-2}};background-color:{{color1-5}}">#</span>
               <span>{{color1_light}}</span>
             </span>
           </div>
@@ -518,9 +523,9 @@ dev[ng-model="theme"] {
               color-picker-alpha="false"
               ></color-picker>
             <span class="derived">
-              <span class="swatch" style="color:{{color2_dark_text}};background-color:{{color2_dark}}">#</span>
+              <span class="swatch" style="color:{{color2-4}};background-color:{{color2-1}}">#</span>
               <span>{{color2_dark}}</span>
-              <span class="swatch" style="color:{{color2_light_text}};background-color:{{color2_light}}">#</span>
+              <span class="swatch" style="color:{{color2-2}};background-color:{{color2-5}}">#</span>
               <span>{{color2_light}}</span>
             </span>
           </div>
@@ -531,9 +536,9 @@ dev[ng-model="theme"] {
               color-picker-alpha="false"
               ></color-picker>
             <span class="derived">
-              <span class="swatch" style="color:{{color3_dark_text}};background-color:{{color3_dark}}">#</span>
+              <span class="swatch" style="color:{{color3-4}};background-color:{{color3-1}}">#</span>
               <span>{{color3_dark}}</span>
-              <span class="swatch" style="color:{{color3_light_text}};background-color:{{color3_light}}">#</span>
+              <span class="swatch" style="color:{{color3-2}};background-color:{{color3-5}}">#</span>
               <span>{{color3_light}}</span>
             </span>
           </div>
@@ -562,9 +567,11 @@ dev[ng-model="theme"] {
                 <span class="w20">{{theme}}</span>
                 <button class="secondary w20" ng-click="setTheme(theme)"><g:message code="theme.applyTheme" args="['']" notargs="['{{theme}}']"/></button>
                 <button class="tertiary w20" ng-click="deleteTheme(theme)"><g:message code="theme.deleteTheme" args="['']"/></button>
-                <span class="w20">
-                    <a href="theme/get?name={{theme}}" class="w20 center"><g:message code="theme.json"/></a>&nbsp;
-                    <a href="theme/getTheme?name={{theme}}" class="w20 center"><g:message code="theme.css"/></a></li>
+                <span class="w10">
+                    <a href="theme/get?name={{theme}}" class="center"><g:message code="theme.json"/></a>
+                </span>
+                <span class="w10">
+                    <a href="theme/getTheme?name={{theme}}" class="center"><g:message code="theme.css"/></a>
                 </span>
             </li>
           </ul>

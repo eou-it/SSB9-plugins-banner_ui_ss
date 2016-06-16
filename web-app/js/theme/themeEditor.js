@@ -1,3 +1,4 @@
+
 /*******************************************************************************
 Copyright 2016 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
@@ -22,7 +23,8 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             },
             colors = [],
             fieldnames = [],
-            generated_lightness = [.25, .9];
+            generated_lightness = [.25, .9],
+            shades = [.05, .2, .35, .5, .8, .95];
 
         var init = function() {
             console.log("theme init");
@@ -38,6 +40,10 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                     fieldnames.push(f + '_dark_text');
                     fieldnames.push(f + '_light');
                     fieldnames.push(f + '_light_text');
+
+                    for ( var i = 0; i < shades.length; i++ ) {
+                        fieldnames.push( f + '-' + i );
+                    }
                 }
             }
             $scope.newTheme();
@@ -113,6 +119,13 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                     var lightName = name + '_light';
                     $scope[ lightName ] = lightColor;
                     setTextColor( $scope, lightName, lightColor );
+
+                    var shade_i, i, shadeName;
+                    for ( i = 0; i < shades.length; i++ ) {
+                        shadeName = name + '-' + i;
+                        shade_i = shade( newValue, shades[i] );
+                        $scope[ shadeName ] = shade_i;
+                    }
 
                     updatePreview( getData( $scope ));
                 }

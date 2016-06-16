@@ -9,6 +9,7 @@ import grails.converters.JSON
 import grails.util.Holders
 
 import groovy.json.JsonOutput
+import java.io.IOException
 
 import org.apache.log4j.Logger
 
@@ -34,10 +35,12 @@ class ThemeController {
         assert params.name
         try {
             def json = themeUtil.getThemeJson( params.name )
+            response.contentType = 'application/json'
             render JsonOutput.toJson( json )
         } catch ( IOException e ) {
-            log.trace( "Failed to load theme {params.name}", e )
+            log.warn( "Failed to load theme ${params.name} ${e}" )
             response.status = 404
+            render ""
         }
     }
 
@@ -52,8 +55,9 @@ class ThemeController {
             def content = themeUtil.formatTheme( params.name, templateName )
             render( text:content, contentType: "text/css" )
         } catch ( IOException e ) {
-            log.warn( "Failed to format theme {params.name} in {templateName}", e )
+            log.warn( "Failed to format theme ${params.name} in ${templateName}. ${e}" )
             response.status = 404
+            render ""
         }
     }
 }
