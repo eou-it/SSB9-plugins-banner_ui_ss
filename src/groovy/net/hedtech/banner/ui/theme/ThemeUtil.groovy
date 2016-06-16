@@ -43,7 +43,7 @@ class ThemeUtil {
     }
 
     def sanitizeName( name ) {
-        return name.toLowerCase().replace('.', '_')
+        return name.toLowerCase().replaceAll(/[.*\/\\]/, '_')
     }
 
     def fileName( name ) {
@@ -54,9 +54,11 @@ class ThemeUtil {
         assert extensionsPath
 
         def file = new File( themesPath, fileName( name ))
+        log.debug "Saving ${file}"
         file.withWriter( 'utf-8' ) {
             file.write( JsonOutput.toJson( data ))
         }
+        log.debug "Saved ${file} ${data}"
     }
 
     def getThemeJson( name ) {
