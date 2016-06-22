@@ -24,7 +24,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             colors = [],
             fieldnames = [],
             generated_lightness = [.25, .9],
-            shades = [.05, .2, .35, .5, .8, .95];
+            shades = [.1, .2, .35, .5, .8, .9];
 
         var init = function() {
             console.log("theme init");

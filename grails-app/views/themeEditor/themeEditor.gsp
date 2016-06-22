@@ -360,21 +360,21 @@ span.approved {
     margin: 10px;
 }
 
-button.primary {
-    color: /*color3-3*/ #393939;
-    background-color: /*color3-5*/ #16fc16;
-    border-color: /*color3-2*/ #00a400;
-    box-shadow: /*color3-2*/ #00a400 0px -4px 0px 0px inset;
+.preview button.primary {
+    color: /*color1-2*/ #393939;
+    background-color: /*color1-5*/ #16fc16;
+    border-color: /*color1-1*/ #00a400;
+    box-shadow: /*color1-1*/ #00a400 0px -4px 0px 0px inset;
 }
 
-button.secondary {
-    color: /*color2-3*/ #393939;
+.preview button.secondary {
+    color: /*color2-2*/ #393939;
     background-color: /*color2-5*/ #b9b9b9;
-    border-color: /*color2-2*/ #797979;
-    box-shadow: /*color2-2*/ #797979 0px -4px 0px 0px inset;
+    border-color: /*color2-1*/ #797979;
+    box-shadow: /*color2-1*/ #797979 0px -4px 0px 0px inset;
 }
 
-button.tertiary {
+.preview button.tertiary {
     color: #000000;
     background-color: #FFFFFF;
     border: 1px solid #999999;
