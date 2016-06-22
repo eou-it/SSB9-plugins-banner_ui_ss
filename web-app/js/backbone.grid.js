@@ -1387,7 +1387,7 @@ var dirtyCheckDefault = {
 
             thead.append ( tr );
             table.append ( thead );
-            view.$el.find('th').on('click',function (e) {
+            view.$el.on('click','th',function (e) {
                 view.sort.call(view, e);
             });
             this.generateColumnControlMenuHeader(table);
