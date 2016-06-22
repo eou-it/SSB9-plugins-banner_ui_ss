@@ -25,7 +25,6 @@ class ThemeEditorController {
 
 
     def index() {
-println "ThemeEditorController.index"
         render( view: "themeEditor", model: { themes: themeUtil.getThemes()} )
     }
 
