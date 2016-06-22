@@ -21,12 +21,11 @@ import org.apache.log4j.Logger
  * Utility class instead of service to avoid BannerDS database connections
  */
 class ThemeUtil {
-    def static extensionsPath = Holders.getConfig().webAppExtensibility.locations.extensions
-    def static themesPath = extensionsPath + "/themes"
+    def static themesPath = Holders.getConfig().banner.theme.path
     private static final Logger log = Logger.getLogger( this.getClass() )
 
     static {
-        assert extensionsPath
+        assert themesPath
         new File( themesPath ).mkdirs()
     }
 
@@ -51,7 +50,7 @@ class ThemeUtil {
     }
 
     def saveTheme(name, data) {
-        assert extensionsPath
+        assert themesPath
 
         def file = new File( themesPath, fileName( name ))
         log.debug "Saving ${file}"
