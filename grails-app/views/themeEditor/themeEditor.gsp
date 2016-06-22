@@ -428,7 +428,7 @@ span.approved {
 }
 
 #content {
-    padding-top:78px; /*!!why is top set to 0?*/
+    padding-top:0px;
 }
 
 #content, .ui-widget {
