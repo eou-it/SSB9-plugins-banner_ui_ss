@@ -60,7 +60,7 @@ numericApp.directive('currencyInput',['$timeout','$filter','readonlysvc','$compi
             $scope.textFocused = function(){
                 $scope.showNumber = true;
                 $timeout(function(){
-                    $elm.find('input[type=number]').focus();
+                    $elm.find('input[type=number]').focus().select();
                 }, 50)
             };
 
