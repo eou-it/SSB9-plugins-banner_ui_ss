@@ -806,7 +806,7 @@ label {
   color: $themecolor1-2;
   background-color: $themecolor1-5;
   border-color: $themecolor1-1;
-/*!!leave grey  box-shadow: inset 0px -4px 0px #themecolor2;*/
+/*!!leave grey  box-shadow: inset 0px -4px 0px $themecolor2;*/
 }
 
 .primary:disabled {
@@ -1499,10 +1499,10 @@ select:focus, input:focus, img:focus{
 
 a.breadcrumbButton:link, a.breadcrumbButton:active,
 a.breadcrumbButton:visited, .breadcrumbButton {
-    color: #206E9F;
+    color: $themecolor1-3; /*#206E9F*/
 }
 #content {
-    background: #eff4f8;
+    background: #f4f4f8; /*eff4f8*/ /*$themecolor1-5 is too much color in pb*/
 }
 .component {
     border-color: #b7c6d1;
@@ -1607,12 +1607,12 @@ a.breadcrumbButton:visited, .breadcrumbButton {
 /************************************** vertical slider **********************************/
 .up {
     color: #4F585F;
-    background:#eff4f8 url('../../images/up-arrow.png') no-repeat;
+    background:$themecolor1-5 /*eff4f8*/ url('../../images/up-arrow.png') no-repeat;
 }
 
 .middle {
     color: #557287;
-    background:#eff4f8 url('../../images/dot.png') no-repeat;
+    background:$themecolor1-5 /*eff4f8*/ url('../../images/dot.png') no-repeat;
 }
 
 .down {
@@ -1625,8 +1625,8 @@ a.breadcrumbButton:visited, .breadcrumbButton {
 }
 
 .button {
-    border-color: #BECCD7;
-    background-color: #206E9F;
+    border-color: $themecolor1-0; /*#BECCD7*/
+    background-color: $themecolor1-3; /*#206E9F*/
     color: #FFF;
     -webkit-box-shadow: inset -0px -4px #225A85;
     -moz-box-shadow: inset -0px -4px #225A85;
