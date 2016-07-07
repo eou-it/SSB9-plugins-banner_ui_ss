@@ -123,6 +123,9 @@
     padding: 10px 20px;
     margin: 10px 20px;
     border-radius: 5px;
+    border: 1px solid;
+}
+.ignorestyles {
     border: 1px solid /*color3-1*/#3b6a63;
     box-shadow: 0 -4px 0 0 /*color3-1*/ #3b6a63 inset;
     background-color: /*color3-5*/ #6aaca2;
@@ -360,14 +363,18 @@ span.approved {
     margin: 10px;
 }
 
-.preview button.primary {
+.preview .primary,
+.preview .primary:hover:not([disabled]),
+.preview .primary:active:not([disabled]) {
     color: /*color1-2*/ #393939;
     background-color: /*color1-5*/ #16fc16;
     border-color: /*color1-1*/ #00a400;
     box-shadow: /*color1-1*/ #00a400 0px -4px 0px 0px inset;
 }
 
-.preview button.secondary {
+.preview .secondary,
+.preview .secondary:hover:not([disabled]),
+.preview .secondary:active:not([disabled]) {
     color: /*color2-2*/ #393939;
     background-color: /*color2-5*/ #b9b9b9;
     border-color: /*color2-1*/ #797979;
@@ -483,10 +490,12 @@ dev[ng-model="theme"] {
 .w20 {
     display: inline-block;
     width:20%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .w10 {
     display: inline-block;
-    width:15%;
+/*    width:15%;*/
 }
 .center {
     text-align: center;
@@ -565,8 +574,8 @@ dev[ng-model="theme"] {
           <ul xe-field="themes">
             <li style="margin:.2em 0" ng-repeat="theme in themes | orderBy: 'theme'">
                 <span class="w20">{{theme}}</span>
-                <button class="secondary w20" ng-click="setTheme(theme)"><g:message code="theme.applyTheme" args="['']" notargs="['{{theme}}']"/></button>
-                <button class="tertiary w20" ng-click="deleteTheme(theme)"><g:message code="theme.deleteTheme" args="['']"/></button>
+                <button class="secondary" ng-click="setTheme(theme)"><g:message code="theme.applyTheme" args="['']" notargs="['{{theme}}']"/></button>
+                <button class="tertiary" ng-click="deleteTheme(theme)"><g:message code="theme.deleteTheme" args="['']"/></button>
                 <span class="w10">
                     <a href="theme/get?name={{theme}}" class="center"><g:message code="theme.json"/></a>
                 </span>

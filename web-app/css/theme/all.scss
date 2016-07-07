@@ -806,7 +806,7 @@ label {
   color: $themecolor1-2;
   background-color: $themecolor1-5;
   border-color: $themecolor1-1;
-/*!!leave grey  box-shadow: inset 0px -4px 0px #themecolor2;*/
+/*!!leave grey  box-shadow: inset 0px -4px 0px $themecolor2;*/
 }
 
 .primary:disabled {
@@ -1046,7 +1046,6 @@ select:focus, input:focus, img:focus{
     background-color: $themecolor1-5; /*F9FAFB;*/
     color:$themecolor1-3; /* #869FB1; */
 }
-/* Font -size and Height have impact on other languages*/
 .gradeBook-buttons-enabled {
   border-color: $themecolor1-1;
     background-color: $themecolor1-5;
@@ -1398,7 +1397,6 @@ select:focus, input:focus, img:focus{
 .header {
     background-image: none;
     background-color: $themecolor1;
-    height: 75px;
 }
 
 .header .institutionalBranding {
@@ -1408,40 +1406,18 @@ select:focus, input:focus, img:focus{
 /*
 .header .home {
     background: url("../images/btn-header-sprite.png") no-repeat scroll 0 -29px transparent;
-    display: block;
-    height: 24px;
-    width: 26px;
 }
 
 .header .menuArrow {
     background: url("../images/header-composite-button-sprites.png") no-repeat scroll right 0 transparent;
-    display: block;
-    height: 24px;
-    left: 30px;
-    position: absolute;
-    top: 0;
-    width: 26px;
 }
 
 .header .fauxBar {
     background: url("../images/header-button-sprites.png") repeat-x scroll 0 -24px transparent;
-    display: block;
-    height: 24px;
-    left: 56px;
-    position: absolute;
-    top: 0;
-    right: 8px;
 }
 
 .header .fauxBarEndCap {
     background: url("../images/header-button-sprites.png") no-repeat scroll right 0 transparent;
-    height: 24px;
-    margin-right: 0;
-    padding-left: 4px;
-    padding-right: 4px;
-    position: absolute;
-    right: 0;
-    top: 0;
 }
 */
 
@@ -1523,251 +1499,85 @@ select:focus, input:focus, img:focus{
 
 a.breadcrumbButton:link, a.breadcrumbButton:active,
 a.breadcrumbButton:visited, .breadcrumbButton {
-    font-size: 0.9em;
-    color: #206E9F;
+    color: $themecolor1-3; /*#206E9F*/
 }
 #content {
-    font-family: openSansRegular;
-    background: #eff4f8;
-    font-size: 16px;
-    height:calc(100% - 6.0em);
-    overflow: auto;
-}
-.content {
-    height: calc(100% - 3em);
+    background: #f4f4f8; /*eff4f8*/ /*$themecolor1-5 is too much color in pb*/
 }
 .component {
-    border: 1px solid #b7c6d1;
+    border-color: #b7c6d1;
     background: #fff;
-    position: relative;
-    min-height: calc(100% - 1.0em);
-    height: auto;
-    width: 98%;
-    margin-left: 1%;
-    margin-bottom: 1%;
-    padding-bottom: 3em;
-    overflow-y: auto;
 }
 
 .app-header {
-    min-height: 2.750em;
-    border-bottom: 1px solid #b7c6d1;
+    border-bottom-color: #b7c6d1;
 }
 
 @media only screen and (max-width: 769px) {
-    #content {
-        top:100px !important;
-    }
-    .content {
-        padding: 0px;
-        height: 100%;
-        overflow: hidden;
-    }
     .component {
-        border: none;
-        border-top: 1px solid #b7c6d1;
-        position: relative;
-        overflow: hidden;
-        height: 99.6%;
-        width: 100%;
-        margin-left: 0px;
-        /*overflow-y: auto;*/
+        border-top-color: #b7c6d1;
     }
 }
 
 /*********************** Side-panel ******************************/
 
 .side-panel {
-    padding: 0px;
-    border: 1px solid #b7c6d1;
-    z-index: 115;
-    background: #fff url('../../images/bg.png') bottom repeat-x;
-    overflow-y: auto;
-    position: absolute;
-    top: 5.5em;
-    right: 1%;
-    bottom: 1.4%;
-    display:none;
-    width:22.375em;
-    font-size: 16px;
+    border-color: #b7c6d1;
+    background: #fff;
+    background-image: none;
 }
 
 .side-panel-header {
-    border-bottom: 1px solid #BECCD7;
-    height: 2.750em;
+    border-bottom-color: #BECCD7;
 }
 
 .side-panel .panelContent {
-    margin: 0px;
-    padding: 0px;
-    width: 100%;
-    height:87%;
-    overflow-y : auto;
-    font-size: 0.875em;
-}
-
-@media only screen and (max-width: 769px) {
-    .side-panel {
-        bottom: 0em;
-        width:100%;
-        right: 0%;
-        top:0%;
-    }
-
-    .side-panel-close {
-        width: 3em;
-        height: 2.5em;
-        background: url('../../images/close.png') no-repeat;
-        position: absolute;
-        right: 0em;
-        background-size: 2.0em;
-        opacity: 0.5;
-        margin-top: 0.4em;
-    }
-}
-
-
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-    .side-panel-close {
-        width: 3em;
-        height: 2.5em;
-        background: url('../../images/close.png') no-repeat;
-        position: absolute;
-        right: 0em;
-        background-size: 2.0em;
-        opacity: 0.5;
-        margin-top: 0.4em;
-    }
 }
 
 
 /**************************************component-content ***************************/
 
-.component-content {
-    min-height: 85%;
-    padding:0px;
-}
-
-.top-grid {
-    height:100%;
-}
-
-@media only screen and (max-width: 769px) {
-    .component-content {
-        background-position:left 0px bottom 0em;
-    }
-
-    .component-bottom .top-grid {
-        height:calc(100% - 3.0em);
-        padding-bottom: 1em;
-    }
-
-    .components.component-bottom .top-grid{
-        height:calc(100% - 6.0em);
-    }
-
-    /*.midterm.component-bottom .top-grid {*/
-        /*height:calc(100% - 3.0em);*/
-    /*}*/
-}
-
-
 @media only screen and (min-width: 769px) and (max-width: 1025px) {
-    .top-grid {
-          height:90%;
-      }
-
     .component-footer {
-        clear: both;
-        height: 3em;
-        width: 100%;
-        border-top: 1px solid #b7c6d1;
-        text-align: right;
-        padding: 0 0.5em;
+        border-top-color: #b7c6d1;
         background: #fff;
-        position: absolute;
-        left: 0px;
-        bottom: 0em;
     }
 }
 /************************************ component footer *****************************/
 .component-footer {
-    clear: both;
-    height: 3em;
-    width: 100%;
-    border-top: 1px solid #b7c6d1;
-    text-align: right;
-    padding: 0 0.5em;
+    border-top-color: #b7c6d1;
     background: #fff;
-    /*position: absolute;*/
-    left: 0px;
-    bottom: 0em;
 }
 
 .component .component-footer {
-    clear: both;
-    height: 3em;
-    width: 100%;
-    border-top: 1px solid #b7c6d1;
-    text-align: right;
-    padding: 0 0.5em;
+    border-top-color: #b7c6d1;
     background: #fff;
-    position: absolute;
-    left: 0px;
-    bottom: 0em;
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1025px) {
     .component-footer {
-        clear: both;
-        height: 3.3em;
-        width: 100%;
-        border-top: 1px solid #b7c6d1;
-        text-align: right;
-        padding: 0 0.5em;
+        border-top-color: #b7c6d1;
         background: #fff;
-        position: absolute;
-        left: 0px;
-        bottom: 0em;
     }
 }
 /************************************ component-top **********************************/
 
 .component-top {
-    border: 1px solid #b7c6d1;
+    border-color: #b7c6d1;
     background: #fff;
-    position: relative;
-    overflow: hidden;
-    height: 98%;
-    width: 98%;
-    margin-left: 1%;
-    overflow-y: hidden;
 }
 
 
 @media only screen and (max-width: 769px) {
     .component-top {
-        border: none;
-        border-top: 1px solid #b7c6d1;
-        position: relative;
-        overflow: hidden;
-        height: 99.6%;
-        width: 100%;
-        margin-left: 0px;
-        overflow-y: hidden;
+        border-top-color: #b7c6d1;
     }
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
     .component-top {
-        border: 1px solid #b7c6d1;
+        border-color: #b7c6d1;
         background: #fff;
-        position: relative;
-        overflow: hidden;
-        height: 98%;
-        width: 98%;
-        margin-left: 1%;
-        padding-bottom: 3.3em;
     }
 
 
@@ -1776,426 +1586,133 @@ a.breadcrumbButton:visited, .breadcrumbButton {
 /************************************ component-bottom **********************************/
 
 .component-bottom {
-    border: 1px solid #b7c6d1;
+    border-color: #b7c6d1;
     background: #fff;
-    position: relative;
-    overflow: hidden;
-    width: 98%;
-    margin-left: 1%;
-    /*padding-bottom: 3em;*/
-    /*margin-bottom: 1%;*/
-}
-
-/*.component-bottom .component-footer {*/
-    /*position: absolute;*/
-    /*top: 99%;*/
-/*}*/
-
-.component-bottom .table-main {
-    min-height: 9em;
 }
 
 @media only screen and (max-width: 769px) {
     .component-bottom {
         border: none;
-        border-top: 1px solid #b7c6d1;
-        position: relative;
-        overflow: hidden;
-        height: 99.6%;
-        width: 100%;
-        margin-left: 0px;
-        padding: 0px;
-    }
-    .component-bottom .component-footer {
-        bottom: 1em;
-        position: absolute;
+        border-top-color: #b7c6d1;
     }
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
     .component-bottom {
-        border: 1px solid #b7c6d1;
+        border-color: #b7c6d1;
         background: #fff;
-        position: relative;
-        overflow: hidden;
-        height: 98%;
-        width: 98%;
-        margin-left: 1%;
     }
 }
 
 /************************************** vertical slider **********************************/
-.vertical-slider {
-    width:100%;
-    height:1.438em;
-    padding-left: 5em;
-}
-
 .up {
-    height:0.6em !important;
-    width:1em !important;
     color: #4F585F;
-    line-height: 0px;
-    margin-top: 0.5em;
-    display: block;
-    background:#eff4f8 url('../../images/up-arrow.png') no-repeat;
+    background:$themecolor1-5 /*eff4f8*/ url('../../images/up-arrow.png') no-repeat;
 }
 
 .middle {
-    height:0.6em !important;
-    width:1em !important;
     color: #557287;
-    margin-top:0.5em;
-    line-height: 0px;
-    display: block;
-    background:#eff4f8 url('../../images/dot.png') no-repeat;
+    background:$themecolor1-5 /*eff4f8*/ url('../../images/dot.png') no-repeat;
 }
 
 .down {
-    height:0.6em !important;
-    width:1em !important;
     color: #4F585F;
-    margin-top:0.6em;
-    line-height: 0px;
-    display: block;
     background: url('../../images/grid-down-arrow.png') no-repeat;
 }
 
 .border {
-    border:1px solid #ccc;
-    height:2.4em;
-}
-
-.actions {
-    margin: 0px;
-    padding: 0px;
+    border-color: #ccc;
 }
 
 .button {
-    font-family: openSansSemiBold;
-    border: 1px solid #BECCD7;
-    background-color: #206E9F;
+    border-color: $themecolor1-0; /*#BECCD7*/
+    background-color: $themecolor1-3; /*#206E9F*/
     color: #FFF;
-    font-size: 14px;
-    min-height: 2.5em;
-    max-height: 2.5em;
-    white-space: normal;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
     -webkit-box-shadow: inset -0px -4px #225A85;
     -moz-box-shadow: inset -0px -4px #225A85;
     box-shadow: inset -0px -4px #225A85;
-    width: 12em;
-    padding: 0 !important;
-    margin: 0.3em 0em;
 }
 
-/* Font -size and Height have impact on other languages*/
 .button-disabled {
-    font-family: openSansSemiBold;
-    border :1px solid #BECCD7;
+    border-color: #BECCD7;
     background-color: #F9FAFB;
     color:#869FB1;
-    font-size: 14px;
-    min-height: 2.5em;
-    max-height: 2.5em;
-    white-space: normal;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
     -webkit-box-shadow: inset 0px -4px 0px #E2EAEF;
     -moz-box-shadow: inset 0px -4px 0px #E2EAEF;
     box-shadow: inset 0px -4px 0px #E2EAEF;
-    width:12em;
-    padding: 0 !important;
-    margin: 0.4em 0em;
 }
 
 .comp-assessment {
-    height: 2.5em;
-    width: 13em;
-    border: none;
-    font-family: openSansSemiBold;
     color:#4F585F;
-    font-size: 0.875em;
-    overflow: hidden;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    -o-appearance:none;
-    appearance:none;
     background: #fff url('../../images/down-arrow.png') no-repeat right 50%;
-    text-indent: 0.01px;          /* Removes default arrow from firefox*/
-    background-size: 0.9em;
-    padding: 0.5em;
-    background-position: 95%;
-    margin-top: 0.3em;
 }
 
 @media only screen and (max-width: 769px) {
-    .button {
-        width:48%;
-        min-height: 3.0em;
-        max-height: 3.0em;
-    }
-    .button-disabled {
-        width:48%;
-        min-height: 3.0em;
-        max-height: 3.0em;
-    }
-    #compositeGradeButton .button {
-        width: 49%;
-    }
-
     .comp-assessment {
-        width: 100%;
-
-        border: 1px solid #869FB1;
-        font-size: 0.875em;
+        border-color: #869FB1;
         color: #869FB1;
-
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
         -webkit-box-shadow: inset 0px -4px 0px #E2EAEF;
         -moz-box-shadow: inset 0px -4px 0px #E2EAEF;
         box-shadow: inset 0px -4px 0px #E2EAEF;
-        width: 97%;
-        margin: 0.8em 0.5em;
-        height:2.5em;
-    }
-
-    .actions  div:first-child{
-        padding:0px;
-        height: 3em;
-
     }
 }
 @media only screen and (max-width: 760px) {
     .actions {
-        border-top: 1px solid lightgray;
-        border-bottom: 1px solid lightgray;
+        border-top-color: lightgray;
+        border-bottom-color: lightgray;
     }
 }
 
 /********************** Ipad mini ********************************/
 @media only screen and (max-width: 770px) and (min-width: 768px) {
-    .course-buttons {
-        display: none;
-    }
-
-    .component-top {
-        height: 95%;
-    }
-
-    #content {
-        overflow: hidden;
-    }
-
-    .table-main {
-        padding-bottom: 4em;
-    }
-
-    form {
-        height:99%;
-    }
-
     .component-footer {
-        clear: both;
-        height: 3em;
-        width: 100%;
-        border-top: 1px solid #b7c6d1;
-        text-align: right;
-        padding: 0 0.5em;
+        border-top-color: #b7c6d1;
         background: #fff;
-        position: absolute;
-        left: 0px;
-        bottom: 2.5em;
-    }
-
-    .incomplete-grades-menu {
-        top: 2.5em !important;
-        width: 65%;
-        height: 3.2em;
-        padding-top: 0.4em;
-        font-size: 1.0em;
-    }
-
-    .button-disabled, .button {
-        min-height: 3.0em;
-        max-height: 3.0em;
-    }
-
-    .select-dropdown, .input-box-date, input.hasMultiCalendarPicker, input {
-        height:4em;
-    }
-
-    .final-roster, .final-incomplete-roster {
-        height: 95% !important;
-    }
-
-    .component-bottom .component-footer {
-        bottom: 2em;
-        position: absolute;
-    }
-
-}
-
-@media only screen and (min-width: 769px) and (max-width: 1025px) {
-    form {
-        height:92%;
     }
 }
-
 
 .rolled {
-    height:1.4em;
-    width:1.4em;
     background: url('../../images/registration_rolled_yes.png') no-repeat;
-    background-size: 1.2em;
-    margin-left:1.0em;
 }
 
 .not-rolled {
-    height:1.4em;
-    width:1.4em;
     background: url('../../images/not-rolled.svg') no-repeat;
-    background-size: 1.3em;
-    margin-left:1.0em;
 }
 
-
-#print-button {
-    margin-top: 0.8em;
-    float: right;
-    cursor: pointer;
-}
-
-.dropdown-container {
-    padding-top: 0.2em;
-    font-size: 0.9em;
-}
-
-.course-drop-down {
-    height: 3em;
-    width: 100%;
-    border: none;
-    padding-top: 0em;
-}
 
 .course-select-assessment {
-    font-size: 0.82em;
-    height: 2.30em;
     color: #83898E;
-    width: 100%;
-    margin-top: 0.5em;
 }
 
-
-@media only screen and (max-width: 769px) {
-    .course-select-assessment {
-        height: 3.0em;
-    }
-
-    .rolled {
-        margin-top: -1.3em;
-        margin-left: 5em;
-    }
-}
 
 .select2-container .select2-choice {
-    display: block;
-    height: 26px;
-    padding: 0 0 0 8px;
-    overflow: hidden;
-    position: relative;
-    border: none !important;
-    white-space: nowrap;
-    line-height: 26px;
     color: #444;
-    text-decoration: none;
-    border-radius: 4px;
-    background-clip: padding-box;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     background-color: transparent;
-    background-image: none !important;
-    background-image: none !important;
-    background-image: none !important;
     background-image: none !important;
 }
 
 .select2-default {
-    /* font-family: openSansSemiBold;
-    color: #4F585F !important; */
-    font-size: 1em;
+    color: #4F585F !important;
 }
 
 .select2-container .select2-choice .select2-arrow {
-    display: inline-block;
-    width: 18px;
-    height: 100%;
-    position: absolute;
-    right: 0.1em;
-    top: 0;
-    left: auto;
-    border: none !important;
-    border-radius: 0;
-    background: none !important;
     background-image: none !important;
-    background-image: none !important;
-    background-image: none !important;
-    background-image: none !important;
-
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    -o-appearance:none;
-    appearance:none;
 }
 
 .select2-container .select2-choice .select2-arrow b {
     background: #fff url('../../images/down-arrow.png') no-repeat 95% 50% !important;
 }
 
-.hidden-label {
-    display: none;
-}
-
-.component-assessment {
-    position: absolute;
-    right: 24em;
-    z-index:2;
-}
-
-@media only screen and (max-width: 769px) {
-
-    .component-assessment {
-        position: absolute;
-        top: 2.5em;
-        z-index: 10;
-        left: 0;
-        width: 100%;
-        height: 3em;
-    }
-
-    .dropdown-container {
-        padding: 0.2em 0em;
-    }
-}
-
 /************************************ Accessibility *********************************/
 
 @media only screen and (min-width: 1025px) {
     td:focus, a:focus, th:focus, select:focus, input:focus, button:focus {
-        outline:1px solid #9ecaed !important;
+        outline-color: #9ecaed !important;
     }
 
     .select2-container-active .select2-choice,
     .select2-container-active .select2-choices {
-        border: 1px solid #9ecaed !important;
+        border-color: #9ecaed !important;
         outline: none;
 
         -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .3);
@@ -2205,196 +1722,16 @@ a.breadcrumbButton:visited, .breadcrumbButton {
 
 /************************************* Composite grades ******************************/
 
-@media only screen and (min-width: 1025px) {
-
-    .divKeyCell {
-        padding-bottom: 5px;
-        padding-left: 20px;
-        text-align: left;
-    }
-
-    .divValueCell {
-        float: right;
-        display: table-column;
-    }
-}
-
-@media only screen and (max-width: 769px) {
-    .divTable {
-        display: table;
-        width: auto;
-        border: 0px !important;
-        border-spacing: 0px;
-    }
-
-    .divRow {
-        display: table-row;
-        width: auto;
-    }
-
-    .divKeyCell {
-        float: left;
-        display: table-column;
-        padding-bottom: 5px;
-        padding-left: 20px;
-        text-align: left;
-    }
-
-    .divValueCell {
-        float: left;
-        display: table-column;
-        text-align: left;
-        padding-left: 10px;
-    }
-
-}
-
-/*****************************************************************************************
-                Incomplete grades
-******************************************************************************************/
-.final-incomplete-roster {
-    display: none;
-}
-
-.incomplete-grades-menu {
-    width: 40%;
-    height: 2.5em;
-    font-size: 0.9em;
-    position: absolute;
-    top: 0px;
-    z-index: 2;
-}
-
-@media only screen and (max-width: 769px) {
-    .incomplete-grades-menu {
-        top: 2.7em;
-        width:70%;
-        height: 3.2em;
-        padding-top: 0.4em;
-        font-size: 1.0em;
-    }
-    .incomplete-grades-menu li:nth-child(2) a {
-        width:12em;
-        max-width: 12em;
-    }
-}
-
-@media only screen and (max-width: 321px) {
-    .incomplete-grades-menu {
-        top: 2.0em;
-        width:70%;
-    }
-    .incomplete-grades-menu li:first a {
-        width:9em;
-        max-width: 9em;
-        height: 4.0em;
-    }
-    .incomplete-grades-menu li:nth-child(2) a {
-        width:10em;
-        max-width: 10em;
-        height: 4.0em;
-    }
-
-    .incomplete-grades-menu li a.active {
-        height: 4em;
-    }
-
-
-}
-
-@media only screen and (min-width: 769px) and (max-width: 1025px) {
-    .incomplete-grades-menu {
-        top: 2.5em;
-        width: 65%;
-        height: 3.2em;
-        padding-top: 0.4em;
-        font-size: 1.0em;
-    }
-
-    .incomplete-grades-menu  .tabs li a {
-        padding: 0.5em 1.0em;
-    }
-}
-
-.select2-container .select2-choice .select2-arrow {
-
-}
 
 /*****************************************************************************************
                 Load Spinner
 ******************************************************************************************/
 .overlay-show {
     background-color: rgba(1, 1, 1, 0.7);
-    bottom:0;
-    left:0;
-    right:0;
-    top:0;
-    position: fixed;
-    z-index: 100;
-    opacity: 0;
-}
-
-input::-ms-clear {
-    display: none;
-}
-
-/**************** Composite grades *****************************************/
-
-.divTable {
-    display: table;
-    width: auto;
-    border: 0px !important;
-    border-spacing: 0px;
-}
-
-.divRow {
-    display: table-row;
-    width: auto;
-}
-
-.divKeyCell {
-    float: left;
-    display: table-column;
-    padding-bottom: 5px;
-    padding-left: 20px;
-    text-align: left;
-}
-
-.divValueCell {
-    float: left;
-    display: table-column;
-    text-align: left;
-    padding-left: 10px;
-}
-
-.final-roster, .final-incomplete-roster {
-    height:91%;
 }
 
 @media only screen and (max-width: 769px) {
-    input, select {
-        font-size: 13px !important;
-    }
-
-    input.hasMultiCalendarPicker + span {
-        background-position: -7px 1px;
-        height: 3.5em;
-        width: 4em;
-    }
     .calendar-img {
         background: none;
-        margin-left: -4em;
-        margin-bottom: 1px;
     }
-}
-
-.resize-col {
-    width: 7px;
-    height: 100%;
-    float: right;
-    z-index: 2;
-    position: absolute;
-    right: 0px;
-    top: 0%;
-    cursor: col-resize;
 }
