@@ -125,12 +125,6 @@
     border-radius: 5px;
     border: 1px solid;
 }
-.ignorestyles {
-    border: 1px solid /*color3-1*/ #3b6a63;
-    box-shadow: 0 -4px 0 0 /*color3-1*/ #3b6a63 inset;
-    background-color: /*color3-5*/ #6aaca2;
-    color: /*color3-2*/ #393939;
-}
 
 .properties button {
     margin: 0;
