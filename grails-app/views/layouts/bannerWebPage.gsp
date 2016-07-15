@@ -73,7 +73,12 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 
         <g:customStylesheetIncludes/>
 
-
+        <!-- !!TODO convert to taglib -->
+        <g:set var="themeConfig" value="${grails.util.Holders.config.banner.theme}"/>
+        <meta name="theme" content="${themeConfig.name}">
+        <g:if test="${themeConfig.url}">
+            <link rel="stylesheet" type="text/css" href="${themeConfig.url}/getTheme?name=${!session.mep ? themeConfig.name : session.mep}&template=${themeConfig.template}&mepCode=${session.mep}">
+        </g:if>
     </head>
     <body>
         <div id="splash"></div>
@@ -88,4 +93,3 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <g:customJavaScriptIncludes/>
     </body>
 </html>
-

@@ -381,6 +381,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/errors/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/help/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/uiCatalog/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/theme/**' : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/themeEditor/**' : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
 
         // ALL URIs specified with the BannerAccessDecisionVoter.ROLE_DETERMINED_DYNAMICALLY
         // 'role' (it's not a real role) will result in authorization being determined based
@@ -420,4 +422,3 @@ grails {
     }
 }
 remove this line */
-
