@@ -20,6 +20,15 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
     }
 
+    'bootstrapRTL' {
+        dependsOn "jquery"
+        defaultBundle environment == "development" ? false : "bootstrap"
+
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap-rtl.css'],            attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/bootstrap-fixes-rtl.css'],                attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
+    }
+
     'glyphicons' {
         defaultBundle environment == "development" ? false : "bannerSelfService"
 
@@ -181,15 +190,15 @@ modules = {
     }
 
     'themeEditor' {
-        dependsOn "bootstrap", "angularApp"
+        dependsOn "angularApp"
         resource url:[plugin: 'banner-ui-ss', file: 'js/theme/themeEditor.js']
     }
 
     'themeEditorLTR' {
-        dependsOn "bannerWebLTR, colorPickerLTR, themeEditor"
+        dependsOn "bannerWebLTR, colorPickerLTR, themeEditor, bootstrap"
     }
 
     'themeEditorRTL' {
-        dependsOn "bannerWebRTL, colorPickerRTL, themeEditor"
+        dependsOn "bannerWebRTL, colorPickerRTL, themeEditor, bootstrapRTL"
     }
 }
