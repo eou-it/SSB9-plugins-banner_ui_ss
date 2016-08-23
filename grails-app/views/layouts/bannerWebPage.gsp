@@ -73,7 +73,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 
         <g:customStylesheetIncludes/>
 
-
+        <g:theme />
     </head>
     <body>
         <div id="splash"></div>
@@ -88,4 +88,3 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <g:customJavaScriptIncludes/>
     </body>
 </html>
-

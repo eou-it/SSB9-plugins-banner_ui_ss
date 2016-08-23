@@ -89,9 +89,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.js']
     }
 
-
     'bannerSelfServiceCommonLTR' {
-
         dependsOn "bannerSelfServiceWithoutAurora, aurora"
         defaultBundle environment == "development" ? false : "bannerSelfServiceLTR"
 
@@ -102,7 +100,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'],            attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'],  attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.css'],           attrs:[media:'screen, projection']
-
     }
 
     'bannerSelfServiceCommonRTL' {
@@ -167,4 +164,32 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/date-picker/directives/date-picker-directive.js']
     }
 
+    'colorPicker' {
+        dependsOn 'angularApp'
+        resource url:[plugin: 'banner-ui-ss', file: 'js/colorPicker/tinycolor.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/colorPicker/angularjs-color-picker.js']
+    }
+
+    'colorPickerLTR' {
+        dependsOn 'colorPicker'
+        resource url:[plugin: 'banner-ui-ss', file: 'js/colorPicker/angularjs-color-picker.css'], attrs:[media:'screen, projection']
+    }
+
+    'colorPickerRTL' {
+        dependsOn 'colorPicker'
+        resource url:[plugin: 'banner-ui-ss', file: 'js/colorPicker/angularjs-color-picker-rtl.css'], attrs:[media:'screen, projection']
+    }
+
+    'themeEditor' {
+        dependsOn "bootstrap", "angularApp"
+        resource url:[plugin: 'banner-ui-ss', file: 'js/theme/themeEditor.js']
+    }
+
+    'themeEditorLTR' {
+        dependsOn "bannerWebLTR, colorPickerLTR, themeEditor"
+    }
+
+    'themeEditorRTL' {
+        dependsOn "bannerWebRTL, colorPickerRTL, themeEditor"
+    }
 }
