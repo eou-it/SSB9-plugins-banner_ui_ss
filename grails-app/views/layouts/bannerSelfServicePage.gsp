@@ -81,7 +81,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         </div>
 
         <g:layoutBody />
-
+        <g:analytics clientTrackerId="${grails.util.Holders.config.clientTrackerId}" ellucianTrackerId="${grails.util.Holders.config.ellucianTrackerId}" allowEllucianTracker="${grails.util.Holders.config.allowEllucianTracker}"/>
         <r:layoutResources/>
 
         <g:customJavaScriptIncludes/>

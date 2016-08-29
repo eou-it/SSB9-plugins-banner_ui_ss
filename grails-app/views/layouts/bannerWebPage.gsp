@@ -80,7 +80,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <div id="spinner" class="spinner spinner-img" style="display:none;">
 
         </div>
-
+    <g:analytics clientTrackerId="${grails.util.Holders.config.clientTrackerId}" ellucianTrackerId="${grails.util.Holders.config.ellucianTrackerId}" allowEllucianTracker="${grails.util.Holders.config.allowEllucianTracker}"/>
         <g:layoutBody />
 
         <r:layoutResources/>
