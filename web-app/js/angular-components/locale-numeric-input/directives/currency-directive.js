@@ -1,6 +1,6 @@
 numericApp.directive('currencyInput',['$timeout','$filter','readonlysvc','$compile', function($timeout, $filter,readonlysvc,$compile) {
-    var withoutDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" only-number/><input value="{{formatted}}" id="{{id}}" class="form-control" ng-click="textFocused()" ng-focus="textFocused()" ng-hide="showNumber" only-number/>';
-    var withDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" /><input value="{{formatted}}" id="{{id}}" class="form-control" ng-click="textFocused()" ng-focus="textFocused()" ng-hide="showNumber" />';
+    var withoutDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" ng-change="valNgChange()" only-number/><input value="{{formatted}}" id="{{id}}" class="form-control" ng-click="textFocused()" ng-focus="textFocused()" ng-hide="showNumber" only-number/>';
+    var withDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" ng-change="valNgChange()" /><input value="{{formatted}}" id="{{id}}" class="form-control" ng-click="textFocused()" ng-focus="textFocused()" ng-hide="showNumber" />';
     var getTemplate = function(decimalLength){
         var template = '';
         decimalLength = decimalLength||0;
@@ -21,6 +21,13 @@ numericApp.directive('currencyInput',['$timeout','$filter','readonlysvc','$compi
         link: function($scope, $elm, $attrs) {
             $elm.removeAttr('id');
             $elm.html(getTemplate($attrs.decimals));
+
+            $scope.valNgChange = function() {
+                $timeout(function() {
+                    if ($attrs.ngChange) $scope.$parent.$eval($attrs.ngChange);
+                }, 0);
+            };
+
             var liveRegion= $('.number-input-accessible');
             if (liveRegion.length == 0) {
                 liveRegion = $("<span>", {
@@ -53,7 +60,7 @@ numericApp.directive('currencyInput',['$timeout','$filter','readonlysvc','$compi
             $scope.textFocused = function(){
                 $scope.showNumber = true;
                 $timeout(function(){
-                    $elm.find('input[type=number]').focus();
+                    $elm.find('input[type=number]').focus().select();
                 }, 50)
             };
 

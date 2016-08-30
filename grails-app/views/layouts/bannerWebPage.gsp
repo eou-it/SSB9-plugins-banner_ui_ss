@@ -19,6 +19,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         </g:else>
 
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
+        <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
 
         <meta charset="${message(code: 'default.character.encoding')}"/>
         <meta name="dir" content="${message(code:'default.language.direction')}"/>
@@ -37,7 +38,8 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <meta name="logoutEndpoint" content="${session.getServletContext().logoutEndpoint}"/>
         <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
         <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
-
+        <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
+        <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
         <title><g:layoutTitle default="Banner"/></title>
 
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
@@ -71,7 +73,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 
         <g:customStylesheetIncludes/>
 
-
+        <g:theme />
     </head>
     <body>
         <div id="splash"></div>
@@ -86,4 +88,3 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <g:customJavaScriptIncludes/>
     </body>
 </html>
-
