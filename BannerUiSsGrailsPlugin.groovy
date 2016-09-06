@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 import org.apache.commons.logging.LogFactory
@@ -26,7 +26,6 @@ class BannerUiSsGrailsPlugin {
             cacheHeaders: '1.1.5 => *',
             csv: '0.3.1 => *',
             feeds: '1.5 => *',
-            selenium: '0.8 => *',
             bannerCore: '1.0.17 => *'
     ]
 
