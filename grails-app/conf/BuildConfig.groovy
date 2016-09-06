@@ -32,7 +32,6 @@ grails.project.dependency.resolution = {
         compile ':cache-headers:1.1.7'
         compile ':csv:0.3.1'
         compile ':feeds:1.5'
-        compile ':selenium:0.8'
     }
 
     dependencies {
