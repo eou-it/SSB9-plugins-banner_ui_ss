@@ -6,58 +6,58 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 --%>
 <!DOCTYPE html>
 <html lang="${message(code: 'default.language.locale')}">
-    <head>
-        <script>
-            var extensibilityInfo =
-                    ${raw(net.hedtech.extensibility.InfoService.getJSON(controllerName, resource(plugin:'web-app-extensibility', dir:'html')))};
-        </script>
+<head>
+    <script>
+        var extensibilityInfo =
+                ${raw(net.hedtech.extensibility.InfoService.getJSON(controllerName, resource(plugin:'web-app-extensibility', dir:'html')))};
+    </script>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-            <r:require modules="bannerWebRTL"/>
-        </g:if>
-        <g:else>
-            <r:require modules="bannerWebLTR"/>
-        </g:else>
+        <r:require modules="bannerWebRTL"/>
+    </g:if>
+    <g:else>
+        <r:require modules="bannerWebLTR"/>
+    </g:else>
 
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
         <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
 
-        <meta charset="${message(code: 'default.character.encoding')}"/>
+    <meta charset="${message(code: 'default.character.encoding')}"/>
         <meta name="dir" content="${message(code:'default.language.direction')}"/>
         <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
-        <meta name="logLevel" content="${g.logLevel()}"/>
-        <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
-        <meta name="transactionTimeout" content="${session.getServletContext().transactionTimeout}"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="logLevel" content="${g.logLevel()}"/>
+    <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
+    <meta name="transactionTimeout" content="${session.getServletContext().transactionTimeout}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="images/applicationIcon.png" />
-        <link rel="apple-touch-startup-image" href="images/applicationStartup.png">
+    <link rel="apple-touch-startup-image" href="images/applicationStartup.png">
         <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
-        <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
-        <meta name="fullName" content="${g.fullName()}"/>
-        <meta name="loginEndpoint" content="${session.getServletContext().loginEndpoint}"/>
-        <meta name="logoutEndpoint" content="${session.getServletContext().logoutEndpoint}"/>
-        <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
-        <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
-        <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
-        <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
-        <title><g:layoutTitle default="Banner"/></title>
+    <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
+    <meta name="fullName" content="${g.fullName()}"/>
+    <meta name="loginEndpoint" content="${session.getServletContext().loginEndpoint}"/>
+    <meta name="logoutEndpoint" content="${session.getServletContext().logoutEndpoint}"/>
+    <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
+    <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
+    <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
+    <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
+    <title><g:layoutTitle default="Banner"/></title>
 
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 
 
-        <r:script>
-            <g:i18nJavaScript/>
+    <r:script>
+        <g:i18nJavaScript/>
 
-            var transactionTimeoutMeta    = $( "meta[name=transactionTimeout]" ),
-                transactionTimeoutSeconds = ( transactionTimeoutMeta.length == 1 ? parseInt( transactionTimeoutMeta.attr( "content" ) ) : 30 ),
-                transactionTimeoutPadding = 10 * 1000,
-                transactionTimeoutMilli   = ( transactionTimeoutSeconds * 1000 ) + transactionTimeoutPadding;
+        var transactionTimeoutMeta    = $( "meta[name=transactionTimeout]" ),
+            transactionTimeoutSeconds = ( transactionTimeoutMeta.length == 1 ? parseInt( transactionTimeoutMeta.attr( "content" ) ) : 30 ),
+            transactionTimeoutPadding = 10 * 1000,
+            transactionTimeoutMilli   = ( transactionTimeoutSeconds * 1000 ) + transactionTimeoutPadding;
 
-            $.ajaxSetup( { timeout: transactionTimeoutMilli } );
+        $.ajaxSetup( { timeout: transactionTimeoutMilli } );
 
-            yepnope({
-               test : window.JSON,
-               nope : '${resource(plugin: 'banner-ui-ss', file: 'js/json2.js')}'
+        yepnope({
+           test : window.JSON,
+           nope : '${resource(plugin: 'banner-ui-ss', file: 'js/json2.js')}'
             });
 
             $(window).load(function() {
@@ -65,26 +65,26 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
                     $( "#splash" ).remove();
                 });
             });
-        </r:script>
+    </r:script>
 
-        <r:layoutResources/>
+    <r:layoutResources/>
 
         <g:layoutHead />
 
-        <g:customStylesheetIncludes/>
+    <g:customStylesheetIncludes/>
 
         <g:theme />
-    </head>
-    <body>
-        <div id="splash"></div>
-        <div id="spinner" class="spinner spinner-img" style="display:none;">
+</head>
+<body>
+<div id="splash"></div>
+<div id="spinner" class="spinner spinner-img" style="display:none;">
 
-        </div>
-    <g:analytics clientTrackerId="${grails.util.Holders.config.clientTrackerId}" ellucianTrackerId="${grails.util.Holders.config.ellucianTrackerId}" allowEllucianTracker="${grails.util.Holders.config.allowEllucianTracker}"/>
-        <g:layoutBody />
+</div>
+<g:analytics/>
+<g:layoutBody/>
 
-        <r:layoutResources/>
+<r:layoutResources/>
 
-        <g:customJavaScriptIncludes/>
-    </body>
+<g:customJavaScriptIncludes/>
+</body>
 </html>
