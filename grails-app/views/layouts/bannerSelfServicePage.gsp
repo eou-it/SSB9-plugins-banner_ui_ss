@@ -19,6 +19,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         </g:else>
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
         <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
+        <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}" />
 
         <meta charset="${message(code: 'default.character.encoding')}"/>
         <meta name="dir" content="${message(code:'default.language.direction')}"/>
@@ -39,6 +40,8 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
         <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
         <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
+        <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
+        <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
         <title><g:layoutTitle default="Banner"/></title>
 
         <link rel="shortcut icon" href="${resource(plugin: 'banner-ui-ss', dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
@@ -79,7 +82,8 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <div id="spinner" class="spinner spinner-img" style="display:none;">
 
         </div>
-
+    <div id="dialogAppDiv">
+    </div>
         <g:layoutBody />
 
         <r:layoutResources/>

@@ -76,6 +76,8 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <g:theme />
     </head>
     <body>
+    <div id="dialogAppDiv">
+    </div>
         <div id="splash"></div>
         <div id="spinner" class="spinner spinner-img" style="display:none;">
 
