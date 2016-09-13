@@ -1,6 +1,6 @@
 /*******************************************************************************
  Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
- *******************************************************************************/
+*******************************************************************************/
 
 modules = {
 
@@ -30,8 +30,8 @@ modules = {
         dependsOn "jquery, i18n-core"
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/html5shim.js'],
-                disposition: 'head',
-                wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
+            disposition: 'head',
+            wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.string.js']
@@ -97,6 +97,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
+
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'],            attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'],  attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.css'],           attrs:[media:'screen, projection']
@@ -134,12 +135,12 @@ modules = {
     }
 
     'bannerWebLTR' {
-        dependsOn "bannerSelfServiceCommonLTR, angularApp, extensibilityAngular"
+        dependsOn "bannerSelfServiceCommonLTR, extensibilityAngular, angularApp"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
     }
 
     'bannerWebRTL' {
-        dependsOn "bannerSelfServiceCommonRTL, angularApp, extensibilityAngularRTL"
+        dependsOn "bannerSelfServiceCommonRTL, extensibilityAngularRTL, angularApp"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
     }
 
