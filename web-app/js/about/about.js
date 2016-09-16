@@ -1,3 +1,6 @@
+/*********************************************************************************
+ Copyright 2016 Ellucian Company L.P. and its affiliates.
+ **********************************************************************************/
 (function(){
     'use strict';
     angular.module('dialogApp', ['xe-ui-components'])
