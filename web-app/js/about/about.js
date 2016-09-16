@@ -14,10 +14,13 @@
             }
             aboutServiceProvider.setBackendUrl(aboutUrl);
         })
-        .controller('ModalCtrl', function($scope){
+        .controller('ModalCtrl', function($scope, $timeout){
             $scope.modalShown = false;
             $scope.toggleModal = function() {
                 $scope.modalShown = !$scope.modalShown;
+                $timeout(function () {
+                    angular.element('#xeModalMask').attr('tabindex', 0).focus();
+                });
             };
             $scope.aboutApi = {
                 title: 'api.title',
