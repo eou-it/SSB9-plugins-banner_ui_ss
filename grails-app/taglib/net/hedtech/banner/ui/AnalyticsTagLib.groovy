@@ -30,7 +30,7 @@ class AnalyticsTagLib {
                         " ga('send', 'pageview');";
             }
             if (allowEllucianTracker != false) {
-                ellucianTracker = "ga('create', 'UA-82923915-1', 'auto', 'Ellucian');\n" +
+                ellucianTracker = "ga('create', 'UA-84403002-1', 'auto', 'Ellucian');\n" +
                         " ga('Ellucian.send', 'pageview');";
             }
 
