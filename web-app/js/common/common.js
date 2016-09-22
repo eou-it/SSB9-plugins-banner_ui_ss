@@ -118,6 +118,8 @@ window.InactivityTimer = ActivityTimer.extend({
             promptMessage: $.i18n.prop("js.notification.inactivityTimer.promptMessage")
         });
 
+        CommonContext.removeNotification=n; //// putting notification as a callback to close the notification when keepalive message received from application navigator
+
         this.logoutAction = function( event ) {
             // Logout the user
             log.debug( "logout due to inactivity" );
@@ -170,6 +172,9 @@ var inactivityTimer = new InactivityTimer({
 
 inactivityTimer.start();
 
+$(document).ready(function(){
+    CommonContext.resetInActivityTimer=inactivityTimer; // putting inactivity timer as a callback to reset when keepalive message received from application navigator
+});
 
 
 // #################################################################################################################
