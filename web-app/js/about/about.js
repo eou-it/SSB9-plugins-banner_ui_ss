@@ -29,7 +29,8 @@
                 general: 'about.banner.tab.general',
                 plugin: 'about.banner.plugins',
                 otherPlugin: 'about.banner.other.plugins',
-                copyright: 'about.banner.copyright'
+                copyright: 'about.banner.copyright',
+                copyrightLegalNotice: 'about.banner.copyrightLegalNotice'
             };
         });
 })();
