@@ -570,6 +570,17 @@ var requestTimeout
         throw new Error(formatterName +" must be a string, function, or falsy value");
     }
 
+    //Removes special characters from the text entered to prevent cross-side scripting
+
+    function removeSpecialCharacter(string) {
+        if (string == null) return null;
+        var flag = /<\s*script\b\s*>[^<]*(?:(?!<\/script>)<[^<]*)*<\/\s*script\s*>/igm.test(string);
+        if(flag == true){
+            return string.toString().replace(/</g, '').replace(/>/g, '').replace(/"/g, '').replace(/'/g, '').replace(/\//g, '');
+        }
+        return string.toString();
+    }
+
     /**
      * Returns a given value
      * If given a function, returns its output
@@ -1820,6 +1831,8 @@ var requestTimeout
                     // create a default choice and prepend it to the list
                     if (this.opts.createSearchChoice && search.val() !== "") {
                         def = this.opts.createSearchChoice.call(self, search.val(), data.results);
+                        def.id = removeSpecialCharacter(def.id);
+                        def.text = removeSpecialCharacter(def.text);
                         if (def !== undefined && def !== null && self.id(def) !== undefined && self.id(def) !== null) {
                             if ($(data.results).filter(
                                 function () {
@@ -1836,6 +1849,7 @@ var requestTimeout
                     }
 
                     results.empty();
+
                     self.opts.populateResults.call(this, results, data.results, {term: search.val(), page: this.resultsPage, context:null});
 
                     if (data.more === true && checkFormatter(opts.formatLoadMore, "formatLoadMore")) {
