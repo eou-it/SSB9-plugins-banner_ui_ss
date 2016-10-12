@@ -19,7 +19,7 @@
             $scope.toggleModal = function() {
                 $scope.modalShown = !$scope.modalShown;
                 $timeout(function () {
-                    angular.element('#xeModalMask').attr('tabindex', 0).focus();
+                    angular.element('#xeModalContainer').attr('tabindex', 0).focus();
                 });
             };
             $scope.aboutApi = {
