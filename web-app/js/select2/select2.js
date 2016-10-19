@@ -575,7 +575,7 @@ var requestTimeout
     function removeSpecialCharacter(string) {
      if (string == null) return null;
         else
-            return string.toString().replace(/</g, '').replace(/>/g, '').replace(/"/g, '').replace(/'/g, '').replace(/\//g, '');
+            return string.toString().replace(/&/g, '').replace(/</g, '').replace(/>/g, '').replace(/"/g, '').replace(/'/g, '').replace(/\//g, '');
 
     }
 
@@ -2632,7 +2632,7 @@ var requestTimeout
                 "<ul class='select2-choices'>",
                 "  <li class='select2-search-field'>",
                 "    <label for='' class='select2-offscreen'></label>",
-                "    <input type='text'  sanitize='false' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input'>",
+                "    <input type='text'  sanitize='true' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input'>",
                 "  </li>",
                 "</ul>",
                 "<div class='select2-drop select2-drop-multi select2-display-none'>",
