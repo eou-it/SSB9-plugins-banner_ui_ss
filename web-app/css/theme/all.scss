@@ -13,22 +13,11 @@
   width: 20em;
 }
 
-#header-main-section-east-part #mepDiv  {
-    border-left-color: 0px; /*!! Removed 1px unneeded line  */
-}
-
-#header-main-section-east-part #signInButton  {
-    border-left: 0px; /*!! Removed 1px unneeded line  */
-}
-
-
-#header-main-section-east-part #userDiv {
-    border-left: 0px; /*!!1px */
-}
-
-
+#header-main-section-east-part #mepDiv,
+#header-main-section-east-part #signInButton,
+#header-main-section-east-part #userDiv,
 #header-main-section-east-part #toolsButton {
-    border-left: 0px; /*!!1px*/
+  border-left: 0px; /*!! Removed 1px unneeded line  */
 }
 
 /* end corrections*/

@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="menuEndPoint" content="${g.createLink(controller: 'selfServiceMenu', action: 'data')}" />
 
-    <r:require modules="themeEditorLTR"/>
     <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         <r:require modules="themeEditorRTL"/>
     </g:if>
