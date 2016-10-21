@@ -570,6 +570,15 @@ var requestTimeout
         throw new Error(formatterName +" must be a string, function, or falsy value");
     }
 
+    //Removes special characters from the text entered to prevent cross-side scripting
+
+    function removeSpecialCharacter(string) {
+     if (string == null) return null;
+        else
+            return string.toString().replace(/&/g, '').replace(/</g, '').replace(/>/g, '').replace(/"/g, '').replace(/'/g, '').replace(/\//g, '');
+
+    }
+
     /**
      * Returns a given value
      * If given a function, returns its output
@@ -1820,6 +1829,11 @@ var requestTimeout
                     // create a default choice and prepend it to the list
                     if (this.opts.createSearchChoice && search.val() !== "") {
                         def = this.opts.createSearchChoice.call(self, search.val(), data.results);
+                        var sanitize = search[0].attributes.sanitize.value;
+                        if (sanitize==='true') {
+                            def.id = removeSpecialCharacter(def.id);
+                            def.text = removeSpecialCharacter(def.text);
+                        }
                         if (def !== undefined && def !== null && self.id(def) !== undefined && self.id(def) !== null) {
                             if ($(data.results).filter(
                                 function () {
@@ -1836,6 +1850,7 @@ var requestTimeout
                     }
 
                     results.empty();
+
                     self.opts.populateResults.call(this, results, data.results, {term: search.val(), page: this.resultsPage, context:null});
 
                     if (data.more === true && checkFormatter(opts.formatLoadMore, "formatLoadMore")) {
@@ -1988,7 +2003,7 @@ var requestTimeout
                 "<div class='select2-drop select2-display-none'>",
                 "   <div class='select2-search'>",
                 "       <label for='' class='select2-offscreen'></label>",
-                "       <input type='text' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input' role='combobox' aria-expanded='true'",
+                "       <input type='text' sanitize='true' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input' role='combobox' aria-expanded='true'",
                 "       aria-autocomplete='list' />",
                 "   </div>",
                 "   <ul class='select2-results' role='listbox'>",
@@ -2617,7 +2632,7 @@ var requestTimeout
                 "<ul class='select2-choices'>",
                 "  <li class='select2-search-field'>",
                 "    <label for='' class='select2-offscreen'></label>",
-                "    <input type='text' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input'>",
+                "    <input type='text'  sanitize='true' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input'>",
                 "  </li>",
                 "</ul>",
                 "<div class='select2-drop select2-drop-multi select2-display-none'>",
