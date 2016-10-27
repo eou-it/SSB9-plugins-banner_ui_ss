@@ -135,12 +135,12 @@ modules = {
     }
 
     'bannerWebLTR' {
-        dependsOn "bannerSelfServiceCommonLTR, extensibilityAngular, angularApp"
+        dependsOn "bannerSelfServiceCommonLTR,angularApp,extensibilityAngular"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
     }
 
     'bannerWebRTL' {
-        dependsOn "bannerSelfServiceCommonRTL, extensibilityAngularRTL, angularApp"
+        dependsOn "bannerSelfServiceCommonRTL,angularApp,extensibilityAngularRTL"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
     }
 
