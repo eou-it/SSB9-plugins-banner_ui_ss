@@ -84,7 +84,8 @@ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
         <div id="spinner" class="spinner spinner-img" style="display:none;">
 
         </div>
-
+    <div id="dialogAppDiv">
+    </div>
         <g:layoutBody />
 
         <r:layoutResources/>
