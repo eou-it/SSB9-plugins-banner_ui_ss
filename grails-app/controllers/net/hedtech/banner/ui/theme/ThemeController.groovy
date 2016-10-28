@@ -44,20 +44,49 @@ class ThemeController {
         }
     }
 
+
+    /*
+        For theme-aware applications
+    */
+    def getCachedCSS() {
+        def themeName = params.name
+        def templateName = params.template
+        def themeUrl = params.themeUrl
+        if ( !templateName ) {
+            templateName = "all"
+        }
+        try {
+            def content = themeUtil.getCSSFromCache(themeName, templateName, themeUrl)
+            render( text:content, contentType: "text/css" )
+
+        } catch (IOException e) {
+            log.warn( "Failed to get theme ${params.name} in ${templateName}. ${e}" )
+        }
+    }
+
+    /*
+        For non-theme-aware applications
+    */
     def getTheme() {
         assert params.name
         def templateName = params.template
-        if ( !templateName || templateName == "" ) {
+        def themeName = params.name
+        if ( !templateName ) {
             templateName = "all"
         }
 
         try {
-            def content = themeUtil.formatTheme( params.name, templateName )
+            def themeJSON = themeUtil.getThemeJson(themeName)
+            def content = themeUtil.formatTheme( templateName, themeJSON)
             render( text:content, contentType: "text/css" )
         } catch ( IOException e ) {
-            log.warn( "Failed to format theme ${params.name} in ${templateName}. ${e}" )
+            log.warn( "Failed to format theme ${themeName} in ${templateName}. ${e}" )
             response.status = 404
             render ""
         }
+    }
+
+    def clearCache()  {
+        themeUtil.clearCache()
     }
 }

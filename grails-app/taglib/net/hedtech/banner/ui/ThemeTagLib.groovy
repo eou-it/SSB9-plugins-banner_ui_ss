@@ -9,7 +9,7 @@ class ThemeTagLib {
             String themeName = session.mep ?: themeConfig.name // future: send mep separately
             String themeTemplate = themeConfig.template
 
-            String text = "<link rel='stylesheet' type='text/css' href='${themeUrl}/getTheme?name=${themeName}&template=${themeTemplate}&mep=${session.mep}'>"
+            String text ="<link rel='stylesheet' type='text/css' href='${createLink(controller:"theme", action: "getCachedCSS",  params: [name: themeName, template: themeTemplate, themeUrl: themeUrl])}'>"
             out << text
         }
     }
