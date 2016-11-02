@@ -2,7 +2,7 @@
 <%@ page import="org.springframework.context.i18n.LocaleContextHolder" %>
 
 <%--
-Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
+Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
 --%>
 <!DOCTYPE html>
 <html lang="${message(code: 'default.language.locale')}">
@@ -19,6 +19,7 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
     </g:else>
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
         <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
+        <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}" />
 
     <meta charset="${message(code: 'default.character.encoding')}"/>
         <meta name="dir" content="${message(code:'default.language.direction')}"/>
@@ -31,16 +32,17 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
         <link rel="apple-touch-icon" href="images/applicationIcon.png" />
     <link rel="apple-touch-startup-image" href="images/applicationStartup.png">
         <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
-    <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
-    <meta name="fullName" content="${g.fullName()}"/>
-    <meta name="loginEndpoint" content="${session.getServletContext().loginEndpoint}"/>
-    <meta name="logoutEndpoint" content="${session.getServletContext().logoutEndpoint}"/>
-    <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
-    <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
-    <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
-    <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
-    <title><g:layoutTitle default="Banner"/></title>
-
+        <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
+        <meta name="fullName" content="${g.fullName()}"/>
+        <meta name="loginEndpoint" content="${session.getServletContext().loginEndpoint}"/>
+        <meta name="logoutEndpoint" content="${session.getServletContext().logoutEndpoint}"/>
+        <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
+        <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
+        <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
+        <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
+        <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
+        <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
+        <title><g:layoutTitle default="Banner"/></title>
         <link rel="shortcut icon" href="${resource(plugin: 'banner-ui-ss', dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 
 
@@ -77,13 +79,12 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 <body>
 <div id="splash"></div>
 <div id="spinner" class="spinner spinner-img" style="display:none;">
-
-</div>
-
-<g:layoutBody/>
+  </div>
 <g:analytics/>
 <r:layoutResources/>
-
+    <div id="dialogAppDiv">
+    </div>
+        <g:layoutBody />
 <g:customJavaScriptIncludes/>
 </body>
 </html>
