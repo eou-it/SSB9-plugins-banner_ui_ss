@@ -11,8 +11,8 @@ class AnalyticsTagLib {
         def ellucianTracker = ""
         def clientTrackerId
         def allowEllucianTracker
-        clientTrackerId = Holders.config.clientTrackerId
-        allowEllucianTracker = Holders.config.allowEllucianTracker
+        clientTrackerId = Holders.config.banner.analytics.trackerId
+        allowEllucianTracker = Holders.config.banner.analytics.allowEllucianTracker
         if (!clientTrackerId && allowEllucianTracker == false) {
             out << ""
         } else {
