@@ -11,6 +11,7 @@ import grails.util.Holders
 import groovy.io.FileType
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import groovy.sql.Sql
 import net.sf.ehcache.Cache
 import net.sf.ehcache.CacheManager
 import net.sf.ehcache.Element
@@ -174,6 +175,13 @@ class ThemeUtil {
         CacheManager manager = CacheManager.getInstance()
         Cache cache = manager.getCache(themeCache)
         cache.removeAll()
+    }
+
+
+    def allowedExtension (type) {
+        List fileExtensions=["json", "scss"]
+        def val = fileExtensions.contains(type);
+        return val;
     }
 
 }

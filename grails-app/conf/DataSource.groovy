@@ -13,9 +13,12 @@ import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsAnnotationConfiguratio
  **********************************************************************************/
 
 dataSource {
-	configClass = GrailsAnnotationConfiguration.class
+	pooled = true
+	driverClassName = "oracle.jdbc.driver.OracleDriver"
 	dialect = "org.hibernate.dialect.Oracle10gDialect"
-	loggingSql = false
+	username = "baninst1"
+	logSql =true
+	password = "u_pick_it"
 }
 
 
@@ -26,7 +29,7 @@ hibernate {
 	hbm2ddl.auto = null
 	show_sql = false
 	dialect = "org.hibernate.dialect.Oracle10gDialect"
-	config.location = ["classpath:hibernate-banner-core.cfg.xml"]
+	config.location = ["classpath:hibernate-banner-core.cfg.xml","classpath:hibernate-banner-theme.cfg.xml"]
 }
 
 
@@ -34,6 +37,8 @@ hibernate {
 environments {
 	development {
 		dataSource {
+			dbCreate = "create-drop'" // one of 'create', 'create-drop','update'
+			url = "jdbc:oracle:thin:@localhost:1521:BAN83"
 		}
 	}
 	test {

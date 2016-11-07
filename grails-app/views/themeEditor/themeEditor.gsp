@@ -563,6 +563,15 @@ dev[ng-model="theme"] {
 
           <p></p>
 
+        <div xe-section="theme-upload">
+            <font id="uploadMsg" style="visibility: hidden" color="red"> Upload file should be either JSON/SCSS format.</font>
+
+            <input id="file" type="file" id="file" style="width:100%" ng-files="getTheFiles($files)"><br/>
+            <button class="primary" ng-click="uploadFiles()" value="Upload""><g:message code="theme.upload"/></button>
+        </div>
+
+            <p></p>
+
           <h3 xe-for="themes"><g:message code="theme.savedThemes"/></h3>
           <ul xe-field="themes">
             <li style="margin:.2em 0" ng-repeat="theme in themes | orderBy: 'theme'">
