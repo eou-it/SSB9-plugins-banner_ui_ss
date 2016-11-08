@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator
 import javax.persistence.Table
 import javax.persistence.Temporal
 import javax.persistence.TemporalType
+import java.sql.Clob
 
 @Entity
 @Table(name = "GUROCFG", schema = "baninst1")
@@ -28,7 +29,8 @@ class ThemeUpload implements  Serializable{
     Long id;
 
     @Column(name="GUROCFG_Config_Value")
-    byte[] file;
+    @Lob
+    Clob file;
 
     @Column(name="CONFIG_NAME")
     String configName;
@@ -96,9 +98,9 @@ class ThemeUpload implements  Serializable{
         result = 31 * result + (configType != null ? configType.hashCode() : 0)
         return result
     }
-    static mapping = {
+    /*static mapping = {
         file type: org.hibernate.type.MaterializedBlobType
-    }
+    }*/
 
     static constraints = {
         file(maxSize: 20 * 1024 * 1024) // 20 MBs

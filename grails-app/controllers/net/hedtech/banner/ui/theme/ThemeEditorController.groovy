@@ -13,9 +13,11 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import net.hedtech.theme.ThemeUpload
+import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 import javax.management.Query
 import java.io.File
+import java.sql.Clob
 import java.util.TreeMap
 
 import org.apache.log4j.Logger
@@ -51,12 +53,14 @@ class ThemeEditorController {
 
         def reqFile = request.getFile("file")
         def name = reqFile.getOriginalFilename()
-        byte[] bFile = reqFile.getBytes()
+        String clobData;
+        //CommonsMultipartFile testFile = request.getFile('file')
+        InputStream inputStream = reqFile.getInputStream()
+        clobData = inputStream?.getText()
         def type = name?.substring(name?.lastIndexOf(".") + 1);
         def val = themeUtil.allowedExtension(type)
         if(val) {
-            //themeUtil.uploadTheme(file, datasource);
-            def uploadservice = themeUploadService .saveTheme(name,bFile, type)
+            def uploadservice = themeUploadService .saveTheme(name,clobData, type)
             errMsg = false;
         }else{
             errMsg = true;
