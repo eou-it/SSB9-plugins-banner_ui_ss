@@ -296,6 +296,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                    if(d && d!='false'){
                         dispMsg.style.visibility='visible';
                     }else {
+                       alert("Upload Successful")
                         dispMsg.style.visibility='hidden';
                     }
                 })
