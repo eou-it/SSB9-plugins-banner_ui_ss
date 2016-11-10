@@ -23,7 +23,7 @@ there is no concept of an 'entity manager' within this project.
 
 <hibernate-configuration>
     <session-factory>
-        <mapping class="net.hedtech.theme.ThemeUpload"/>
+        <mapping class="net.hedtech.theme.Configuration"/>
 
     </session-factory>
 </hibernate-configuration>

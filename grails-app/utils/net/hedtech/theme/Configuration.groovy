@@ -1,28 +1,16 @@
 package net.hedtech.theme
 
-import org.hibernate.annotations.Type
-
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.Lob
-import javax.persistence.PrePersist
-import javax.persistence.SequenceGenerator
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import javax.persistence.*
 import java.sql.Clob
 
 @Entity
 @Table(name = "GUROCFG", schema = "baninst1")
-class ThemeUpload implements  Serializable{
+class Configuration implements  Serializable{
 
 
     @Id
-    @Column(name="GUROCFG_Config_ID")
-    @SequenceGenerator(name = "GUROCFG_SEQ_GEN", sequenceName = "baninst1.GUROCFG_CONFIG_ID_SEQ" ,
+    @Column(name="GUROCFG_SURROGATE_ID")
+    @SequenceGenerator(name = "GUROCFG_SEQ_GEN", sequenceName = "baninst1.GUROCFG_SURROGATE_ID_SEQ" ,
             allocationSize = 1, initialValue = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GUROCFG_SEQ_GEN")
     //@GeneratedValue (strategy =GenerationType.AUTO)
@@ -35,12 +23,8 @@ class ThemeUpload implements  Serializable{
     @Column(name="CONFIG_NAME")
     String configName;
 
-    @Column(name="GUROCFG_GUBAPPL_APP_ID")
-    String appId
-
-
-    @Column(name="GUROCFG_SURROGATE_ID")
-    Long surrogateId
+    @Column(name="GUROCFG_CONFIG_ID")
+    String configId
 
     @Column(name="GUROCFG_VERSION")
     Long version
@@ -66,16 +50,15 @@ class ThemeUpload implements  Serializable{
         if (this.is(o)) return true
         if (getClass() != o.class) return false
 
-        ThemeUpload that = (ThemeUpload) o
+        Configuration that = (Configuration) o
 
         if (activityDate != that.activityDate) return false
-        if (appId != that.appId) return false
+        if (configId != that.configId) return false
         if (configName != that.configName) return false
         if (configType != that.configType) return false
         if (dataOrigin != that.dataOrigin) return false
-        if (!Arrays.equals(file, that.file)) return false
+        if (file != that.file) return false
         if (id != that.id) return false
-        if (surrogateId != that.surrogateId) return false
         if (userId != that.userId) return false
         if (version != that.version) return false
         if (vpdiCode != that.vpdiCode) return false
@@ -86,10 +69,9 @@ class ThemeUpload implements  Serializable{
     int hashCode() {
         int result
         result = id.hashCode()
-        result = 31 * result + (file != null ? Arrays.hashCode(file) : 0)
+        result = 31 * result + (file != null ? file.hashCode() : 0)
         result = 31 * result + (configName != null ? configName.hashCode() : 0)
-        result = 31 * result + appId.hashCode()
-        result = 31 * result + (surrogateId != null ? surrogateId.hashCode() : 0)
+        result = 31 * result + (configId != null ? configId.hashCode() : 0)
         result = 31 * result + (version != null ? version.hashCode() : 0)
         result = 31 * result + (userId != null ? userId.hashCode() : 0)
         result = 31 * result + (dataOrigin != null ? dataOrigin.hashCode() : 0)
@@ -98,10 +80,6 @@ class ThemeUpload implements  Serializable{
         result = 31 * result + (configType != null ? configType.hashCode() : 0)
         return result
     }
-    /*static mapping = {
-        file type: org.hibernate.type.MaterializedBlobType
-    }*/
-
     static constraints = {
         file(maxSize: 20 * 1024 * 1024) // 20 MBs
 

@@ -13,12 +13,9 @@ import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsAnnotationConfiguratio
  **********************************************************************************/
 
 dataSource {
-	pooled = true
-	driverClassName = "oracle.jdbc.driver.OracleDriver"
+	configClass = GrailsAnnotationConfiguration.class
 	dialect = "org.hibernate.dialect.Oracle10gDialect"
-	username = "baninst1"
-	logSql =true
-	password = "u_pick_it"
+	loggingSql = false
 }
 
 
@@ -37,8 +34,6 @@ hibernate {
 environments {
 	development {
 		dataSource {
-			dbCreate = "create-drop'" // one of 'create', 'create-drop','update'
-			url = "jdbc:oracle:thin:@localhost:1521:BAN83"
 		}
 	}
 	test {
