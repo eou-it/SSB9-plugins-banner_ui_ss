@@ -9,7 +9,7 @@ import org.apache.log4j.Logger
 class ThemeEditorController {
     def themeUtil = new ThemeUtil()
     private static final Logger log = Logger.getLogger( this.getClass() )
-    def configurationService
+    def themeUploadService
     //def dataSource
 
 
@@ -31,18 +31,17 @@ class ThemeEditorController {
     }
 
     def upload() {
-        boolean errMsg = false;
-
+        boolean errMsg = false
+        List fileExtensions=["json", "scss"]
         def reqFile = request.getFile("file")
         def name = reqFile.getOriginalFilename()
         String clobData;
-        //CommonsMultipartFile testFile = request.getFile('file')
         InputStream inputStream = reqFile.getInputStream()
         clobData = inputStream?.getText()
-        def type = name?.substring(name?.lastIndexOf(".") + 1);
-        def val = themeUtil.allowedExtension(type)
+        def type = name?.substring(name?.lastIndexOf(".") + 1)
+        def val = fileExtensions.contains(type)
         if(val) {
-            def uploadservice = configurationService.saveTheme(name,clobData, type)
+            def uploadservice = themeUploadService.saveTheme(name,clobData, type)
             errMsg = false;
         }else{
             errMsg = true;

@@ -278,7 +278,6 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
         var formdata = new FormData();
         $scope.uploadFiles = function() {
             var dispMsg = document.getElementById("uploadMsg");
-            dispMsg.style.visibility='hidden';
             console.log("upload file:", $scope);
             var data = formdata;
             var request = {
@@ -294,13 +293,24 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             $http(request)
                 .success(function (d) {
                    if(d && d!='false'){
-                        dispMsg.style.visibility='visible';
+                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.type") , type: "Error", id: $("#file")});
+                       errorNotification.set({
+                           flash: true
+                       });
+                       notifications.addNotification(errorNotification);
                     }else {
-                       alert("Upload Successful")
-                        dispMsg.style.visibility='hidden';
-                    }
+                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.success") , type: "Warning", id: $("#file")});
+                       errorNotification.set({
+                           flash: true
+                       });
+                       notifications.addNotification(errorNotification);}
                 })
                 .error(function () {
+                    var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.error") , type: "Error", id: $("#file")});
+                    errorNotification.set({
+                        flash: true
+                    });
+                    notifications.addNotification(errorNotification);
                 });
 
         }

@@ -4,22 +4,15 @@
 
 package net.hedtech.banner.ui.theme
 
-
 import grails.converters.JSON
 import grails.util.Holders
-
 import groovy.io.FileType
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-import groovy.sql.Sql
 import net.sf.ehcache.Cache
 import net.sf.ehcache.CacheManager
 import net.sf.ehcache.Element
 import net.sf.ehcache.config.CacheConfiguration
-
-import java.io.File
-import java.util.TreeMap
-
 import org.apache.log4j.Logger
 
 /**
@@ -175,13 +168,6 @@ class ThemeUtil {
         CacheManager manager = CacheManager.getInstance()
         Cache cache = manager.getCache(themeCache)
         cache.removeAll()
-    }
-
-
-    def allowedExtension (type) {
-        List fileExtensions=["json", "scss"]
-        def val = fileExtensions.contains(type);
-        return val;
     }
 
 }
