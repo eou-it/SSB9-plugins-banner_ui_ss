@@ -12,7 +12,7 @@ class Configuration implements  Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GUROCFG_SEQ_GEN")
     Long id;
 
-    @Column(name="CONFIG_NAME", nullable = false, length = 50)
+    @Column(name="GUROCFG_CONFIG_NAME", nullable = false, length = 50)
     String configName;
 
     @Column(name="GUROCFG_CONFIG_TYPE", nullable = false, length = 30)
@@ -20,7 +20,7 @@ class Configuration implements  Serializable{
 
     @Column(name="GUROCFG_CONFIG_VALUE", nullable = true)
     @Lob
-    String file;
+    String value;
 
     @Version
     @Column(name="GUROCFG_VERSION" , nullable = false, precision = 19)
@@ -46,7 +46,7 @@ class Configuration implements  Serializable{
         if (configName != that.configName) return false
         if (configType != that.configType) return false
         if (dataOrigin != that.dataOrigin) return false
-        //if (file != that.file) return false
+        if (value != that.value) return false
         if (id != that.id) return false
         if (lastModifiedBy != that.lastModifiedBy) return false
         if (version != that.version) return false
@@ -57,7 +57,7 @@ class Configuration implements  Serializable{
     int hashCode() {
         int result
         result = (id!=null ? id.hashCode():1)
-        //result = 31 * result + (file != null ? file.hashCode() : 0)
+        result = 31 * result + (value != null ? value.hashCode() : 0)
         result = 31 * result + (configName != null ? configName.hashCode() : 0)
         result = 31 * result + (version != null ? version.hashCode() : 0)
         result = 31 * result + (lastModifiedBy != null ? lastModifiedBy.hashCode() : 0)
@@ -71,7 +71,7 @@ class Configuration implements  Serializable{
     public String toString() {
         return "Configuration{" +
                 "id=" + id +
-                //", file=" + file +
+                ", value=" + value +
                 ", configName='" + configName + '\'' +
                 ", version=" + version +
                 ", lastModifiedBy='" + lastModifiedBy + '\'' +
@@ -81,13 +81,4 @@ class Configuration implements  Serializable{
                 '}';
     }
 
-//Remove for now
-//    static constraints = {
-//        dataOrigin(nullable: true)
-//        configType(nullable: false)
-//        configName(nullable: false)
-//        file(nullable: true)
-//        lastModifiedBy(nullable: true)
-//        lastModified(nullable: false)
-//    }
 }
