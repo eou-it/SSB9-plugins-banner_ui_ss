@@ -88,5 +88,6 @@ class ThemeController {
 
     def clearCache()  {
         themeUtil.clearCache()
+        render ""
     }
 }
