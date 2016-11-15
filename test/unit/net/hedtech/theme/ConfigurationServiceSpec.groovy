@@ -1,6 +1,7 @@
 package net.hedtech.theme
 
 import grails.test.mixin.TestFor
+import net.hedtech.banner.general.ConfigurationService
 import spock.lang.Specification
 
 /**
@@ -10,11 +11,11 @@ import spock.lang.Specification
 class ConfigurationServiceSpec extends Specification {
 
     def setup() {
-    }
+   }
 
     def cleanup() {
     }
 
     void "test something"() {
-    }
-}
+   }
+   }

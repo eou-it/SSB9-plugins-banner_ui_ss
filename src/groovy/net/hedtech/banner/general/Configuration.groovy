@@ -12,13 +12,13 @@ class Configuration implements  Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GUROCFG_SEQ_GEN")
     Long id;
 
-    @Column(name="GUROCFG_CONFIG_NAME", nullable = false, length = 50)
-    String configName;
+    @Column(name="GUROCFG_NAME", nullable = false, length = 50)
+    String name;
 
-    @Column(name="GUROCFG_CONFIG_TYPE", nullable = false, length = 30)
-    String configType
+    @Column(name="GUROCFG_TYPE", nullable = false, length = 30)
+    String type
 
-    @Column(name="GUROCFG_CONFIG_VALUE", nullable = true)
+    @Column(name="GUROCFG_VALUE", nullable = true)
     @Lob
     String value;
 
@@ -42,13 +42,13 @@ class Configuration implements  Serializable{
 
         Configuration that = (Configuration) o
 
-        if (lastModified != that.lastModified) return false
-        if (configName != that.configName) return false
-        if (configType != that.configType) return false
         if (dataOrigin != that.dataOrigin) return false
-        if (value != that.value) return false
         if (id != that.id) return false
+        if (lastModified != that.lastModified) return false
         if (lastModifiedBy != that.lastModifiedBy) return false
+        if (name != that.name) return false
+        if (type != that.type) return false
+        if (value != that.value) return false
         if (version != that.version) return false
 
         return true
@@ -56,29 +56,29 @@ class Configuration implements  Serializable{
 
     int hashCode() {
         int result
-        result = (id!=null ? id.hashCode():1)
+        result = (id != null ? id.hashCode() : 0)
+        result = 31 * result + (name != null ? name.hashCode() : 0)
+        result = 31 * result + (type != null ? type.hashCode() : 0)
         result = 31 * result + (value != null ? value.hashCode() : 0)
-        result = 31 * result + (configName != null ? configName.hashCode() : 0)
         result = 31 * result + (version != null ? version.hashCode() : 0)
         result = 31 * result + (lastModifiedBy != null ? lastModifiedBy.hashCode() : 0)
         result = 31 * result + (dataOrigin != null ? dataOrigin.hashCode() : 0)
-        result = 31 * result + lastModified.hashCode()
-        result = 31 * result + (configType != null ? configType.hashCode() : 0)
+        result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0)
         return result
     }
+
 
     @Override
     public String toString() {
         return "Configuration{" +
                 "id=" + id +
-                ", value=" + value +
-                ", configName='" + configName + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", value='" + value + '\'' +
                 ", version=" + version +
                 ", lastModifiedBy='" + lastModifiedBy + '\'' +
                 ", dataOrigin='" + dataOrigin + '\'' +
                 ", lastModified=" + lastModified +
-                ", configType='" + configType + '\'' +
                 '}';
     }
-
 }

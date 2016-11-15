@@ -9,14 +9,14 @@ class ThemeUploadService
     def configurationService
 
     Configuration saveTheme (String fileName, def clobData, String type){
-        def theme  = Configuration.findByConfigNameAndConfigType(fileName,type)
+        def theme  = Configuration.findByNameAndType(fileName,type)
         if (theme) {
             //if (theme.file != clobData) {
                 theme.value = clobData
             //}
             theme = configurationService.update(theme)
         } else {
-            theme = configurationService.create([configName: fileName, configType: type, value: clobData])
+            theme = configurationService.create([name: fileName, type: type, value: clobData])
         }
         println "Saved theme $theme"
         theme
