@@ -14,4 +14,16 @@ eventCompileEnd = {
     Class RtlCssGenerator = classLoader.loadClass("net.hedtech.banner.common.RtlCssGenerator", true)
     def rtlCssGenerator = RtlCssGenerator.newInstance()
     rtlCssGenerator.generateRTLCss(true);
+
+    Class ThemeScssGenerator = classLoader.loadClass("net.hedtech.banner.common.ThemeScssGenerator", true)
+    def themeScssGenerator = ThemeScssGenerator.newInstance()
+    def scssFilePath = "${basedir}/web-app/css/theme/"
+    def scssFileName = grails.util.Metadata.current.'app.name'+".scss"
+    def scssFile = scssFilePath+scssFileName
+    try {
+        themeScssGenerator.generateThemeSCSSFile(scssFile);
+    } catch (FileNotFoundException e) {
+        println "Unable to generate theme SCSS file - unexpected exception"
+        e.printStackTrace()
+    }
 }
