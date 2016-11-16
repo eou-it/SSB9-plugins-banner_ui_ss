@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "GUROCFG")
-class Configuration implements  Serializable{
+class ConfigurationData implements  Serializable{
 
     @Id
     @Column(name="GUROCFG_SURROGATE_ID")
@@ -40,7 +40,7 @@ class Configuration implements  Serializable{
         if (this.is(o)) return true
         if (getClass() != o.class) return false
 
-        Configuration that = (Configuration) o
+        ConfigurationData that = (ConfigurationData) o
 
         if (dataOrigin != that.dataOrigin) return false
         if (id != that.id) return false
@@ -70,7 +70,7 @@ class Configuration implements  Serializable{
 
     @Override
     public String toString() {
-        return "Configuration{" +
+        return "ConfigurationData{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
