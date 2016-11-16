@@ -3,12 +3,12 @@ package net.hedtech.banner.general
 import javax.persistence.*
 
 @Entity
-@Table(name = "GUROCFG", schema = "bansecr")
-class ConfigurationData implements  Serializable{
+@Table(name = "GUROCFG")
+class Configuration implements  Serializable{
 
     @Id
     @Column(name="GUROCFG_SURROGATE_ID")
-    @SequenceGenerator(name = "GUROCFG_SEQ_GEN", sequenceName = "bansecr.GUROCFG_SURROGATE_ID_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "GUROCFG_SEQ_GEN", sequenceName = "GUROCFG_SURROGATE_ID_SEQUENCE", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GUROCFG_SEQ_GEN")
     Long id;
 
@@ -40,7 +40,7 @@ class ConfigurationData implements  Serializable{
         if (this.is(o)) return true
         if (getClass() != o.class) return false
 
-        ConfigurationData that = (ConfigurationData) o
+        Configuration that = (Configuration) o
 
         if (dataOrigin != that.dataOrigin) return false
         if (id != that.id) return false
@@ -70,7 +70,7 @@ class ConfigurationData implements  Serializable{
 
     @Override
     public String toString() {
-        return "ConfigurationData{" +
+        return "Configuration{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
