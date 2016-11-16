@@ -4,14 +4,15 @@
 
 package net.hedtech.banner.ui.theme
 
+import groovy.json.JsonOutput
+import org.apache.commons.io.FilenameUtils
 import org.apache.log4j.Logger
 
 class ThemeEditorController {
     def themeUtil = new ThemeUtil()
     private static final Logger log = Logger.getLogger( this.getClass() )
-    def themeUploadService
-    //def dataSource
-
+    def static fileExtensions=["json", "scss"]
+    def themeService
 
     def index() {
         render( view: "themeEditor", model: { themes: themeUtil.getThemes()} )
@@ -20,28 +21,29 @@ class ThemeEditorController {
     def save() {
         def data = request.JSON
         assert data.name, "Must include name of theme"
+        def name = themeUtil.fileName(data.name)
+        def json = JsonOutput.toJson(data)
+        def type = fileExtensions[0]
+        themeService.saveTheme(name, json, type)
 
-        themeUtil.saveTheme( data.name, data )
         render "OK"
     }
 
     def delete() {
         assert params.name
-        render themeUtil.deleteTheme( params.name )
+        render themeService.deleteTheme( themeUtil.fileName( params.name ) )
     }
 
     def upload() {
         boolean errMsg = false
-        List fileExtensions=["json", "scss"]
-        def reqFile = request.getFile("file")
-        def name = reqFile.getOriginalFilename()
-        String clobData;
-        InputStream inputStream = reqFile.getInputStream()
+        String clobData
+        def file = request.getFile("file")
+        def fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
+        InputStream inputStream = file.getInputStream()
         clobData = inputStream?.getText()
-        def type = name?.substring(name?.lastIndexOf(".") + 1)
-        def val = fileExtensions.contains(type)
-        if(val) {
-            def uploadservice = themeUploadService.saveTheme(name,clobData, type)
+        String type = FilenameUtils.getExtension(file.getOriginalFilename())
+        if(fileExtensions.contains(type)) {
+            themeService.saveTheme(fileName, clobData, type)
             errMsg = false;
         }else{
             errMsg = true;

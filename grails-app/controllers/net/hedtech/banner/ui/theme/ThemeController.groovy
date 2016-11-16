@@ -15,27 +15,41 @@ import org.apache.log4j.Logger
 
 class ThemeController {
     def themeUtil = new ThemeUtil()
+    def themeService
     private static final Logger log = Logger.getLogger( this.getClass() )
 
     def index() {
-        //response.status = 404
        render "index"
     }
 
     def list() {
-        render( themeUtil.getThemes() as JSON )
+        def themes = themeService.listThemes([sort: "name", order: "asc"]).name as JSON
+        render themes
     }
 
-    def save() {
-        def data = request.JSON
-        themeUtil.saveTheme( data )
+    def templateList() {
+        def templates = themeService.listThemes([sort: "name", order: "desc"])
+        render themeUtil.formatTemplateNames(templates.name) as JSON
     }
 
     def get() {
         assert params.name
         try {
-            def json = themeUtil.getThemeJson( params.name )
+            def json = themeService.getThemeJSON( themeUtil.fileName(params.name) )
             response.contentType = 'application/json'
+            render JsonOutput.toJson( json )
+        } catch ( IOException e ) {
+            log.warn( "Failed to load theme ${params.name} ${e}" )
+            response.status = 404
+            render ""
+        }
+    }
+
+    def getTemplate() {
+        assert params.name
+        try {
+            def json = themeService.getThemeCSS( themeUtil.fileName(params.name) )
+            response.contentType = 'text/css'
             render JsonOutput.toJson( json )
         } catch ( IOException e ) {
             log.warn( "Failed to load theme ${params.name} ${e}" )
@@ -76,7 +90,7 @@ class ThemeController {
         }
 
         try {
-            def themeJSON = themeUtil.getThemeJson(themeName)
+            def themeJSON = themeService.getThemeJSON(themeName)
             def content = themeUtil.formatTheme( templateName, themeJSON)
             render( text:content, contentType: "text/css" )
         } catch ( IOException e ) {
