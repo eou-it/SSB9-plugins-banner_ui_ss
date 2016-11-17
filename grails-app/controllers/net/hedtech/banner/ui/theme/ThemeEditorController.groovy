@@ -21,7 +21,7 @@ class ThemeEditorController {
     def save() {
         def data = request.JSON
         assert data.name, "Must include name of theme"
-        def name = themeUtil.fileName(data.name)
+        def name = data.name
         def json = JsonOutput.toJson(data)
         def type = fileExtensions[0]
         themeService.saveTheme(name, json, type)

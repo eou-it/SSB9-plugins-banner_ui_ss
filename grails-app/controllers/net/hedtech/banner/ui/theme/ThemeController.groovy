@@ -9,7 +9,7 @@ import grails.converters.JSON
 import grails.util.Holders
 
 import groovy.json.JsonOutput
-import java.io.IOException
+import net.hedtech.banner.exceptions.ApplicationException
 
 import org.apache.log4j.Logger
 
@@ -52,7 +52,7 @@ class ThemeController {
             def scss = themeService.getTemplateSCSS(params.name)
             response.contentType = 'text/css'
             render scss
-        } catch ( IOException e ) {
+        } catch ( ApplicationException ae ) {
             log.warn( "Failed to load theme ${params.name} ${e}" )
             response.status = 404
             render ""
@@ -78,8 +78,8 @@ class ThemeController {
                 content = themeService.getCSS(templateName, themeName)
             }
             render( text:content, contentType: "text/css" )
-        } catch ( IOException e ) {
-            log.warn( "Failed to format theme ${themeName} in ${templateName}. ${e}" )
+        } catch ( ApplicationException ae ) {
+            log.warn( "Failed to format theme ${themeName} in ${templateName}. ${ae}" )
             response.status = 404
             render ""
         }

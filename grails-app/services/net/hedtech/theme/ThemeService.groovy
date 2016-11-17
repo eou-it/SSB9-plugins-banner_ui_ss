@@ -6,13 +6,11 @@ package net.hedtech.theme
 
 import grails.converters.JSON
 import net.hedtech.banner.general.ConfigurationData
-import net.hedtech.banner.ui.theme.ThemeUtil
 import org.apache.log4j.Logger
 
 
 class ThemeService {
     def configurationDataService
-    def themeUtil = new ThemeUtil()
     def static final types = [theme:'json', template:'scss']
     private static final Logger log = Logger.getLogger( this.getClass() )
 

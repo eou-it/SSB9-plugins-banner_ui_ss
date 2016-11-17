@@ -1,3 +1,6 @@
+/*******************************************************************************
+ Copyright 2016 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 package net.hedtech.theme
 
 import grails.test.mixin.TestFor
@@ -6,9 +9,6 @@ import net.hedtech.banner.general.ConfigurationDataService
 import net.sf.json.JSONObject
 import spock.lang.Specification
 
-/**
- * Created by gurunathdk on 11/15/2016.
- */
 @TestFor(ThemeService)
 class ThemeServiceSpec extends Specification {
     static loadExternalBeans = true
