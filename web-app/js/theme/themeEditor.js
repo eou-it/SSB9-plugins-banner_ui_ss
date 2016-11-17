@@ -13,6 +13,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
         var themePath = 'theme',
             themeEditorPath = 'themeEditor',
             themes = [],
+            templates = [],
             variables = {
                 'name': 'string',
                 'color1': 'color',
@@ -197,13 +198,18 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             return '&reload=' + new Date().getTime();
         }
 
-        $scope.loadTheme = function( name ) {
+        $scope.loadTheme = function( name, template ) {
             console.log( 'loadTheme ' + name );
-
+            var templateParam
+            if(!template) {
+                templateParam = ''
+            } else {
+                templateParam = '&template=' + template
+            }
             var newLink = document.createElement( 'link' );
             newLink.rel = 'stylesheet';
             newLink.type = 'text/css';
-            newLink.href = themePath + '/getTheme?name=' + name + autoReload();
+            newLink.href = themePath + '/getTheme?name=' + name + templateParam +  autoReload();
 
             document.getElementsByTagName("head")[0].appendChild( newLink );
 
@@ -245,6 +251,15 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             });
         }
 
+        $scope.getTemplates = function() {
+            $http.get(themePath + '/listTemplates').success( function(response) {
+                $scope.templates = response;
+                console.log( 'templates: ', $scope.templates, $scope );
+            }).error( function(response) {
+                console.log( 'Unable to load existing templates', response.status );
+            });
+        }
+
         $scope.saveTheme = function() {
             console.log("saveTheme:", $scope);
             var data = getData($scope);
@@ -254,7 +269,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 .success( function() {
                     console.log("success");
                     $scope.getThemes();
-                    $scope.loadTheme($scope.name, data);
+                    $scope.loadTheme($scope.name);
                 })
                 .error( function(response) {
                     console.log( response );
@@ -265,7 +280,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
         $scope.deleteTheme = function( name ) {
             console.log("deleteTheme:", name);
             //!! TODO: RESTFUL
-            return $http.post( themeEditorPath + "/delete?name=" + name )
+            return $http.post( themeEditorPath + "/deleteTheme?name=" + name )
                 .success( function() {
                     console.log("delete success");
                     $scope.getThemes();
@@ -275,6 +290,21 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                     console.log( "failed to delete theme: ", response.status );
                 });
         }
+
+        $scope.deleteTemplate = function( name ) {
+            console.log("deleteTemplate:", name);
+            //!! TODO: RESTFUL
+            return $http.post( themeEditorPath + "/deleteTemplate?name=" + name )
+                .success( function() {
+                    console.log("delete success");
+                    $scope.getTemplates();
+                })
+                .error( function(response) {
+                    console.log( response );
+                    console.log( "failed to delete template: ", response.status );
+                });
+        }
+
         var formdata = new FormData();
         $scope.uploadFiles = function() {
             var dispMsg = document.getElementById("uploadMsg");
@@ -303,7 +333,11 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                        errorNotification.set({
                            flash: true
                        });
-                       notifications.addNotification(errorNotification);}
+                       notifications.addNotification(errorNotification);
+
+                       $scope.getThemes();
+                       $scope.getTemplates();
+                    }
                 })
                 .error(function () {
                     var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.error") , type: "Error", id: $("#file")});
@@ -312,7 +346,6 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                     });
                     notifications.addNotification(errorNotification);
                 });
-
         }
 
         $scope.getTheFiles = function ($files) {
@@ -325,6 +358,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
         init();
 
         $scope.getThemes();
+        $scope.getTemplates();
     };
 
 

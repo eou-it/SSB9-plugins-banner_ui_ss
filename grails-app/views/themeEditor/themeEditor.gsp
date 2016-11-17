@@ -589,6 +589,18 @@ dev[ng-model="theme"] {
                 </span>
             </li>
           </ul>
+
+            <h3 xe-for="themes"><g:message code="theme.savedTemplates"/></h3>
+            <ul xe-field="themes">
+                <li style="margin:.2em 0" ng-repeat="template in templates | orderBy: 'template'">
+                    <span class="w20">{{template}}</span>
+                    <button class="secondary" ng-click="loadTheme('THEME_EDITOR_LOAD_TEMPLATE', template)"><g:message code="theme.applyTheme" args="['']" notargs="['{{template}}']"/></button>
+                    <button class="tertiary" ng-click="deleteTemplate(template)"><g:message code="theme.deleteTheme" args="['']"/></button>
+                    <span class="w10">
+                        <a href="theme/getTemplate?name={{template}}" class="center"><g:message code="template.scss"/></a>
+                    </span>
+                </li>
+            </ul>
         </div>
     </section>
   </div>

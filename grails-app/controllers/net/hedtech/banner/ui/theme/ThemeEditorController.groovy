@@ -29,9 +29,14 @@ class ThemeEditorController {
         render "OK"
     }
 
-    def delete() {
+    def deleteTheme() {
         assert params.name
-        render themeService.deleteTheme( themeUtil.fileName( params.name ) )
+        render themeService.deleteTheme( params.name)
+    }
+
+    def deleteTemplate() {
+        assert params.name
+        render themeService.deleteTemplate( params.name )
     }
 
     def upload() {
