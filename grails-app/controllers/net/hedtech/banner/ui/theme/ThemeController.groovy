@@ -53,7 +53,7 @@ class ThemeController {
             response.contentType = 'text/css'
             render scss
         } catch ( ApplicationException ae ) {
-            log.warn( "Failed to load theme ${params.name} ${ae}" )
+            log.error "Failed to load theme ${params.name} ${ae}"
             response.status = 404
             render ""
         }
@@ -79,7 +79,7 @@ class ThemeController {
             }
             render( text:content, contentType: "text/css" )
         } catch ( ApplicationException ae ) {
-            log.warn( "Failed to format theme ${themeName} in ${templateName}. ${ae}" )
+            log.error "Failed to format theme ${themeName} in ${templateName}. ${ae}"
             response.status = 404
             render ""
         }
