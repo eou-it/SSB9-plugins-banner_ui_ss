@@ -307,9 +307,6 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 })
                 .error(function () {
                     var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.error") , type: "Error", id: $("#file")});
-                    errorNotification.set({
-                        flash: true
-                    });
                     notifications.addNotification(errorNotification);
                 });
 
