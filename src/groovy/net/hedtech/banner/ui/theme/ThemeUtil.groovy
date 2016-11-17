@@ -4,10 +4,8 @@
 
 package net.hedtech.banner.ui.theme
 
-
 import grails.converters.JSON
 import grails.util.Holders
-
 import groovy.io.FileType
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -15,10 +13,6 @@ import net.sf.ehcache.Cache
 import net.sf.ehcache.CacheManager
 import net.sf.ehcache.Element
 import net.sf.ehcache.config.CacheConfiguration
-
-import java.io.File
-import java.util.TreeMap
-
 import org.apache.log4j.Logger
 
 /**
@@ -34,48 +28,14 @@ class ThemeUtil {
         new File( themesPath ).mkdirs()
     }
 
-    def getThemes() {
-        def dir = new File( themesPath )
-        def names = []
-        dir.eachFileRecurse( FileType.FILES ) { file ->
-            if ( file.getName().endsWith( '.json' )) {
-                def name = file.getName().replaceAll( /^theme\./, '' ).replaceAll( /\.json$/, '' )
-                names << name
-            }
-        }
-        return names
-    }
-
     def sanitizeName( name ) {
         return name.toLowerCase().replaceAll(/[.*\/\\]/, '_')
     }
 
     def fileName( name ) {
-        return "theme.${sanitizeName( name )}.json"
+        return "${sanitizeName( name )}"
     }
 
-    def saveTheme(name, data) {
-        assert themesPath
-
-        def file = new File( themesPath, fileName( name ))
-        log.debug "Saving ${file}"
-        file.withWriter( 'utf-8' ) {
-            file.write( JsonOutput.toJson( data ))
-        }
-        log.debug "Saved ${file} ${data}"
-    }
-
-    def getThemeJson( name ) {
-        def file = new File( themesPath, fileName( name ))
-        def text = file.getText( 'utf-8' )
-        def json = new JsonSlurper().parseText( text ) // parse to validate it's JSON
-        return json
-    }
-
-    def deleteTheme( name ) {
-        def file = new File( themesPath, fileName( name ))
-        return file.delete();
-    }
 
     def formatTheme(templateName, themeJSON) throws IOException {
         def sorted = new TreeMap( { a,b ->

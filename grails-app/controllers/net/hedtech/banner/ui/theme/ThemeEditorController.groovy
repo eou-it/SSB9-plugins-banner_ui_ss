@@ -4,25 +4,15 @@
 
 package net.hedtech.banner.ui.theme
 
-
-import grails.converters.JSON
-import grails.util.Holders
-
-import groovy.io.FileType
 import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
-
-import java.io.File
-import java.util.TreeMap
-
+import org.apache.commons.io.FilenameUtils
 import org.apache.log4j.Logger
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 
 class ThemeEditorController {
     def themeUtil = new ThemeUtil()
     private static final Logger log = Logger.getLogger( this.getClass() )
-
+    def static fileExtensions=["json", "scss"]
+    def themeService
 
     def index() {
         render( view: "themeEditor", model: { themes: themeUtil.getThemes()} )
@@ -31,13 +21,33 @@ class ThemeEditorController {
     def save() {
         def data = request.JSON
         assert data.name, "Must include name of theme"
+        def name = themeUtil.fileName(data.name)
+        def json = JsonOutput.toJson(data)
+        def type = fileExtensions[0]
+        themeService.saveTheme(name, json, type)
 
-        themeUtil.saveTheme( data.name, data )
         render "OK"
     }
 
     def delete() {
         assert params.name
-        render themeUtil.deleteTheme( params.name )
+        render themeService.deleteTheme( themeUtil.fileName( params.name ) )
+    }
+
+    def upload() {
+        boolean errMsg = false
+        String clobData
+        def file = request.getFile("file")
+        def fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
+        InputStream inputStream = file.getInputStream()
+        clobData = inputStream?.getText()
+        String type = FilenameUtils.getExtension(file.getOriginalFilename())
+        if(fileExtensions.contains(type)) {
+            themeService.saveTheme(fileName, clobData, type)
+            errMsg = false;
+        }else{
+            errMsg = true;
+        }
+        render errMsg;
     }
 }

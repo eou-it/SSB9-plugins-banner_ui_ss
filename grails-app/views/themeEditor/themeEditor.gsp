@@ -493,6 +493,11 @@ dev[ng-model="theme"] {
 .center {
     text-align: center;
 }
+
+.uploadMessage{
+    style:"visibility: hidden";
+    color:"red";
+}
 </style>
 </div>
 
@@ -562,6 +567,13 @@ dev[ng-model="theme"] {
           </div>
 
           <p></p>
+        <br/>
+        <div xe-section="theme-upload">
+            <input id="file" type="file" id="file" style="width:100%" ng-files="getTheFiles($files)"><br/>
+            <button class="primary" ng-click="uploadFiles()" value="Upload"><g:message code="theme.upload"/></button>
+        </div>
+
+            <p></p>
 
           <h3 xe-for="themes"><g:message code="theme.savedThemes"/></h3>
           <ul xe-field="themes">

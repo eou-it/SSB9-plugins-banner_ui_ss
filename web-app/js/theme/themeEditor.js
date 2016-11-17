@@ -275,7 +275,52 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                     console.log( "failed to delete theme: ", response.status );
                 });
         }
+        var formdata = new FormData();
+        $scope.uploadFiles = function() {
+            var dispMsg = document.getElementById("uploadMsg");
+            console.log("upload file:", $scope);
+            var data = formdata;
+            var request = {
+                method: 'POST',
+                url: themeEditorPath + '/upload',
+                data: formdata,
+                headers: {
+                    'Content-Type': undefined
+                }
+            };
 
+            // SEND THE FILES.
+            $http(request)
+                .success(function (d) {
+                   if(d && d!='false'){
+                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.type") , type: "Error", id: $("#file")});
+                       errorNotification.set({
+                           flash: true
+                       });
+                       notifications.addNotification(errorNotification);
+                    }else {
+                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.success") , type: "Warning", id: $("#file")});
+                       errorNotification.set({
+                           flash: true
+                       });
+                       notifications.addNotification(errorNotification);}
+                })
+                .error(function () {
+                    var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.error") , type: "Error", id: $("#file")});
+                    errorNotification.set({
+                        flash: true
+                    });
+                    notifications.addNotification(errorNotification);
+                });
+
+        }
+
+        $scope.getTheFiles = function ($files) {
+            formdata=new FormData();
+            angular.forEach($files, function (value, key) {
+                formdata.append('file', value);
+            });
+        };
         console.log( "starting get" );
         init();
 
@@ -303,4 +348,16 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 }
             };
         }]);
+    themeEditorApp.directive('ngFiles', ['$parse', function ($parse) {
+        function fn_link(scope, element, attrs) {
+            var onChange = $parse(attrs.ngFiles);
+            element.on('change', function (event) {
+                onChange(scope, { $files: event.target.files });
+            });
+        };
+
+        return {
+            link: fn_link
+        }
+    }])
 })();
