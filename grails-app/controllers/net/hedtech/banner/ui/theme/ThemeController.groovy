@@ -53,7 +53,7 @@ class ThemeController {
             response.contentType = 'text/css'
             render scss
         } catch ( ApplicationException ae ) {
-            log.warn( "Failed to load theme ${params.name} ${e}" )
+            log.warn( "Failed to load theme ${params.name} ${ae}" )
             response.status = 404
             render ""
         }
