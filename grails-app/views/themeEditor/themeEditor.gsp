@@ -569,8 +569,8 @@ dev[ng-model="theme"] {
           <p></p>
         <br/>
         <div xe-section="theme-upload">
-            <input id="file" type="file" id="file" style="width:100%" ng-files="getTheFiles($files)"><br/>
-            <button class="primary" ng-click="uploadFiles()" value="Upload"><g:message code="theme.upload"/></button>
+            <input id="file" type="file" id="file" style="width:100%" ng-files="getTheFiles($files)" onchange="angular.element(this).scope().uploadfilechange(this)"><br/>
+            <button class="primary" ng-click="uploadFiles()" ng-disabled="isDisabled" ng-model="isDisabled" value="Upload"><g:message code="theme.upload"/></button>
         </div>
 
             <p></p>
