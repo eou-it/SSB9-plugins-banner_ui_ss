@@ -26,6 +26,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             fieldnames = [],
             generated_lightness = [.25, .9],
             shades = [.1, .2, .35, .5, .8, .9];
+            $scope.isDisabled=true;
 
         var init = function() {
             console.log("theme init");
@@ -351,6 +352,17 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 formdata.append('file', value);
             });
         };
+        $scope.uploadfilechange = function (values){
+            if(values.value !=""){
+                $scope.$apply(function() {
+                    $scope.isDisabled=false;
+                });
+            }else{
+                $scope.$apply(function() {
+                    $scope.isDisabled=true;
+                });
+            }
+        }
         console.log( "starting get" );
         init();
 
