@@ -324,9 +324,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 $scope.$apply(function() {
                     $scope.isDisabled=false;
                 });
-                //$scope.isDisabled=false;
             }else{
-                //$scope.isDisabled=true;
                 $scope.$apply(function() {
                     $scope.isDisabled=true;
                 });
