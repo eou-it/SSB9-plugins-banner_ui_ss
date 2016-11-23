@@ -40,18 +40,25 @@ class ThemeEditorController {
     }
 
     def upload() {
-        boolean errMsg = false
+        def errMsg
         String clobData
         def file = request.getFile("file")
         def fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
         InputStream inputStream = file.getInputStream()
         clobData = inputStream?.getText()
-        String type = FilenameUtils.getExtension(file.getOriginalFilename())
-        if(fileExtensions.contains(type)) {
-            themeService.saveTheme(fileName, clobData, type)
-            errMsg = false;
-        }else{
-            errMsg = true;
+        def gb = file?.size/(1024*1024*1024)
+        if(gb>4){
+            errMsg = "largeData"
+        }else if(gb==0){
+            errMsg = "noData"
+        }else {
+            String type = FilenameUtils.getExtension(file.getOriginalFilename())
+            if (fileExtensions.contains(type)) {
+                themeService.saveTheme(fileName, clobData, type)
+                errMsg = "success";
+            } else {
+                errMsg = "format";
+            }
         }
         render errMsg;
     }

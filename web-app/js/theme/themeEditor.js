@@ -318,13 +318,26 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             // SEND THE FILES.
             $http(request)
                 .success(function (d) {
-                   if(d && d!='false'){
+                   if(d=='format'){
                        var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.type") , type: "Error", id: $("#file")});
                        errorNotification.set({
                            flash: true
                        });
                        notifications.addNotification(errorNotification);
-                    }else {
+                    }else if(d=='largeData') {
+                        var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.size") , type: "Error", id: $("#file")});
+                        errorNotification.set({
+                            flash: true
+                        });
+                        notifications.addNotification(errorNotification);
+                    }
+                   else if(d=='noData') {
+                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.nodata") , type: "Error", id: $("#file")});
+                       errorNotification.set({
+                           flash: true
+                       });
+                       notifications.addNotification(errorNotification);
+                   }else{
                        var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.success") , type: "Warning", id: $("#file")});
                        errorNotification.set({
                            flash: true
@@ -337,6 +350,9 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 })
                 .error(function () {
                     var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.error") , type: "Error", id: $("#file")});
+                    errorNotification.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.cancelActionButton"), function() {
+                        notifications.remove( errorNotification );
+                    });
                     notifications.addNotification(errorNotification);
                 });
         }
