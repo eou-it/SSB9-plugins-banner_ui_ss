@@ -199,18 +199,13 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             return '&reload=' + new Date().getTime();
         }
 
-        $scope.loadTheme = function( name, template ) {
+        $scope.loadTheme = function( name ) {
             console.log( 'loadTheme ' + name );
-            var templateParam
-            if(!template) {
-                templateParam = ''
-            } else {
-                templateParam = '&template=' + template
-            }
+
             var newLink = document.createElement( 'link' );
             newLink.rel = 'stylesheet';
             newLink.type = 'text/css';
-            newLink.href = themePath + '/getTheme?name=' + name + templateParam +  autoReload();
+            newLink.href = themePath + '/getTheme?name=' + name + autoReload();
 
             document.getElementsByTagName("head")[0].appendChild( newLink );
 
