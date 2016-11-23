@@ -62,7 +62,7 @@ class ThemeUtil {
     }
 
     def CSSFileName(themeName, templateName) {
-        return "theme.${themeName}-${templateName}.css".toString()
+        return "${themeName}-${templateName}.css".toString()
     }
 
     /*

@@ -1,14 +1,10 @@
-/*******************************************************************************
- Copyright 2016 Ellucian Company L.P. and its affiliates.
- ****************************************************************************** */
-
 package net.hedtech.banner.general
 
 import javax.persistence.*
 
 @Entity
 @Table(name = "GUROCFG")
-class ConfigurationData implements  Serializable{
+class ConfigurationData implements Serializable{
 
     @Id
     @Column(name="GUROCFG_SURROGATE_ID")

@@ -6,10 +6,9 @@ package net.hedtech.banner.ui.theme
 
 
 import grails.converters.JSON
-import grails.util.Holders
 
 import groovy.json.JsonOutput
-import java.io.IOException
+import net.hedtech.banner.exceptions.ApplicationException
 
 import org.apache.log4j.Logger
 
@@ -23,19 +22,19 @@ class ThemeController {
     }
 
     def list() {
-        def themes = themeService.listThemes([sort: "name", order: "asc"]).name as JSON
-        render themes
+        def themes = themeService.listThemes([sort: "name", order: "asc"])
+        render themes.name as JSON
     }
 
-    def templateList() {
-        def templates = themeService.listThemes([sort: "name", order: "desc"])
-        render themeUtil.formatTemplateNames(templates.name) as JSON
+    def listTemplates() {
+        def templates = themeService.listTemplates([sort: "name", order: "asc"])
+        render templates.name as JSON
     }
 
     def get() {
         assert params.name
         try {
-            def json = themeService.getThemeJSON( themeUtil.fileName(params.name) )
+            def json = themeService.getThemeJSON( params.name )
             response.contentType = 'application/json'
             render JsonOutput.toJson( json )
         } catch ( IOException e ) {
@@ -45,56 +44,38 @@ class ThemeController {
         }
     }
 
+
     def getTemplate() {
         assert params.name
         try {
-            def json = themeService.getThemeCSS( themeUtil.fileName(params.name) )
+            def scss = themeService.getTemplateSCSS(params.name)
             response.contentType = 'text/css'
-            render JsonOutput.toJson( json )
-        } catch ( IOException e ) {
-            log.warn( "Failed to load theme ${params.name} ${e}" )
+            render scss
+        } catch ( ApplicationException ae ) {
+            log.error "Failed to load theme ${params.name} ${ae}"
             response.status = 404
             render ""
         }
     }
 
-
-    /*
-        For theme-aware applications
-    */
-    def getCachedCSS() {
-        def themeName = params.name
-        def templateName = params.template
-        def themeUrl = params.themeUrl
-        if ( !templateName ) {
-            templateName = "all"
-        }
-        try {
-            def content = themeUtil.getCSSFromCache(themeName, templateName, themeUrl)
-            render( text:content, contentType: "text/css" )
-
-        } catch (IOException e) {
-            log.warn( "Failed to get theme ${params.name} in ${templateName}. ${e}" )
-        }
-    }
-
-    /*
-        For non-theme-aware applications
-    */
     def getTheme() {
         assert params.name
         def templateName = params.template
         def themeName = params.name
+        def content
         if ( !templateName ) {
             templateName = "all"
         }
 
         try {
-            def themeJSON = themeService.getThemeJSON(themeName)
-            def content = themeUtil.formatTheme( templateName, themeJSON)
+            if(params.themeUrl) {
+                content = themeUtil.getCSSFromCache(themeName, templateName, params.themeUrl)
+            } else {
+                content = themeService.getCSS(templateName, themeName)
+            }
             render( text:content, contentType: "text/css" )
-        } catch ( IOException e ) {
-            log.warn( "Failed to format theme ${themeName} in ${templateName}. ${e}" )
+        } catch ( ApplicationException ae ) {
+            log.error "Failed to format theme ${themeName} in ${templateName}. ${ae}"
             response.status = 404
             render ""
         }
