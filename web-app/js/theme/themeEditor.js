@@ -318,6 +318,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             // SEND THE FILES.
             $http(request)
                 .success(function (d) {
+
                    if(d=='format'){
                        var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.type") , type: "Error", id: $("#file")});
                        errorNotification.set({
@@ -354,7 +355,11 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                         notifications.remove( errorNotification );
                     });
                     notifications.addNotification(errorNotification);
+                }).finally(function() {
+                    angular.element("input[type='file']").val(null);
+                     $scope.isDisabled=true;
                 });
+
         }
 
         $scope.getTheFiles = function ($files) {
