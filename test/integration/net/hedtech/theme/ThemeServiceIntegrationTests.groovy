@@ -8,6 +8,7 @@ import grails.converters.JSON
 import net.hedtech.banner.security.FormContext
 
 import net.hedtech.banner.testing.BaseIntegrationTestCase
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.junit.After
 import org.junit.AfterClass
@@ -20,10 +21,6 @@ import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertTrue
 
-/**
- * This is a helper class that is used to access Web Tailor
- *
- */
 
 class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
 
@@ -49,7 +46,7 @@ class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
 
     @AfterClass
     public static void cleanUp() {
-        new File(System.properties['base.dir'] + '/web-app/css/theme/banner-ui-ss.scss').delete()
+        new File("${ServletContextHolder.servletContext.getRealPath('/css/theme')}/banner-ui-ss.scss").delete()
         new File('target/css').delete()
     }
 

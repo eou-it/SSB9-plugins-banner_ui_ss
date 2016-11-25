@@ -13,10 +13,12 @@ import net.sf.ehcache.Element
 import org.apache.log4j.Logger
 import org.apache.commons.io.FilenameUtils
 import org.omg.CORBA.portable.ApplicationException
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 
 class ThemeService {
     def configurationDataService
+    def grailsApplication
     def static final types = [theme:'json', template:'scss']
     def static themesPath = Holders.getConfig().banner.theme.path
     private static final Logger log = Logger.getLogger( this.getClass() )
@@ -118,7 +120,7 @@ class ThemeService {
 
 
     def importTemplates(loadFromPlugin) {
-        def path = System.properties['base.dir'] + '/web-app/css/theme'
+        def path = ServletContextHolder.servletContext.getRealPath('/css/theme')
         def count=0
         log.info "Checking/loading templates."
         try {

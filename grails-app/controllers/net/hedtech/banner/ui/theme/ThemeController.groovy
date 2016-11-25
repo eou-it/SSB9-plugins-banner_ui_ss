@@ -6,7 +6,6 @@ package net.hedtech.banner.ui.theme
 
 
 import grails.converters.JSON
-import grails.util.Holders
 import groovy.json.JsonOutput
 import net.hedtech.banner.exceptions.ApplicationException
 
@@ -64,7 +63,7 @@ class ThemeController {
         def themeName = params.name
         def content
         if ( !templateName ) {
-            templateName = Holders.getConfig().banner.theme?.template
+            templateName = 'all'
         }
         try {
             content = themeService.getCSS(templateName, themeName, params.themeUrl)
