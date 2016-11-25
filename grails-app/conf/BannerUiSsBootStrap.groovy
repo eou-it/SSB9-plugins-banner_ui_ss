@@ -4,10 +4,12 @@ Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 import net.hedtech.banner.controllers.ControllerUtils
+import net.hedtech.banner.general.ConfigurationData
 class BannerUiSsBootStrap {
     public static String localLogoutEnable="saml/logout?local=true";
     public static String globalLogoutEnable="saml/logout";
     def grailsApplication
+    def themeService
 
 	def init = { servletContext ->
 
@@ -32,5 +34,8 @@ class BannerUiSsBootStrap {
         } else{
             servletContext.setAttribute("guestLoginEnabled", false)
         }
+
+        //Import theme templates
+        themeService.importTemplates(false)
 	}
 }

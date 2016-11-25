@@ -6,7 +6,7 @@ package net.hedtech.banner.ui.theme
 
 
 import grails.converters.JSON
-
+import grails.util.Holders
 import groovy.json.JsonOutput
 import net.hedtech.banner.exceptions.ApplicationException
 
@@ -64,15 +64,10 @@ class ThemeController {
         def themeName = params.name
         def content
         if ( !templateName ) {
-            templateName = "all"
+            templateName = Holders.getConfig().banner.theme?.template
         }
-
         try {
-            if(params.themeUrl) {
-                content = themeUtil.getCSSFromCache(themeName, templateName, params.themeUrl)
-            } else {
-                content = themeService.getCSS(templateName, themeName)
-            }
+            content = themeService.getCSS(templateName, themeName, params.themeUrl)
             render( text:content, contentType: "text/css" )
         } catch ( ApplicationException ae ) {
             log.error "Failed to format theme ${themeName} in ${templateName}. ${ae}"

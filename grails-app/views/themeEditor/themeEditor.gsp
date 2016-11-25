@@ -486,6 +486,12 @@ dev[ng-model="theme"] {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.template {
+    display: inline-block;
+    width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .w10 {
     display: inline-block;
 /*    width:15%;*/
@@ -590,10 +596,10 @@ dev[ng-model="theme"] {
             </li>
           </ul>
 
-            <h3 xe-for="themes"><g:message code="theme.savedTemplates"/></h3>
-            <ul xe-field="themes">
+            <h3 xe-for="templates"><g:message code="theme.savedTemplates"/></h3>
+            <ul xe-field="templates">
                 <li style="margin:.2em 0" ng-repeat="template in templates | orderBy: 'template'">
-                    <span class="w20">{{template}}</span>
+                    <span class="template" title="{{template}}">{{template}}</span>
                     <button class="tertiary" ng-click="deleteTemplate(template)"><g:message code="theme.deleteTheme" args="['']"/></button>
                     <span class="w10">
                         <a href="theme/getTemplate?name={{template}}" class="center"><g:message code="template.scss"/></a>

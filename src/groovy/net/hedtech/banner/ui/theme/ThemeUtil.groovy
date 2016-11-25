@@ -4,11 +4,8 @@
 
 package net.hedtech.banner.ui.theme
 
-import grails.converters.JSON
+
 import grails.util.Holders
-import groovy.io.FileType
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
 import net.sf.ehcache.Cache
 import net.sf.ehcache.CacheManager
 import net.sf.ehcache.Element
@@ -28,16 +25,16 @@ class ThemeUtil {
         new File( themesPath ).mkdirs()
     }
 
-    def sanitizeName( name ) {
+    def static sanitizeName( name ) {
         return name.toLowerCase().replaceAll(/[.*\/\\]/, '_')
     }
 
-    def fileName( name ) {
+    def static fileName( name ) {
         return "${sanitizeName( name )}"
     }
 
 
-    def formatTheme(templateName, themeJSON) throws IOException {
+    def static formatTheme(templateSCSS, themeJSON) {
         def sorted = new TreeMap( { a,b ->
             def v = b.length() <=> a.length();
             if ( v ) {
@@ -45,14 +42,9 @@ class ThemeUtil {
             } else {
                 return b.compareTo(a);
             }
-                                  })
-
+        })
         sorted.putAll( themeJSON )
-
-        def templateFile = new File( themesPath, "${sanitizeName( templateName )}.scss")
-        def template = templateFile.getText( 'utf-8' )
-
-        def content = template
+        def content = templateSCSS
         sorted.each { k, v ->
             if ( v ) {
                 content = content.replace( "\$theme$k", v ) // also add "/*theme$k*/ " +  except for logo
@@ -61,24 +53,20 @@ class ThemeUtil {
         return content
     }
 
-    def CSSFileName(themeName, templateName) {
+    def static CSSFileName(themeName, templateName) {
         return "${themeName}-${templateName}.css".toString()
     }
 
-    /*
-        Deletes the theme CSS file from disk storage
-    */
-    def clearCSSFile(themeName, templateName) {
+    /* Deletes the theme CSS file from disk storage */
+    def static clearCSSFile(themeName, templateName) {
         File file = new File("${themesPath}/${CSSFileName(themeName, templateName)}")
         if(file.exists()){
             file.delete()
         }
     }
 
-    /*
-        Configures the cache: sets TTL time, removes the css file if the cache is expired
-    */
-    def getThemeCache(themeName, templateName) {
+    /* Configures the cache: sets TTL time, removes the css file if the cache is expired */
+    def static getThemeCache(themeName, templateName) {
         Cache cache
         CacheManager cacheManager = CacheManager.getInstance()
         cache = cacheManager.getCache(themeCache)
@@ -96,10 +84,8 @@ class ThemeUtil {
         return cache
     }
 
-    /*
-        Checks if theme CSS file exists in the cache
-    */
-    def expired(final key, Cache cache) {
+    /* Checks if theme CSS file exists in the cache */
+    def static expired(final key, Cache cache) {
         boolean expired = true;
         final Element element = cache.getQuiet(key);
         if (element != null) {
@@ -108,29 +94,8 @@ class ThemeUtil {
         return expired;
     }
 
-    /*
-        Stores the theme CSS file in the cache and Retrieves it from cache for subsequent requests
-    */
-    def getCSSFromCache(themeName, templateName, themeUrl)     {
-        def fileName = CSSFileName(themeName, templateName)
-        Cache cache = getThemeCache(themeName, templateName)
-        if(expired(fileName, cache)) {
-            File file = new File("${themesPath}/${fileName}")
-            def themeJSON = JSON.parse(new URL( "${themeUrl}/get?name=${themeName}" ).text)
-            def content = formatTheme(templateName, themeJSON)
-            file.withWriter( 'utf-8' ) {
-                file.write( content )
-            }
-            cache.put(new Element(file.name, file.text))
-        }
-        Element ele = cache.get(fileName)
-        return ele.objectValue
-    }
-
-    /*
-        Clears Theme Cache
-    */
-    def clearCache() {
+    /* Clears Theme Cache */
+    def static clearCache() {
         CacheManager manager = CacheManager.getInstance()
         Cache cache = manager.getCache(themeCache)
         cache.removeAll()

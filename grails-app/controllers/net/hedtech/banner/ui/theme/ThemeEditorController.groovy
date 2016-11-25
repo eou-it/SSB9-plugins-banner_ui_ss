@@ -24,7 +24,7 @@ class ThemeEditorController {
         def name = data.name
         def json = JsonOutput.toJson(data)
         def type = fileExtensions[0]
-        themeService.saveTheme(name, json, type)
+        themeService.saveTheme(name, type, json)
 
         render "OK"
     }
@@ -54,7 +54,7 @@ class ThemeEditorController {
         }else {
             String type = FilenameUtils.getExtension(file.getOriginalFilename())
             if (fileExtensions.contains(type)) {
-                themeService.saveTheme(fileName, clobData, type)
+                themeService.saveTheme(fileName, type, clobData)
                 errMsg = "success";
             } else {
                 errMsg = "format";
