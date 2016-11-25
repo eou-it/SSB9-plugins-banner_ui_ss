@@ -28,9 +28,7 @@ import static org.junit.Assert.assertTrue
 class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
 
     def grailsApplication
-    ThemeService themeService
-    // Inject link generator
-    LinkGenerator grailsLinkGenerator
+    def themeService
 
     def themeJSON    = '{"color1":"#ffffff", "color2":"#666666"}'
     def templateSCSS =  '''.#header-main-section { background-color: $themecolor1; }'''
@@ -47,6 +45,12 @@ class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
     @After
     public void tearDown() {
         super.tearDown();
+    }
+
+    @AfterClass
+    public static void cleanUp() {
+        new File(System.properties['base.dir'] + '/web-app/css/theme/banner-ui-ss.scss').delete()
+        new File('target/css').delete()
     }
 
     @Test

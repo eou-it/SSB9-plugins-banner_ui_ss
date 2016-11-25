@@ -44,13 +44,6 @@ class ThemeScssGeneratorSpec extends Specification {
         "@media only screen and (min-width:768px){ .test { border: 1px solid #999; font-size:1em }}" | "@media only screen and (min-width:768px){ .test  {    border-color: #999999;}}"
     }
 
-    def "test generateThemeSCSSFile"() {
-        expect:
-        assert themeScssGenerator.checkFileExists(scssFile)
-        cleanup:
-        new File(scssFile).delete()
-    }
-
     @Unroll
     def "get color from border css property ( )"() {
         expect:
