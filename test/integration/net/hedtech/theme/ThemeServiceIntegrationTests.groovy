@@ -9,7 +9,6 @@ import net.hedtech.banner.security.FormContext
 
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before

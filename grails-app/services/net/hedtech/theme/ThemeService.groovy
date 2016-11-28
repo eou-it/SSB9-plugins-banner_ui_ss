@@ -74,15 +74,18 @@ class ThemeService {
     def getTemplateSCSS(templateName) {
         File templateFile
         def templateSCSSS
-        def templateObj = ConfigurationData.findByNameAndType(templateName, types.template)
-        if (!templateObj) {
-            def template = Holders.getConfig().banner.theme?.template
-            templateFile = new File("${System.properties['base.dir'] + '/web-app/css/theme'}/${template}")
-            templateSCSSS = templateFile.text
-        } else {
-            templateSCSSS = templateObj.value
+        try {
+            def templateObj = ConfigurationData.findByNameAndType(templateName, types.template)
+            if (!templateObj) {
+                def template = Holders.getConfig().banner.theme?.template
+                templateFile = new File("${ServletContextHolder.servletContext.getRealPath('/css/theme')}/web-app/css/theme/${template}.scss")
+                templateSCSSS = templateFile.text
+            } else {
+                templateSCSSS = templateObj.value
+            }
+        } catch (ApplicationException ae) {
+            log.error "failed to get the template, ${ae}"
         }
-
         return templateSCSSS
     }
 
