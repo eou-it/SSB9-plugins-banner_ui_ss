@@ -71,21 +71,18 @@ class ThemeService {
         return theme
     }
 
-    def getTemplateSCSS(templateName) {
+    def getTemplateSCSS(templateName) throws ApplicationException{
         File templateFile
         def templateSCSSS
-        try {
-            def templateObj = ConfigurationData.findByNameAndType(templateName, types.template)
-            if (!templateObj) {
-                def template = Holders.getConfig().banner.theme?.template
-                templateFile = new File("${ServletContextHolder.servletContext.getRealPath('/css/theme')}/web-app/css/theme/${template}.scss")
-                templateSCSSS = templateFile.text
-            } else {
-                templateSCSSS = templateObj.value
-            }
-        } catch (ApplicationException ae) {
-            log.error "failed to get the template, ${ae}"
+        def templateObj = ConfigurationData.findByNameAndType(templateName, types.template)
+        if (!templateObj) {
+            def template = Holders.getConfig().banner.theme?.template
+            templateFile = new File("${ServletContextHolder.servletContext.getRealPath('/css/theme')}/web-app/css/theme/${template}.scss")
+            templateSCSSS = templateFile.text
+        } else {
+            templateSCSSS = templateObj.value
         }
+
         return templateSCSSS
     }
 
@@ -107,18 +104,24 @@ class ThemeService {
     def getCSSFromCache(themeName, templateName, themeUrl)     {
         def fileName = ThemeUtil.CSSFileName(themeName, templateName)
         Cache cache = ThemeUtil.getThemeCache(themeName, templateName)
+        def css
         if(ThemeUtil.expired(fileName, cache)) {
             File file = new File("${themesPath}/${fileName}")
-            def themeJSON = JSON.parse(new URL( "${themeUrl}/get?name=${themeName}" ).text)
-            def templateSCSS = getTemplateSCSS(templateName)
-            def content = ThemeUtil.formatTheme(templateSCSS, themeJSON)
-            file.withWriter( 'utf-8' ) {
-                file.write( content )
+            def themeJSON = JSON.parse(new URL("${themeUrl}/get?name=${themeName}").text)
+            if (themeJSON) {
+                def templateSCSS = getTemplateSCSS(templateName)
+                def content = ThemeUtil.formatTheme(templateSCSS, themeJSON)
+                file.withWriter('utf-8') {
+                    file.write(content)
+                }
+                cache.put(new Element(file.name, file.text))
             }
-            cache.put(new Element(file.name, file.text))
+            Element ele = cache.get(fileName)
+            if(ele) {
+                css = ele.objectValue
+            }
         }
-        Element ele = cache.get(fileName)
-        return ele.objectValue
+        return css
     }
 
 

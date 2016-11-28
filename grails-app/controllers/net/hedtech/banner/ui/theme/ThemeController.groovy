@@ -10,6 +10,9 @@ import groovy.json.JsonOutput
 import net.hedtech.banner.exceptions.ApplicationException
 
 import org.apache.log4j.Logger
+import org.omg.CORBA.portable.ApplicationException
+
+import java.sql.SQLException
 
 class ThemeController {
     def themeUtil = new ThemeUtil()
@@ -67,7 +70,13 @@ class ThemeController {
         }
         try {
             content = themeService.getCSS(templateName, themeName, params.themeUrl)
-            render( text:content, contentType: "text/css" )
+            if(content) {
+                render(text: content, contentType: "text/css")
+            } else {
+                log.error "Failed to format theme ${themeName} in ${templateName}"
+                response.status = 404
+                render(text: "", contentType: "text/css")
+            }
         } catch ( ApplicationException ae ) {
             log.error "Failed to format theme ${themeName} in ${templateName}. ${ae}"
             response.status = 404
