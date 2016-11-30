@@ -12,7 +12,7 @@ import net.sf.ehcache.Cache
 import net.sf.ehcache.Element
 import org.apache.log4j.Logger
 import org.apache.commons.io.FilenameUtils
-import org.omg.CORBA.portable.ApplicationException
+import net.hedtech.banner.exceptions.ApplicationException
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 
@@ -20,11 +20,12 @@ class ThemeService {
     def configurationDataService
     def grailsApplication
     def static final types = [theme:'json', template:'scss']
-    def static themesPath = Holders.getConfig().banner.theme.path
     private static final Logger log = Logger.getLogger( this.getClass() )
 
+
     def saveTheme(String fileName, String type, def content) {
-        def theme = ConfigurationData.findByNameAndType(fileName, type)
+        fileName = ThemeUtil.sanitizeName(fileName)
+        def theme = ConfigurationData.findByNameIlikeAndType("%"+fileName+"%", type)
         if (theme) {
             theme.value = content
             theme = configurationDataService.update(theme)
@@ -35,15 +36,15 @@ class ThemeService {
         theme
     }
 
-    def deleteTheme(String fileName) {
-        def theme = ConfigurationData.findByNameAndType(fileName, types.theme)
+    def deleteTheme(def name) {
+        def theme = ConfigurationData.findByNameAndType(name, types.theme)
         if(theme) {
             configurationDataService.delete(theme)
         }
     }
 
-    def deleteTemplate(String fileName) {
-        def template = ConfigurationData.findByNameAndType(fileName, types.template)
+    def deleteTemplate(def name) {
+        def template = ConfigurationData.findByNameAndType(name, types.template)
         if(template) {
             configurationDataService.delete(template)
         }
@@ -66,30 +67,31 @@ class ThemeService {
     }
 
     def getThemeJSON(name) {
-        def theme = ConfigurationData.findByNameAndType(name, types.theme)
+        name = ThemeUtil.sanitizeName(name)
+        def theme = ConfigurationData.findByNameIlikeAndType("%"+name+"%", types.theme)
         theme = theme ? JSON.parse(theme.value): ''
         return theme
     }
 
     def getTemplateSCSS(templateName) throws ApplicationException{
         File templateFile
-        def templateSCSSS
-        def templateObj = ConfigurationData.findByNameAndType(templateName, types.template)
+        def templateSCSS
+        def templateObj = ConfigurationData.findByNameIlikeAndType("%"+templateName+"%", types.template)
         if (!templateObj) {
             def template = Holders.getConfig().banner.theme?.template
             templateFile = new File("${ServletContextHolder.servletContext.getRealPath('/css/theme')}/web-app/css/theme/${template}.scss")
-            templateSCSSS = templateFile.text
+            templateSCSS = templateFile.text
         } else {
-            templateSCSSS = templateObj.value
+            templateSCSS = templateObj.value
         }
 
-        return templateSCSSS
+        return templateSCSS
     }
 
-    def getCSS(templateName, themeName, themeUrl) {
+    def getCSS(themeName, templateName, themeUrl) {
         def content
         if(themeUrl) {
-           content = getCSSFromCache(themeName, templateName, themeUrl)
+            content = getCSSFromCache(themeName, templateName, themeUrl)
         } else {
             def templateSCSSS = getTemplateSCSS(templateName)
             def themeJSON = getThemeJSON(themeName)
@@ -100,26 +102,21 @@ class ThemeService {
         return content
     }
 
-    /* Stores the theme CSS file in the cache and Retrieves it from cache for subsequent requests */
     def getCSSFromCache(themeName, templateName, themeUrl)     {
-        def fileName = ThemeUtil.CSSFileName(themeName, templateName)
-        Cache cache = ThemeUtil.getThemeCache(themeName, templateName)
+        def cssName = ThemeUtil.CSSFileName(themeName, templateName)
+        Cache cache = ThemeUtil.getThemeCache()
         def css
-        if(ThemeUtil.expired(fileName, cache)) {
-            File file = new File("${themesPath}/${fileName}")
+        if(ThemeUtil.expired(cssName, cache)) {
             def themeJSON = JSON.parse(new URL("${themeUrl}/get?name=${themeName}").text)
             if (themeJSON) {
                 def templateSCSS = getTemplateSCSS(templateName)
                 def content = ThemeUtil.formatTheme(templateSCSS, themeJSON)
-                file.withWriter('utf-8') {
-                    file.write(content)
-                }
-                cache.put(new Element(file.name, file.text))
+                cache.put(new Element(cssName, content))
             }
-            Element ele = cache.get(fileName)
-            if(ele) {
-                css = ele.objectValue
-            }
+        }
+        Element ele = cache.get(cssName)
+        if(ele) {
+            css = ele.objectValue
         }
         return css
     }
@@ -134,7 +131,7 @@ class ThemeService {
                 def fileName = FilenameUtils.getBaseName(file.name)
                 if((fileName == 'banner-ui-ss' && loadFromPlugin) || (fileName != 'banner-ui-ss' &&  !loadFromPlugin)) {
                     if (!fileName.endsWith('-patch')) {
-                        def template = ConfigurationData.findByNameAndType(fileName, 'scss')
+                        def template = ConfigurationData.findByNameIlikeAndType("%"+ThemeUtil.sanitizeName(fileName)+"%", types.template)
                         def map = [
                                 name        : fileName,
                                 type        : types.template,

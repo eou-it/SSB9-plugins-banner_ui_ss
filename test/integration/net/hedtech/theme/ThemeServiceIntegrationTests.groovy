@@ -12,6 +12,7 @@ import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
 import net.hedtech.banner.general.ConfigurationData
 import net.hedtech.theme.ThemeService
@@ -115,10 +116,14 @@ class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
     void testGetCSS() {
         themeService.saveTheme("TestTheme", types.theme, themeJSON)
         themeService.saveTheme("TestTemplate", types.template, templateSCSS)
+        def templateInstance = ConfigurationData.findByNameAndType("TestTemplate", types.template)
+        assertNotNull templateInstance.id
+        def themeInstance = ConfigurationData.findByNameAndType("TestTheme", types.theme)
+        assertNotNull themeInstance.id
         grailsApplication.config.banner.theme.path = "target/css"
         grailsApplication.config.banner.theme.name = "TestTheme"
         grailsApplication.config.banner.theme.template = "TestTemplate"
-        def content = themeService.getCSS("TestTemplate", "TestTheme", null)
+        def content = themeService.getCSS("TestTheme", "TestTemplate", null)
         assertEquals content, desiredCSS
     }
 

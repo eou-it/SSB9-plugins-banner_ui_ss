@@ -52,7 +52,7 @@ class ThemeEditorController {
         }else if(gb==0){
             errMsg = "noData"
         }else {
-            String type = FilenameUtils.getExtension(file.getOriginalFilename())
+            String type = FilenameUtils.getExtension(file.getOriginalFilename()).toUpperCase()
             if (fileExtensions.contains(type)) {
                 themeService.saveTheme(fileName, type, clobData)
                 errMsg = "success";

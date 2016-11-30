@@ -1,26 +1,21 @@
 /*******************************************************************************
  Copyright 2016 Ellucian Company L.P. and its affiliates.
-****************************************************************************** */
+ ****************************************************************************** */
 
 package net.hedtech.banner.ui.theme
-
 
 import grails.converters.JSON
 import groovy.json.JsonOutput
 import net.hedtech.banner.exceptions.ApplicationException
-
 import org.apache.log4j.Logger
-import org.omg.CORBA.portable.ApplicationException
 
-import java.sql.SQLException
 
 class ThemeController {
-    def themeUtil = new ThemeUtil()
     def themeService
     private static final Logger log = Logger.getLogger( this.getClass() )
 
     def index() {
-       render "index"
+        render "index"
     }
 
     def list() {
@@ -62,6 +57,7 @@ class ThemeController {
 
     def getTheme() {
         assert params.name
+        //assert params.themeUrl
         def templateName = params.template
         def themeName = params.name
         def content
@@ -69,7 +65,7 @@ class ThemeController {
             templateName = 'all'
         }
         try {
-            content = themeService.getCSS(templateName, themeName, params.themeUrl)
+            content = themeService.getCSS(themeName, templateName, params.themeUrl)
             if(content) {
                 render(text: content, contentType: "text/css")
             } else {
@@ -85,7 +81,7 @@ class ThemeController {
     }
 
     def clearCache()  {
-        themeUtil.clearCache()
+        ThemeUtil.clearCache()
         render ""
     }
 }
