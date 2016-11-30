@@ -5,13 +5,14 @@
 package net.hedtech.banner.ui.theme
 
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import org.apache.commons.io.FilenameUtils
 import org.apache.log4j.Logger
 
 class ThemeEditorController {
     def themeUtil = new ThemeUtil()
     private static final Logger log = Logger.getLogger( this.getClass() )
-    def static fileExtensions=["json", "scss"]
+    def static fileExtensions=["JSON", "SCSS"]
     def themeService
 
     def index() {
@@ -31,12 +32,12 @@ class ThemeEditorController {
 
     def deleteTheme() {
         assert params.name
-        render themeService.deleteTheme( params.name)
+        render themeService.deleteTheme(params.name)
     }
 
     def deleteTemplate() {
         assert params.name
-        render themeService.deleteTemplate( params.name )
+        render themeService.deleteTemplate(params.name )
     }
 
     def upload() {
@@ -44,8 +45,6 @@ class ThemeEditorController {
         String clobData
         def file = request.getFile("file")
         def fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
-        InputStream inputStream = file.getInputStream()
-        clobData = inputStream?.getText()
         def gb = file?.size/(1024*1024*1024)
         if(gb>4){
             errMsg = "largeData"
@@ -53,6 +52,21 @@ class ThemeEditorController {
             errMsg = "noData"
         }else {
             String type = FilenameUtils.getExtension(file.getOriginalFilename()).toUpperCase()
+            InputStream inputStream = file.getInputStream()
+            if('json'.equalsIgnoreCase(type)){
+                try{
+                     def clobDataJSON = new JsonSlurper().parseText(inputStream?.getText())
+                }catch(e){
+                    throw new Exception("File not supported Exception")
+                }
+            }else if ('scss'.equalsIgnoreCase(type)){
+                try {
+                    def clobDataSCSS = inputStream?.getText('utf-8')
+                }catch(e){
+                    throw new Exception("File not supported Exception")
+                }
+            }
+            clobData= file?.getInputStream()?.getText()
             if (fileExtensions.contains(type)) {
                 themeService.saveTheme(fileName, type, clobData)
                 errMsg = "success";
