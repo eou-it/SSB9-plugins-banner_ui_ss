@@ -11,6 +11,8 @@ import net.sf.ehcache.CacheManager
 import net.sf.ehcache.Element
 import net.sf.ehcache.config.CacheConfiguration
 import org.apache.log4j.Logger
+import org.apache.xalan.templates.ElemApplyImport
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Utility class instead of service to avoid BannerDS database connections
@@ -25,8 +27,8 @@ class ThemeUtil {
         return name.replaceAll(/[.*\/\\]/, '_')
     }
 
-    def static CSSFileName(themeName, templateName) {
-        return "${themeName}-${templateName}.css".toString()
+    def static cssName(themeName, templateName) {
+        return "${themeName}.${templateName}.css".toString()
     }
 
     def static formatTheme(templateSCSS, themeJSON) {
@@ -49,17 +51,16 @@ class ThemeUtil {
     }
 
     def static getThemeCache() {
-        Cache cache
         CacheManager cacheManager = CacheManager.getInstance()
-        cache = cacheManager.getCache(themeCache)
-        def ttl = Holders.getConfig().banner.theme?.cacheTimeOut
-        if(!ttl || ttl < 0) {
-            ttl = 900  //900 seconds
-        }
+        Cache cache = cacheManager.getCache(themeCache)
         if(!cache) {
             cacheManager.addCache(themeCache)
             cache = cacheManager.getCache(themeCache)
             CacheConfiguration config = cache.getCacheConfiguration()
+            def ttl = Holders.getConfig().banner.theme?.cacheTimeOut
+            if(!ttl || ttl < 0) {
+                ttl = 900  //900 seconds
+            }
             config.setTimeToLiveSeconds(ttl)
         }
         return cache
@@ -78,6 +79,19 @@ class ThemeUtil {
         CacheManager manager = CacheManager.getInstance()
         Cache cache = manager.getCache(themeCache)
         cache.removeAll()
+    }
+
+    def static removeElementFromCache(key) {
+        CacheManager manager = CacheManager.getInstance()
+        Cache cache = manager.getCache(themeCache)
+        if(cache) {
+            cache.getKeys().each {
+                if (StringUtils.containsIgnoreCase(it, key)) {
+                    cache.get(it)
+                    cache.remove(it)
+                }
+            }
+        }
     }
 
 }

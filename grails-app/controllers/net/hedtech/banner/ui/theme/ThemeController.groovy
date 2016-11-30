@@ -57,15 +57,15 @@ class ThemeController {
 
     def getTheme() {
         assert params.name
-        //assert params.themeUrl
         def templateName = params.template
         def themeName = params.name
         def content
+
         if ( !templateName ) {
             templateName = 'all'
         }
         try {
-            content = themeService.getCSS(themeName, templateName, params.themeUrl)
+            content = themeService.getCSS(themeName, templateName)
             if(content) {
                 render(text: content, contentType: "text/css")
             } else {

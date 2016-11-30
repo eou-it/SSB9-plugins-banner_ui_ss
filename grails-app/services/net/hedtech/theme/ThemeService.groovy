@@ -25,7 +25,7 @@ class ThemeService {
 
     def saveTheme(String fileName, String type, def content) {
         fileName = ThemeUtil.sanitizeName(fileName)
-        def theme = ConfigurationData.findByNameIlikeAndType("%"+fileName+"%", type)
+        def theme = ConfigurationData.findByNameIlikeAndType(fileName, type)
         if (theme) {
             theme.value = content
             theme = configurationDataService.update(theme)
@@ -33,6 +33,14 @@ class ThemeService {
             theme = configurationDataService.create([name: fileName, type: type, value: content])
         }
         log.debug "Saved theme $theme"
+        def cacheKey
+        if(type == types.template) {
+            cacheKey = ".${fileName}.css"
+        } else {
+            cacheKey = "${fileName}."
+        }
+        ThemeUtil.removeElementFromCache(cacheKey)
+        log.debug "Cleared cache for $theme"
         theme
     }
 
@@ -68,7 +76,7 @@ class ThemeService {
 
     def getThemeJSON(name) {
         name = ThemeUtil.sanitizeName(name)
-        def theme = ConfigurationData.findByNameIlikeAndType("%"+name+"%", types.theme)
+        def theme = ConfigurationData.findByNameIlikeAndType(name, types.theme)
         theme = theme ? JSON.parse(theme.value): ''
         return theme
     }
@@ -76,7 +84,7 @@ class ThemeService {
     def getTemplateSCSS(templateName) throws ApplicationException{
         File templateFile
         def templateSCSS
-        def templateObj = ConfigurationData.findByNameIlikeAndType("%"+templateName+"%", types.template)
+        def templateObj = ConfigurationData.findByNameIlikeAndType(templateName, types.template)
         if (!templateObj) {
             def template = Holders.getConfig().banner.theme?.template
             templateFile = new File("${ServletContextHolder.servletContext.getRealPath('/css/theme')}/web-app/css/theme/${template}.scss")
@@ -88,39 +96,27 @@ class ThemeService {
         return templateSCSS
     }
 
-    def getCSS(themeName, templateName, themeUrl) {
-        def content
-        if(themeUrl) {
-            content = getCSSFromCache(themeName, templateName, themeUrl)
-        } else {
-            def templateSCSSS = getTemplateSCSS(templateName)
-            def themeJSON = getThemeJSON(themeName)
-            if (themeJSON) {
-                content = ThemeUtil.formatTheme(templateSCSSS, themeJSON)
-            }
-        }
-        return content
-    }
-
-    def getCSSFromCache(themeName, templateName, themeUrl)     {
-        def cssName = ThemeUtil.CSSFileName(themeName, templateName)
-        Cache cache = ThemeUtil.getThemeCache()
+    def getCSS(themeName, templateName) {
         def css
-        if(ThemeUtil.expired(cssName, cache)) {
-            def themeJSON = JSON.parse(new URL("${themeUrl}/get?name=${themeName}").text)
-            if (themeJSON) {
-                def templateSCSS = getTemplateSCSS(templateName)
-                def content = ThemeUtil.formatTheme(templateSCSS, themeJSON)
-                cache.put(new Element(cssName, content))
+        Cache cache = ThemeUtil.getThemeCache()
+        def templateSCSS = getTemplateSCSS(templateName)
+        def themeJSON = getThemeJSON(themeName)
+        if(templateSCSS && themeJSON) {
+            def cssName = ThemeUtil.cssName(themeName, templateName)
+            if (ThemeUtil.expired(cssName, cache)) {
+                css = ThemeUtil.formatTheme(templateSCSS, themeJSON)
+                cache.put(new Element(cssName, css))
             }
-        }
-        Element ele = cache.get(cssName)
-        if(ele) {
-            css = ele.objectValue
+            Element ele = cache.get(cssName)
+            if (ele) {
+                css = ele.objectValue
+            }
+        } else {
+            ThemeUtil.clearCache()
+            log.debug "Cleared theme cache."
         }
         return css
     }
-
 
     def importTemplates(loadFromPlugin) {
         def path = ServletContextHolder.servletContext.getRealPath('/css/theme')
@@ -131,7 +127,7 @@ class ThemeService {
                 def fileName = FilenameUtils.getBaseName(file.name)
                 if((fileName == 'banner-ui-ss' && loadFromPlugin) || (fileName != 'banner-ui-ss' &&  !loadFromPlugin)) {
                     if (!fileName.endsWith('-patch')) {
-                        def template = ConfigurationData.findByNameIlikeAndType("%"+ThemeUtil.sanitizeName(fileName)+"%", types.template)
+                        def template = ConfigurationData.findByNameIlikeAndType(ThemeUtil.sanitizeName(fileName), types.template)
                         def map = [
                                 name        : fileName,
                                 type        : types.template,

@@ -1,4 +1,4 @@
-/** *****************************************************************************
+/*******************************************************************************
  Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
@@ -123,7 +123,7 @@ class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
         grailsApplication.config.banner.theme.path = "target/css"
         grailsApplication.config.banner.theme.name = "TestTheme"
         grailsApplication.config.banner.theme.template = "TestTemplate"
-        def content = themeService.getCSS("TestTheme", "TestTemplate", null)
+        def content = themeService.getCSS("TestTheme", "TestTemplate")
         assertEquals content, desiredCSS
     }
 
