@@ -1,6 +1,6 @@
 /*******************************************************************************
  Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
- *******************************************************************************/
+*******************************************************************************/
 
 modules = {
 
@@ -20,15 +20,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
     }
 
-    'bootstrapRTL' {
-        dependsOn "jquery"
-        defaultBundle environment == "development" ? false : "bootstrap"
-
-        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap-rtl.css'],            attrs: [media: 'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'css/bootstrap-fixes-rtl.css'],                attrs: [media: 'screen, projection']
-        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
-    }
-
     'glyphicons' {
         defaultBundle environment == "development" ? false : "bannerSelfService"
 
@@ -39,8 +30,8 @@ modules = {
         dependsOn "jquery, i18n-core"
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/html5shim.js'],
-                disposition: 'head',
-                wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
+            disposition: 'head',
+            wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/underscore.string.js']
@@ -106,6 +97,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/datatables-colvis.css'],        attrs:[media:'screen, projection']
+
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.grid.css'],            attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/backbone.pagingcontrols.css'],  attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'js/select2/select2.css'],           attrs:[media:'screen, projection']
@@ -133,19 +125,23 @@ modules = {
     }
 
     'bannerSelfService' {
-        dependsOn "bannerSelfServiceCommonLTR, extensibilityJQuery"
+        dependsOn "bannerSelfServiceCommonLTR, angularApp, extensibilityJQuery"
+        resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
     }
 
     'bannerSelfServiceRTL' {
-        dependsOn "bannerSelfServiceCommonRTL, extensibilityJQueryRTL"
+        dependsOn "bannerSelfServiceCommonRTL, angularApp, extensibilityJQueryRTL"
+        resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
     }
 
     'bannerWebLTR' {
-        dependsOn "bannerSelfServiceCommonLTR, angularApp, extensibilityAngular"
+        dependsOn "bannerSelfServiceCommonLTR,angularApp,extensibilityAngular"
+        resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
     }
 
     'bannerWebRTL' {
-        dependsOn "bannerSelfServiceCommonRTL, angularApp, extensibilityAngularRTL"
+        dependsOn "bannerSelfServiceCommonRTL,angularApp,extensibilityAngularRTL"
+        resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
     }
 
     'angularApp' {
@@ -190,15 +186,15 @@ modules = {
     }
 
     'themeEditor' {
-        dependsOn "angularApp"
+        dependsOn "bootstrap", "angularApp"
         resource url:[plugin: 'banner-ui-ss', file: 'js/theme/themeEditor.js']
     }
 
     'themeEditorLTR' {
-        dependsOn "bannerWebLTR, colorPickerLTR, themeEditor, bootstrap"
+        dependsOn "bannerWebLTR, colorPickerLTR, themeEditor"
     }
 
     'themeEditorRTL' {
-        dependsOn "bannerWebRTL, colorPickerRTL, themeEditor, bootstrapRTL"
+        dependsOn "bannerWebRTL, colorPickerRTL, themeEditor"
     }
 }
