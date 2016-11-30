@@ -8,15 +8,19 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.commons.io.FilenameUtils
 import org.apache.log4j.Logger
+import net.hedtech.banner.exceptions.ApplicationException
 
 class ThemeEditorController {
     def themeUtil = new ThemeUtil()
-    private static final Logger log = Logger.getLogger( this.getClass() )
-    def static fileExtensions=["JSON", "SCSS"]
+    private static final Logger log = Logger.getLogger(this.getClass())
+    def static fileExtensions = ["json", "scss"]
     def themeService
 
     def index() {
-        render( view: "themeEditor", model: { themes: themeUtil.getThemes()} )
+        render(view: "themeEditor", model: {
+            themes:
+            themeUtil.getThemes()
+        })
     }
 
     def save() {
@@ -37,43 +41,34 @@ class ThemeEditorController {
 
     def deleteTemplate() {
         assert params.name
-        render themeService.deleteTemplate(params.name )
+        render themeService.deleteTemplate(params.name)
     }
 
     def upload() {
-        def errMsg
+        def msgCode
         String clobData
-        def file = request.getFile("file")
-        def fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
-        def gb = file?.size/(1024*1024*1024)
-        if(gb>4){
-            errMsg = "largeData"
-        }else if(gb==0){
-            errMsg = "noData"
-        }else {
-            String type = FilenameUtils.getExtension(file.getOriginalFilename()).toUpperCase()
-            InputStream inputStream = file.getInputStream()
-            if('json'.equalsIgnoreCase(type)){
-                try{
-                     def clobDataJSON = new JsonSlurper().parseText(inputStream?.getText())
-                }catch(e){
-                    throw new Exception("File not supported Exception")
-                }
-            }else if ('scss'.equalsIgnoreCase(type)){
-                try {
-                    def clobDataSCSS = inputStream?.getText('utf-8')
-                }catch(e){
-                    throw new Exception("File not supported Exception")
-                }
-            }
-            clobData= file?.getInputStream()?.getText()
-            if (fileExtensions.contains(type)) {
-                themeService.saveTheme(fileName, type, clobData)
-                errMsg = "success";
+        try {
+            def file = request.getFile("file")
+            def fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
+            def gb = file?.size / (1024 * 1024 * 1024)
+            if (gb > 4) {
+                msgCode = "largeData"
+            } else if (gb == 0) {
+                msgCode = "noData"
             } else {
-                errMsg = "format";
+                String type = FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase()
+                InputStream inputStream = file.getInputStream()
+                clobData = inputStream?.getText('utf-8')
+                if (fileExtensions.contains(type)) {
+                    themeService.saveTheme(fileName, type, clobData)
+                    msgCode = "success"
+                } else {
+                    msgCode = "format"
+                }
             }
+        } catch (ApplicationException ae) {
+            log.error "Failed to upload file ${ae}"
         }
-        render errMsg;
+        render msgCode
     }
 }
