@@ -8,7 +8,7 @@ class ConfigurationData implements Serializable{
 
     @Id
     @Column(name="GUROCFG_SURROGATE_ID")
-    @SequenceGenerator(name = "GUROCFG_SEQ_GEN", sequenceName = "GUROCFG_SURROGATE_ID_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "GUROCFG_SEQ_GEN", sequenceName = "GUROCFG_SURROGATE_ID_SEQUENCE", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GUROCFG_SEQ_GEN")
     Long id;
 
