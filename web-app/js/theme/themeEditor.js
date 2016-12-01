@@ -1,6 +1,7 @@
 /*******************************************************************************
 Copyright 2016 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
+/* global notifications */
 (function() {
     'use strict';
 
@@ -266,9 +267,26 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                     $scope.getThemes();
                     $scope.loadTheme($scope.name);
                 })
+                .success(function(data) {
+                    var errorNotification =  notifications.get('saveError');
+                    if (errorNotification) {
+                        notifications.remove(errorNotification);
+                    }
+                    notifications.addNotification(new Notification({
+                        message: $.i18n.prop("js.notification.success"),
+                        type: "success",
+                        flash: true
+                    }))
+                })
                 .error( function(response) {
                     console.log( response );
                     console.log( "failed to save theme: ", response.status );
+                    var errorNotification  = notifications.addNotification(new Notification({
+                        message: $.i18n.prop("js.notification.upload.error"),
+                        type: "error",
+                        id: 'saveError'
+                    }))
+
                 });
         }
 

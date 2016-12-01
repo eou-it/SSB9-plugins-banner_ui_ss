@@ -19,7 +19,7 @@ class ThemeEditorController {
     def index() {
         render(view: "themeEditor", model: {
             themes:
-            themeUtil.getThemes()
+            themeService.listThemes([sort: "name", order: "asc"])
         })
     }
 
