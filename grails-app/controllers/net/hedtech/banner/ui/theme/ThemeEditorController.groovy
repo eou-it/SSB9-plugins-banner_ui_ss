@@ -58,7 +58,12 @@ class ThemeEditorController {
             } else {
                 String type = FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase()
                 InputStream inputStream = file.getInputStream()
-                clobData = inputStream?.getText('utf-8')
+                if('json'.equalsIgnoreCase(type)){
+                    new JsonSlurper().parseText(inputStream?.getText())
+                }else if ('scss'.equalsIgnoreCase(type)){
+                     inputStream?.getText('utf-8')
+                }
+                clobData= file?.getInputStream()?.getText()
                 if (fileExtensions.contains(type)) {
                     themeService.saveTheme(fileName, type, clobData)
                     msgCode = "success"
@@ -67,6 +72,7 @@ class ThemeEditorController {
                 }
             }
         } catch (ApplicationException ae) {
+            msgCode = "error"
             log.error "Failed to upload file ${ae}"
         }
         render msgCode

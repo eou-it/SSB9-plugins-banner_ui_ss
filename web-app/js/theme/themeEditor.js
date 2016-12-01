@@ -337,6 +337,12 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                            flash: true
                        });
                        notifications.addNotification(errorNotification);
+                   }else if(d=='error') {
+                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.error") , type: "Error", id: $("#file")});
+                       errorNotification.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.cancelActionButton"), function() {
+                           notifications.remove( errorNotification );
+                       });
+                       notifications.addNotification(errorNotification);
                    }else{
                        var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.success") , type: "Warning", id: $("#file")});
                        errorNotification.set({
