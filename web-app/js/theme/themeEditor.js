@@ -25,7 +25,8 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             colors = [],
             fieldnames = [],
             generated_lightness = [.25, .9],
-            shades = [.1, .2, .35, .5, .8, .9];
+            shades = [.1, .2, .35, .5, .8, .9],
+            saveError = 'saveError';
             $scope.isDisabled=true;
 
         var init = function() {
@@ -284,7 +285,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                     var errorNotification  = notifications.addNotification(new Notification({
                         message: $.i18n.prop("js.notification.upload.error"),
                         type: "error",
-                        id: 'saveError'
+                        id: saveError
                     }))
 
                 });
@@ -333,51 +334,55 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             };
 
             // SEND THE FILES.
-            $http(request)
+            return $http(request)
                 .success(function (d) {
-
+                    var errorPresent =  notifications.get(saveError);
+                    if (errorPresent) {
+                        notifications.remove(errorPresent);
+                    }
                    if(d=='format'){
-                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.type") , type: "Error", id: $("#file")});
-                       errorNotification.set({
+                       var errorNotification = new Notification({
+                           message:$.i18n.prop("js.notification.upload.type") ,
+                           type: "error",
                            flash: true
-                       });
+                            });
                        notifications.addNotification(errorNotification);
                     }else if(d=='largeData') {
-                        var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.size") , type: "Error", id: $("#file")});
-                        errorNotification.set({
-                            flash: true
-                        });
+                        var errorNotification = new Notification({
+                            message:$.i18n.prop("js.notification.upload.size") ,
+                            type: "error",
+                            flash: true});
                         notifications.addNotification(errorNotification);
                     }
                    else if(d=='noData') {
-                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.nodata") , type: "Error", id: $("#file")});
-                       errorNotification.set({
-                           flash: true
-                       });
+                       var errorNotification = new Notification({
+                           message:$.i18n.prop("js.notification.upload.nodata") ,
+                           type: "error",
+                           flash: true});
                        notifications.addNotification(errorNotification);
                    }else if(d=='error') {
-                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.error") , type: "Error", id: $("#file")});
-                       errorNotification.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.cancelActionButton"), function() {
-                           notifications.remove( errorNotification );
-                       });
+                       var errorNotification = new Notification({
+                           message:$.i18n.prop("js.notification.upload.error") ,
+                           type: "error",
+                           id: saveError});
                        notifications.addNotification(errorNotification);
                    }else{
-                       var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.success") , type: "Warning", id: $("#file")});
-                       errorNotification.set({
+                       notifications.addNotification(new Notification({
+                           message: $.i18n.prop("js.notification.success"),
+                           type: "success",
                            flash: true
-                       });
-                       notifications.addNotification(errorNotification);
+                       }))
 
                        $scope.getThemes();
                        $scope.getTemplates();
                     }
                 })
                 .error(function () {
-                    var errorNotification = new Notification({message:$.i18n.prop("js.notification.upload.error") , type: "Error", id: $("#file")});
-                    errorNotification.addPromptAction( $.i18n.prop("js.notification.dirtyCheck.cancelActionButton"), function() {
-                        notifications.remove( errorNotification );
-                    });
-                    notifications.addNotification(errorNotification);
+                    var errorNotification  = notifications.addNotification(new Notification({
+                        message: $.i18n.prop("js.notification.upload.error"),
+                        type: "error",
+                        id: saveError
+                    }))
                 }).finally(function() {
                     angular.element("input[type='file']").val(null);
                      $scope.isDisabled=true;
