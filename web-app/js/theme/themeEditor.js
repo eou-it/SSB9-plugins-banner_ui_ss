@@ -368,7 +368,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                        notifications.addNotification(errorNotification);
                    }else{
                        notifications.addNotification(new Notification({
-                           message: $.i18n.prop("js.notification.success"),
+                           message: $.i18n.prop("js.notification.upload.success"),
                            type: "success",
                            flash: true
                        }))
