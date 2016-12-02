@@ -23,21 +23,22 @@ class ThemeService {
     private static final Logger log = Logger.getLogger( this.getClass() )
 
 
-    def saveTheme(String fileName, String type, def content) {
-        fileName = ThemeUtil.sanitizeName(fileName)
-        def theme = ConfigurationData.findByNameIlikeAndType(fileName, type)
+    def saveTheme(String name, String type, def content) {
+        name = ThemeUtil.sanitizeName(name)
+        def theme = ConfigurationData.findByNameIlikeAndType(name, type)
         if (theme) {
+            theme.name = name
             theme.value = content
             theme = configurationDataService.update(theme)
         } else {
-            theme = configurationDataService.create([name: fileName, type: type, value: content])
+            theme = configurationDataService.create([name: name, type: type, value: content])
         }
         log.debug "Saved theme $theme"
         def cacheKey
         if(type == types.template) {
-            cacheKey = ".${fileName}.css"
+            cacheKey = ".${name}.css"
         } else {
-            cacheKey = "${fileName}."
+            cacheKey = "${name}."
         }
         ThemeUtil.removeElementFromCache(cacheKey)
         log.debug "Cleared cache for $theme"
