@@ -24,7 +24,7 @@ class ThemeService {
 
 
     def saveTheme(String name, String type, def content) {
-        name = ThemeUtil.sanitizeName(name)
+        name = ThemeUtil.sanitizeName(name).toLowerCase()
         def theme = ConfigurationData.findByNameIlikeAndType(name, type)
         if (theme) {
             theme.name = name
@@ -77,7 +77,11 @@ class ThemeService {
 
     def getThemeJSON(name) {
         def theme = ConfigurationData.findByNameIlikeAndType(name, types.theme)
+        def themeName = theme.name
         theme = theme ? JSON.parse(theme.value): ''
+        if(theme && theme !=''){
+            theme.put("name",themeName?.toLowerCase())
+        }
         return theme
     }
 
