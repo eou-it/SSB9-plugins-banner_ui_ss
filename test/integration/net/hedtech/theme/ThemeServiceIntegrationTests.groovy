@@ -27,7 +27,7 @@ class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
     def grailsApplication
     def themeService
 
-    def themeJSON    = '{"color1":"#ffffff", "color2":"#666666"}'
+    def themeJSON    = '{"name":"testtheme","color1":"#ffffff", "color2":"#666666"}'
     def templateSCSS =  '''.#header-main-section { background-color: $themecolor1; }'''
     def desiredCSS   =   '.#header-main-section { background-color: #ffffff; }'
     def static final types = [theme:'json', template:'scss']
@@ -52,10 +52,10 @@ class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
 
     @Test
     void testSaveTheme() {
-        themeService.saveTheme("TestTheme", types.theme, themeJSON)
-        def themeInstance = ConfigurationData.findByNameAndType("TestTheme", types.theme)
+        themeService.saveTheme("testtheme", types.theme, themeJSON)
+        def themeInstance = ConfigurationData.findByNameAndType("testtheme", types.theme)
         assertNotNull themeInstance.id
-        assertEquals themeInstance.name, "TestTheme"
+        assertEquals themeInstance.name, "testtheme"
         assertEquals themeInstance.type,  types.theme
         assertEquals themeInstance.value, themeJSON
     }
@@ -68,62 +68,63 @@ class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
 
     @Test
     void  testGetThemeJSON() {
-        themeService.saveTheme("TestTheme", types.theme, themeJSON)
-        def json = themeService.getThemeJSON("TestTheme")
+        themeService.saveTheme("testtheme", types.theme, themeJSON)
+        def json = themeService.getThemeJSON("testtheme")
         assertEquals JSON.parse(themeJSON), json
     }
 
     @Test
     void testDeleteTheme(){
         themeService.saveTheme("TestTheme", types.theme, themeJSON)
-        def themeInstance = ConfigurationData.findByNameAndType("TestTheme", 'json')
-        themeService.deleteTheme("TestTheme")
+        def themeInstance = ConfigurationData.findByNameAndType("testtheme", 'json')
+        themeService.deleteTheme("testtheme")
         assertNull ConfigurationData.findById(themeInstance.id)
     }
 
     @Test
     void testSaveTemplate() {
-        themeService.saveTheme("TestTemplate", types.template, templateSCSS)
-        def templateInstance = ConfigurationData.findByNameAndType("TestTemplate", types.template)
+        themeService.saveTheme("testtemplate", types.template, templateSCSS)
+        def templateInstance = ConfigurationData.findByNameAndType("testtemplate", types.template)
         assertNotNull templateInstance.id
-        assertEquals templateInstance.name, "TestTemplate"
+        assertEquals templateInstance.name, "testtemplate"
         assertEquals templateInstance.type, types.template
         assertEquals templateInstance.value, templateSCSS
     }
 
     @Test
     void testListTemplates(){
-        themeService.saveTheme("TestTemplate", types.template, templateSCSS)
+        themeService.saveTheme("testtemplate", types.template, templateSCSS)
         def list = themeService.listTemplates([sort: "name", order: "asc"])
         assertTrue list.size() > 1
     }
 
     @Test
     void testDeleteTemplate(){
-        def templateInstance = themeService.saveTheme("TestTemplate", types.template, templateSCSS)
-        themeService.deleteTemplate("TestTemplate")
+        def templateInstance = themeService.saveTheme("testtemplate", types.template, templateSCSS)
+        themeService.deleteTemplate("testtemplate")
         assertNull ConfigurationData.findById(templateInstance.id)
     }
 
     @Test
     void "test importTemplates"(){
         themeService.importTemplates(true)
-        def templateInstance  = ConfigurationData.findByNameAndType(templateName, types.template)
+        themeService.saveTheme("testtemplate", types.template, templateSCSS)
+        def templateInstance  = ConfigurationData.findByNameAndType("testtemplate", types.template)
         assertNotNull templateInstance.id
     }
 
     @Test
     void testGetCSS() {
-        themeService.saveTheme("TestTheme", types.theme, themeJSON)
-        themeService.saveTheme("TestTemplate", types.template, templateSCSS)
-        def templateInstance = ConfigurationData.findByNameAndType("TestTemplate", types.template)
+        themeService.saveTheme("testtheme", types.theme, themeJSON)
+        themeService.saveTheme("testtemplate", types.template, templateSCSS)
+        def templateInstance = ConfigurationData.findByNameAndType("testtemplate", types.template)
         assertNotNull templateInstance.id
-        def themeInstance = ConfigurationData.findByNameAndType("TestTheme", types.theme)
+        def themeInstance = ConfigurationData.findByNameAndType("testtheme", types.theme)
         assertNotNull themeInstance.id
         grailsApplication.config.banner.theme.path = "target/css"
-        grailsApplication.config.banner.theme.name = "TestTheme"
-        grailsApplication.config.banner.theme.template = "TestTemplate"
-        def content = themeService.getCSS("TestTheme", "TestTemplate")
+        grailsApplication.config.banner.theme.name = "testtheme"
+        grailsApplication.config.banner.theme.template = "testtemplate"
+        def content = themeService.getCSS("testtheme", "testtemplate")
         assertEquals content, desiredCSS
     }
 
