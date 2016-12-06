@@ -77,7 +77,7 @@ class ThemeService {
 
     def getThemeJSON(name) {
         def theme = ConfigurationData.findByNameIlikeAndType(name, types.theme)
-        def themeName = theme.name
+        def themeName = theme?.name
         theme = theme ? JSON.parse(theme.value): ''
         if(theme && theme !=''){
             theme.put("name",themeName?.toLowerCase())
