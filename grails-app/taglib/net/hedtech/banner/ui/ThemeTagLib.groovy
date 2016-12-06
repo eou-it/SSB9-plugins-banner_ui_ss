@@ -7,7 +7,12 @@ package net.hedtech.banner.ui
 class ThemeTagLib {
     def theme = { attrs, body ->
         def themeConfig = grailsApplication.config.banner?.theme
-        String themeName = session.mep ?: themeConfig.name
+        String themeName
+        if(session?.mep) {
+            themeName = session.mep
+        } else if(themeConfig?.name) {
+            themeName = themeConfig.name
+        }
         String themeTemplate = themeConfig.template ?: 'all'
         String cssLink
         if(themeName && themeTemplate) {
