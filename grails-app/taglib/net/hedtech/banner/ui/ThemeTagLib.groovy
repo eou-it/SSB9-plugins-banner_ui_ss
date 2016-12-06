@@ -7,16 +7,26 @@ package net.hedtech.banner.ui
 class ThemeTagLib {
     def theme = { attrs, body ->
         def themeConfig = grailsApplication.config.banner?.theme
-        String text
-        if (themeConfig?.name && themeConfig?.template) {
-            String themeName = session.mep ?: themeConfig.name // future: send mep separately
-            String themeTemplate = themeConfig.template
-            if(themeConfig?.url) {
-              text = "<link rel='stylesheet' type='text/css' href='${themeConfig.url}/getTheme?name=${themeName}&template=${themeTemplate}'>"
+        String themeName = session.mep ?: themeConfig.name
+        String themeTemplate = themeConfig.template ?: 'all'
+        String cssLink
+        if(themeName && themeTemplate) {
+            cssLink = "<link rel='stylesheet' type='text/css'"
+            if (themeConfig?.url) {
+                if(session.mep) {
+                    cssLink += "href='${themeConfig.url}/getTheme?name=${themeName}&template=${themeTemplate}&mepCode=${session.mep}'>"
+                } else {
+                    cssLink += "href='${themeConfig.url}/getTheme?name=${themeName}&template=${themeTemplate}'>"
+                }
             } else {
-              text = "<link rel='stylesheet' type='text/css' href='${createLink(controller:"theme", action: "getTheme",  params: [name: themeName, template: themeTemplate])}'>"
+                if(session.mep) {
+                    cssLink += "href='${createLink(controller: "theme", action: "getTheme", params: [name: themeName, template: themeTemplate, mepCode: session.mep])}'>"
+                } else {
+                    cssLink += "href='${createLink(controller: "theme", action: "getTheme", params: [name: themeName, template: themeTemplate])}'>"
+                }
             }
-          }
-        out << text
+        }
+        out << cssLink
     }
+
 }
