@@ -132,11 +132,11 @@ class ThemeService {
         def count=0
         log.info "Checking/loading templates."
         try {
-            new File(path).eachFileMatch(~/.*.scss/) { file ->
+            new File(path).eachFileMatch(~/.*\.scss/) { file ->
                 def fileName = FilenameUtils.getBaseName(file.name).toLowerCase()
                 if((fileName == 'banner-ui-ss' && loadFromPlugin) || (fileName != 'banner-ui-ss' &&  !loadFromPlugin)) {
                     if (!fileName.endsWith('-patch')) {
-                        def template = ConfigurationData.findByNameAndType(ThemeUtil.sanitizeName(fileName), types.template)
+                        def template = ConfigurationData.findByNameAndType(ThemeUtil.sanitizeName(fileName).toLowerCase(), types.template)
                         def map = [
                                 name        : fileName,
                                 type        : types.template,
