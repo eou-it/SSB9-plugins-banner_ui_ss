@@ -76,7 +76,7 @@ class ThemeService {
     }
 
     def getThemeJSON(name) {
-        def theme = ConfigurationData.findByNameAndType(name, types.theme)
+        def theme = ConfigurationData.findByNameAndType(name?.toLowerCase(), types.theme)
         def themeName = theme?.name
         theme = theme ? JSON.parse(theme.value): ''
         if(theme && theme !=''){
@@ -88,7 +88,7 @@ class ThemeService {
     def getTemplateSCSS(templateName) throws ApplicationException{
         File templateFile
         def templateSCSS
-        def templateObj = ConfigurationData.findByNameIlikeAndType(templateName, types.template)
+        def templateObj = ConfigurationData.findByNameAndType(templateName?.toLowerCase(), types.template)
         if (!templateObj) {
             def template = Holders.getConfig().banner.theme?.template
             def path = "${ServletContextHolder.servletContext.getRealPath('/css/theme')}"
@@ -133,10 +133,10 @@ class ThemeService {
         log.info "Checking/loading templates."
         try {
             new File(path).eachFileMatch(~/.*.scss/) { file ->
-                def fileName = FilenameUtils.getBaseName(file.name)
+                def fileName = FilenameUtils.getBaseName(file.name).toLowerCase()
                 if((fileName == 'banner-ui-ss' && loadFromPlugin) || (fileName != 'banner-ui-ss' &&  !loadFromPlugin)) {
                     if (!fileName.endsWith('-patch')) {
-                        def template = ConfigurationData.findByNameIlikeAndType(ThemeUtil.sanitizeName(fileName), types.template)
+                        def template = ConfigurationData.findByNameAndType(ThemeUtil.sanitizeName(fileName), types.template)
                         def map = [
                                 name        : fileName,
                                 type        : types.template,
