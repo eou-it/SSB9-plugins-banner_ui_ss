@@ -46,7 +46,7 @@ class ThemeController {
         assert params.name
         try {
             def scss = themeService.getTemplateSCSS(params.name)
-            response.contentType = 'text/css'
+            response.contentType = 'text/x-scss'
             render scss
         } catch ( ApplicationException ae ) {
             log.error "Failed to load theme ${params.name} ${ae}"
