@@ -494,10 +494,6 @@ dev[ng-model="theme"] {
     text-align: center;
 }
 
-.uploadMessage{
-    style:"visibility: hidden";
-    color:"red";
-}
 </style>
 </div>
 
