@@ -327,6 +327,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             var request = {
                 method: 'POST',
                 url: themeEditorPath + '/upload',
+                cache: false,
                 data: formdata,
                 headers: {
                     'Content-Type': undefined
@@ -416,6 +417,19 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
 
 
     themeEditorApp.controller('themeEditorCtrl', ['$scope', '$http', '$timeout', themeEditorCtrl]);
+
+    themeEditorApp.config(['$httpProvider', function($httpProvider) {
+        //initialize get if not there
+        if (!$httpProvider.defaults.headers.get) {
+            $httpProvider.defaults.headers.get = {};
+        }
+
+        //disable IE ajax request caching
+        $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 12 DEC 2016 05:00:00 GMT';
+        // extra
+        $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+        $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+    }]);
 
     /**
      * create an xe-onload directive to execute functions specified as xe-onload attributes
