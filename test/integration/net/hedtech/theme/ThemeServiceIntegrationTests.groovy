@@ -128,4 +128,18 @@ class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
         assertEquals content, desiredCSS
     }
 
+    @Test
+    void testGetCSSMissingTemplate() {
+        themeService.saveTheme("testtheme", types.theme, themeJSON)
+        def templateNameNotExist = "testtemplatenotexist"
+        def templateInstance = ConfigurationData.findByNameAndType(templateNameNotExist, types.template)
+        assertNull templateInstance
+        def themeInstance = ConfigurationData.findByNameAndType("testtheme", types.theme)
+        assertNotNull themeInstance.id
+        grailsApplication.config.banner.theme.path = "target/css"
+        grailsApplication.config.banner.theme.name = "testtheme"
+        grailsApplication.config.banner.theme.template = "all" // the default template, found in the filesystem
+        def content = themeService.getCSS("testtheme", templateNameNotExist)
+        assertNull content
+    }
 }

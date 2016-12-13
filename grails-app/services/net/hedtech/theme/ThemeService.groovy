@@ -89,17 +89,17 @@ class ThemeService {
         File templateFile
         def templateSCSS
         def templateObj = ConfigurationData.findByNameAndType(templateName?.toLowerCase(), types.template)
-        if (!templateObj) {
-            def template = Holders.getConfig().banner.theme?.template
+        def defaultTemplate = Holders.getConfig().banner.theme?.template
+        if (templateObj) {
+            templateSCSS = templateObj.value
+        } else if (templateName?.equalsIgnoreCase( defaultTemplate )) {
             def path = "${ServletContextHolder.servletContext.getRealPath('/css/theme')}"
                 new File(path).eachFileMatch(~/.*\.scss/) { file ->
                     def fileName = FilenameUtils.getBaseName(file.name)
-                    if(fileName.toLowerCase() == template.toLowerCase()) {
+                    if(fileName.toLowerCase() == defaultTemplate.toLowerCase()) {
                         templateSCSS = file.text
                 }
             }
-        } else {
-            templateSCSS = templateObj.value
         }
 
         return templateSCSS
