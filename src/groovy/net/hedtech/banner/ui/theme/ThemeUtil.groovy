@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils
 
 class ThemeUtil {
     def static themeCache = "theme"
-    private static final Logger log = Logger.getLogger( this.getClass() )
+    //private static final Logger log = Logger.getLogger( this.getClass() )
 
 
     def static sanitizeName( name ) {

@@ -341,7 +341,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                     if (errorPresent) {
                         notifications.remove(errorPresent);
                     }
-                   if(d=='format'){
+                   if(d=='invalidFormat'){
                        var errorNotification = new Notification({
                            message:$.i18n.prop("js.notification.upload.type") ,
                            type: "error",

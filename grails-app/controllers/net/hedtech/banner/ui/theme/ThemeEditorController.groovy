@@ -68,7 +68,7 @@ class ThemeEditorController {
                     themeService.saveTheme(fileName, type, clobData)
                     msgCode = "success"
                 } else {
-                    msgCode = "format"
+                    msgCode = "invalidFormat"
                 }
             }
         } catch (ApplicationException ae) {

@@ -1,3 +1,6 @@
+/*******************************************************************************
+ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 package net.hedtech.banner.general
 
 import javax.persistence.*
