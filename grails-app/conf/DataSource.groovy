@@ -26,7 +26,7 @@ hibernate {
 	hbm2ddl.auto = null
 	show_sql = false
 	dialect = "org.hibernate.dialect.Oracle10gDialect"
-	config.location = ["classpath:hibernate-banner-core.cfg.xml"]
+	config.location = ["classpath:hibernate-banner-core.cfg.xml","classpath:hibernate-banner-theme.cfg.xml"]
 }
 
 
