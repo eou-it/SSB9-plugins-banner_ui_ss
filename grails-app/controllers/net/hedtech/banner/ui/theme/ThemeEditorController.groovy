@@ -4,40 +4,77 @@
 
 package net.hedtech.banner.ui.theme
 
-
-import grails.converters.JSON
-import grails.util.Holders
-
-import groovy.io.FileType
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
-
-import java.io.File
-import java.util.TreeMap
-
+import org.apache.commons.io.FilenameUtils
 import org.apache.log4j.Logger
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import net.hedtech.banner.exceptions.ApplicationException
 
 class ThemeEditorController {
     def themeUtil = new ThemeUtil()
-    private static final Logger log = Logger.getLogger( this.getClass() )
-
+    private static final Logger log = Logger.getLogger(this.getClass())
+    def static fileExtensions = ["json", "scss"]
+    def themeService
 
     def index() {
-        render( view: "themeEditor", model: { themes: themeUtil.getThemes()} )
+        render(view: "themeEditor", model: {
+            themes:
+            themeService.listThemes([sort: "name", order: "asc"])
+        })
     }
 
     def save() {
         def data = request.JSON
         assert data.name, "Must include name of theme"
+        def name = data.name
+        def json = JsonOutput.toJson(data)
+        def type = fileExtensions[0]
+        themeService.saveTheme(name, type, json)
 
-        themeUtil.saveTheme( data.name, data )
         render "OK"
     }
 
-    def delete() {
+    def deleteTheme() {
         assert params.name
-        render themeUtil.deleteTheme( params.name )
+        render themeService.deleteTheme(params.name)
+    }
+
+    def deleteTemplate() {
+        assert params.name
+        render themeService.deleteTemplate(params.name)
+    }
+
+    def upload() {
+        def msgCode
+        String clobData
+        try {
+            def file = request.getFile("file")
+            def fileName = FilenameUtils.getBaseName(file.getOriginalFilename());
+            def gb = file?.size / (1024 * 1024 * 1024)
+            if (gb > 4) {
+                msgCode = "largeData"
+            } else if (gb == 0) {
+                msgCode = "noData"
+            } else {
+                String type = FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase()
+                if (fileExtensions.contains(type)) {
+                    InputStream inputStream = file.getInputStream()
+                    if('json'.equals(type)){
+                        new JsonSlurper().parseText(inputStream?.getText())
+                    }else if ('scss'.equals(type)){
+                        inputStream?.getText('utf-8')
+                    }
+                    clobData= file?.getInputStream()?.getText()
+                    themeService.saveTheme(fileName, type, clobData)
+                    msgCode = "success"
+                } else {
+                    msgCode = "invalidFormat"
+                }
+            }
+        } catch (ApplicationException ae) {
+            msgCode = "error"
+            log.error "Failed to upload file ${ae}"
+        }
+        render msgCode
     }
 }
