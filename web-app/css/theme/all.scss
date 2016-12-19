@@ -22,6 +22,10 @@
 
 /* end corrections*/
 
+#breadcrumb-panel, #title-panel {
+    background-color: $themecolor1-5; /*#F9FAFB*/
+    border-bottom-color: $themecolor1-4; /*#DEE5E7*/
+}
 
 :focus {
     outline-color: $themecolor3-4;

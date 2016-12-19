@@ -482,7 +482,7 @@ dev[ng-model="theme"] {
 
 .w20 {
     display: inline-block;
-    width: 20%;
+    width: 40%;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -493,6 +493,7 @@ dev[ng-model="theme"] {
 .center {
     text-align: center;
 }
+
 </style>
 </div>
 
@@ -562,6 +563,13 @@ dev[ng-model="theme"] {
           </div>
 
           <p></p>
+        <br/>
+        <div xe-section="theme-upload">
+            <input id="file" type="file" id="file" style="width:100%" ng-files="getTheFiles($files)" onchange="angular.element(this).scope().uploadfilechange(this)"><br/>
+            <button class="primary" ng-click="uploadFiles()" ng-disabled="isDisabled" ng-model="isDisabled"><g:message code="theme.upload"/></button>
+        </div>
+
+            <p></p>
 
           <h3 xe-for="themes"><g:message code="theme.savedThemes"/></h3>
           <ul xe-field="themes">
@@ -572,11 +580,19 @@ dev[ng-model="theme"] {
                 <span class="w10">
                     <a href="theme/get?name={{theme}}" class="center"><g:message code="theme.json"/></a>
                 </span>
-                <span class="w10">
-                    <a href="theme/getTheme?name={{theme}}" class="center"><g:message code="theme.css"/></a>
-                </span>
             </li>
           </ul>
+
+            <h3 xe-for="templates"><g:message code="theme.savedTemplates"/></h3>
+            <ul xe-field="templates">
+                <li style="margin:.2em 0" ng-repeat="template in templates | orderBy: 'template'">
+                    <span class="w20" title="{{template}}">{{template}}</span>
+                    <button class="tertiary" ng-click="deleteTemplate(template)"><g:message code="theme.deleteTheme" args="['']"/></button>
+                    <span class="w10">
+                        <a href="theme/getTemplate?name={{template}}" class="center"><g:message code="template.scss"/></a>
+                    </span>
+                </li>
+            </ul>
         </div>
     </section>
   </div>

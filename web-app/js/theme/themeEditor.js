@@ -1,7 +1,7 @@
-
 /*******************************************************************************
 Copyright 2016 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
+/* global notifications */
 (function() {
     'use strict';
 
@@ -13,6 +13,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
         var themePath = 'theme',
             themeEditorPath = 'themeEditor',
             themes = [],
+            templates = [],
             variables = {
                 'name': 'string',
                 'color1': 'color',
@@ -24,7 +25,9 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             colors = [],
             fieldnames = [],
             generated_lightness = [.25, .9],
-            shades = [.1, .2, .35, .5, .8, .9];
+            shades = [.1, .2, .35, .5, .8, .9],
+            saveError = 'saveError';
+            $scope.isDisabled=true;
 
         var init = function() {
             console.log("theme init");
@@ -245,6 +248,15 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
             });
         }
 
+        $scope.getTemplates = function() {
+            $http.get(themePath + '/listTemplates').success( function(response) {
+                $scope.templates = response;
+                console.log( 'templates: ', $scope.templates, $scope );
+            }).error( function(response) {
+                console.log( 'Unable to load existing templates', response.status );
+            });
+        }
+
         $scope.saveTheme = function() {
             console.log("saveTheme:", $scope);
             var data = getData($scope);
@@ -254,18 +266,35 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 .success( function() {
                     console.log("success");
                     $scope.getThemes();
-                    $scope.loadTheme($scope.name, data);
+                    $scope.loadTheme($scope.name);
+                })
+                .success(function(data) {
+                    var errorNotification =  notifications.get('saveError');
+                    if (errorNotification) {
+                        notifications.remove(errorNotification);
+                    }
+                    notifications.addNotification(new Notification({
+                        message: $.i18n.prop("js.notification.success"),
+                        type: "success",
+                        flash: true
+                    }))
                 })
                 .error( function(response) {
                     console.log( response );
                     console.log( "failed to save theme: ", response.status );
+                    var errorNotification  = notifications.addNotification(new Notification({
+                        message: $.i18n.prop("js.notification.upload.error"),
+                        type: "error",
+                        id: saveError
+                    }))
+
                 });
         }
 
         $scope.deleteTheme = function( name ) {
             console.log("deleteTheme:", name);
             //!! TODO: RESTFUL
-            return $http.post( themeEditorPath + "/delete?name=" + name )
+            return $http.post( themeEditorPath + "/deleteTheme?name=" + name )
                 .success( function() {
                     console.log("delete success");
                     $scope.getThemes();
@@ -276,14 +305,131 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 });
         }
 
+        $scope.deleteTemplate = function( name ) {
+            console.log("deleteTemplate:", name);
+            //!! TODO: RESTFUL
+            return $http.post( themeEditorPath + "/deleteTemplate?name=" + name )
+                .success( function() {
+                    console.log("delete success");
+                    $scope.getTemplates();
+                })
+                .error( function(response) {
+                    console.log( response );
+                    console.log( "failed to delete template: ", response.status );
+                });
+        }
+
+        var formdata = new FormData();
+        $scope.uploadFiles = function() {
+            var dispMsg = document.getElementById("uploadMsg");
+            console.log("upload file:", $scope);
+            var data = formdata;
+            var request = {
+                method: 'POST',
+                url: themeEditorPath + '/upload',
+                cache: false,
+                data: formdata,
+                headers: {
+                    'Content-Type': undefined
+                }
+            };
+
+            // SEND THE FILES.
+            return $http(request)
+                .success(function (d) {
+                    var errorPresent =  notifications.get(saveError);
+                    if (errorPresent) {
+                        notifications.remove(errorPresent);
+                    }
+                   if(d=='invalidFormat'){
+                       var errorNotification = new Notification({
+                           message:$.i18n.prop("js.notification.upload.type") ,
+                           type: "error",
+                           flash: true
+                            });
+                       notifications.addNotification(errorNotification);
+                    }else if(d=='largeData') {
+                        var errorNotification = new Notification({
+                            message:$.i18n.prop("js.notification.upload.size") ,
+                            type: "error",
+                            flash: true});
+                        notifications.addNotification(errorNotification);
+                    }
+                   else if(d=='noData') {
+                       var errorNotification = new Notification({
+                           message:$.i18n.prop("js.notification.upload.nodata") ,
+                           type: "error",
+                           flash: true});
+                       notifications.addNotification(errorNotification);
+                   }else if(d=='error') {
+                       var errorNotification = new Notification({
+                           message:$.i18n.prop("js.notification.upload.error") ,
+                           type: "error",
+                           id: saveError});
+                       notifications.addNotification(errorNotification);
+                   }else{
+                       notifications.addNotification(new Notification({
+                           message: $.i18n.prop("js.notification.upload.success"),
+                           type: "success",
+                           flash: true
+                       }))
+
+                       $scope.getThemes();
+                       $scope.getTemplates();
+                    }
+                })
+                .error(function () {
+                    var errorNotification  = notifications.addNotification(new Notification({
+                        message: $.i18n.prop("js.notification.upload.error"),
+                        type: "error",
+                        id: saveError
+                    }))
+                }).finally(function() {
+                    angular.element("input[type='file']").val(null);
+                     $scope.isDisabled=true;
+                });
+
+        }
+
+        $scope.getTheFiles = function ($files) {
+            formdata=new FormData();
+            angular.forEach($files, function (value, key) {
+                formdata.append('file', value);
+            });
+        };
+        $scope.uploadfilechange = function (values){
+            if(values.value !=""){
+                $scope.$apply(function() {
+                    $scope.isDisabled=false;
+                });
+            }else{
+                $scope.$apply(function() {
+                    $scope.isDisabled=true;
+                });
+            }
+        }
         console.log( "starting get" );
         init();
 
         $scope.getThemes();
+        $scope.getTemplates();
     };
 
 
     themeEditorApp.controller('themeEditorCtrl', ['$scope', '$http', '$timeout', themeEditorCtrl]);
+
+    themeEditorApp.config(['$httpProvider', function($httpProvider) {
+        //initialize get if not there
+        if (!$httpProvider.defaults.headers.get) {
+            $httpProvider.defaults.headers.get = {};
+        }
+
+        //disable IE ajax request caching
+        $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 12 DEC 2016 05:00:00 GMT';
+        // extra
+        $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+        $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+    }]);
 
     /**
      * create an xe-onload directive to execute functions specified as xe-onload attributes
@@ -303,4 +449,16 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 }
             };
         }]);
+    themeEditorApp.directive('ngFiles', ['$parse', function ($parse) {
+        function fn_link(scope, element, attrs) {
+            var onChange = $parse(attrs.ngFiles);
+            element.on('change', function (event) {
+                onChange(scope, { $files: event.target.files });
+            });
+        };
+
+        return {
+            link: fn_link
+        }
+    }])
 })();
