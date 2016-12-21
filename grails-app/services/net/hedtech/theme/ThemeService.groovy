@@ -6,13 +6,13 @@ package net.hedtech.theme
 
 import grails.converters.JSON
 import grails.util.Holders
-import net.hedtech.banner.general.ConfigurationData
 import net.hedtech.banner.ui.theme.ThemeUtil
 import net.sf.ehcache.Cache
 import net.sf.ehcache.Element
 import org.apache.log4j.Logger
 import org.apache.commons.io.FilenameUtils
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.ConfigurationData
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 
@@ -20,12 +20,13 @@ class ThemeService {
     def configurationDataService
     def grailsApplication
     def static final types = [theme:'json', template:'scss']
+    def static final typesList = ['json', 'scss']
     private static final Logger log = Logger.getLogger( this.getClass() )
 
 
     def saveTheme(String name, String type, def content) {
         name = ThemeUtil.sanitizeName(name).toLowerCase()
-        def theme = ConfigurationData.findByNameAndType(name, type)
+        def theme = ConfigurationData.fetchThemebyNameandType(name, type)
         if (theme) {
             theme.name = name
             theme.value = content
@@ -46,37 +47,38 @@ class ThemeService {
     }
 
     def deleteTheme(def name) {
-        def theme = ConfigurationData.findByNameAndType(name, types.theme)
+        def theme = ConfigurationData.fetchThemebyNameandType(name, types.theme)
         if(theme) {
             configurationDataService.delete(theme)
         }
     }
 
     def deleteTemplate(def name) {
-        def template = ConfigurationData.findByNameAndType(name, types.template)
+        def template = ConfigurationData.fetchThemebyNameandType(name, types.template)
         if(template) {
             configurationDataService.delete(template)
         }
     }
 
     def listThemes(args) {
-        def c = ConfigurationData.createCriteria()
-        def results = c.list (args) {
+        def results = ConfigurationData.fetchThemes(types.theme)
+        /*def results = c.list (args) {
             eq('type', types.theme)
-        }
+        }*/
         results
     }
 
     def listTemplates(args) {
-        def c = ConfigurationData.createCriteria()
+        def results = ConfigurationData.fetchThemes(types.template)
+        /*def c = ConfigurationData.createCriteria()
         def results = c.list (args) {
             eq('type', types.template)
-        }
+        }*/
         results
     }
 
     def getThemeJSON(name) {
-        def theme = ConfigurationData.findByNameAndType(name?.toLowerCase(), types.theme)
+        def theme = ConfigurationData.fetchThemebyNameandType(name?.toLowerCase(), types.theme)
         def themeName = theme?.name
         theme = theme ? JSON.parse(theme.value): ''
         if(theme && theme !=''){
@@ -88,7 +90,7 @@ class ThemeService {
     def getTemplateSCSS(templateName) throws ApplicationException{
         File templateFile
         def templateSCSS
-        def templateObj = ConfigurationData.findByNameAndType(templateName?.toLowerCase(), types.template)
+        def templateObj = ConfigurationData.fetchThemebyNameandType(templateName?.toLowerCase(), types.template)
         def defaultTemplate = Holders.getConfig().banner.theme?.template
         if (templateObj) {
             templateSCSS = templateObj.value
@@ -136,7 +138,7 @@ class ThemeService {
                 def fileName = FilenameUtils.getBaseName(file.name).toLowerCase()
                 if((fileName == 'banner-ui-ss' && loadFromPlugin) || (fileName != 'banner-ui-ss' &&  !loadFromPlugin)) {
                     if (!fileName.endsWith('-patch')) {
-                        def template = ConfigurationData.findByNameAndType(ThemeUtil.sanitizeName(fileName).toLowerCase(), types.template)
+                        def template = ConfigurationData.fetchThemebyNameandType(ThemeUtil.sanitizeName(fileName).toLowerCase(), types.template)
                         def map = [
                                 name        : fileName,
                                 type        : types.template,
