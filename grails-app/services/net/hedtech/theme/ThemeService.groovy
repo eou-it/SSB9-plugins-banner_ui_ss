@@ -26,7 +26,7 @@ class ThemeService {
 
     def saveTheme(String name, String type, def content) {
         name = ThemeUtil.sanitizeName(name).toLowerCase()
-        def theme = ConfigurationData.fetchThemebyNameandType(name, type)
+        ConfigurationData theme = ConfigurationData.fetchByNameAndType(name, type)
         if (theme) {
             theme.name = name
             theme.value = content
@@ -47,38 +47,32 @@ class ThemeService {
     }
 
     def deleteTheme(def name) {
-        def theme = ConfigurationData.fetchThemebyNameandType(name, types.theme)
+        ConfigurationData theme = ConfigurationData.fetchByNameAndType(name, types.theme)
         if(theme) {
             configurationDataService.delete(theme)
         }
     }
 
     def deleteTemplate(def name) {
-        def template = ConfigurationData.fetchThemebyNameandType(name, types.template)
+        ConfigurationData template = ConfigurationData.fetchByNameAndType(name, types.template)
         if(template) {
             configurationDataService.delete(template)
         }
     }
 
     def listThemes(args) {
-        def results = ConfigurationData.fetchThemes(types.theme)
-        /*def results = c.list (args) {
-            eq('type', types.theme)
-        }*/
+        def results = ConfigurationData.fetchByType(types.theme)
         results
     }
 
     def listTemplates(args) {
-        def results = ConfigurationData.fetchThemes(types.template)
-        /*def c = ConfigurationData.createCriteria()
-        def results = c.list (args) {
-            eq('type', types.template)
-        }*/
+        def results = ConfigurationData.fetchByType(types.template)
         results
     }
 
     def getThemeJSON(name) {
-        def theme = ConfigurationData.fetchThemebyNameandType(name?.toLowerCase(), types.theme)
+        //Not mapped to configuration Data because we are converting it to json Object
+        def theme = ConfigurationData.fetchByNameAndType(name?.toLowerCase(), types.theme)
         def themeName = theme?.name
         theme = theme ? JSON.parse(theme.value): ''
         if(theme && theme !=''){
@@ -90,7 +84,7 @@ class ThemeService {
     def getTemplateSCSS(templateName) throws ApplicationException{
         File templateFile
         def templateSCSS
-        def templateObj = ConfigurationData.fetchThemebyNameandType(templateName?.toLowerCase(), types.template)
+        ConfigurationData templateObj = ConfigurationData.fetchByNameAndType(templateName?.toLowerCase(), types.template)
         def defaultTemplate = Holders.getConfig().banner.theme?.template
         if (templateObj) {
             templateSCSS = templateObj.value
@@ -138,7 +132,7 @@ class ThemeService {
                 def fileName = FilenameUtils.getBaseName(file.name).toLowerCase()
                 if((fileName == 'banner-ui-ss' && loadFromPlugin) || (fileName != 'banner-ui-ss' &&  !loadFromPlugin)) {
                     if (!fileName.endsWith('-patch')) {
-                        def template = ConfigurationData.fetchThemebyNameandType(ThemeUtil.sanitizeName(fileName).toLowerCase(), types.template)
+                        ConfigurationData template = ConfigurationData.fetchByNameAndType(ThemeUtil.sanitizeName(fileName).toLowerCase(), types.template)
                         def map = [
                                 name        : fileName,
                                 type        : types.template,
