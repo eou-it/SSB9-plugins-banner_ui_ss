@@ -61,8 +61,8 @@ class ExcelExportService {
             Row headerRow = sheet.createRow(sheetRow)
             sheetRow++
 
+            CellStyle cellStyle = wb.createCellStyle()
             data.headers.eachWithIndex { it, index ->
-                CellStyle cellStyle = wb.createCellStyle()
                 cellStyle.setDataFormat(TEXT_FORMAT)
 
                 Cell cell = headerRow.createCell(index)
@@ -71,6 +71,7 @@ class ExcelExportService {
             }
         }
         if (data.data) {
+            CellStyle cellStyle = wb.createCellStyle()
             data.data.eachWithIndex{ it, index ->
                 Row dataRow = sheet.createRow(sheetRow)
                 sheetRow++
@@ -81,7 +82,6 @@ class ExcelExportService {
                         formatToUse = DATE_FORMAT
                     }
                     Cell cell = dataRow.createCell(i)
-                    CellStyle cellStyle = wb.createCellStyle()
                     cellStyle.setDataFormat(formatToUse)
 
                     cell.setCellValue(column)
