@@ -9,6 +9,7 @@ grails.project.dependency.resolver="maven"
 
 grails.plugin.location.'banner-core'="../banner_core.git"
 grails.plugin.location.'sghe-aurora'="../sghe_aurora.git"
+grails.plugin.location.'banner_general_utility'="../banner_general_utility.git"
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies

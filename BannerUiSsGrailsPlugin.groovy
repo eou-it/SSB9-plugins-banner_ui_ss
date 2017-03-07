@@ -18,7 +18,7 @@ class BannerUiSsGrailsPlugin {
 
     String groupId = "net.hedtech"
 
-    def version = "9.20.2"
+    def version = "9.21"
 
     def grailsVersion = "2.2.1 > *"
 
