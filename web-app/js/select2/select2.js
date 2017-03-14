@@ -1830,7 +1830,7 @@ var requestTimeout
                     if (this.opts.createSearchChoice && search.val() !== "") {
                         def = this.opts.createSearchChoice.call(self, search.val(), data.results);
                         var sanitize = search[0].attributes.sanitize.value;
-                        if (sanitize==='true') {
+                        if (sanitize==='true' && def && def.id) {
                             def.id = removeSpecialCharacter(def.id);
                             def.text = removeSpecialCharacter(def.text);
                         }
