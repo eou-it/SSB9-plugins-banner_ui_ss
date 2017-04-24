@@ -155,7 +155,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-ui-router.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-messages.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-translate.min.js']
-        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls-0.10.0.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/lrInfiniteScroll.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/moment.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-common.js']
