@@ -7,7 +7,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
 
     window.console = window.console || { log: function() {} }; //IE9 console.log polyfill stub
 
-    var themeEditorApp = angular.module("themeEditor", ["color.picker"]);
+    var themeEditorApp = angular.module("themeEditor", ["color.picker", "extensibility"]);
 
     var themeEditorCtrl = function($scope, $http, $timeout) {
         var themePath = 'theme',

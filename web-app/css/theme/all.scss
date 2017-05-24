@@ -10,6 +10,7 @@
   padding-left:0.5em;
 }
 .institutionalBranding {
+  background-image: url("$themelogo");
   width: 20em;
 }
 
@@ -262,10 +263,6 @@ div[id=mainMenuContainer] .navList .parent:focus span {
 
 #header-main-section-east-part #username{
     background-color: $themecolor1-2;
-}
-
-.institutionalBranding {
-    background-image: url("$themelogo");
 }
 
 .notification-center {
@@ -1392,10 +1389,6 @@ select:focus, input:focus, img:focus{
     background-color: $themecolor1;
 }
 
-.header .institutionalBranding {
-    background-image: url("$themelogo");
-}
-
 /*
 .header .home {
     background: url("../images/btn-header-sprite.png") no-repeat scroll 0 -29px transparent;
@@ -1727,4 +1720,210 @@ a.breadcrumbButton:visited, .breadcrumbButton {
     .calendar-img {
         background: none;
     }
+}
+/* BannerUiSs-patch.scss */
+.placeholder-theme-name {
+  content:  $themename;
+}
+
+:focus {
+  outline-color: $themecolor3-4;
+}
+
+/*** Branding Logo ***/
+.institutionalBranding {
+  background-image: url("$themelogo");
+  width: 20em;
+}
+
+.notification-center-count {
+  color: #FFFFFF;
+}
+
+/*** Tweaks to base UI */
+#header-main-section-east-part #username {
+  padding-right:0.5em; /* space after name */
+}
+#header-main-section-east-part #mepDiv {
+  padding-left:0.5em;
+}
+
+#header-main-section-east-part #mepDiv,
+#header-main-section-east-part #signInButton,
+#header-main-section-east-part #userDiv,
+#header-main-section-east-part #toolsButton {
+  border-left: 0px; /*!! Removed 1px unneeded line  */
+}
+
+#toolsList .canvas-item:hover,
+#toolsList .canvas-item:focus {
+  background-color: $themecolor3-5 ;
+}
+
+/** Page Builder */
+.admin-menu-section-main {
+    border-color: $themecolor1-2; /*#9AC0D2*/
+}
+.admin-menu {
+    color: $themecolor1-3; /*#206E9F;*/
+}
+
+.admin-menu-section-sub>div:first-of-type {
+    border-right-color: $themecolor1-2; /*#9AC0D2*/
+}
+
+.admin-menu-section-sub {
+    border-color: $themecolor1-2; /*#9AC0D2*/
+}
+.app-list-container {
+    border: 1px solid $themecolor1-2;
+}
+
+
+.admin-menu-section-main {
+    border-color: $themecolor1-2; /*#9AC0D2*/
+}
+
+@media (max-width: 991px) {
+  .admin-menu-section-sub>div:first-of-type {
+    border-bottom-color: $themecolor1-2; /*#9AC0D2*/
+  }
+}
+
+@media (min-width: 992px) {
+  .admin-menu-section-sub>div:first-of-type {
+      border-right-color: $themecolor1-2; /*#9AC0D2*/
+  }
+}
+
+.app-list-container>div {
+    border-top-color: $themecolor1-2; /*#9AC0D2*/
+}
+
+#toolsList .canvas-item:hover,
+#toolsList .canvas-item:focus {
+  background-color: $themecolor3-5 ;
+}
+
+/* Hide button bar in header of old-style pages */
+.buttonBar {
+  visibility: hidden;
+}
+
+/* Login page style overrides */
+.splashBg, .pageBg {
+    background-image: none;
+}
+
+.pageBg {
+     background-color: $themecolor1-4; /*#4c8db5;*/
+     background-image: linear-gradient( $themecolor1-1 /*#015d96*/, $themecolor1-4 /*#4c8db5*/ );
+     background-repeat: repeat-x;
+     background-size: auto 674px;
+}
+
+.splashBg {
+    height: 408px;
+    width: 705px;
+    position: relative;
+    background-color: $themecolor1-3 /*#4e8bbb;*/ /* center section background */
+    border: 2px solid $themecolor1-1 /*#00579a*/;
+    box-shadow: 0 0 30px 0px #000;
+    top: 155px;
+    margin: auto;
+    margin: auto;
+    left: 0px;
+}
+
+.splashBg:before {
+  /* top section */
+  content: "";
+  position: absolute;
+  display: block;
+  top: 0px;
+  height: 156px;
+  width: 100%;
+  background-color: $themecolor1-3 /*#70a4c4*/;
+  background-image: linear-gradient( to right, $themecolor1-4 /*#70a4c4*/, $themecolor1-2 /*#337dab*/ );
+  border-bottom: 1px solid;
+  border-image: linear-gradient( to right, $themecolor1-2 /*#4287b1*/, $themecolor1-1 /*#005c96*/ ) 1;
+}
+
+.splashBg .copyright {
+  /* bottom section */
+  top: 244px;
+  bottom: 0;
+  left:0;
+  right:0;
+  margin: 0;
+  padding: 24px 35px 0 85px;
+  background-image: linear-gradient( to right, $themecolor1-3 /*#3f85b0*/, $themecolor1-1 /*#0d649b*/ );
+  border-top: 1px solid;
+  border-image: linear-gradient( to right, $themecolor1-2 /*#367fac*/, $themecolor1-1 /*#005c96*/ ) 1;
+}
+
+.splashBg .appName {
+  /* Banner(R) name */
+  top:55px;
+  right:35px;
+}
+
+.splashBg .loginMsg {
+  /* instructions under banner name */
+  top: 110px;
+  right: 37px;
+}
+
+
+.splashBg .ellucianName {
+  /* Ellucian (TM) from auth.gsp patch */
+  display: block !important;
+  color: #ffffff;
+  font-size: 37px;
+  position: absolute;
+  left: 62px;
+  top: 181px;
+  height: 86px;
+}
+
+.splashBg .ellucianName .trademark {
+  font-size:4px;
+}
+
+
+.splashBg .logIn {
+  margin: 36px 0 0 248px;
+}
+
+.splashBg .logIn DIV  {
+  margin-top: 0;
+}
+
+.splashBg .ie-warning {
+  position: relative;
+}
+
+.ie-warning DIV {
+  color: #ffffff;
+}
+
+.splashBg .signin-button-wrapper {
+  bottom: 0;
+  top: -.15em;
+}
+
+.signin-button {
+  background: $themecolor2-3;
+  background-image:linear-gradient($themecolor2-3, $themecolor2-2);
+  border: 1px solid $themecolor2-1;
+}
+
+.signin-button:hover {
+  background: $themecolor2-4;
+  background-image:linear-gradient($themecolor2-4, $themecolor2-3);
+}
+
+.signin-button:active {
+  background: $themecolor2-2;
+  background-image:linear-gradient($themecolor2-2, $themecolor2-3);
 }

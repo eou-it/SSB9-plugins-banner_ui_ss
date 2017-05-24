@@ -153,6 +153,8 @@ class ThemeService {
             }
         } catch (ApplicationException ae) {
             log.error "Unable to import templates $ae"
+        }catch(Exception e){
+            log.error "Unable to import templates $e"
         }
         log.info "Finished checking/loading system required templates. templated loaded: $count"
 

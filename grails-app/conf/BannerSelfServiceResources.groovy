@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 modules = {
@@ -17,6 +17,15 @@ modules = {
 
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap.css'],            attrs: [media: 'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/bootstrap-fixes.css'],                attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
+    }
+
+    'bootstrapRTL' {
+        dependsOn "jquery"
+        defaultBundle environment == "development" ? false : "bootstrap"
+
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap-rtl.css'],            attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/bootstrap-fixes-rtl.css'],                attrs: [media: 'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
     }
 
@@ -127,21 +136,25 @@ modules = {
     'bannerSelfService' {
         dependsOn "bannerSelfServiceCommonLTR, angularApp, extensibilityJQuery"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
     }
 
     'bannerSelfServiceRTL' {
         dependsOn "bannerSelfServiceCommonRTL, angularApp, extensibilityJQueryRTL"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
     }
 
     'bannerWebLTR' {
         dependsOn "bannerSelfServiceCommonLTR,angularApp,extensibilityAngular"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
     }
 
     'bannerWebRTL' {
         dependsOn "bannerSelfServiceCommonRTL,angularApp,extensibilityAngularRTL"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
     }
 
     'angularApp' {
@@ -155,7 +168,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-ui-router.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-messages.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-translate.min.js']
-        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls-0.10.0.min.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/lrInfiniteScroll.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/moment.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-common.js']
@@ -186,15 +199,30 @@ modules = {
     }
 
     'themeEditor' {
-        dependsOn "bootstrap", "angularApp"
+        dependsOn "angularApp"
         resource url:[plugin: 'banner-ui-ss', file: 'js/theme/themeEditor.js']
     }
 
     'themeEditorLTR' {
-        dependsOn "bannerWebLTR, colorPickerLTR, themeEditor"
+        dependsOn "bannerWebLTR, colorPickerLTR, bootstrap, themeEditor"
     }
 
     'themeEditorRTL' {
-        dependsOn "bannerWebRTL, colorPickerRTL, themeEditor"
+        dependsOn "bannerWebRTL, colorPickerRTL, bootstrapRTL, themeEditor"
+    }
+
+    'uploadProperties' {
+        dependsOn "bootstrap", "angularApp"
+        resource url:[plugin: 'banner-ui-ss', file: 'js/uploadProperties/uploadProperties.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/uploadProperties.css'], attrs: [media: 'screen, projection']
+    }
+
+    'uploadPropertiesLTR' {
+        dependsOn "bannerWebLTR, uploadProperties"
+    }
+
+    'uploadPropertiesRTL' {
+        dependsOn "bannerWebRTL, uploadProperties"
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/uploadProperties-rtl.css'], attrs: [media: 'screen, projection']
     }
 }
