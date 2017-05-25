@@ -1,5 +1,5 @@
 /*******************************************************************************
-Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
+Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 import net.hedtech.banner.configuration.ApplicationConfigurationUtils as ConfigFinder
@@ -383,6 +383,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/uiCatalog/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/theme/**' : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/themeEditor/**' : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
+        '/ssb/uploadProperties/**' : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
 
         // ALL URIs specified with the BannerAccessDecisionVoter.ROLE_DETERMINED_DYNAMICALLY
         // 'role' (it's not a real role) will result in authorization being determined based
