@@ -77,14 +77,13 @@ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
         <g:theme />
 </head>
 <body>
-<div id="splash"></div>
-<div id="spinner" class="spinner spinner-img" style="display:none;">
-  </div>
-<g:analytics/>
-<r:layoutResources/>
-    <div id="dialogAppDiv">
+    <div id="splash"></div>
+    <div id="spinner" class="spinner spinner-img" style="display:none;">
     </div>
-        <g:layoutBody />
-<g:customJavaScriptIncludes/>
+    <g:analytics/>
+    <div id="dialogAppDiv"></div>
+    <g:layoutBody />
+    <r:layoutResources/>
+    <g:customJavaScriptIncludes/>
 </body>
 </html>
