@@ -30,6 +30,7 @@
                 plugin: 'about.banner.plugins',
                 otherPlugin: 'about.banner.other.plugins',
                 copyright: 'about.banner.copyright',
+                close : 'api.close',
                 copyrightLegalNotice: 'about.banner.copyrightLegalNotice'
             };
         });
