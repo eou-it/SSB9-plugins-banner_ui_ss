@@ -26,7 +26,6 @@ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
         <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
     <meta name="logLevel" content="${g.logLevel()}"/>
     <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
-    <g var=" "
     <meta name="transactionTimeout" content="${grails.util.Holders.config.transactionTimeout}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
