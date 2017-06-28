@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2015 Ellucian Company L.P. and its affiliates.
+ Copyright 2017 Ellucian Company L.P. and its affiliates.
  ******************************************************************************/
  /*currency-directive, decimal directive and percentage-directive does the number formatting through $filter.
  $filter uses the locale specific angular locale files for formatting the number. This file loads the angular locale
@@ -10,7 +10,7 @@
 var locale = $('meta[name=userLocale]').attr("content")
  locale = locale.replace('_','-');
  locale = locale.toLowerCase();
- if(!(locale=="en-us"|| locale=="en-au"|| locale=="en-gb"|| locale=="en-ie"|| locale=="en-in"|| locale=="en" || locale=="fr" || locale=="fr-ca" || locale=="pt" || locale=="es" )){
+ if(!(locale=="en-us"|| locale=="en-au"|| locale=="en-gb"|| locale=="en-ie"|| locale=="en-in"|| locale=="en" || locale=="fr" || locale=="fr-ca" || locale=="pt" || locale=="es" || locale=="es-mx" || locale=="es-co" || locale=="es-pr")){
     var countryLocale=locale.split("-");
     if(countryLocale[0]=="ar"){
         locale="en-us";
@@ -1186,6 +1186,380 @@ switch(locale)  {
             });
         }]);
         break;
+    case "es-co":
+        angular.module("ngLocale", [], ["$provide", function($provide) {
+        var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
+        $provide.value("$locale", {
+          "DATETIME_FORMATS": {
+            "AMPMS": [
+              "a. m.",
+              "p. m."
+            ],
+            "DAY": [
+              "domingo",
+              "lunes",
+              "martes",
+              "mi\u00e9rcoles",
+              "jueves",
+              "viernes",
+              "s\u00e1bado"
+            ],
+            "ERANAMES": [
+              "antes de Cristo",
+              "despu\u00e9s de Cristo"
+            ],
+            "ERAS": [
+              "a. C.",
+              "d. C."
+            ],
+            "FIRSTDAYOFWEEK": 6,
+            "MONTH": [
+              "enero",
+              "febrero",
+              "marzo",
+              "abril",
+              "mayo",
+              "junio",
+              "julio",
+              "agosto",
+              "septiembre",
+              "octubre",
+              "noviembre",
+              "diciembre"
+            ],
+            "SHORTDAY": [
+              "dom.",
+              "lun.",
+              "mar.",
+              "mi\u00e9.",
+              "jue.",
+              "vie.",
+              "s\u00e1b."
+            ],
+            "SHORTMONTH": [
+              "ene.",
+              "feb.",
+              "mar.",
+              "abr.",
+              "may.",
+              "jun.",
+              "jul.",
+              "ago.",
+              "sept.",
+              "oct.",
+              "nov.",
+              "dic."
+            ],
+            "STANDALONEMONTH": [
+              "Enero",
+              "Febrero",
+              "Marzo",
+              "Abril",
+              "Mayo",
+              "Junio",
+              "Julio",
+              "Agosto",
+              "Septiembre",
+              "Octubre",
+              "Noviembre",
+              "Diciembre"
+            ],
+            "WEEKENDRANGE": [
+              5,
+              6
+            ],
+            "fullDate": "EEEE, d 'de' MMMM 'de' y",
+            "longDate": "d 'de' MMMM 'de' y",
+            "medium": "d/MM/y h:mm:ss a",
+            "mediumDate": "d/MM/y",
+            "mediumTime": "h:mm:ss a",
+            "short": "d/MM/yy h:mm a",
+            "shortDate": "d/MM/yy",
+            "shortTime": "h:mm a"
+          },
+          "NUMBER_FORMATS": {
+            "CURRENCY_SYM": "$",
+            "DECIMAL_SEP": ",",
+            "GROUP_SEP": ".",
+            "PATTERNS": [
+              {
+                "gSize": 3,
+                "lgSize": 3,
+                "maxFrac": 3,
+                "minFrac": 0,
+                "minInt": 1,
+                "negPre": "-",
+                "negSuf": "",
+                "posPre": "",
+                "posSuf": ""
+              },
+              {
+                "gSize": 3,
+                "lgSize": 3,
+                "maxFrac": 2,
+                "minFrac": 2,
+                "minInt": 1,
+                "negPre": "-\u00a4",
+                "negSuf": "",
+                "posPre": "\u00a4",
+                "posSuf": ""
+              }
+            ]
+          },
+          "id": "es-co",
+          "pluralCat": function(n, opt_precision) {  if (n == 1) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
+        });
+        }]);
+        break;
 
-
+    case "es-mx":
+        angular.module("ngLocale", [], ["$provide", function($provide) {
+        var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
+        $provide.value("$locale", {
+          "DATETIME_FORMATS": {
+            "AMPMS": [
+              "a.m.",
+              "p.m."
+            ],
+            "DAY": [
+              "domingo",
+              "lunes",
+              "martes",
+              "mi\u00e9rcoles",
+              "jueves",
+              "viernes",
+              "s\u00e1bado"
+            ],
+            "ERANAMES": [
+              "antes de Cristo",
+              "despu\u00e9s de Cristo"
+            ],
+            "ERAS": [
+              "a. C.",
+              "d. C."
+            ],
+            "FIRSTDAYOFWEEK": 6,
+            "MONTH": [
+              "enero",
+              "febrero",
+              "marzo",
+              "abril",
+              "mayo",
+              "junio",
+              "julio",
+              "agosto",
+              "septiembre",
+              "octubre",
+              "noviembre",
+              "diciembre"
+            ],
+            "SHORTDAY": [
+              "dom.",
+              "lun.",
+              "mar.",
+              "mi\u00e9.",
+              "jue.",
+              "vie.",
+              "s\u00e1b."
+            ],
+            "SHORTMONTH": [
+              "ene",
+              "feb",
+              "mar",
+              "abr",
+              "may",
+              "jun",
+              "jul",
+              "ago",
+              "sep",
+              "oct",
+              "nov",
+              "dic"
+            ],
+            "STANDALONEMONTH": [
+              "Enero",
+              "Febrero",
+              "Marzo",
+              "Abril",
+              "Mayo",
+              "Junio",
+              "Julio",
+              "Agosto",
+              "Septiembre",
+              "Octubre",
+              "Noviembre",
+              "Diciembre"
+            ],
+            "WEEKENDRANGE": [
+              5,
+              6
+            ],
+            "fullDate": "EEEE, d 'de' MMMM 'de' y",
+            "longDate": "d 'de' MMMM 'de' y",
+            "medium": "dd/MM/y h:mm:ss a",
+            "mediumDate": "dd/MM/y",
+            "mediumTime": "h:mm:ss a",
+            "short": "dd/MM/yy h:mm a",
+            "shortDate": "dd/MM/yy",
+            "shortTime": "h:mm a"
+          },
+          "NUMBER_FORMATS": {
+            "CURRENCY_SYM": "$",
+            "DECIMAL_SEP": ".",
+            "GROUP_SEP": ",",
+            "PATTERNS": [
+              {
+                "gSize": 3,
+                "lgSize": 3,
+                "maxFrac": 3,
+                "minFrac": 0,
+                "minInt": 1,
+                "negPre": "-",
+                "negSuf": "",
+                "posPre": "",
+                "posSuf": ""
+              },
+              {
+                "gSize": 3,
+                "lgSize": 3,
+                "maxFrac": 2,
+                "minFrac": 2,
+                "minInt": 1,
+                "negPre": "-\u00a4",
+                "negSuf": "",
+                "posPre": "\u00a4",
+                "posSuf": ""
+              }
+            ]
+          },
+          "id": "es-mx",
+          "pluralCat": function(n, opt_precision) {  if (n == 1) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
+        });
+        }]);
+        break;
+    case "es-pr":
+        angular.module("ngLocale", [], ["$provide", function($provide) {
+        var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
+        $provide.value("$locale", {
+          "DATETIME_FORMATS": {
+            "AMPMS": [
+              "a. m.",
+              "p. m."
+            ],
+            "DAY": [
+              "domingo",
+              "lunes",
+              "martes",
+              "mi\u00e9rcoles",
+              "jueves",
+              "viernes",
+              "s\u00e1bado"
+            ],
+            "ERANAMES": [
+              "antes de Cristo",
+              "despu\u00e9s de Cristo"
+            ],
+            "ERAS": [
+              "a. C.",
+              "d. C."
+            ],
+            "FIRSTDAYOFWEEK": 6,
+            "MONTH": [
+              "enero",
+              "febrero",
+              "marzo",
+              "abril",
+              "mayo",
+              "junio",
+              "julio",
+              "agosto",
+              "septiembre",
+              "octubre",
+              "noviembre",
+              "diciembre"
+            ],
+            "SHORTDAY": [
+              "dom.",
+              "lun.",
+              "mar.",
+              "mi\u00e9.",
+              "jue.",
+              "vie.",
+              "s\u00e1b."
+            ],
+            "SHORTMONTH": [
+              "ene.",
+              "feb.",
+              "mar.",
+              "abr.",
+              "may.",
+              "jun.",
+              "jul.",
+              "ago.",
+              "sept.",
+              "oct.",
+              "nov.",
+              "dic."
+            ],
+            "STANDALONEMONTH": [
+              "Enero",
+              "Febrero",
+              "Marzo",
+              "Abril",
+              "Mayo",
+              "Junio",
+              "Julio",
+              "Agosto",
+              "Septiembre",
+              "Octubre",
+              "Noviembre",
+              "Diciembre"
+            ],
+            "WEEKENDRANGE": [
+              5,
+              6
+            ],
+            "fullDate": "EEEE, d 'de' MMMM 'de' y",
+            "longDate": "d 'de' MMMM 'de' y",
+            "medium": "MM/dd/y h:mm:ss a",
+            "mediumDate": "MM/dd/y",
+            "mediumTime": "h:mm:ss a",
+            "short": "MM/dd/yy h:mm a",
+            "shortDate": "MM/dd/yy",
+            "shortTime": "h:mm a"
+          },
+          "NUMBER_FORMATS": {
+            "CURRENCY_SYM": "$",
+            "DECIMAL_SEP": ".",
+            "GROUP_SEP": ",",
+            "PATTERNS": [
+              {
+                "gSize": 3,
+                "lgSize": 3,
+                "maxFrac": 3,
+                "minFrac": 0,
+                "minInt": 1,
+                "negPre": "-",
+                "negSuf": "",
+                "posPre": "",
+                "posSuf": ""
+              },
+              {
+                "gSize": 3,
+                "lgSize": 3,
+                "maxFrac": 2,
+                "minFrac": 2,
+                "minInt": 1,
+                "negPre": "-\u00a4",
+                "negSuf": "",
+                "posPre": "\u00a4",
+                "posSuf": ""
+              }
+            ]
+          },
+          "id": "es-pr",
+          "pluralCat": function(n, opt_precision) {  if (n == 1) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
+        });
+        }]);
+        break;
 }
