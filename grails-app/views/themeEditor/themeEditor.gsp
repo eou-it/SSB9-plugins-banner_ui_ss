@@ -7,8 +7,10 @@
     <title><g:message code="theme.editor.title"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="menuEndPoint" content="${g.createLink(controller: 'selfServiceMenu', action: 'data')}" />
+    <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
 
-    <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
+    <g:set var="lang_dir" value="${message(code: 'default.language.direction')}" scope="page" />
+    <g:if test="${lang_dir  == 'rtl'}">
         <r:require modules="themeEditorRTL"/>
     </g:if>
     <g:else>
@@ -18,7 +20,7 @@
     </g:applyLayout>
 </head>
 
-<body>
+<body dir="${lang_dir}">
 
 <div id="style-container" style="display:none">
 <!-- style included here so it is available to JS to replace -->
@@ -43,8 +45,14 @@
 
 .header a {
     margin-left: 20px;
+    margin-right: auto;
     font-size: 18px;
     color: #e2bce9;
+}
+
+[dir=rtl] .header a {
+    margin-left: auto;
+    margin-right: 20px;
 }
 
 .themes {
@@ -69,9 +77,20 @@
     line-height: 3;
 }
 
+[dir=rtl] .properties .download-links {
+    float: left;
+}
+
 .properties a {
     margin-right: 10px;
+    margin-left: auto;
     font-size: 1.1em;
+}
+
+
+[dir=rtl] .properties a {
+    margin-right: auto;
+    margin-left: 10px;
 }
 
 .properties a:first-child {
@@ -153,6 +172,10 @@
     width: 65px;
 }
 
+[dir=rtl] .preview .menu {
+    float: right;
+ }
+
 .preview .header {
     height: 55px;
     line-height: 2.5;
@@ -161,6 +184,12 @@
 
 .preview .header span {
     margin-left: 20px;
+    margin-right: auto;
+}
+
+[dir=rtl] .preview .header span {
+    margin-left: auto;
+    margin-right: 20px
 }
 
 .preview .right-section {
@@ -168,10 +197,19 @@
     height: 100%;
 }
 
+[dir=rtl] .preview .right-section {
+    float: left;
+}
+
+
 .preview .notification, .preview .close-page {
     float: left;
     height: 100%;
     width: 60px;
+}
+
+[dir=rtl] .preview .notification, .preview .close-page {
+    float: right;
 }
 
 .preview .notification {
@@ -184,8 +222,14 @@
 .preview .notification-flyout {
     position: absolute;
     right: 89px;
+    left: auto;
     top: 85px;
     width: 400px;
+}
+
+[dir=rtl] .preview .notification-flyout {
+    right: auto;
+    left: 89px;
 }
 
 .preview .notification-flyout .message {
@@ -208,7 +252,13 @@
 .form-buttons {
     position: absolute;
     right: 35px;
+    left: auto;
     bottom: 0;
+}
+
+[dir=rtl] .form-buttons {
+    right: auto;
+    left: 35px;
 }
 
 .form-buttons button {
@@ -220,6 +270,10 @@
     float: right;
 }
 
+[dir=rtl] .form-buttons button {
+    float: left;
+}
+
 .preview .notification-flyout .buttons button {
     float: right;
     padding: 10px 20px;
@@ -227,6 +281,10 @@
     border-radius: 5px;
     border-width: 1px;
     border-style: solid;
+}
+
+[dir=rtl] .preview .notification-flyout .buttons button {
+    float: left;
 }
 
 .content {
@@ -263,6 +321,10 @@
 .form {
     border-top: 1px solid #E2E2E2;
     padding: 20px 20px 20px 85px;
+}
+
+[dir=rtl] .form {
+    padding: 20px 85px 20px 20px;
 }
 
 .tabs {
@@ -317,6 +379,12 @@
     position: absolute;
     top: 0;
     left: 0;
+    right: auto;
+}
+
+[dir=rtl] .chevron-down {
+    left: auto;
+    right: 0;
 }
 
 .inputs input, .inputs select {

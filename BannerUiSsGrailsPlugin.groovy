@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2011-2017 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 import org.apache.commons.logging.LogFactory
@@ -18,7 +18,7 @@ class BannerUiSsGrailsPlugin {
 
     String groupId = "net.hedtech"
 
-    def version = "9.21"
+    def version = "9.23"
 
     def grailsVersion = "2.2.1 > *"
 

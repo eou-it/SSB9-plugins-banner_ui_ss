@@ -1,4 +1,8 @@
-﻿/*
+﻿/*******************************************************************************
+ Copyright 2013-2017 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
+
+/*
  Copyright 2012 Igor Vaynberg
 
  Version: 3.5.2 Timestamp: Sat Nov  1 14:43:36 EDT 2014
@@ -1830,7 +1834,7 @@ var requestTimeout
                     if (this.opts.createSearchChoice && search.val() !== "") {
                         def = this.opts.createSearchChoice.call(self, search.val(), data.results);
                         var sanitize = search[0].attributes.sanitize.value;
-                        if (sanitize==='true') {
+                        if (sanitize==='true' && def && def.id) {
                             def.id = removeSpecialCharacter(def.id);
                             def.text = removeSpecialCharacter(def.text);
                         }
@@ -2204,18 +2208,6 @@ var requestTimeout
                         this.cancel(e);
                         killEvent(e);
                         return;
-                }
-            }));
-
-            this.search.on("blur", this.bind(function(e) {
-                // a workaround for chrome to keep the search field focussed when the scroll bar is used to scroll the dropdown.
-                // without this the search field loses focus which is annoying
-                if (document.activeElement === this.body.get(0)) {
-                    window.setTimeout(this.bind(function() {
-                        if (this.opened()) {
-                            this.search.focus();
-                        }
-                    }), 0);
                 }
             }));
 
