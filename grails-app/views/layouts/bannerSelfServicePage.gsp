@@ -26,7 +26,7 @@ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
         <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
     <meta name="logLevel" content="${g.logLevel()}"/>
     <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
-    <meta name="transactionTimeout" content="${session.getServletContext().transactionTimeout}"/>
+    <meta name="transactionTimeout" content="${grails.util.Holders.config.transactionTimeout}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="images/applicationIcon.png" />
@@ -34,9 +34,9 @@ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
         <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
         <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
         <meta name="fullName" content="${g.fullName()}"/>
-        <meta name="loginEndpoint" content="${session.getServletContext().loginEndpoint}"/>
-        <meta name="logoutEndpoint" content="${session.getServletContext().logoutEndpoint}"/>
-        <meta name="guestLoginEnabled" content="${session.getServletContext().guestLoginEnabled}"/>
+        <meta name="loginEndpoint" content="${grails.util.Holders.config.loginEndpoint}"/>
+        <meta name="logoutEndpoint" content="${grails.util.Holders.config.logoutEndpoint}"/>
+        <meta name="guestLoginEnabled" content="${grails.util.Holders.config.guestLoginEnabled}"/>
         <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
         <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
         <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
