@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 (function(){
     'use strict';
@@ -30,6 +30,7 @@
                 plugin: 'about.banner.plugins',
                 otherPlugin: 'about.banner.other.plugins',
                 copyright: 'about.banner.copyright',
+                close : 'api.close',
                 copyrightLegalNotice: 'about.banner.copyrightLegalNotice'
             };
         });
