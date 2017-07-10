@@ -10,7 +10,7 @@ class BannerUiSsBootStrap {
     def themeService
 
     def init = {
-        configPropertiesService.setTransactionTimeOUt()
+        configPropertiesService.setTransactionTimeOut()
         configPropertiesService.setLoginEndPointUrl()
         configPropertiesService.setLogOutEndPointUrl()
         configPropertiesService.setGuestLoginEnabled()
