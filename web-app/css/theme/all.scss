@@ -10,8 +10,13 @@
   padding-left:0.5em;
 }
 .institutionalBranding {
-  background-image: url("$themelogo");
-  width: 20em;
+     background-image: url("$themelogo");
+     width: 20em;
+ }
+
+.favicon {
+    background-image: url("$themefavicon");
+    width: 20em;
 }
 
 #header-main-section-east-part #mepDiv,
