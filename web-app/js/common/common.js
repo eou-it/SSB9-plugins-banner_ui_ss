@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
+ Copyright 2017 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 //IE fix to support indexOf method on Array objects
 Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
@@ -436,7 +436,31 @@ $(document).ready(function() {
     });
 
     addCssClass();
+    changeFavicon();
 });
+
+function changeFavicon() {
+    var link = document.querySelector("link[rel*='shortcut icon']")||document.createElement('link'),
+        oldLink = document.querySelector("link[rel*='shortcut icon']")||document.getElementById('dynamic-favicon');
+    var defaultUrl = link.href;
+    link.rel = 'shortcut icon';
+    link.type = 'image/x-icon';
+    link.className = 'favicon';
+    var url = window.getComputedStyle(link).getPropertyValue('background-image');
+    if(url.indexOf("$themefavicon") != -1 || url == null) {
+        link.href = defaultUrl;
+        link.removeAttribute('class');
+    }
+    else {
+        link.href = url.slice(4, -1).replace(/"/g, "");
+        link.id = 'dynamic-favicon';
+    }
+
+    if (oldLink)
+        document.getElementsByTagName('head')[0].removeChild(oldLink);
+
+    document.getElementsByTagName('head')[0].appendChild(link);
+}
 
 function addCssClass() {
 

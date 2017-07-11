@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%-- Copyright 2016 Ellucian Company L.P. and its affiliates. --%>
+<%-- Copyright 2017 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" defaultCodec="none" %>
 <html xmlns:ng="http://angularjs.org" ng-app="themeEditor" ng-strict-di>
@@ -617,14 +617,15 @@ dev[ng-model="theme"] {
           <div xe-field="logo" class="prop">
             <label for="theme-logo" class="name"><g:message code="theme.logo"/></label>
             <input class="value" style="width:100%" id="theme-logo" ng-model="logo"></input>
-            <div class="input-lg" style="margin-top:.5em; height:3em;background:{{color1}} url({{logo}}) 1em center no-repeat"></div><!-- TODO:remove<img style='display:none' src='{{logo}}'/>-->
+              <div class="input-lg" id="theme-logo-image"></div><!-- TODO:remove<img style='display:none' src='{{logo}}'/>-->
           </div>
 
-<!--          <div xe-field="css" class="prop">
-            <label for="theme-css" class="name"><g:message code="theme.css"/></label>
-            <input class="value" style="width:100%" id="theme-css" ng-model="css"></input>
-          </div>
--->
+            <div xe-field="favicon" class="prop">
+                <label for="theme-favicon" class="name"><g:message code="theme.favicon"/></label>
+                <input class="value" style="width:100%" id="theme-favicon" ng-model="favicon"></input>
+                <div class="input-lg" id="theme-favicon-image"></div><!-- TODO:remove<img style='display:none' src='{{favicon}}'/>-->
+            </div>
+
           <div xe-section="theme-controls">
             <button class="primary" xe-field="theme-save" ng-click="saveTheme()"><g:message code="theme.save"/></button>
             <button class="secondary" xe-field="theme-new" ng-click="newTheme()"><g:message code="theme.new"/></button>
