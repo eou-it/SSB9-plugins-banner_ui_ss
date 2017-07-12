@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%-- Copyright 2017 Ellucian Company L.P. and its affiliates. --%>
+<%-- Copyright 2016-2017 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" defaultCodec="none" %>
 <html xmlns:ng="http://angularjs.org" ng-app="themeEditor" ng-strict-di>
