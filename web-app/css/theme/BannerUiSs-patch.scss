@@ -8,6 +8,11 @@
   width: 20em;
 }
 
+.favicon {
+  background-image: url("$themefavicon");
+  width: 20em;
+}
+
 #banner-header-main-section,
 #header-main-section {
     background-color: $themecolor1; /* use selected color */
