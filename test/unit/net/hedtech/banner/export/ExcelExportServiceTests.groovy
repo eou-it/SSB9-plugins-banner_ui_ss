@@ -172,14 +172,14 @@ class ExcelExportServiceTests extends GrailsUnitTestCase{
 
         Row dataRow = sheet.getRow(2)
         assertEquals "data01", dataRow.getCell(0).getStringCellValue()
-        assertEquals ExcelExportService.TEXT_FORMAT, dataRow.getCell(0).getCellStyle().getDataFormat()
+        assertEquals ExcelExportService.DATE_FORMAT, dataRow.getCell(0).getCellStyle().getDataFormat()
 
         assertEquals formatter.format(dateToUse), dataRow.getCell(1).getDateCellValue().format("M/d/yy")
         assertEquals ExcelExportService.DATE_FORMAT, dataRow.getCell(1).getCellStyle().getDataFormat()
 
         dataRow = sheet.getRow(3)
         assertEquals "data11", dataRow.getCell(0).getStringCellValue()
-        assertEquals ExcelExportService.TEXT_FORMAT, dataRow.getCell(0).getCellStyle().getDataFormat()
+        assertEquals ExcelExportService.DATE_FORMAT, dataRow.getCell(0).getCellStyle().getDataFormat()
 
         assertEquals formatter.format(dateToUse), dataRow.getCell(1).getDateCellValue().format("M/d/yy")
         assertEquals ExcelExportService.DATE_FORMAT, dataRow.getCell(1).getCellStyle().getDataFormat()
