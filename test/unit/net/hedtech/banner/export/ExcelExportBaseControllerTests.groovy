@@ -125,7 +125,8 @@ class ExcelExportBaseControllerTests {
     void testUnicodeFileName() {
 
         def fileName = "\u0627\u0633\u062A\u062E\u0631\u0627\u062C \u0645\u0644\u0641"
-        def fileNameEncoded = URLEncoder.encode(fileName)
+        //def fileNameEncoded = URLEncoder.encode(fileName)
+        def fileNameEncoded = URLEncoder.encode(fileName ,"utf-8")
         ExcelExportBaseController.metaClass.hasAccess = { return true }
         ExcelExportBaseController.metaClass.retrieveData = { return [success: false] }
         ExcelExportBaseController.metaClass.getFileName = { return fileName }
