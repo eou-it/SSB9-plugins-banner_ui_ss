@@ -10,6 +10,7 @@ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
     <script>
         var extensibilityInfo =
                 ${raw(net.hedtech.extensibility.InfoService.getJSON(controllerName, resource(plugin:'web-app-extensibility', dir:'html')))};
+        window.mepCode='${session.mep}';
     </script>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         <r:require modules="bannerSelfServiceRTL"/>
