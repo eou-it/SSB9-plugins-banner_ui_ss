@@ -1,5 +1,5 @@
 /*******************************************************************************
-Copyright 2016 Ellucian Company L.P. and its affiliates.
+Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 /* global notifications */
 (function() {
@@ -20,6 +20,7 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
                 'color2': 'color',
                 'color3': 'color',
                 'logo': 'image',
+                'favicon': 'image',
                 'css': 'url'
             },
             colors = [],
@@ -210,6 +211,10 @@ Copyright 2016 Ellucian Company L.P. and its affiliates.
 
             document.getElementsByTagName("head")[0].appendChild( newLink );
 
+            $('#theme-logo-image').css({'background-color': $scope.color1, 'background-image' : 'url(' + $scope.logo + ')'});
+            $('#theme-favicon-image').css({'background-color': $scope.color1, 'background-image' : 'url(' + $scope.favicon + ')'});
+
+            changeFavicon();
             updatePreview( getData( $scope ));
         }
 

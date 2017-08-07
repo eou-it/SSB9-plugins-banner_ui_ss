@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.export
 
@@ -69,7 +69,7 @@ class ExcelExportBaseControllerTests {
         controller.exportExcelFile()
 
         assertEquals 200, controller.response.status
-        assertEquals "attachment;filename=\"" + controller.message(code: "net.hedtech.banner.export.ExcelExportBaseController.defaultFileName") + ".xls\"", controller.response.getHeader("Content-disposition")
+        assertEquals "attachment;filename=\"" + controller.message(code: "net.hedtech.banner.export.ExcelExportBaseController.defaultFileName") + ".xls\"" + ";filename*=utf-8''" + controller.message(code: "net.hedtech.banner.export.ExcelExportBaseController.defaultFileName") + ".xls", controller.response.getHeader("Content-disposition")
     }
 
 
@@ -81,7 +81,7 @@ class ExcelExportBaseControllerTests {
         controller.exportExcelFile()
 
         assertEquals 200, controller.response.status
-        assertEquals "attachment;filename=\"testFile.xls\"", controller.response.getHeader("Content-disposition")
+        assertEquals "attachment;filename=\"testFile.xls\"" + ";filename*=utf-8''testFile.xls", controller.response.getHeader("Content-disposition")
     }
 
 
@@ -121,4 +121,20 @@ class ExcelExportBaseControllerTests {
         assertNotNull controller.response.outputStream
         assertTrue controller.response.getContentAsString().size() > 0
     }
+
+    void testUnicodeFileName() {
+
+        def fileName = "\u0627\u0633\u062A\u062E\u0631\u0627\u062C \u0645\u0644\u0641"
+        def fileNameEncoded = URLEncoder.encode(fileName)
+        ExcelExportBaseController.metaClass.hasAccess = { return true }
+        ExcelExportBaseController.metaClass.retrieveData = { return [success: false] }
+        ExcelExportBaseController.metaClass.getFileName = { return fileName }
+        controller.excelExportService = new ExcelExportService()
+        controller.exportExcelFile()
+
+        assertEquals 200, controller.response.status
+        assertEquals "attachment;filename=\"" + fileName + ".xls\"" + ";filename*=utf-8''" + fileNameEncoded + ".xls", controller.response.getHeader("Content-disposition")
+
+    }
+
 }

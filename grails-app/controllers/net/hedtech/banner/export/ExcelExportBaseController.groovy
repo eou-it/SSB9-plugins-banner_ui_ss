@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2014 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.export
 
@@ -36,7 +36,7 @@ class ExcelExportBaseController {
 
             Workbook wb = excelExportService.getExcelFile(data, fileTypeS as ExcelExportService.FileType, getSheetTitle())
 
-            response.setHeader("Content-disposition", "attachment;filename=\"" + getFileName() + "." + fileTypeS + "\"")
+            response.setHeader("Content-disposition", "attachment;filename=\"" + getFileName() + "." + fileTypeS + "\";filename*=utf-8''" + URLEncoder.encode(getFileName() + "." + fileTypeS,"utf-8"))
             response.contentType = CONTENT_TYPE
             response.outputStream << toByteArray(wb)
             response.outputStream.flush()
