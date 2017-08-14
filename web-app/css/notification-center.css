@@ -100,6 +100,11 @@ li:first-child span.notification-item-prompt-message {
     display: inline;
 }
 
+button.notification-flyout-item:focus {
+    outline: 1px solid #4d90fe;
+    -ms-user-select: none;
+}
+
 .notification-item-prompts button{
     background-color: #908989;
     border-color: #908989;
