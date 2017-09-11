@@ -16,6 +16,9 @@ class RtlCssGeneratorIntegrationTests extends BaseIntegrationTestCase {
     def rtlcssFile = "${System.properties['base.dir']}/web-app/css/banner-ui-ss-rtl.css"
     def tempFile = "${System.properties['base.dir']}/web-app/css/banner-ui-ss-rtl-temp.css"
 
+    def css = '.class { border-left:1px; }'
+    def rtl = css.replaceAll( 'left', 'right' );
+
     @Before
     void setUp() {
         formContext = ['GUAGMNU']
@@ -31,10 +34,37 @@ class RtlCssGeneratorIntegrationTests extends BaseIntegrationTestCase {
     }
 
 
+    def ws( text ) {
+        return text.replaceAll( /\s+/, ' ' )
+    }
+
     @Test
-    public void testGenerateRTLCss(){
+    public void testTransformCss() {
+        def transformCss = ws( rtlCssGenerator.transformCss(css))
+        assertEquals rtl, transformCss
+    }
+
+
+    @Test
+    public void testCommentedStyle(){
+        def commentsInProperties = '.class { color:blue;/*{identifier}*/ background:none;}'
+        def desiredCss = '.class { color:blue; background:none;}'
+        assertEquals desiredCss, rtlCssGenerator.removeCommentedStyles( commentsInProperties )
+    }
+
+    @Test
+    public void testGenerateRTLCssWithPluginFalse(){
         new File(rtlcssFile).renameTo(tempFile)
         rtlCssGenerator.generateRTLCss(false)
+        assertTrue new File(rtlcssFile).exists()
+    }
+
+
+    @Test
+    public void testGenerateRTLCssWithPluginTrue(){
+        new File(rtlcssFile).renameTo(tempFile)
+        rtlCssGenerator.generateRTLCss(true)
+        assertTrue new File(rtlcssFile).exists()
     }
 
 
