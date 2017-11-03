@@ -1,0 +1,9 @@
+<div ng-controller="uiSelectController">
+    <label style="margin-right: 1em" tabindex="0" for="preference" aria-label="'popup.preference.locale.heading' | xei18n" ng-bind="'popup.preference.locale.heading' | xei18n"/></label>
+    <xe-ui-select  tabindex="0" id="preference" ng-model="person2.selected" theme="select2" ng-disabled="disabled">
+        <xe-ui-select-match>{{$select.selected.name}}</xe-ui-select-match>
+        <xe-ui-select-choices repeat="state in stateData">
+            <div ng-bind-html="state.name | highlight: $select.search"></div>
+        </xe-ui-select-choices>
+    </xe-ui-select>
+</div>

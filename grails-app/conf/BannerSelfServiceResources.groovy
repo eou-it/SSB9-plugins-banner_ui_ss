@@ -137,24 +137,32 @@ modules = {
         dependsOn "bannerSelfServiceCommonLTR, angularApp, extensibilityJQuery"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/preference_data.js']
     }
 
     'bannerSelfServiceRTL' {
         dependsOn "bannerSelfServiceCommonRTL, angularApp, extensibilityJQueryRTL"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/preference_data.js']
     }
 
     'bannerWebLTR' {
         dependsOn "bannerSelfServiceCommonLTR,angularApp,extensibilityAngular"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/preference_data.js']
     }
 
     'bannerWebRTL' {
         dependsOn "bannerSelfServiceCommonRTL,angularApp,extensibilityAngularRTL"
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/preference_data.js']
     }
 
     'angularApp' {
@@ -226,4 +234,8 @@ modules = {
         dependsOn "bannerWebRTL, uploadProperties"
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/uploadProperties-rtl.css'], attrs: [media: 'screen, projection']
     }
+
+    /*'userPreference' {
+        dependsOn "bootstrap", "angularApp"
+    }*/
 }
