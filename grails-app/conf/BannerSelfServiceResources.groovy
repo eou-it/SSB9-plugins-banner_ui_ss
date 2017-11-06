@@ -138,7 +138,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/preference_data.js']
     }
 
     'bannerSelfServiceRTL' {
@@ -146,7 +145,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/preference_data.js']
     }
 
     'bannerWebLTR' {
@@ -154,7 +152,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/preference_data.js']
     }
 
     'bannerWebRTL' {
@@ -162,7 +159,6 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
         resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/preference_data.js']
     }
 
     'angularApp' {

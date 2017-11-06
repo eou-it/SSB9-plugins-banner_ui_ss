@@ -13,9 +13,9 @@
             $scope.title ="Preference Language ";
             $scope.selectedLang ={};
 
-            $scope.get('configUserPreference/fetch',function(){
+           /* $scope.get('configUserPreference/fetch',function(){
 
-            });
+            });*/
             $scope.testing = function(){
                 var optionSelected = angular.element("#preference").find('span.select2-chosen').text();
                 $scope.selectedLang.name=optionSelected;
