@@ -3,34 +3,30 @@
     angular.module('userPreference', ['xe-ui-components'])
         .controller('PopupCtrl',[ '$scope','$timeout','$http', function($scope, $timeout, $http ){
             $scope.modalShown = false;
+            if($('meta[name=menuBaseURL]').attr("content")){
+                var backendlocale = $('meta[name=menuBaseURL]').attr("content");
+            }
             $scope.togglepopup = function() {
                 $scope.modalShown = !$scope.modalShown;
                 $timeout(function () {
                     angular.element('#xeModalMask').attr('tabindex', 0).focus();
+                    // To Fetch all Locales from DB
+                    $http.get(backendlocale+"/userPreference/locales").then(function (response) {
+                        var localesFromDB = response.data["locales"];
+                        if(undefined!=response.data["selectedLocale"]){
+                            $scope.language.selected = response.data["selectedLocale"];
+                            $scope.disableButton = true;
+                        }
+                        $scope.localeList = localesFromDB;
+
+                    },function (data, status, headers, config) {
+                        //alert("error");
+                    });
                 });
             };
-            $scope.title =$.i18n.prop('userpreference.popup.language.heading');
-
+            $scope.popupTitle = $.i18n.prop('userpreference.popup.language.heading');
             $scope.localeList=[];
             $scope.disableButton = true;
-
-            /*if($('meta[name=menuBaseURL]').attr("content")){*/
-                var backendlocale = $('meta[name=menuBaseURL]').attr("content");
-            /*}*/
-            // To Fetch all Locales from DB
-            $http.get(backendlocale+"/userPreference/locales").then(function (response) {
-               var localesFromDB = response.data["locales"];
-                if(undefined!=response.data["selectedLocale"]){
-                    $scope.language.selected = response.data["selectedLocale"];
-                    $scope.disableButton = true;
-                }
-                $scope.localeList = localesFromDB;
-
-            },function (data, status, headers, config) {
-
-                alert("error");
-            });
-
 
             $scope.$watch("language.selected", function(newVal, oldVal) {
                 if (undefined != $scope.language.selected && null!=$scope.language.selected){
@@ -41,10 +37,9 @@
 
             // To pass the selected Locale to backend and set in DB
             $scope.saveLocale = function(){
-                console.log("HEREE");
                 $http({
                     method: 'POST',
-                    url: "userPreference/saveLocale",
+                    url: backendlocale+"/userPreference/saveLocale",
                     data: $scope.language.selected
                 }).then(function (response, status) {
                     $scope.togglepopup();

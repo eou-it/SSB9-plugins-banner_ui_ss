@@ -2,7 +2,7 @@
 Copyright 2017 Ellucian Company L.P. and its affiliates.
 --%>
 <div id="userPreferenceDiv" ng-app="userPreference" data-ng-controller="PopupCtrl">
-    <xe-popup-modal show="modalShown">
+    <xe-popup-modal show="modalShown" pageheader="${g.message(code: 'userpreference.popup.language.heading')}" >
         <popup-content>
             <div>
                 <xe-ui-select id="preference" ng-model="language.selected" theme="select2" ng-required="true">
@@ -14,7 +14,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
             </div>
         </popup-content>
         <popup-buttons>
-            <xe-button ng-click="saveLocale()" ng-Keydown="saveLocale()" id="saveLanguage" xe-disabled="disableButton" xe-type="primary" xe-label="SAVE" ></xe-button>
+            <xe-button ng-click="saveLocale()" ng-Keydown="saveLocale()" id="saveLanguage" xe-disabled="disableButton" xe-type="primary" xe-label="${g.message(code: 'userpreference.popup.language.save')}" ></xe-button>
         </popup-buttons>
     </xe-popup-modal>
 </div>
