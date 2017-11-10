@@ -1,3 +1,7 @@
+/*******************************************************************************
+ Copyright 2017 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
+
 (function(){
     'use strict';
     angular.module('userPreference', ['xe-ui-components'])
