@@ -135,37 +135,37 @@ modules = {
 
     'bannerSelfService' {
         dependsOn "bannerSelfServiceCommonLTR, angularApp, extensibilityJQuery"
-        resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.css']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/about/about.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference.css', attrs: [media: 'screen, projection']]
     }
 
     'bannerSelfServiceRTL' {
         dependsOn "bannerSelfServiceCommonRTL, angularApp, extensibilityJQueryRTL"
-        resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference-rtl.css']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference-rtl-patch.css']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/about/about.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference-rtl.css', attrs: [media: 'screen, projection']]
+        resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference-rtl-patch.css', attrs: [media: 'screen, projection']]
     }
 
     'bannerWebLTR' {
         dependsOn "bannerSelfServiceCommonLTR,angularApp,extensibilityAngular"
-        resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.css']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/about/about.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference.css', attrs: [media: 'screen, projection']]
 
     }
 
     'bannerWebRTL' {
         dependsOn "bannerSelfServiceCommonRTL,angularApp,extensibilityAngularRTL"
-        resource url:[plugin: 'banner-ui-ss',file: 'js/about/about.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference-rtl.css']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/preference/userpreference-rtl-patch.css']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/about/about.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference-rtl.css', attrs: [media: 'screen, projection']]
+        resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference-rtl-patch.css', attrs: [media: 'screen, projection']]
     }
 
     'angularApp' {

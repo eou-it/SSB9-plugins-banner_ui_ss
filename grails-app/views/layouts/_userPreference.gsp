@@ -14,7 +14,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
             </div>
         </popup-content>
         <popup-buttons>
-            <xe-button ng-click="saveLocale()" ng-Keydown="saveLocale()" id="saveLanguage" xe-disabled="disableButton" xe-type="primary" xe-label="${g.message(code: 'userpreference.popup.language.save')}" ></xe-button>
+            <xe-button ng-click="saveLocale()" id="saveLanguage" xe-disabled="disableButton" xe-type="primary" xe-label="${g.message(code: 'userpreference.popup.language.save')}" ></xe-button>
         </popup-buttons>
     </xe-popup-modal>
 </div>

@@ -10,7 +10,9 @@
             if($('meta[name=menuBaseURL]').attr("content")){
                 var backendlocale = $('meta[name=menuBaseURL]').attr("content");
             }
+            notifications.clearNotifications();
             $scope.togglepopup = function() {
+
                 $scope.modalShown = !$scope.modalShown;
                 $timeout(function () {
                     angular.element('#xeModalMask').attr('tabindex', 0).focus();
@@ -37,7 +39,6 @@
                     $scope.disableButton = false;
                 }
             });
-
 
             // To pass the selected Locale to backend and set in DB
             $scope.saveLocale = function(){
