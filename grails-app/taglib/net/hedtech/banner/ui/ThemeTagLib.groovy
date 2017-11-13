@@ -19,7 +19,7 @@ class ThemeTagLib {
         String themeTemplate = themeConfig.template ?: 'all'
         String cssLink
         if(themeName && themeTemplate) {
-            cssLink = "<link rel='stylesheet' type='text/css '"
+            cssLink = "<link rel='stylesheet' type='text/css' "
             if (themeConfig?.url) {
                 cssLink += "href='${themeConfig.url}/getTheme?name=${themeName}&template=${themeTemplate + mepCodeParam}'>"
             } else {
