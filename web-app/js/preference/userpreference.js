@@ -12,7 +12,6 @@
             }
             notifications.clearNotifications();
             $scope.togglepopup = function() {
-
                 $scope.modalShown = !$scope.modalShown;
                 $timeout(function () {
                     angular.element('#xeModalMask').attr('tabindex', 0).focus();
@@ -26,10 +25,22 @@
                         $scope.localeList = localesFromDB;
 
                     },function (data, status, headers, config) {
-                        //alert("error");
+                        var errorMessage = $.i18n.prop('userpreference.notification.failure.message');
+                        var errorNotification = new Notification({
+                            message: errorMessage,
+                            type: "error",
+                            component: errorNotification,
+                            elementToFocus: errorNotification
+                        });
+                        notifications.addNotification(errorNotification);
                     });
                 });
             };
+
+            $scope.closePopup = function() {
+                $scope.modalShown = !$scope.modalShown;
+            };
+
             $scope.popupTitle = $.i18n.prop('userpreference.popup.language.heading');
             $scope.localeList=[];
             $scope.disableButton = true;
@@ -47,7 +58,7 @@
                     url: backendlocale+"/userPreference/saveLocale",
                     data: $scope.language.selected
                 }).then(function (response, status) {
-                    $scope.togglepopup();
+                    $scope.closePopup();
                     var successmessage = $.i18n.prop('userpreference.notification.success.message');
                     var successNotification = new Notification({
                         message: successmessage,
@@ -57,7 +68,7 @@
                     });
                     notifications.addNotification(successNotification);
                 },function (data, status, headers, config) {
-                    $scope.togglepopup();
+                    $scope.closePopup();
                     var errorMessage = $.i18n.prop('userpreference.notification.failure.message');
                     var errorNotification = new Notification({
                         message: errorMessage,
