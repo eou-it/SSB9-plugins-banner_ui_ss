@@ -14,7 +14,9 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
             </div>
         </popup-content>
         <popup-buttons>
-            <xe-button ng-click="saveLocale()" id="saveLanguage" xe-disabled="disableButton" xe-type="primary" xe-label="${g.message(code: 'userpreference.popup.language.save')}" ></xe-button>
+            <xe-button ng-click="saveLocale()" id="saveLanguage" xe-disabled="disableButton" xe-type="secondary" xe-label="${g.message(code: 'userpreference.popup.language.save')}" ></xe-button>
+            %{--<xe-button ng-click="saveLocale()" id="saveLanguage" xe-disabled="disableButton" xe-type="primary" xe-label="${g.message(code: 'userpreference.popup.language.save')}" ></xe-button>--}%
+            <xe-button ng-click="errorMessage()" id="errorMessage" xe-type="secondary" xe-label="Error Message Testing" ></xe-button>
         </popup-buttons>
     </xe-popup-modal>
 </div>

@@ -79,6 +79,18 @@
                     notifications.addNotification(errorNotification);
                 });
             };
+
+            $scope.errorMessage = function(){
+                $scope.closePopup();
+                var errorMessage = $.i18n.prop('userpreference.notification.failure.message');
+                var errorNotification = new Notification({
+                    message: errorMessage,
+                    type: "error",
+                    component: errorNotification,
+                    elementToFocus: errorNotification
+                });
+                notifications.addNotification(errorNotification);
+            };
             $scope.language = {};
 
         }]);
