@@ -59,6 +59,7 @@
                     data: $scope.language.selected
                 }).then(function (response, status) {
                     $scope.closePopup();
+                    notifications.clearNotifications();
                     var successmessage = $.i18n.prop('userpreference.notification.success.message');
                     var successNotification = new Notification({
                         message: successmessage,
@@ -69,6 +70,7 @@
                     notifications.addNotification(successNotification);
                 },function (data, status, headers, config) {
                     $scope.closePopup();
+                    notifications.clearNotifications();
                     var errorMessage = $.i18n.prop('userpreference.notification.failure.message');
                     var errorNotification = new Notification({
                         message: errorMessage,
@@ -82,6 +84,7 @@
 
             $scope.errorMessage = function(){
                 $scope.closePopup();
+                notifications.clearNotifications();
                 var errorMessage = $.i18n.prop('userpreference.notification.failure.message');
                 var errorNotification = new Notification({
                     message: errorMessage,
