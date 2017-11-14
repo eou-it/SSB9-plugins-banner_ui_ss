@@ -53,10 +53,12 @@
 
             // To pass the selected Locale to backend and set in DB
             $scope.saveLocale = function(){
+                $scope.disableButton = true;
                 $http({
                     method: 'POST',
                     url: backendlocale+"/userPreference/saveLocale",
-                    data: $scope.language.selected
+                    data: $scope.language.selected,
+                    cache: false
                 }).then(function (response, status) {
                     $scope.closePopup();
                     notifications.clearNotifications();

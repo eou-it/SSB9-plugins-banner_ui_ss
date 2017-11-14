@@ -3,25 +3,24 @@
 *******************************************************************************/
 
 div#buttonContainer.buttonContainer {
-    direction:rtl;
-    float:right;
-    clear:both;
-    bottom:0em;
-    position:fixed;
-    left:0em;
-    width:100%;
+    direction: rtl;
+    float: right;
+    clear: both;
+    bottom: 0em;
+    position: fixed;
+    left: 0em;
+    width: 100%;
 }
 
-
 @media (max-width: 768px) and (orientation: landscape) {
-    .xe-popup-container xe-button .primary{
+    .xe-popup-container xe-button .primary {
         width: 100%;
-        bottom:auto;
+        bottom: auto;
     }
 
-    div#buttonContainer.buttonContainer{
-        width:100%;
-        left:0em;
+    div#buttonContainer.buttonContainer {
+        width: 100%;
+        left: 0em;
     }
 
 }
@@ -29,8 +28,8 @@ div#buttonContainer.buttonContainer {
 @media screen and (min-width: 768px) {
 
     div#buttonContainer.buttonContainer {
-        direction:rtl;
-        float:left;
+        direction: rtl;
+        float: left;
         height: 0%;
         bottom: auto;
         width: auto;
@@ -39,6 +38,14 @@ div#buttonContainer.buttonContainer {
     }
 }
 
-.xe-popup-container xe-button .primary{
+.xe-popup-container xe-button .primary {
     width: 100%;
+}
+
+div.select2-result-label ::after {
+    content: "\200E";
+}
+
+span.select2-chosen ::after {
+    content: "\200E";
 }
