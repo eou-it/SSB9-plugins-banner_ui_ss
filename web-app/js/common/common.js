@@ -447,7 +447,7 @@ function changeFavicon() {
     link.type = 'image/x-icon';
     link.className = 'favicon';
     var url = window.getComputedStyle(link).getPropertyValue('background-image');
-    if(url.indexOf("$themefavicon") != -1 || url == null) {
+    if(url.indexOf("$themefavicon") != -1 || !url || url === "none") {
         link.href = defaultUrl;
         link.removeAttribute('class');
     }
