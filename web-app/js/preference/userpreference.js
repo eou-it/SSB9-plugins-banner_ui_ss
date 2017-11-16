@@ -53,6 +53,7 @@
 
             // To pass the selected Locale to backend and set in DB
             $scope.saveLocale = function(){
+                $scope.closePopup();
                 /*setTimeout(function() { angular.element("#saveLanguage").focusout(); }, 10);*/
                 /*$scope.disableButton = true;*/
                 $http({
@@ -61,32 +62,36 @@
                     data: $scope.language.selected,
                     cache: false
                 }).then(function (response, status) {
-                    $scope.closePopup();
                     successNotification();
                 },function (data, status, headers, config) {
-                    $scope.closePopup();
                     errorNotification();
                 });
+            };
+
+
+            $scope.errorMessage = function(){
+                $scope.closePopup();
+                errorNotification();
             };
 
             $scope.language = {};
 
             function successNotification(){
                 notifications.clearNotifications();
-                var element1 = angular.element("#notification-center").find('a:first');
+                /*var element1 = angular.element("#notification-center").find('a:first');*/
                 var successmessage = $.i18n.prop('userpreference.notification.success.message');
                 var successNotification = new Notification({
                     message: successmessage,
                     type: "success",
-                    component: successNotification,
-                    elementToFocus: element1
+                    flash: true
+                    /*elementToFocus: element1*/
                 });
                 notifications.addNotification(successNotification);
             }
 
             function errorNotification(){
                 notifications.clearNotifications();
-                /*var element1 = angular.element("#notificationCenterAriaInfo").find('ul.error-container:first');*/
+                var element1 = angular.element("#notificationCenterAriaInfo").find('ul.error-container:first');
                 /*var element1 = angular.element("#notification-center").find('a:first');*/
                 var errorMessage = $.i18n.prop('userpreference.notification.failure.message');
                 var errorNotification = new Notification({
