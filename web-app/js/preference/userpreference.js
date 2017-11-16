@@ -62,7 +62,7 @@
                     cache: false
                 }).then(function (response, status) {
                     $scope.closePopup();
-                    errorNotification();
+                    successNotification();
                 },function (data, status, headers, config) {
                     $scope.closePopup();
                     errorNotification();
@@ -87,13 +87,13 @@
             function errorNotification(){
                 notifications.clearNotifications();
                 /*var element1 = angular.element("#notificationCenterAriaInfo").find('ul.error-container:first');*/
-                var element1 = angular.element("#notification-center").find('a:first');
+                /*var element1 = angular.element("#notification-center").find('a:first');*/
                 var errorMessage = $.i18n.prop('userpreference.notification.failure.message');
                 var errorNotification = new Notification({
                     message: errorMessage,
-                    type: "error",
-                    component: errorNotification,
-                    elementToFocus: element1
+                    type: "error"
+                    /*component: errorNotification*/
+                    /*elementToFocus: element1*/
                 });
                 notifications.addNotification(errorNotification);
             }
