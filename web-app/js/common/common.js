@@ -447,11 +447,9 @@ function changeFavicon() {
     link.type = 'image/x-icon';
     link.className = 'favicon';
     var url = window.getComputedStyle(link).getPropertyValue('background-image');
-    if(url.indexOf("$themefavicon") != -1 || !url || url === "none") {
-        link.href = defaultUrl;
-        link.removeAttribute('class');
-    }
-    else {
+    var urlRegex = /^url\("(.*)"\)$/;
+    
+    if(urlRegex.test(url) && url.indexOf("$themefavicon") == -1){
         link.href = url.slice(4, -1).replace(/"/g, "");
         link.id = 'dynamic-favicon';
     }
