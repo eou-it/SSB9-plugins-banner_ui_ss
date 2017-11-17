@@ -53,9 +53,10 @@
 
             // To pass the selected Locale to backend and set in DB
             $scope.saveLocale = function(){
+                if($scope.disableButton){
+                    return false;
+                }
                 $scope.closePopup();
-                /*setTimeout(function() { angular.element("#saveLanguage").focusout(); }, 10);*/
-                /*$scope.disableButton = true;*/
                 $http({
                     method: 'POST',
                     url: backendlocale+"/userPreference/saveLocale",
@@ -78,29 +79,29 @@
 
             function successNotification(){
                 notifications.clearNotifications();
-                /*var element1 = angular.element("#notification-center").find('a:first');*/
+                var element1 = angular.element("#ariaNotificationCountText");
                 var successmessage = $.i18n.prop('userpreference.notification.success.message');
                 var successNotification = new Notification({
                     message: successmessage,
                     type: "success",
-                    flash: true
-                    /*elementToFocus: element1*/
+                    flash:"true",
+                    elementToFocus : element1
                 });
                 notifications.addNotification(successNotification);
             }
 
             function errorNotification(){
                 notifications.clearNotifications();
-                var element1 = angular.element("#notificationCenterAriaInfo").find('ul.error-container:first');
-                /*var element1 = angular.element("#notification-center").find('a:first');*/
                 var errorMessage = $.i18n.prop('userpreference.notification.failure.message');
                 var errorNotification = new Notification({
                     message: errorMessage,
-                    type: "error"
-                    /*component: errorNotification*/
-                    /*elementToFocus: element1*/
+                    type: "error",
+                    flash:"true"
                 });
                 notifications.addNotification(errorNotification);
+                angular.element("div.notification-item-message").find('span:first').attr('tabindex',0);
+                angular.element("div.notification-item-message").find('span:first').addClass('notification-flyout-item');
+                angular.element("div.notification-item-message").find('span:first').focus();
             }
 
         }]);
