@@ -21,7 +21,6 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
 
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
         <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
-        <g:set var="org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE" value="${net.hedtech.banner.general.configuration.ConfigUserPreferenceService.getUserLocale()}" scope="session" />
         <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}" />
 
     <meta charset="${message(code: 'default.character.encoding')}"/>
