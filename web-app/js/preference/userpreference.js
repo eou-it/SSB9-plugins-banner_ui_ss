@@ -82,11 +82,6 @@
             };
 
 
-            $scope.errorMessage = function(){
-                $scope.closePopup();
-                errorNotification();
-            };
-
             $scope.language = {};
 
             function successNotification(){

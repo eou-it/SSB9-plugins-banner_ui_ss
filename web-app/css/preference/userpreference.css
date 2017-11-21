@@ -82,16 +82,4 @@ div#buttonContainer.buttonContainer {
     width: 100%;
 }
 
-.xe-popup-container xe-button#saveLanguage .secondary{
-    width: 45%;
-    float:right;
-}
-
-.xe-popup-container xe-button#errorMessage .secondary{
-    width: 50%;
-    padding: 0.875em 4.75em;
-    float:left;
-}
-
-
 
