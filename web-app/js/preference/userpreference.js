@@ -5,6 +5,14 @@
 (function(){
     'use strict';
     angular.module('userPreference', ['xe-ui-components'])
+        .config(function($httpProvider) {
+            $httpProvider.defaults.headers.common['Cache-Control'] = 'no-cache';
+            $httpProvider.defaults.cache = false;
+            if (!$httpProvider.defaults.headers.get) {
+                $httpProvider.defaults.headers.get = {};
+            }
+            $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
+        })
         .controller('PopupCtrl',[ '$scope','$timeout','$http', function($scope, $timeout, $http ){
             $scope.modalShown = false;
             $scope.disableButton = true;
@@ -29,7 +37,25 @@
                     angular.element('#xeModalMask').attr('tabindex', 0).focus();
                     angular.element('#preference').find('input')[1].focus();
                     // To Fetch all Locales from DB
-                    $http.get(backendlocale+"/userPreference/locales").then(function (response) {
+                    $http({
+                        method: 'GET',
+                        url: backendlocale+"/userPreference/locales",
+                        data: $scope.language.selected
+                    }).then(function (response, status) {
+                        var localesFromDB = response.data["locales"];
+                        if(undefined!=response.data["selectedLocale"]){
+                            $scope.language.selected = response.data["selectedLocale"];
+                            $scope.prevSelected = response.data["selectedLocale"];
+                            $('.uiselect-choice-status-hidden-accessible').text("");
+                            $('.uiselect-choice-status-hidden-accessible').text($scope.prevSelected.description);
+                            $('.uiselect-choice-status-hidden-accessible').innerText = $scope.prevSelected.description;
+                        }
+                        $scope.disableButton = true;
+                        $scope.localeList = localesFromDB;
+                    },function (data, status, headers, config) {
+                        errorNotification();
+                    });
+                   /* $http.get(backendlocale+"/userPreference/locales").then(function (response) {
                         var localesFromDB = response.data["locales"];
                         if(undefined!=response.data["selectedLocale"]){
                             $scope.language.selected = response.data["selectedLocale"];
@@ -44,7 +70,7 @@
                     },function (data, status, headers, config) {
                         $scope.closePopup();
                         errorNotification();
-                    });
+                    });*/
                 });
             };
 
