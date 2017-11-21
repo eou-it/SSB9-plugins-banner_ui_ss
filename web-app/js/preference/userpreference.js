@@ -16,6 +16,15 @@
                 notifications.clearNotifications();
                 $scope.modalShown = !$scope.modalShown;
                 delete $scope.language.selected;
+                var liveChoicestStusRegion = $('.uiselect-choice-status-hidden-accessible');
+                if (liveChoicestStusRegion.length == 0) {
+                    var regionSpan = angular.element('<span></span>');
+                    regionSpan.attr('role', 'status');
+                    regionSpan.attr('aria-live', 'assertive');
+                    regionSpan.attr('aria-atomic', 'true');
+                    regionSpan.attr('class', 'uiselect-choice-status-hidden-accessible');
+                    angular.element(document.body).append(regionSpan);
+                }
                 $timeout(function () {
                     angular.element('#xeModalMask').attr('tabindex', 0).focus();
                     angular.element('#preference').find('input')[1].focus();
@@ -25,6 +34,9 @@
                         if(undefined!=response.data["selectedLocale"]){
                             $scope.language.selected = response.data["selectedLocale"];
                             $scope.prevSelected = response.data["selectedLocale"];
+                            $('.uiselect-choice-status-hidden-accessible').text("");
+                            $('.uiselect-choice-status-hidden-accessible').text($scope.prevSelected.description);
+                            $('.uiselect-choice-status-hidden-accessible').innerText = $scope.prevSelected.description;
                         }
                         $scope.disableButton = true;
                         $scope.localeList = localesFromDB;
