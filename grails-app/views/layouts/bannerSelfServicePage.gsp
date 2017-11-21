@@ -83,6 +83,12 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
     </div>
     <g:analytics/>
     <div id="dialogAppDiv"></div>
+
+
+<g:if test="${grails.util.Holders.config.locale_userPreferenceEnable}">
+    <g:render template="/layouts/userPreference" plugin="banner_ui_ss"/>
+</g:if>
+
     <g:layoutBody />
     <r:layoutResources/>
     <g:customJavaScriptIncludes/>
