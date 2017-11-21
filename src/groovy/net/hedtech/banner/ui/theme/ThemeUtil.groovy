@@ -24,7 +24,7 @@ class ThemeUtil {
 
 
     def static sanitizeName( name ) {
-        return name.replaceAll(/[.*\/\\]/, '_')
+        return name.replaceAll(/[.*\/\\<>\'\"\(\)]/, '_')
     }
 
     def static cssName(themeName, templateName) {
