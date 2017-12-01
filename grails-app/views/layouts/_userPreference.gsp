@@ -1,7 +1,7 @@
 <%--
 Copyright 2017 Ellucian Company L.P. and its affiliates.
 --%>
-<div id="userPreferenceDiv" dir="auto" ng-app="userPreference" data-ng-controller="PopupCtrl">
+<div id="userPreferenceDiv" dir="auto" data-ng-controller="PopupCtrl">
     <xe-popup-modal show="modalShown" focusbackelement="tools" pageheader="${g.message(code: 'userpreference.popup.language.heading')}" >
         <popup-content>
             <div>
