@@ -4,6 +4,7 @@
 package net.hedtech.banner.common
 
 import groovy.io.FileType
+import groovy.util.FileNameFinder
 
 /**
  * This class is a utility class used to take all the CSS files from *Resources.groovy file and transform into SCSS file
@@ -264,8 +265,8 @@ class ThemeScssGenerator {
         return css
     }
 
-    def appendToScssFile(scss, scssFile, sourceCSSFile) {
-        File file = new File(scssFile)
+    def appendToScssFile(scss, scssFileName, sourceCSSFile) {
+        File file = new File(scssFileName)
         def sourceFileComment = "\n/* "+sourceCSSFile.getName()+" */\n"
         file.append(sourceFileComment)
         file.append(scss)
@@ -555,7 +556,7 @@ class ThemeScssGenerator {
             def regexCSSResource = ~/resource url(.+?).css('|")/
             def regexDir = ~/dir:('|")(.+?)('|")/
             def regexPlugin = ~/plugin:('|")(.+?)('|")/
-            def regexCssFile = ~/file:('|")(.+?)('|")/
+            def regexCssFile = ~/file:('|")(.+?)('|")/    /*' terminate string for highlighting */
 
             def matcherResource = regexCSSResource.matcher(fileText)
             def matcherDir
@@ -673,18 +674,32 @@ class ThemeScssGenerator {
         return variable
     }
 
+    def appendFile(String filename, String SCSSFile) {
+        File fileToAppend = new File(filename)
+        if(fileToAppend.exists()) {
+            log.debug "Appending patch file ${filename} at offset ${new File( SCSSFile ).length()}"
+            appendToScssFile(fileToAppend.text, SCSSFile, fileToAppend)
+        }
+    }
+
     def appendSCSSPatchFile(String SCSSFile) {
-        if(checkFileExists(SCSSFile)) {
-           File patchFile = new File(SCSSFile.substring(0, SCSSFile.indexOf('.scss'))+'-patch.scss')
-           if(patchFile.exists()) {
-               appendToScssFile(patchFile.text, SCSSFile, patchFile)
-           }
+        String patchFilename = SCSSFile.substring(0, SCSSFile.indexOf('.scss'))+'-patch.scss'
+        appendFile( patchFilename, SCSSFile )
+    }
+
+    def appendCommonPatchFile( String scssFile ) {
+        def names = new FileNameFinder().getFileNames(baseDirPath, '**/banner-theme-common-patch.scss' )
+        if ( names ) {
+            appendFile( names[0], scssFile )
         }
     }
 
     public generateThemeSCSSFile(String SCSSFile) {
         def cssFiles = []
         def SCSS
+
+        checkFileExists(SCSSFile) ? new File(SCSSFile).delete() : new File(SCSSFile).getParentFile().mkdirs()
+
         cssFiles.addAll(getCSSFiles(new File("${baseDirPath}/grails-app/conf/")))
         if (new File("${baseDirPath}/plugins/").exists()) {
             cssFiles.addAll(getCSSFiles(new File("${baseDirPath}/plugins/")))
@@ -701,10 +716,11 @@ class ThemeScssGenerator {
                             appendToScssFile(SCSS, SCSSFile, file)
                         }
                     }
-                    appendSCSSPatchFile(SCSSFile)
                 }
             }
-            println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
         }
+        appendCommonPatchFile(SCSSFile)
+        appendSCSSPatchFile(SCSSFile)
+        println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
     }
 }

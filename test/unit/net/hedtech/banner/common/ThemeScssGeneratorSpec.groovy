@@ -12,7 +12,6 @@ class ThemeScssGeneratorSpec extends Specification {
     def themeScssGenerator = new ThemeScssGenerator()
     def scssFile = "${System.properties['base.dir']}/web-app/css/theme/banner-ui-ss.scss"
 
-
     def "test remove comments ()"() {
         expect:
         themeScssGenerator.removeCommentedStyles(inputCss) == desiredCss
@@ -45,10 +44,10 @@ class ThemeScssGeneratorSpec extends Specification {
     }
 
     def "test generateThemeSCSSFile"() {
-        expect:
-        assert themeScssGenerator.checkFileExists(scssFile)
-        cleanup:
-        new File(scssFile).delete()
+         when:
+         themeScssGenerator.generateThemeSCSSFile( scssFile )
+         then:
+         themeScssGenerator.checkFileExists(scssFile)
     }
 
     @Unroll
@@ -177,4 +176,36 @@ class ThemeScssGeneratorSpec extends Specification {
         'ReD'               |   '#FF0000'
         'DarkSeaGreen'      |   '#8FBC8F'
     }
-}  
+
+    def "includes -patch file exactly once"() {
+        when:
+        String markerText = "/* banner-ui-ss-patch.scss */"
+        themeScssGenerator.generateThemeSCSSFile( scssFile )
+        String scss = new File(scssFile).text
+
+        // logging on failure is too verbose with whole scss string, so just test result
+        int first = scss.indexOf( markerText )
+        int last = scss.lastIndexOf( markerText )
+
+        then:
+        first != -1
+        first == last
+    }
+
+    def "includes banner-theme-common-patch.scss file"() {
+        when:
+        themeScssGenerator.generateThemeSCSSFile( scssFile )
+        String scss = new File(scssFile).text
+
+        // logging on failure is too verbose with whole scss string, so just test result
+        boolean containsMarker = scss.contains( "/* banner-theme-common-patch.scss */" )
+        boolean containsThemeName = scss.contains( ".placeholder-theme-name" )
+        boolean containsLogo = scss.contains( '$themelogo' )
+
+        then:
+        containsMarker
+        containsThemeName
+        containsLogo
+    }
+
+}
