@@ -15,7 +15,9 @@ numericApp.directive('decimalInput',['$timeout', '$filter','readonlysvc', '$comp
         restrict: 'E',
         scope:{
             ngModel : "=",
-            id : "@"
+            id : "@",
+            integerLength:"=",
+            decimalLength:"="
         },
         link: function($scope, $elm, $attrs) {
             $elm.removeAttr('id');
@@ -79,6 +81,28 @@ numericApp.directive('decimalInput',['$timeout', '$filter','readonlysvc', '$comp
 
             $scope.$watch('ngModel', function(){
                 var formatted;
+                var dotIndex
+                if($scope.ngModel) {
+                    dotIndex = $scope.ngModel.toString().indexOf(".")
+                    if (dotIndex !== -1) {
+                        if ($attrs.integerLength && (dotIndex > parseInt($attrs.integerLength))) {
+                            var splittedNumber = $scope.ngModel.toString().split(".");
+                            var slicedIntegerPart = splittedNumber[0].toString().slice(0, $attrs.integerLength);
+                            $scope.ngModel = parseFloat(slicedIntegerPart.concat("." + splittedNumber[1]));
+                        }
+
+                        var numberOfDecimals = $scope.ngModel.toString().length - dotIndex + 1;
+
+                        if ($attrs.decimalLength && (numberOfDecimals > parseInt($attrs.decimalLength))) {
+                            var splittedNumber = $scope.ngModel.toString().split(".");
+                            var slicedDecimalPart = splittedNumber[1].toString().slice(0, $attrs.decimalLength);
+                            $scope.ngModel = parseFloat(splittedNumber[0].toString().concat(".", slicedDecimalPart));
+                        }
+                    }
+                    else {
+                        $scope.ngModel = parseFloat($scope.ngModel.toString().slice(0, $attrs.integerLength));
+                    }
+                }
                 formatted = $filter("number")($scope.ngModel, $attrs.decimals);
                 $scope.formatted = formatted;
 
