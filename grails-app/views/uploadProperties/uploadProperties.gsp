@@ -1,7 +1,7 @@
 <%-- Copyright 2017 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
-<html xmlns:ng="http://angularjs.org" ng-app="uploadProperties" ng-strict-di>
+<html xmlns:ng="http://angularjs.org" ng-strict-di>
 <head>
     <title><g:message code="upload.properties.title"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +19,7 @@
 
 <body>
 
-<div id="content">
+<div id="content" ng-app="uploadProperties">
 
 <div id="uploadContent" ng-controller="uploadPropCtrl">
 <div id="header1">
