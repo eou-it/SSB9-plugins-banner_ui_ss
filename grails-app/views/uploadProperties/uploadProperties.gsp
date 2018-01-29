@@ -1,4 +1,4 @@
-<%-- Copyright 2017 Ellucian Company L.P. and its affiliates. --%>
+<%-- Copyright 2017-2018 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html xmlns:ng="http://angularjs.org" ng-strict-di>
