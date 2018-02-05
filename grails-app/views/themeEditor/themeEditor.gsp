@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<%-- Copyright 2016-2017 Ellucian Company L.P. and its affiliates. --%>
+<%-- Copyright 2016-2018 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" defaultCodec="none" %>
-<html xmlns:ng="http://angularjs.org" ng-app="themeEditor" ng-strict-di>
+<html xmlns:ng="http://angularjs.org" ng-strict-di>
 <head>
     <title><g:message code="theme.editor.title"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -565,7 +565,7 @@ dev[ng-model="theme"] {
 </style>
 </div>
 
-<div id="content">
+<div id="content" ng-app="themeEditor">
   <div class="col-md-4 properties" data-reactid=".0.1.0.0">
     <section id="themeComponent">
         <h4><g:message code="theme.editor.title"/></h4>
