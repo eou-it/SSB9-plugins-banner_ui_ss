@@ -2,8 +2,8 @@
 Copyright 2017-2018 Ellucian Company L.P. and its affiliates.
 --%>
 <div id="userPreferenceDiv" dir="auto">
-    <xe-popup-modal ng-if="showDiv" show="modalShown" focusbackelement="tools" pageheader="${g.message(code: 'userpreference.popup.language.heading')}" >
-        <popup-content>
+    <xe-popup-modal show="modalShown" focusbackelement="tools" pageheader="${g.message(code: 'userpreference.popup.language.heading')}" >
+        <popup-content ng-if="showDiv">
             <div>
                 <xe-ui-select id="preference" ng-model="language.selected" theme="select2" ng-required="true" text-selected="description">
                     <xe-ui-select-match placeholder="${g.message(code: 'userpreference.popup.language.selectinput.placeholder')}"><span ng-bind="$select.selected.description"></span></xe-ui-select-match>
