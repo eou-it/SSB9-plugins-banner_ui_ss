@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 package net.hedtech.banner.ui
@@ -13,7 +13,9 @@ class ThemeTagLib {
             themeName = themeConfig.name ? (themeConfig.name + session.mep) : session.mep
             mepCodeParam = "&mepCode=${session.mep}"
         } else {
-            themeName = themeConfig.name
+            if(themeConfig.name) {
+                themeName = themeConfig.name
+            }
             mepCodeParam=''
         }
         String themeTemplate = themeConfig.template ?: 'all'
