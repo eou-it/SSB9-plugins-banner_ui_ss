@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2011-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2011-2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 import org.apache.commons.logging.LogFactory
@@ -18,7 +18,7 @@ class BannerUiSsGrailsPlugin {
 
     String groupId = "net.hedtech"
 
-    def version = "9.26"
+    def version = "9.26.1"
 
     def grailsVersion = "2.2.1 > *"
 
@@ -26,7 +26,7 @@ class BannerUiSsGrailsPlugin {
             cacheHeaders: '1.1.5 => *',
             csv: '0.3.1 => *',
             feeds: '1.5 => *',
-            bannerCore: '1.0.17 => *'
+            bannerCore: '9.26.1 => *'
     ]
 
     def pluginExcludes = [

@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2017-2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 (function(){
@@ -55,22 +55,6 @@
                     },function (data, status, headers, config) {
                         errorNotification();
                     });
-                   /* $http.get(backendlocale+"/userPreference/locales").then(function (response) {
-                        var localesFromDB = response.data["locales"];
-                        if(undefined!=response.data["selectedLocale"]){
-                            $scope.language.selected = response.data["selectedLocale"];
-                            $scope.prevSelected = response.data["selectedLocale"];
-                            $('.uiselect-choice-status-hidden-accessible').text("");
-                            $('.uiselect-choice-status-hidden-accessible').text($scope.prevSelected.description);
-                            $('.uiselect-choice-status-hidden-accessible').innerText = $scope.prevSelected.description;
-                        }
-                        $scope.disableButton = true;
-                        $scope.localeList = localesFromDB;
-
-                    },function (data, status, headers, config) {
-                        $scope.closePopup();
-                        errorNotification();
-                    });*/
                 });
             };
 
