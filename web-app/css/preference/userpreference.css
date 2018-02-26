@@ -29,9 +29,9 @@ div#buttonContainer.buttonContainer {
     width:100%;
 }
 
-.ui-select-container .select2-choice {
+/*.ui-select-container .select2-choice {
     background: url("images/ui-select/dropdown_grey.svg") no-repeat 100% !important;
-}
+}*/
 
 .select2-dropdown-open .select2-choice {
     background: url("images/ui-select/dropdown_blue.svg") no-repeat 100%;
