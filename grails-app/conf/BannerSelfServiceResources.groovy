@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 modules = {
@@ -211,30 +211,30 @@ modules = {
     }
 
     'themeEditor' {
-        dependsOn "angularApp"
+        dependsOn "angularApp,commonComponents "
         resource url:[plugin: 'banner-ui-ss', file: 'js/theme/themeEditor.js']
     }
 
     'themeEditorLTR' {
-        dependsOn "bannerWebLTR, colorPickerLTR, bootstrap, themeEditor"
+        dependsOn "bannerWebLTR, colorPickerLTR, bootstrap, themeEditor, commonComponentsLTR"
     }
 
     'themeEditorRTL' {
-        dependsOn "bannerWebRTL, colorPickerRTL, bootstrapRTL, themeEditor"
+        dependsOn "bannerWebRTL, colorPickerRTL, bootstrapRTL, themeEditor, commonComponentsRTL"
     }
 
     'uploadProperties' {
-        dependsOn "bootstrap", "angularApp"
+        dependsOn "bootstrap", "angularApp", "commonComponents"
         resource url:[plugin: 'banner-ui-ss', file: 'js/uploadProperties/uploadProperties.js']
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/uploadProperties.css'], attrs: [media: 'screen, projection']
     }
 
     'uploadPropertiesLTR' {
-        dependsOn "bannerWebLTR, uploadProperties"
+        dependsOn "bannerWebLTR, uploadProperties, commonComponentsLTR"
     }
 
     'uploadPropertiesRTL' {
-        dependsOn "bannerWebRTL, uploadProperties"
+        dependsOn "bannerWebRTL, uploadProperties, commonComponentsRTL"
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/uploadProperties-rtl.css'], attrs: [media: 'screen, projection']
     }
 
