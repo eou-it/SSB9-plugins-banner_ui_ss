@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 package net.hedtech.banner.ui.theme
@@ -12,7 +12,7 @@ import org.apache.log4j.Logger
 
 class ThemeController {
     def themeService
-    private static final Logger log = Logger.getLogger( this.getClass() )
+    private static final Logger log = Logger.getLogger( ThemeController.class.name )
 
     def index() {
         render "index"
