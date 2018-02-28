@@ -23,7 +23,7 @@ class ThemeTagLibSpec extends Specification {
         config.banner.theme.name = "TestTheme"
         config.banner.theme.template = "TestTemplate"
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css'href='/theme/getTheme?name=TestTheme&template=TestTemplate'>"
+        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=TestTheme&template=TestTemplate'>"
     }
 
     void "test ThemeTagLib with theme, template name and theme URL"() {
@@ -32,7 +32,7 @@ class ThemeTagLibSpec extends Specification {
         config.banner.theme.url = "http://<HOST>:<PORT>/<APP_NAME>/ssb/theme"
         config.banner.theme.template = "TestTemplate"
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css'href='http://<HOST>:<PORT>/<APP_NAME>/ssb/theme/getTheme?name=TestTheme&template=TestTemplate'>"
+        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='http://<HOST>:<PORT>/<APP_NAME>/ssb/theme/getTheme?name=TestTheme&template=TestTemplate'>"
     }
 
     void "test ThemeTagLib with theme name, URL and without template name configured"() {
@@ -40,7 +40,7 @@ class ThemeTagLibSpec extends Specification {
         config.banner.theme.name = "TestTheme"
         config.banner.theme.url = "http://<HOST>:<PORT>/<APP_NAME>/ssb/theme"
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css'href='http://<HOST>:<PORT>/<APP_NAME>/ssb/theme/getTheme?name=TestTheme&template=all'>"
+        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='http://<HOST>:<PORT>/<APP_NAME>/ssb/theme/getTheme?name=TestTheme&template=all'>"
     }
 
     void "test ThemeTagLib without Template Configured"() {
@@ -53,7 +53,7 @@ class ThemeTagLibSpec extends Specification {
         def request = GrailsWebUtil.bindMockWebRequest()
         request.session['mep'] = 'BANNER'
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css'href='/theme/getTheme?name=BANNER&template=all&mepCode=BANNER'>"
+        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=BANNER&template=all&mepCode=BANNER'>"
     }
 
     void "test ThemeTagLib with MEP code, theme URL, template name configured"() {
@@ -62,7 +62,7 @@ class ThemeTagLibSpec extends Specification {
         config.banner.theme.template = "TestTemplate"
         request.session['mep'] = 'BANNER'
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css'href='/theme/getTheme?name=BANNER&template=TestTemplate&mepCode=BANNER'>"
+        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=BANNER&template=TestTemplate&mepCode=BANNER'>"
     }
 
     void "test ThemeTagLib with MEP code, theme URL, theme name and without template name configured"() {
@@ -70,6 +70,6 @@ class ThemeTagLibSpec extends Specification {
         def request = GrailsWebUtil.bindMockWebRequest()
         request.session['mep'] = 'BANNER'
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css'href='/theme/getTheme?name=BANNER&template=all&mepCode=BANNER'>"
+        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=BANNER&template=all&mepCode=BANNER'>"
     }
 }
