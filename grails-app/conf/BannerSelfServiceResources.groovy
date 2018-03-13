@@ -192,6 +192,10 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/services/readonly-service.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/date-picker/directives/date-picker-directive.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/i18n/i18n-filter.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'css/hotkeys/hotkeys.css']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/hotkeys.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/testModule/testModule.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/shortcuts/bannershortcuts.js']
     }
 
     'colorPicker' {

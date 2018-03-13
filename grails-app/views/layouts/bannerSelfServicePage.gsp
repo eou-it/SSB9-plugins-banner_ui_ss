@@ -88,7 +88,8 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
 <g:if test="${grails.util.Holders.config.locale_userPreferenceEnable}">
     <g:render template="/layouts/userPreference" plugin="banner_ui_ss"/>
 </g:if>
-
+<div id="testing_module"></div>
+<div id="shortcut_module_added"></div>
     <g:layoutBody />
     <r:layoutResources/>
     <g:customJavaScriptIncludes/>
