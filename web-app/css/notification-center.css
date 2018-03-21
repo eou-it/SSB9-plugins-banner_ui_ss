@@ -5,7 +5,7 @@
     min-width: 25em;
     background-color: #0071A7;
     font-size: 1.2em;
-    box-shadow: 0 1px 1px #000000;
+    /*box-shadow: 0 1px 1px #000000;*/
     right : 0;
     left : auto;
 }
@@ -69,25 +69,26 @@
 }
 
 .notification-center-flyout ul li.notification-center-message-success {
-    background-color: #DDF4C9;
-    border: 1px solid #B0C3A0;
-    border-bottom: 2px solid #B0C3A0;
-    color: #04661B;
+    background-color: #eaf7f2;
+    border: 1px solid #00af69;
+    color: #00804d;
+    box-shadow: 0 1px 1px rgba(0, 175, 105,0.15);
+
 }
 
 .notification-center-flyout ul li.notification-center-message-error{
-    background-color: #FAEDED;
-    border: 1px solid #E7C2C2;
-    border-bottom: 2px solid #EED2D2;
-    color: #CD3939;
+    background-color: #ffeeed;
+    /*border: #d42828;*/
+    border: 1px solid #d42828;
+    color: #d42828;
 }
 
 .notification-center-flyout ul li.notification-center-message-warning {
-    background-color: #FFF6B3;
-    border: 1px solid #F3E58E;
-    border-bottom: 2px solid #F3E688;
-    color: #8B572A;
-    border-width: 1px 0px 0px 0px;
+    background-color: #f5f2e7;
+    border-top: 1px solid #8a6a00;
+    /*border-bottom: 2px solid #8a6a00;*/
+    color: #8a6a00;
+    /*border-width: 1px 0px 0px 0px;*/
 }
 
 li span.notification-item-prompt-message, li .notification-item-prompts, .notification-center-flyout-hidden, .notification-center-hidden {
@@ -125,6 +126,7 @@ li:first-child .notification-item-prompts {
     border: 1px solid #C6CBCD;
     text-align: right;
     padding: 0.25em 0.25em 0.25em 0;
+    border-top: 1px solid #8a6a00;
 }
 
 body > .notification-center-shim {
@@ -140,7 +142,7 @@ body > .notification-center-shim {
 }
 
 #header-main-section li a.notification-message{
-    color: #ff0000;
+    color: #d42828;
     text-decoration: underline;
     cursor: pointer;
 }
