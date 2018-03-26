@@ -1,21 +1,10 @@
-/*!
- * angular-hotkeys v1.4.5
- * https://chieffancypants.github.io/angular-hotkeys
- * Copyright (c) 2014 Wes Cruver
- * License: MIT
- */
-/*
- * angular-hotkeys
- *
- * Automatic keyboard shortcuts for your angular apps
- *
- * (c) 2014 Wes Cruver
- * License: MIT
- */
-
+/*********************************************************************************
+ Copyright 2015-2018 Ellucian Company L.P. and its affiliates.
+ **********************************************************************************/
 (function() {
 
     'use strict';
+    var listOfHotkeys = [];
 
     angular.module('cfp.hotkeys', []).provider('hotkeys', function() {
 
@@ -36,16 +25,16 @@
          * Cheat sheet template in the event you want to totally customize it.
          * @type {String}
          */
-        this.template = '<div class="cfp-hotkeys-container fade" ng-class="{in: helpVisible}" aria-labelledby="{{title}}" role="region" tabindex="-1" style="display: none;"><div class="cfp-hotkeys">' +
+        this.template = '<div class="cfp-hotkeys-container fade"  style="overflow-y: scroll;" ng-class="{in: helpVisible}" aria-labelledby="{{title}}" role="region" tabindex="-1" style="display: none;"><div class="cfp-hotkeys">' +
             '<h4 class="cfp-hotkeys-title">{{title}}</h4>' +
-            '<table><tbody>' +
+            '<div style="overflow-y: scroll;"><table ><tbody>' +
             '<tr aria-live="assertive" ng-repeat="hotkey in hotkeys | filter:{ description: \'!$$undefined$$\' }">' +
             '<td tabindex="0" class="cfp-hotkeys-keys" aria-describedby="{{hotkey.description}}">' +
             '<span aria-live="assertive" ng-repeat="key in hotkey.format() track by $index" class="cfp-hotkeys-key">{{ key }}</span>' +
             '</td>' +
             '<td aria-live="assertive" class="cfp-hotkeys-text">{{ hotkey.description }}</td>' +
             '</tr>' +
-            '</tbody></table>' +
+            '</tbody></table></div>' +
             '<div class="cfp-hotkeys-close" aria-label="Close button" tabindex="0" ng-click="toggleCheatSheet()">X</div>' +
             '</div></div>';
 
@@ -53,7 +42,7 @@
          * Configurable setting for the cheat sheet hotkey
          * @type {String}
          */
-        this.cheatSheetHotkey = 'ctrl+q';
+        this.cheatSheetHotkey = 'ctrl+asd';
 
         /**
          * Configurable setting for the cheat sheet description

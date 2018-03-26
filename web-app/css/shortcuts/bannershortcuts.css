@@ -1,0 +1,74 @@
+
+.shortcut-container-expanded {
+    padding-bottom: 0%;
+}
+
+.shortcut-container-collapse {
+    padding-bottom: 6%;
+}
+
+.content-heading-shortcut {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 1.5em;
+    float: left;
+    width: 95%;
+}
+
+.shortcutAccordion {
+    border: solid black;
+    border-width: 0 0.35em 0.35em 0;
+    display: inline-block;
+    padding: 0.35em;
+    float: right;
+    margin-top: 2%;
+}
+
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.chicklet {
+    padding: 0.5em;
+    width: 2em;
+    border: 1px solid black;
+    text-align: center;
+    background: aliceblue;
+    overflow: hidden;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    vertical-align: middle;
+    display: table-cell
+}
+
+.shortcut-description {
+    margin-right: 10px;
+    text-align: left;
+    display: table-cell;
+    word-break: break-word;
+    padding: 1em 1em 1em 0;
+    width: 60%;
+}
+
+.delimiter-shortcut {
+    font-size: 2em;
+    display: inline-block;
+    display: table-cell;
+    vertical-align: super;
+}
+
+.banner-shortcut {
+    display: table;
+    width: 100%;
+}
+
+.shortcut-row {
+    display: table-row;
+    width: auto;
+}
