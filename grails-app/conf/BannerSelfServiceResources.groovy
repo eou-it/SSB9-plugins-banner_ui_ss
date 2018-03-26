@@ -4,12 +4,31 @@
 
 modules = {
 
+    'eds' {
+        resource url: 'https://cdn.elluciancloud.com/assets/1.3.0/css/ellucian-design-system-ltr.min.css'
+    }
+
+    'edsRTL' {
+        resource url: 'https://cdn.elluciancloud.com/assets/1.3.0/css/ellucian-design-system-rtl.min.css'
+    }
+
+
     'jquery' {
+        dependsOn "eds"
         resource url:[plugin: 'banner-ui-ss', file: 'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme/jquery-ui-1.8.13.custom.css'], attrs:[media:'screen, projection']
 
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-1.7.2.js'], disposition: 'head'
         resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-ui-1.8.15.custom.js'], disposition: 'head'
     }
+
+    'jqueryRTL' {
+        dependsOn "edsRTL"
+        resource url:[plugin: 'banner-ui-ss', file: 'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme/jquery-ui-1.8.13.custom-rtl.css'], attrs:[media:'screen, projection']
+
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-1.7.2.js'], disposition: 'head'
+        resource url:[plugin: 'banner-ui-ss', file: 'js/jquery/jquery-ui-1.8.15.custom.js'], disposition: 'head'
+    }
+
 
     'bootstrap' {
         dependsOn "jquery"
@@ -21,7 +40,7 @@ modules = {
     }
 
     'bootstrapRTL' {
-        dependsOn "jquery"
+        dependsOn "jqueryRTL"
         defaultBundle environment == "development" ? false : "bootstrap"
 
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap-rtl.css'],            attrs: [media: 'screen, projection']
