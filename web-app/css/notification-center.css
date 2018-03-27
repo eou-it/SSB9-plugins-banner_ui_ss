@@ -69,25 +69,25 @@
 }
 
 .notification-center-flyout ul li.notification-center-message-success {
-    background-color: #eaf7f2;
-    border: 1px solid #00af69;
-    color: #00804d;
+    background-color: #eaf7f2;  /*$color-success-fill*/
+    border: 1px solid #00af69;  /*$color-success*/
+    color: #00804d; /*$color-success-fill-dark or $color-success-dark*/
     box-shadow: 0 1px 1px rgba(0, 175, 105,0.15);
 
 }
 
 .notification-center-flyout ul li.notification-center-message-error{
-    background-color: #ffeeed;
+    background-color: #ffeeed;  /*$color-error-fill*/
     /*border: #d42828;*/
-    border: 1px solid #d42828;
-    color: #d42828;
+    border: 1px solid #d42828;  /*$color-error-fill-dark or $color-error-dark*/
+    color: #d42828; /*$color-error-fill-dark or $color-error-dark*/
 }
 
 .notification-center-flyout ul li.notification-center-message-warning {
-    background-color: #f5f2e7;
-    border-top: 1px solid #8a6a00;
+    background-color: #f5f2e7;  /*$color-warning-fill*/
+    border-top: 1px solid #8a6a00;  /*$color-warning-fill-dark or $color-warning-dark*/
     /*border-bottom: 2px solid #8a6a00;*/
-    color: #8a6a00;
+    color: #8a6a00;  /*$color-warning-fill-dark or $color-warning-dark*/
     /*border-width: 1px 0px 0px 0px;*/
 }
 
@@ -126,7 +126,7 @@ li:first-child .notification-item-prompts {
     border: 1px solid #C6CBCD;
     text-align: right;
     padding: 0.25em 0.25em 0.25em 0;
-    border-top: 1px solid #8a6a00;
+    border-top: 1px solid #8a6a00; /*$color-warning-fill-dark or $color-warning-dark*/
 }
 
 body > .notification-center-shim {
@@ -142,7 +142,7 @@ body > .notification-center-shim {
 }
 
 #header-main-section li a.notification-message{
-    color: #d42828;
+    color: #d42828;  /*$color-error-dark or $color-error-fill-dark*/
     text-decoration: underline;
     cursor: pointer;
 }
