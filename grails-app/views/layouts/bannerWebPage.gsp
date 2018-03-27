@@ -47,7 +47,6 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
         <title><g:layoutTitle default="Banner"/></title>
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 
-
     <r:script>
         <g:i18nJavaScript/>
 

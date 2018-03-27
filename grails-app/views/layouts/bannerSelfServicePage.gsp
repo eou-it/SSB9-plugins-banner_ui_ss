@@ -44,8 +44,6 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
         <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
         <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
         <title><g:layoutTitle default="Banner"/></title>
-        <link rel="shortcut icon" href="${resource(plugin: 'banner-ui-ss', dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
-
 
     <r:script>
         <g:i18nJavaScript/>
@@ -94,7 +92,7 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
     <meta name="msapplication-TileColor" content="#9f00a7"/>
     <meta name="msapplication-TileImage" content="https://cdn.elluciancloud.com/assets/1.3.0/favicon/mstile-144x144.png"/>
     <meta name="theme-color" content="#783084"/>
-    <link rel="icon" href="https://cdn.elluciancloud.com/assets/1.3.0/favicon/favicon.ico"/>
+    <link rel="shortcut icon" href="https://cdn.elluciancloud.com/assets/1.3.0/favicon/favicon.ico"/>
 
 </head>
 <body>
