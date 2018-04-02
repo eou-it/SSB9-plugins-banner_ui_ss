@@ -12,7 +12,7 @@ Copyright 2017-2018 Ellucian Company L.P. and its affiliates.
                     <div class="banner-shortcut" id="banner_shortcut_{{$index}}" ng-show="banner_shortcut_{{$index}}">
                         <div aria-live="assertive" class="shortcut-row" ng-repeat="hotkey in bannershortcut.shortcutList">
                             <div aria-live="assertive" class="shortcut-description" data-ng-bind="hotkey.description"></div>
-                            <div style="display: table-cell; vertical-align: middle;text-align: center">
+                            <div style="display: table-cell; vertical-align: middle;text-align: center;padding: 0em 0em 1em 0em;">
                                 <span ng-repeat-start="item in hotkey.combo" class="chicklet">{{item}}</span>
                                 <div style="display: table-cell" class="delimiter-shortcut" ng-repeat-end ng-if="!$last">&nbsp;</div>
                             </div>

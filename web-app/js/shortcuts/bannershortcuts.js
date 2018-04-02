@@ -140,26 +140,7 @@
                 }
             };
         }])
-        .controller('shortcutModal', ['$scope', 'keyshortcut', '$http', function ($scope, keyshortcut, $http) {
-
-            $http({
-                method: "GET",
-                url: "shortcut/data"
-            }).then(function mySuccess(response) {
-                $scope.messageList = response.data;
-                if (keyshortcut.isMac()) {
-                    //MAC
-                    $scope.macMessageList = $scope.messageList.mac;
-                    populateEntireDialog( $scope.macMessageList, keyshortcut)
-
-                } else {
-                    //Windows
-                    $scope.windowsMessageList = $scope.messageList.windows;
-                    populateEntireDialog($scope.windowsMessageList, keyshortcut)
-                }
-            }, function myError(response) {
-                console.log("Error Occurred reading message keys from message.properties file");
-            });
+        .controller('shortcutModal', ['$scope', 'keyshortcut', '$http', '$document', function ($scope, keyshortcut, $http, $document) {
 
             function populateEntireDialog(objToIterate, keyshortcutService) {
                 Object.keys(objToIterate).forEach(function (key, index) {
@@ -172,6 +153,18 @@
                     keyshortcutService.addSectionShortcuts(key, tempList);
                 });
             }
+
+            $document.bind('keydown', function (event) {
+                if (event.ctrlKey && event.shiftKey && event.keyCode === 191) {
+                    $scope.toggleshortcut();
+                    $scope.$apply();
+                    event.preventDefault();
+                    return false;
+                }
+                /*else{
+                 return true;
+                 }*/
+            });
 
 
             //for printing the overlay
@@ -197,7 +190,28 @@
 
             $scope.toggleshortcut = function () {
                 $scope.modalShown = !$scope.modalShown;
-                $scope.shortcutObj = keyshortcut.getBannerShortcutList();
+                var listExists = keyshortcut.getBannerShortcutList();
+                if (listExists.length === 0) {
+                    $http({
+                        method: "GET",
+                        url: "shortcut/data"
+                    }).then(function mySuccess(response) {
+                        $scope.messageList = response.data;
+                        if (keyshortcut.isMac()) {
+                            //MAC
+                            $scope.macMessageList = $scope.messageList.mac;
+                            populateEntireDialog($scope.macMessageList, keyshortcut)
+
+                        } else {
+                            //Windows
+                            $scope.windowsMessageList = $scope.messageList.windows;
+                            populateEntireDialog($scope.windowsMessageList, keyshortcut)
+                        }
+                        $scope.shortcutObj = keyshortcut.getBannerShortcutList();
+                    }, function myError(response) {
+                        console.log("Error Occurred reading message keys from message.properties file");
+                    });
+                }
             };
 
         }]);

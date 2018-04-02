@@ -10,9 +10,12 @@
 .content-heading-shortcut {
     display: inline-block;
     vertical-align: middle;
-    font-size: 1.5em;
     float: left;
+    opacity: 1;
     width: 95%;
+    color:#4F585F;
+    font-size: 14px;
+    font-family: OpenSans-Bold;
 }
 
 .shortcutAccordion {
@@ -36,15 +39,18 @@
 
 .chicklet {
     padding: 0.5em;
-    width: 2em;
-    border: 1px solid black;
+    width: 2.5em;
     text-align: center;
+    font-size: 0.875em;
     background: aliceblue;
+    color: #557287;
     overflow: hidden;
     margin-right: 0.5em;
     margin-left: 0.5em;
     vertical-align: middle;
-    display: table-cell
+    display: table-cell;
+    border-radius: 0.5em;
+    border:1px solid black;
 }
 
 .shortcut-description {
@@ -52,12 +58,14 @@
     text-align: left;
     display: table-cell;
     word-break: break-word;
-    padding: 1em 1em 1em 0;
+    padding: 1em 1em 0em 0;
     width: 60%;
+    font-family: OpenSans;
+    font-size:0.875em;
 }
 
 .delimiter-shortcut {
-    font-size: 2em;
+    width:0.25em;
     display: inline-block;
     display: table-cell;
     vertical-align: super;
