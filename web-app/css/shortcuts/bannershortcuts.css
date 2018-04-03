@@ -3,8 +3,26 @@
     padding-bottom: 0%;
 }
 
-.shortcut-container-collapse {
+/*.shortcut-container-collapse {
     padding-bottom: 6%;
+}*/
+
+.shortcutAccordion {
+    display: inline-block;
+    float: right;
+    width: 2em;
+    height: 2em;
+    margin-top: 0.125em;
+}
+
+.down {
+    background: url('../../images/expand.svg') right center no-repeat;
+    margin-right: 0.35em;
+}
+
+.up {
+    background: url('../../images/collapse.svg') no-repeat;
+    margin-right: 0.35em;
 }
 
 .content-heading-shortcut {
@@ -12,45 +30,29 @@
     vertical-align: middle;
     float: left;
     opacity: 1;
-    width: 95%;
-    color:#4F585F;
-    font-size: 14px;
+    width: 91%;
+    color: #4F585F;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     font-family: OpenSans-Bold;
-}
-
-.shortcutAccordion {
-    border: solid black;
-    border-width: 0 0.35em 0.35em 0;
-    display: inline-block;
-    padding: 0.35em;
-    float: right;
-    margin-top: 2%;
-}
-
-.up {
-    transform: rotate(-135deg);
-    -webkit-transform: rotate(-135deg);
-}
-
-.down {
-    transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
 }
 
 .chicklet {
     padding: 0.5em;
-    width: 2.5em;
+    min-width: 1.75em;
+    height: 1.5em;
     text-align: center;
-    font-size: 0.875em;
-    background: aliceblue;
+    background: #EFF4F8 100%;
     color: #557287;
+    font-family: OpenSans-Semibold;
     overflow: hidden;
     margin-right: 0.5em;
     margin-left: 0.5em;
     vertical-align: middle;
     display: table-cell;
-    border-radius: 0.5em;
-    border:1px solid black;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border: 0.1em solid #BECCD7
 }
 
 .shortcut-description {
@@ -58,14 +60,15 @@
     text-align: left;
     display: table-cell;
     word-break: break-word;
-    padding: 1em 1em 0em 0;
+    padding: 0em 1em 0em 0;
     width: 60%;
-    font-family: OpenSans;
-    font-size:0.875em;
+    font-family: OpenSans-regular;
+    font-size: 0.875em;
+    vertical-align: middle;
 }
 
 .delimiter-shortcut {
-    width:0.25em;
+    width: 0.25em;
     display: inline-block;
     display: table-cell;
     vertical-align: super;
@@ -74,9 +77,59 @@
 .banner-shortcut {
     display: table;
     width: 100%;
+    padding-top: 0.25em;
+}
+
+.column-container {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    padding: 0.5em 0 0.5em 0em;
 }
 
 .shortcut-row {
     display: table-row;
     width: auto;
+}
+
+.keyboard-hidden-accessible {
+    opacity: 0;
+    height: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+@media screen and (min-width: 768px) {
+    .shortcutAccordion {
+        display: inline-block;
+        float: right;
+        width: 2em;
+        height: 2em;
+        margin-top: 0.125em;
+    }
+
+    .content-heading-shortcut {
+        display: inline-block;
+        vertical-align: middle;
+        float: left;
+        opacity: 1;
+        width: 92%;
+        color: #4F585F;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        font-family: OpenSans-Bold;
+    }
+
+    .down {
+        background: url('../../images/expand.svg') right center no-repeat;
+        margin-right: 0em;
+    }
+
+    .up {
+        background: url('../../images/collapse.svg') no-repeat;
+        margin-right: 0.35em;
+        width: 3%;
+    }
 }

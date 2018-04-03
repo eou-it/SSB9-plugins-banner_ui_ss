@@ -25,24 +25,13 @@
          * Cheat sheet template in the event you want to totally customize it.
          * @type {String}
          */
-        this.template = '<div class="cfp-hotkeys-container fade"  style="overflow-y: scroll;" ng-class="{in: helpVisible}" aria-labelledby="{{title}}" role="region" tabindex="-1" style="display: none;"><div class="cfp-hotkeys">' +
-            '<h4 class="cfp-hotkeys-title">{{title}}</h4>' +
-            '<div style="overflow-y: scroll;"><table ><tbody>' +
-            '<tr aria-live="assertive" ng-repeat="hotkey in hotkeys | filter:{ description: \'!$$undefined$$\' }">' +
-            '<td tabindex="0" class="cfp-hotkeys-keys" aria-describedby="{{hotkey.description}}">' +
-            '<span aria-live="assertive" ng-repeat="key in hotkey.format() track by $index" class="cfp-hotkeys-key">{{ key }}</span>' +
-            '</td>' +
-            '<td aria-live="assertive" class="cfp-hotkeys-text">{{ hotkey.description }}</td>' +
-            '</tr>' +
-            '</tbody></table></div>' +
-            '<div class="cfp-hotkeys-close" aria-label="Close button" tabindex="0" ng-click="toggleCheatSheet()">X</div>' +
-            '</div></div>';
+        this.template = '';
 
         /**
          * Configurable setting for the cheat sheet hotkey
          * @type {String}
          */
-        this.cheatSheetHotkey = 'ctrl+asd';
+        this.cheatSheetHotkey = 'adsdsd';
 
         /**
          * Configurable setting for the cheat sheet description
