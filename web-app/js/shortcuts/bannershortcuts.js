@@ -192,7 +192,7 @@
                 let headerName = angular.element(event.target).text();
                 let expandedClass = angular.element(event.target).closest('div').hasClass('shortcut-container-expanded');
                 if (expandedClass) {
-                    headerName = headerName + " Expanded. Use Tab key to Navigate within this Section. ";
+                    headerName = headerName + " Expanded. ";
                     angular.element(".keyboard-hidden-accessible").text(headerName);
                 } else {
                     headerName = headerName + " Collapsed. Use Tab Key to Navigate to Next Section. ";
@@ -214,7 +214,7 @@
                 if (expandedClass) {
                     headingName = headingName + " Collapsed. Please use Tab Key to Navigate to Next Section.";
                 } else {
-                    headingName = headingName + " Expanded. Please use Tab key to Navigate within this Section.";
+                    headingName = headingName + " Expanded.";
                 }
                 angular.element(".keyboard-hidden-accessible").text(headingName);
             }

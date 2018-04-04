@@ -9,12 +9,13 @@ Copyright 2018 Ellucian Company L.P. and its affiliates.
                         <span class="content-heading-shortcut" tabindex="0" ng-keydown="showDescription($event)" data-ng-bind="bannershortcut.sectionHeading" ng-click="showDescription($event)"></span>
                         <span class="shortcutAccordion" ng-keydown="showDescription($event)" ng-click="showDescription($event)" ng-class="banner_shortcut_{{$index}} ? 'up' : 'down'"></span>
                     <div class="banner-shortcut" id="banner_shortcut_{{$index}}" ng-show="banner_shortcut_{{$index}}">
-                        <div class="shortcut-row" ng-repeat="hotkey in bannershortcut.shortcutList" tabindex="0">
+                        <div class="shortcut-row" ng-repeat-start="hotkey in bannershortcut.shortcutList">
                             <div class="shortcut-description" aria-label="{{hotkey.description}}" data-ng-bind="hotkey.description"></div>
                             <div class="column-container">
                                 <span ng-repeat-start="item in hotkey.combo" class="chicklet" data-ng-bind="item"></span><div class="delimiter-shortcut" ng-repeat-end ng-if="!$last">&nbsp;</div>
                             </div>
                         </div>
+                        <hr style="width:100%" ng-repeat-end ng-if="$last"/>
                     </div>
                 </div>
             </div>
