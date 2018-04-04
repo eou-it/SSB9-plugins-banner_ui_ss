@@ -168,8 +168,14 @@
             var regionSpan1 = angular.element('<span></span>');
             regionSpan1.attr('role', 'status');
             regionSpan1.attr('aria-live', 'assertive');
-            regionSpan1.attr('class', 'keyboard-hidden-accessible');
+            regionSpan1.attr('class', 'keyboard-hidden-screen-reader');
             angular.element(document.body).append(regionSpan1);
+
+            var regionSpan2 = angular.element('<span></span>');
+            regionSpan2.attr('role', 'status');
+            regionSpan2.attr('aria-live', 'assertive');
+            regionSpan2.attr('class', 'keyboard-screen-reader-opens');
+            angular.element(document.body).append(regionSpan2);
 
             $scope.banner_shortcut_0 = true;
 
@@ -192,11 +198,11 @@
                 let headerName = angular.element(event.target).text();
                 let expandedClass = angular.element(event.target).closest('div').hasClass('shortcut-container-expanded');
                 if (expandedClass) {
-                    headerName = headerName + " Expanded. ";
-                    angular.element(".keyboard-hidden-accessible").text(headerName);
+                    headerName = headerName + " Use Tab Key to Navigate to Next Section and Down arrow key to navigate to each item in the section";
+                    angular.element(".keyboard-hidden-screen-reader").text(headerName);
                 } else {
                     headerName = headerName + " Collapsed. Use Tab Key to Navigate to Next Section. ";
-                    angular.element(".keyboard-hidden-accessible").text(headerName);
+                    angular.element(".keyboard-hidden-screen-reader").text(headerName);
                 }
             };
 
@@ -214,9 +220,10 @@
                 if (expandedClass) {
                     headingName = headingName + " Collapsed. Please use Tab Key to Navigate to Next Section.";
                 } else {
-                    headingName = headingName + " Expanded.";
+                    headingName = headingName + " Expanded. Use Tab Key to Navigate to Next Section and Down arrow key to navigate to each item in the section";
                 }
-                angular.element(".keyboard-hidden-accessible").text(headingName);
+                angular.element(".keyboard-hidden-screen-reader").text("This dialog lists all the keyboard shortcuts specific to this application");
+                angular.element(".keyboard-screen-reader-opens").text(headingName);
             }
 
 
