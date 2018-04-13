@@ -6,9 +6,9 @@
     'use strict';
     var listOfBannerShortcuts = [];
     angular.module('keyboardshortcut', ['cfp.hotkeys', 'xe-ui-components'])
-        .config(function (hotkeysProvider) {
+        /*.config(function (hotkeysProvider) {
             hotkeysProvider.includeCheatSheet = false;
-        })
+        })*/
 
         //service
         // add method which will internally call hotkeys.add method
@@ -101,6 +101,10 @@
             this.getBannerShortcutList = function () {
                 return listOfBannerShortcuts;
             };
+
+           /* this.addToHotkeys = function (combo, description, callback) {
+             this.addToList(combo, description, callback);
+             };*/
 
 
             this.isMac = function () {
@@ -233,7 +237,7 @@
                 if (listExists.length === 0) {
                     $http({
                         method: "GET",
-                        url: "shortcut/data"
+                        url: backendlocale+"/shortcut/data"
                     }).then(function mySuccess(response) {
                         $scope.messageList = response.data;
                         if (keyshortcut.isMac()) {
@@ -252,7 +256,7 @@
                         console.log("Error Occurred reading message keys from message.properties file");
                     });
                 } else {
-                    $timeout(function () {
+                  $timeout(function () {
                         defaultAriaAccessibility(listExists);
                     }, 10);
                 }
