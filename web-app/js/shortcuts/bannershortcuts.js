@@ -102,9 +102,9 @@
                 return listOfBannerShortcuts;
             };
 
-           /* this.addToHotkeys = function (combo, description, callback) {
+            this.addToHotkeys = function (combo, description, callback) {
              this.addToList(combo, description, callback);
-             };*/
+             };
 
 
             this.isMac = function () {
@@ -234,10 +234,12 @@
             $scope.toggleshortcut = function () {
                 $scope.modalShown = !$scope.modalShown;
                 let listExists = keyshortcut.getBannerShortcutList();
-                if (listExists.length === 0) {
+                /*if (listExists.length === 0) {*/
+                var backendURL = $('meta[name=menuBaseURL]').attr("content");
                     $http({
                         method: "GET",
-                        url: backendlocale+"/shortcut/data"
+                        url: backendURL+"/shortcut/data",
+                        cache:true
                     }).then(function mySuccess(response) {
                         $scope.messageList = response.data;
                         if (keyshortcut.isMac()) {
@@ -255,11 +257,11 @@
                     }, function myError(response) {
                         console.log("Error Occurred reading message keys from message.properties file");
                     });
-                } else {
+                /*} else {*/
                   $timeout(function () {
                         defaultAriaAccessibility(listExists);
                     }, 10);
-                }
+                /*}*/
             };
 
         }]);
