@@ -1,63 +1,31 @@
 /*********************************************************************************
- Copyright 2015-2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 (function() {
 
     'use strict';
-    var listOfHotkeys = [];
 
-    angular.module('cfp.hotkeys', []).provider('hotkeys', function() {
+    angular.module('bannerBindkeys', []).provider('hotkeys', function() {
 
-        /**
-         * Configurable setting to disable the cheatsheet entirely
-         * @type {Boolean}
-         */
         this.includeCheatSheet = true;
 
-        /**
-         * Configurable setting for the cheat sheet title
-         * @type {String}
-         */
+        this.templateTitle = '';
 
-        this.templateTitle = 'Keyboard Shortcuts:';
-
-        /**
-         * Cheat sheet template in the event you want to totally customize it.
-         * @type {String}
-         */
         this.template = '';
 
-        /**
-         * Configurable setting for the cheat sheet hotkey
-         * @type {String}
-         */
-        this.cheatSheetHotkey = 'adsdsd';
+        this.cheatSheetHotkey = '';
 
-        /**
-         * Configurable setting for the cheat sheet description
-         * @type {String}
-         */
-        this.cheatSheetDescription = 'Show / hide this help menu';
+        this.cheatSheetDescription = '';
 
         this.$get = ['$rootElement', '$rootScope', '$compile', '$window', '$document', function ($rootElement, $rootScope, $compile, $window, $document) {
 
-            // monkeypatch Mousetrap's stopCallback() function
-            // this version doesn't return true when the element is an INPUT, SELECT, or TEXTAREA
-            // (instead we will perform this check per-key in the _add() method)
             Mousetrap.stopCallback = function(event, element) {
-                // if the element has the class "mousetrap" then no need to stop
                 if ((' ' + element.className + ' ').indexOf(' mousetrap ') > -1) {
                     return false;
                 }
-
                 return (element.contentEditable && element.contentEditable == 'true');
             };
 
-            /**
-             * Convert strings like cmd into symbols like ?
-             * @param  {String} combo Key combination, e.g. 'mod+f'
-             * @return {String}       The key combination with symbols
-             */
             function symbolize (combo) {
                 var map = {
                     command   : '\u2318',     // ?
@@ -98,10 +66,6 @@
              * @param {Boolean}  persistent  Whether the hotkey persists navigation events
              */
             function Hotkey (combo, description, callback, action, allowIn, persistent) {
-                // TODO: Check that the values are sane because we could
-                // be trying to instantiate a new Hotkey with outside dev's
-                // supplied values
-
                 this.combo = combo instanceof Array ? combo : [combo];
                 this.description = description;
                 this.callback = callback;
@@ -109,28 +73,6 @@
                 this.allowIn = allowIn;
                 this.persistent = persistent;
             }
-
-            /**
-             * Helper method to format (symbolize) the key combo for display
-             *
-             * @return {[Array]} An array of the key combination sequence
-             *   for example: "command+g c i" becomes ["? + g", "c", "i"]
-             *
-             * TODO: this gets called a lot.  We should cache the result
-             */
-            Hotkey.prototype.format = function() {
-
-                // Don't show all the possible key combos, just the first one.  Not sure
-                // of usecase here, so open a ticket if my assumptions are wrong
-                var combo = this.combo[0];
-
-                var sequence = combo.split(/[\s]/);
-                for (var i = 0; i < sequence.length; i++) {
-                    sequence[i] = symbolize(sequence[i]);
-                }
-
-                return sequence;
-            };
 
             /**
              * A new scope used internally for the cheatsheet
@@ -179,16 +121,10 @@
 
                 if (route && route.hotkeys) {
                     angular.forEach(route.hotkeys, function (hotkey) {
-                        // a string was given, which implies this is a function that is to be
-                        // $eval()'d within that controller's scope
-                        // TODO: hotkey here is super confusing.  sometimes a function (that gets turned into an array), sometimes a string
                         var callback = hotkey[2];
                         if (typeof(callback) === 'string' || callback instanceof String) {
                             hotkey[2] = [callback, route];
                         }
-
-                        // todo: perform check to make sure not already defined:
-                        // this came from a route, so it's likely not meant to be persistent
                         hotkey[5] = false;
                         _add.apply(this, hotkey);
                     });
@@ -214,12 +150,6 @@
             }
 
 
-            /**
-             * Purges all non-persistent hotkeys (such as those defined in routes)
-             *
-             * Without this, the same hotkey would get recreated everytime
-             * the route is accessed.
-             */
             function purgeHotkeys() {
                 var i = scope.hotkeys.length;
                 while (i--) {
@@ -230,38 +160,17 @@
                 }
             }
 
-            /**
-             * Toggles the help menu element's visiblity
-             */
             var previousEsc = false;
 
 
             function toggleCheatSheet() {
                 scope.helpVisible = !scope.helpVisible;
-                // Bind to esc to remove the cheat sheet.  Ideally, this would be done
-                // as a directive in the template, but that would create a nasty
-                // circular dependency issue that I don't feel like sorting out.
-                console.log("scope.helpVisible"+scope.helpVisible);
-                if(scope.helpVisible){
-                    /*var totalElements = angular.element(".cfp-hotkeys-container").length;
-                    var mainTableContent = angular.element(".cfp-hotkeys-container")[parseInt(totalElements)-1];
-                    angular.element(mainTableContent).find('tr td').on('keydown',function(){
-
-                    });*/
-                }
-
-
                 if (scope.helpVisible) {
                     previousEsc = _get('esc');
                     _del('esc');
-
-                    // Here's an odd way to do this: we're going to use the original
-                    // description of the hotkey on the cheat sheet so that it shows up.
-                    // without it, no entry for esc will ever show up (#22)
                     _add('esc', previousEsc.description, toggleCheatSheet);
                 } else {
                     _del('esc');
-
                     // restore the previously bound ESC key
                     if (previousEsc !== false) {
                         _add(previousEsc);
@@ -281,13 +190,10 @@
              */
             function _add (combo, description, callback, action, allowIn, persistent) {
 
-                // used to save original callback for "allowIn" wrapping:
                 var _callback;
 
-                // these elements are prevented by the default Mousetrap.stopCallback():
                 var preventIn = ['INPUT', 'SELECT', 'TEXTAREA'];
 
-                // Determine if object format was given:
                 var objType = Object.prototype.toString.call(combo);
 
                 if (objType === '[object Object]') {
@@ -299,7 +205,6 @@
                     combo       = combo.combo;
                 }
 
-                // description is optional:
                 if (description instanceof Function) {
                     action = callback;
                     callback = description;
@@ -308,28 +213,18 @@
                     description = '$$undefined$$';
                 }
 
-                // any items added through the public API are for controllers
-                // that persist through navigation, and thus undefined should mean
-                // true in this case.
                 if (persistent === undefined) {
                     persistent = true;
                 }
 
-                // if callback is defined, then wrap it in a function
-                // that checks if the event originated from a form element.
-                // the function blocks the callback from executing unless the element is specified
-                // in allowIn (emulates Mousetrap.stopCallback() on a per-key level)
                 if (typeof callback === 'function') {
 
-                    // save the original callback
                     _callback = callback;
 
-                    // make sure allowIn is an array
                     if (!(allowIn instanceof Array)) {
                         allowIn = [];
                     }
 
-                    // remove anything from preventIn that's present in allowIn
                     var index;
                     for (var i=0; i < allowIn.length; i++) {
                         allowIn[i] = allowIn[i].toUpperCase();
@@ -339,7 +234,6 @@
                         }
                     }
 
-                    // create the new wrapper callback
                     callback = function(event) {
                         var shouldExecute = true;
                         var target = event.target || event.srcElement; // srcElement is IE only
@@ -375,12 +269,6 @@
                 return hotkey;
             }
 
-            /**
-             * delete and unbind a Hotkey
-             *
-             * @param  {mixed} hotkey   Either the bound key or an instance of Hotkey
-             * @return {boolean}        true if successful
-             */
             function _del (hotkey) {
                 var combo = (hotkey instanceof Hotkey) ? hotkey.combo : hotkey;
 
@@ -452,13 +340,6 @@
                             delete boundScopes[scope.$id][i];
                         }
                     });
-                    /*angular.element(scope).$on('$destroy', function () {
-                     var i = boundScopes[scope.$id].length;
-                     while (i--) {
-                     _del(boundScopes[scope.$id][i]);
-                     delete boundScopes[scope.$id][i];
-                     }
-                     });*/
                 }
                 // return an object with an add function so we can keep track of the
                 // hotkeys and their scope that we added via this chaining method
@@ -489,9 +370,6 @@
                 // return mousetrap a function to call
                 return function (event, combo) {
 
-                    // if this is an array, it means we provided a route object
-                    // because the scope wasn't available yet, so rewrap the callback
-                    // now that the scope is available:
                     if (callback instanceof Array) {
                         var funcString = callback[0];
                         var route = callback[1];
@@ -500,10 +378,7 @@
                         };
                     }
 
-                    // this takes place outside angular, so we'll have to call
-                    // $apply() to make sure angular's digest happens
                     $rootScope.$apply(function() {
-                        // call the original hotkey callback with the keyboard event
                         callback(event, _get(combo));
                     });
                 };
@@ -559,34 +434,11 @@
         }])
 
         .run(['hotkeys', function(hotkeys) {
-            // force hotkeys to run by injecting it. Without this, hotkeys only runs
-            // when a controller or something else asks for it via DI.
         }]);
 
 })();
 
 /*global define:false */
-/**
- * Copyright 2013 Craig Campbell
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Mousetrap is a simple keyboard shortcut library for Javascript with
- * no external dependencies
- *
- * @version 1.4.6
- * @url craig.is/killing/mice
- */
 (function(window, document, undefined) {
 
     /**
@@ -799,16 +651,6 @@
         // for keypress events we should return the character as is
         if (e.type == 'keypress') {
             var character = String.fromCharCode(e.which);
-
-            // if the shift key is not pressed then it is safe to assume
-            // that we want the character to be lowercase.  this means if
-            // you accidentally have caps lock on then your key bindings
-            // will continue to work
-            //
-            // the only side effect that might not be desired is if you
-            // bind something like 'A' cause you want to trigger an
-            // event when capital A is pressed caps lock will no longer
-            // trigger the event.  shift+a will though.
             if (!e.shiftKey) {
                 character = character.toLowerCase();
             }
@@ -816,7 +658,6 @@
             return character;
         }
 
-        // for non keypress events the special maps are needed
         if (_MAP[e.which]) {
             return _MAP[e.which];
         }
@@ -825,11 +666,6 @@
             return _KEYCODE_MAP[e.which];
         }
 
-        // if it is not in the special map
-
-        // with keydown and keyup events the character seems to always
-        // come in as an uppercase character whether you are pressing shift
-        // or not.  we should make sure it is always lowercase for comparisons
         return String.fromCharCode(e.which).toLowerCase();
     }
 
@@ -914,20 +750,8 @@
                 continue;
             }
 
-            // if this is a keypress event and the meta key and control key
-            // are not pressed that means that we need to only look at the
-            // character, otherwise check the modifiers as well
-            //
-            // chrome will not fire a keypress if meta or control is down
-            // safari will fire a keypress if meta or meta+shift is down
-            // firefox will fire a keypress if meta or control is down
             if ((action == 'keypress' && !e.metaKey && !e.ctrlKey) || _modifiersMatch(modifiers, callback.modifiers)) {
 
-                // when you bind a combination or sequence a second time it
-                // should overwrite the first one.  if a sequenceName or
-                // combination is specified in this call it does just that
-                //
-                // @todo make deleting its own method?
                 var deleteCombo = !sequenceName && callback.combo == combination;
                 var deleteSequence = sequenceName && callback.seq == sequenceName && callback.level == level;
                 if (deleteCombo || deleteSequence) {
@@ -1047,21 +871,8 @@
         // loop through matching callbacks for this key event
         for (i = 0; i < callbacks.length; ++i) {
 
-            // fire for all sequence callbacks
-            // this is because if for example you have multiple sequences
-            // bound such as "g i" and "g t" they both need to fire the
-            // callback for matching g cause otherwise you can only ever
-            // match the first one
             if (callbacks[i].seq) {
 
-                // only fire callbacks for the maxLevel to prevent
-                // subsequences from also firing
-                //
-                // for example 'a option b' should not cause 'option b' to fire
-                // even though 'option b' is part of the other sequence
-                //
-                // any sequences that do not match here will be discarded
-                // below by the _resetSequences call
                 if (callbacks[i].level != maxLevel) {
                     continue;
                 }
@@ -1081,27 +892,6 @@
             }
         }
 
-        // if the key you pressed matches the type of sequence without
-        // being a modifier (ie "keyup" or "keypress") then we should
-        // reset all sequences that were not matched by this event
-        //
-        // this is so, for example, if you have the sequence "h a t" and you
-        // type "h e a r t" it does not match.  in this case the "e" will
-        // cause the sequence to reset
-        //
-        // modifier keys are ignored because you can have a sequence
-        // that contains modifiers such as "enter ctrl+space" and in most
-        // cases the modifier key will be pressed before the next key
-        //
-        // also if you have a sequence such as "ctrl+b a" then pressing the
-        // "b" key will trigger a "keypress" and a "keydown"
-        //
-        // the "keydown" is expected when there is a modifier, but the
-        // "keypress" ends up matching the _nextExpectedAction since it occurs
-        // after and that causes the sequence to reset
-        //
-        // we ignore keypresses in a sequence that directly follow a keydown
-        // for the same character
         var ignoreThisKeypress = e.type == 'keypress' && _ignoreNextKeypress;
         if (e.type == _nextExpectedAction && !_isModifier(character) && !ignoreThisKeypress) {
             _resetSequences(doNotReset);
@@ -1174,8 +964,6 @@
             _REVERSE_MAP = {};
             for (var key in _MAP) {
 
-                // pull out the numeric keypad from here cause keypress should
-                // be able to detect the keys from the character
                 if (key > 95 && key < 112) {
                     continue;
                 }
@@ -1197,8 +985,6 @@
      */
     function _pickBestAction(key, modifiers, action) {
 
-        // if no action was picked in we should try to pick the one
-        // that we think would work best for this key
         if (!action) {
             action = _getReverseMap()[key] ? 'keydown' : 'keypress';
         }
@@ -1223,8 +1009,6 @@
      */
     function _bindSequence(combo, keys, callback, action) {
 
-        // start off by adding a sequence level record for this combination
-        // and setting the level to 0
         _sequenceLevels[combo] = 0;
 
         /**
@@ -1252,27 +1036,13 @@
         function _callbackAndReset(e) {
             _fireCallback(callback, e, combo);
 
-            // we should ignore the next key up if the action is key down
-            // or keypress.  this is so if you finish a sequence and
-            // release the key the final key will not trigger a keyup
             if (action !== 'keyup') {
                 _ignoreNextKeyup = _characterFromEvent(e);
             }
 
-            // weird race condition if a sequence ends with the key
-            // another sequence begins with
             setTimeout(_resetSequences, 10);
         }
 
-        // loop through keys one at a time and bind the appropriate callback
-        // function.  for any key leading up to the final one it should
-        // increase the sequence. after the final, it should reset all sequences
-        //
-        // if an action is specified in the original bind call then that will
-        // be used throughout.  otherwise we will pass the action that the
-        // next key in the sequence should match.  this allows a sequence
-        // to mix and match keypress and keydown events depending on which
-        // ones are better suited to the key provided
         for (var i = 0; i < keys.length; ++i) {
             var isFinal = i + 1 === keys.length;
             var wrappedCallback = isFinal ? _callbackAndReset : _increaseSequence(action || _getKeyInfo(keys[i + 1]).action);
@@ -1319,22 +1089,16 @@
                 key = _SPECIAL_ALIASES[key];
             }
 
-            // if this is not a keypress event then we should
-            // be smart about using shift keys
-            // this will only work for US keyboards however
             if (action && action != 'keypress' && _SHIFT_MAP[key]) {
                 key = _SHIFT_MAP[key];
                 modifiers.push('shift');
             }
 
-            // if this key is a modifier then add it to the list of modifiers
             if (_isModifier(key)) {
                 modifiers.push(key);
             }
         }
 
-        // depending on what the key combination is
-        // we will try to pick the best event for it
         action = _pickBestAction(key, modifiers, action);
 
         return {
@@ -1356,17 +1120,13 @@
      */
     function _bindSingle(combination, callback, action, sequenceName, level) {
 
-        // store a direct mapped reference for use with Mousetrap.trigger
         _directMap[combination + ':' + action] = callback;
 
-        // make sure multiple spaces in a row become a single space
         combination = combination.replace(/\s+/g, ' ');
 
         var sequence = combination.split(' '),
             info;
 
-        // if this pattern is a sequence of keys then run through this method
-        // to reprocess each pattern one key at a time
         if (sequence.length > 1) {
             _bindSequence(combination, sequence, callback, action);
             return;
@@ -1374,19 +1134,11 @@
 
         info = _getKeyInfo(combination, action);
 
-        // make sure to initialize array if this is the first time
-        // a callback is added for this key
         _callbacks[info.key] = _callbacks[info.key] || [];
 
         // remove an existing match if there is one
         _getMatches(info.key, info.modifiers, {type: info.action}, sequenceName, combination, level);
 
-        // add this call back to the array
-        // if it is a sequence put it at the beginning
-        // if not put it at the end
-        //
-        // this is important because the way these are processed expects
-        // the sequence ones to come first
         _callbacks[info.key][sequenceName ? 'unshift' : 'push']({
             callback: callback,
             modifiers: info.modifiers,

@@ -5,17 +5,11 @@
 (function () {
     'use strict';
     var listOfBannerShortcuts = [];
-    angular.module('keyboardshortcut', ['cfp.hotkeys', 'xe-ui-components'])
-        /*.config(function (hotkeysProvider) {
-            hotkeysProvider.includeCheatSheet = false;
-        })*/
-
+    angular.module('keyboardshortcut', ['bannerBindkeys', 'xe-ui-components'])
         //service
-        // add method which will internally call hotkeys.add method
         .service('keyshortcut', ['hotkeys', function (hotkeys) {
-            this.shortcutObj = function (combination, description, callback) {
+            this.shortcutObj = function (combination, description, callback,bindingScope) {
                 let shortcut = {};
-                //  combination = this.symbolize(combination);
                 if (combination.indexOf('+') >= 0) {
                     let addSplCombination = this.addingSpecial(combination);
                     combination = addSplCombination.split('+');
@@ -27,6 +21,7 @@
                 shortcut.combo = combination;
                 shortcut.description = description;
                 shortcut.callback = callback;
+                shortcut.scopeToBind=bindingScope;
                 return shortcut;
             };
 
@@ -43,7 +38,6 @@
                 up: '\u2191',     // ?
                 down: '\u2193',     // ?
                 'return': '\u23CE',
-                pgUp: 'pgUp',// ?
                 backspace: '\u232B'      // ?
             };
 
@@ -93,7 +87,7 @@
 
             this.addSectionShortcuts = function (sectionHeading, shortcutList) {
                 for (let i = 0; i < shortcutList.length - 1; i++) {
-                    this.addToList(shortcutList[i].combo.toString(), shortcutList[i].description, shortcutList[i].callback);
+                    this.addToList(shortcutList[i].combo.toString(), shortcutList[i].description, shortcutList[i].callback,shortcutList[i].scopeToBind);
                 }
                 this.addBannerShortcut(sectionHeading, shortcutList);
             };
@@ -102,9 +96,9 @@
                 return listOfBannerShortcuts;
             };
 
-            this.addToHotkeys = function (combo, description, callback) {
-             this.addToList(combo, description, callback);
-             };
+            this.addToHotkeys = function (combo, description, callback,passingScope) {
+                this.addToList(combo, description, callback,passingScope);
+            };
 
 
             this.isMac = function () {
@@ -115,14 +109,21 @@
                 return isMac;
             };
 
-            this.addToList = function (combo, description, callback) {
+            this.addToList = function (combo, description, callback,scopeToBind) {
                 if (callback) {
-                    hotkeys.add({
-                        combo: combo,
-                        description: description,
-                        callback: callback
-                    });
-
+                    if (!scopeToBind) {
+                        hotkeys.add({
+                            combo: combo,
+                            description: description,
+                            callback: callback
+                        });
+                    } else {
+                        hotkeys.bindTo(scopeToBind).add({
+                            combo: combo,
+                            description: description,
+                            callback: callback
+                        })
+                    }
                 } else {
                     hotkeys.add({
                         combo: combo,
@@ -155,20 +156,6 @@
                 }
             });
 
-
-            //for printing the overlay
-            /*$scope.printdiv = function (printpage) {
-             var headstr = "<html><head><title></title></head><body>";
-             var footstr = "</body>";
-             var newstr = document.all.item(printpage).innerHTML;
-             var oldstr = document.body.innerHTML;
-             var myWindow = window.open('', 'printpage');
-             myWindow.document.write(headstr + newstr + footstr);
-             window.print();
-             document.body.innerHTML = oldstr;
-             return false;
-             };*/
-
             var regionSpan1 = angular.element('<span></span>');
             regionSpan1.attr('role', 'status');
             regionSpan1.attr('aria-live', 'assertive');
@@ -182,6 +169,8 @@
             angular.element(document.body).append(regionSpan2);
 
             $scope.banner_shortcut_0 = true;
+
+            $scope.backendCalled =false;
 
             $scope.showDescription = function (event) {
                 if (event.type === "click" || (event.type = "keydown" && event.keyCode === 13)) {
@@ -202,10 +191,10 @@
                 let headerName = angular.element(event.target).text();
                 let expandedClass = angular.element(event.target).closest('div').hasClass('shortcut-container-expanded');
                 if (expandedClass) {
-                    headerName = headerName + " Use Tab Key to Navigate to Next Section and Down arrow key to navigate to each item in the section";
+                    headerName = headerName + " " + $.i18n.prop("platform.shortcut.aria.instructnavigate");
                     angular.element(".keyboard-hidden-screen-reader").text(headerName);
                 } else {
-                    headerName = headerName + " Collapsed. Use Tab Key to Navigate to Next Section. ";
+                    headerName = headerName + " "+ $.i18n.prop("platform.shortcut.aria.collapsed");
                     angular.element(".keyboard-hidden-screen-reader").text(headerName);
                 }
             };
@@ -216,17 +205,17 @@
                 for (let i = 0; i <= shortcutListObj.length - 1; i++) {
                     angular.element("#banner_shortcut_" + i).prev().prev().attr('aria-live', 'polite');
                     let contentHeading = shortcutListObj[i].sectionHeading;
-                    let contentDisplay = "Press Enter to Expand/Collapse the section" + contentHeading + ".  Use Tab key to navigate to next section or shortcut ";
+                    let contentDisplay = $.i18n.prop("platform.shortcut.aria.sectionheading") + contentHeading + "." +$.i18n.prop("platform.shortcut.aria.focussed");
                     angular.element("#banner_shortcut_" + i).prev().prev().attr('aria-label', contentDisplay);
                 }
                 let headingName = angular.element("#banner_shortcut_0").prev().prev().text();
                 let expandedClass = angular.element("#banner_shortcut_0").prev().prev().hasClass('shortcut-container-expanded');
                 if (expandedClass) {
-                    headingName = headingName + " Collapsed. Please use Tab Key to Navigate to Next Section.";
+                    headingName = headingName + " "+ $.i18n.prop("platform.shortcut.aria.collapsed");
                 } else {
-                    headingName = headingName + " Expanded. Use Tab Key to Navigate to Next Section and Down arrow key to navigate to each item in the section";
+                    headingName = headingName + " "+ $.i18n.prop("platform.shortcut.aria.expanded");
                 }
-                angular.element(".keyboard-hidden-screen-reader").text("This dialog lists all the keyboard shortcuts specific to this application");
+                angular.element(".keyboard-hidden-screen-reader").text($.i18n.prop("platform.shortcut.aria.dialog.description"));
                 angular.element(".keyboard-screen-reader-opens").text(headingName);
             }
 
@@ -234,7 +223,7 @@
             $scope.toggleshortcut = function () {
                 $scope.modalShown = !$scope.modalShown;
                 let listExists = keyshortcut.getBannerShortcutList();
-                /*if (listExists.length === 0) {*/
+                if (!$scope.backendCalled) {
                 var backendURL = $('meta[name=menuBaseURL]').attr("content");
                     $http({
                         method: "GET",
@@ -242,10 +231,10 @@
                         cache:true
                     }).then(function mySuccess(response) {
                         $scope.messageList = response.data;
+                        $scope.backendCalled=true;
                         if (keyshortcut.isMac()) {
                             $scope.macMessageList = $scope.messageList.mac;
                             populateEntireDialog($scope.macMessageList, keyshortcut)
-
                         } else {
                             $scope.windowsMessageList = $scope.messageList.windows;
                             populateEntireDialog($scope.windowsMessageList, keyshortcut)
@@ -257,11 +246,11 @@
                     }, function myError(response) {
                         console.log("Error Occurred reading message keys from message.properties file");
                     });
-                /*} else {*/
+                } else {
                   $timeout(function () {
                         defaultAriaAccessibility(listExists);
                     }, 10);
-                /*}*/
+                }
             };
 
         }]);

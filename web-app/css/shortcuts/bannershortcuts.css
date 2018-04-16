@@ -70,9 +70,10 @@
 }
 
 .banner-shortcut {
-    /*display: table;*/
+    display: table;
     width: 100%;
     padding-top: 0.25em;
+    border-bottom:1px solid #EEEEEF;
 }
 
 .column-container {
