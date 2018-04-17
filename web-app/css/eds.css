@@ -68,12 +68,10 @@
 
 .primary:hover:not([disabled]) {
     background-color: #065AA5;
-    border: none;
 }
 
 .secondary:hover:not([disabled]) {
     background-color: #065AA5;
-    border: none;
     color: #FFFFFF;
 }
 
