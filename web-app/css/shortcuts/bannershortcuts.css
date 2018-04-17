@@ -45,8 +45,7 @@
     margin-left: 0.5em;
     vertical-align: middle;
     display: table-cell;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
+    border-radius: 6px;
     border: 0.1em solid #BECCD7
 }
 
@@ -106,32 +105,16 @@
 }
 
 @media screen and (min-width: 768px) {
-    .shortcutAccordion {
-        display: inline-block;
-        float: right;
-        width: 2em;
-        height: 2em;
-        margin-top: 0.125em;
-    }
 
     .content-heading-shortcut {
-        display: inline-block;
-        vertical-align: middle;
-        float: left;
-        opacity: 1;
         width: 92%;
-        color: #4F585F;
-        padding:0.5em 0em 0.5em 1em;
-        font-family: OpenSans-Bold;
     }
 
     .down {
-        background: url('../../images/expand.svg') right center no-repeat;
         margin-right: 0em;
     }
 
     .up {
-        background: url('../../images/collapse.svg') no-repeat;
         margin-right: 0.35em;
         width: 3%;
     }
