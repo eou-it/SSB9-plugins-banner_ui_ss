@@ -35,3 +35,74 @@
     background-color: #F7F7F7;
 }
 
+/* Button Styles Prisma */
+
+.primary:hover:not([disabled]) {
+    background-color: #065AA5;
+    border: none;
+}
+
+.primary:focus:not([disabled]) {
+    border: 2px solid #81C8FF;
+    -ms-user-select: none;
+    outline: none;
+}
+
+.primary {
+    background-color: #026BC8;
+    color: #FFFFFF;
+    border-radius: 4px;
+    padding: 0.5em 1.5em;
+    border: none;
+    font-family: Open Sans !important;
+}
+
+.secondary {
+    background-color: #FFFFFF;
+    border: 1px solid #026BC8;
+    color: #026BC8;
+    border-radius: 4px;
+    padding: 0.5em 1.5em;;
+    font-family: Open Sans !important;
+}
+
+.primary:hover:not([disabled]) {
+    background-color: #065AA5;
+    border: none;
+}
+
+.secondary:hover:not([disabled]) {
+    background-color: #065AA5;
+    border: none;
+    color: #FFFFFF;
+}
+
+.secondary:focus:not([disabled]) {
+    border: 1px solid #81C8FF;
+    -ms-user-select: none;
+    background-color: #065AA5;
+    color: #FFFFFF;
+    outline: none;
+}
+
+.primary:disabled {
+    background-color: #B2B3B7;
+    color: #FFFFFF;
+    border: none;
+}
+
+.secondary:disabled {
+    background-color: #B2B3B7;
+    color: #FFFFFF;
+    border: none;
+}
+
+.primary:active:not([disabled]) {
+    background-color: #0A4982;
+    border: none;
+}
+
+.secondary:active:not([disabled]) {
+    background-color: #0A4982;
+    border: none;
+}

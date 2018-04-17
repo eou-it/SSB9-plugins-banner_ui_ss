@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2011-2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2011-2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 
 $(document).ready(function() {
@@ -281,6 +281,7 @@ $(document).ready(function() {
                             prompt.action();
                         });
                     b.addClass('notification-flyout-item');
+                    b.addClass('secondary');
                     promptsDiv.append( b );
                 }, this );
             }
@@ -303,6 +304,8 @@ $(document).ready(function() {
             }
             else if(notificationType == "warning"){
                 var actionButton = promptsDiv.find('button:first');
+                actionButton.removeClass('secondary');
+                actionButton.addClass('primary');
                 actionButton.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage+ " " + actionButton.text(), "off", "aria-labelledby");
             }
             else{
