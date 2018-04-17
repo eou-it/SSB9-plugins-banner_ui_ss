@@ -1,6 +1,9 @@
 
 .readonly
 {
-    background-color:#F5F6F7;
-    font-color:#676A6E;
+    /*EDS Changes*/
+    background-color: #F7F7F7;
+    border: 1px solid #151618;
+    color: #5B5E65;
+    opacity: 100%;
 }
