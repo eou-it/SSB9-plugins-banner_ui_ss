@@ -78,7 +78,7 @@
                 });
                 let index = sectionHeadList.indexOf(sectionHeading);
                 if (index < 0) {
-                    listOfBannerShortcuts.unshift(bannerObj);
+                    listOfBannerShortcuts.push(bannerObj);
                 } else {
                     listOfBannerShortcuts[index].shortcutList = listOfBannerShortcuts[index].shortcutList.concat(shortcutList);
                 }
@@ -135,7 +135,8 @@
         .controller('shortcutModal', ['$scope', 'keyshortcut', '$http', '$document', '$timeout', function ($scope, keyshortcut, $http, $document, $timeout) {
 
             function populateEntireDialog(objToIterate, keyshortcutService) {
-                Object.keys(objToIterate).forEach(function (key, index) {
+
+                Object.keys(objToIterate).sort().forEach(function (key, index) {
                     var shortcutList = objToIterate[key];
                     var tempList = [];
                     for (let i = 0; i < shortcutList.length; i++) {
