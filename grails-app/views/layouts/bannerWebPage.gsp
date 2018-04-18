@@ -2,7 +2,7 @@
 <%@ page import="org.springframework.context.i18n.LocaleContextHolder" %>
 
 <%--
-Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
+Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 --%>
 <!DOCTYPE html>
 <html lang="${message(code: 'default.language.locale')}">
@@ -96,6 +96,5 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
     </g:if>
 
         <g:render template="/layouts/bannershortcuts" plugin="banner_ui_ss"/>
-    <div id="testing_module"></div>
     </body>
 </html>
