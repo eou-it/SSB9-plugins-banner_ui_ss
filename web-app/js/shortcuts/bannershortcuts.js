@@ -4,11 +4,11 @@
 
 (function () {
     'use strict';
-    var listOfBannerShortcuts = [];
+    var _listOfBannerShortcuts = [];
     angular.module('keyboardshortcut', ['bannerBindkeys', 'xe-ui-components'])
         //service
         .service('keyshortcut', ['hotkeys', function (hotkeys) {
-            this.shortcutObj = function (combination, description, callback,bindingScope) {
+            this.shortcutObj = function (combination, description, callback, bindingScope) {
                 let shortcut = {};
                 if (combination.indexOf('+') >= 0) {
                     let addSplCombination = this.addingSpecial(combination);
@@ -21,7 +21,7 @@
                 shortcut.combo = combination;
                 shortcut.description = description;
                 shortcut.callback = callback;
-                shortcut.scopeToBind=bindingScope;
+                shortcut.scopeToBind = bindingScope;
                 return shortcut;
             };
 
@@ -73,31 +73,31 @@
                 bannerObj.sectionHeading = sectionHeading;
                 bannerObj.shortcutList = shortcutList;
 
-                var sectionHeadList = listOfBannerShortcuts.map(function (listOfBannerShortcut, index, array) {
+                var sectionHeadList = this.getBannerShortcutList().map(function (listOfBannerShortcut, index, array) {
                     return listOfBannerShortcut.sectionHeading;
                 });
                 let index = sectionHeadList.indexOf(sectionHeading);
                 if (index < 0) {
-                    listOfBannerShortcuts.push(bannerObj);
+                    _listOfBannerShortcuts.push(bannerObj);
                 } else {
-                    listOfBannerShortcuts[index].shortcutList = listOfBannerShortcuts[index].shortcutList.concat(shortcutList);
+                    _listOfBannerShortcuts[index].shortcutList = _listOfBannerShortcuts[index].shortcutList.concat(shortcutList);
                 }
 
             };
 
             this.addSectionShortcuts = function (sectionHeading, shortcutList) {
                 for (let i = 0; i < shortcutList.length - 1; i++) {
-                    this.addToList(shortcutList[i].combo.toString(), shortcutList[i].description, shortcutList[i].callback,shortcutList[i].scopeToBind);
+                    this.addToList(shortcutList[i].combo.toString(), shortcutList[i].description, shortcutList[i].callback, shortcutList[i].scopeToBind);
                 }
                 this.addBannerShortcut(sectionHeading, shortcutList);
             };
 
             this.getBannerShortcutList = function () {
-                return listOfBannerShortcuts;
+                return _listOfBannerShortcuts;
             };
 
-            this.addToHotkeys = function (combo, description, callback,passingScope) {
-                this.addToList(combo, description, callback,passingScope);
+            this.addToHotkeys = function (combo, description, callback, passingScope) {
+                this.addToList(combo, description, callback, passingScope);
             };
 
 
@@ -109,7 +109,7 @@
                 return isMac;
             };
 
-            this.addToList = function (combo, description, callback,scopeToBind) {
+            this.addToList = function (combo, description, callback, scopeToBind) {
                 if (callback) {
                     if (!scopeToBind) {
                         hotkeys.add({
@@ -133,19 +133,6 @@
             };
         }])
         .controller('shortcutModal', ['$scope', 'keyshortcut', '$http', '$document', '$timeout', function ($scope, keyshortcut, $http, $document, $timeout) {
-
-            function populateEntireDialog(objToIterate, keyshortcutService) {
-
-                Object.keys(objToIterate).sort().forEach(function (key, index) {
-                    var shortcutList = objToIterate[key];
-                    var tempList = [];
-                    for (let i = 0; i < shortcutList.length; i++) {
-                        let temp1 = keyshortcutService.shortcutObj(shortcutList[i].combination, shortcutList[i].description);
-                        tempList.push(temp1);
-                    }
-                    keyshortcutService.addSectionShortcuts(key, tempList);
-                });
-            }
 
             $document.bind('keydown', function (event) {
                 if (event.ctrlKey && event.shiftKey && event.keyCode === 191) {
@@ -171,7 +158,7 @@
 
             $scope.banner_shortcut_0 = true;
 
-            $scope.backendCalled =false;
+            $scope.backendCalled = false;
 
             $scope.showDescription = function (event) {
                 if (event.type === "click" || (event.type = "keydown" && event.keyCode === 13)) {
@@ -195,7 +182,7 @@
                     headerName = headerName + " " + $.i18n.prop("platform.shortcut.aria.instructnavigate");
                     angular.element(".keyboard-hidden-screen-reader").text(headerName);
                 } else {
-                    headerName = headerName + " "+ $.i18n.prop("platform.shortcut.aria.collapsed");
+                    headerName = headerName + " " + $.i18n.prop("platform.shortcut.aria.collapsed");
                     angular.element(".keyboard-hidden-screen-reader").text(headerName);
                 }
             };
@@ -206,50 +193,71 @@
                 for (let i = 0; i <= shortcutListObj.length - 1; i++) {
                     angular.element("#banner_shortcut_" + i).prev().prev().attr('aria-live', 'polite');
                     let contentHeading = shortcutListObj[i].sectionHeading;
-                    let contentDisplay = $.i18n.prop("platform.shortcut.aria.sectionheading") + contentHeading + "." +$.i18n.prop("platform.shortcut.aria.focussed");
+                    let contentDisplay = $.i18n.prop("platform.shortcut.aria.sectionheading") + contentHeading + "." + $.i18n.prop("platform.shortcut.aria.focussed");
                     angular.element("#banner_shortcut_" + i).prev().prev().attr('aria-label', contentDisplay);
                 }
                 let headingName = angular.element("#banner_shortcut_0").prev().prev().text();
                 let expandedClass = angular.element("#banner_shortcut_0").prev().prev().hasClass('shortcut-container-expanded');
                 if (expandedClass) {
-                    headingName = headingName + " "+ $.i18n.prop("platform.shortcut.aria.collapsed");
+                    headingName = headingName + " " + $.i18n.prop("platform.shortcut.aria.collapsed");
                 } else {
-                    headingName = headingName + " "+ $.i18n.prop("platform.shortcut.aria.expanded");
+                    headingName = headingName + " " + $.i18n.prop("platform.shortcut.aria.expanded");
                 }
                 angular.element(".keyboard-hidden-screen-reader").text($.i18n.prop("platform.shortcut.aria.dialog.description"));
                 angular.element(".keyboard-screen-reader-opens").text(headingName);
             }
 
+            function sortAscendingShortcutList(listToBeSorted) {
+                listToBeSorted.sort(function (a, b) {
+                    return a.sectionHeading > b.sectionHeading;
+                });
+                return listToBeSorted;
+            }
+
+            $scope.populateEntireDialog= function(objToIterate) {
+                Object.keys(objToIterate).forEach(function (key, index) {
+                    var shortcutList = objToIterate[key];
+                    var tempList = [];
+                    for (let i = 0; i < shortcutList.length; i++) {
+                        let temp1 = keyshortcut.shortcutObj(shortcutList[i].combination, shortcutList[i].description);
+                        tempList.push(temp1);
+                    }
+                    keyshortcut.addSectionShortcuts(key, tempList);
+                });
+            };
+
 
             $scope.toggleshortcut = function () {
                 $scope.modalShown = !$scope.modalShown;
-                let listExists = keyshortcut.getBannerShortcutList();
+                let shortcutList = keyshortcut.getBannerShortcutList();
                 if (!$scope.backendCalled) {
-                var backendURL = $('meta[name=menuBaseURL]').attr("content");
+                    var backendURL = $('meta[name=menuBaseURL]').attr("content");
                     $http({
                         method: "GET",
-                        url: backendURL+"/shortcut/data",
-                        cache:true
-                    }).then(function mySuccess(response) {
-                        $scope.messageList = response.data;
-                        $scope.backendCalled=true;
+                        url: backendURL + "/shortcut/data",
+                        cache: true
+                    }).then(function success(response) {
+                        let jsonShortcutList = response.data;
+                        $scope.backendCalled = true;
                         if (keyshortcut.isMac()) {
-                            $scope.macMessageList = $scope.messageList.mac;
-                            populateEntireDialog($scope.macMessageList, keyshortcut)
+                            let macMessageList = jsonShortcutList.mac;
+                            $scope.populateEntireDialog(macMessageList);
                         } else {
-                            $scope.windowsMessageList = $scope.messageList.windows;
-                            populateEntireDialog($scope.windowsMessageList, keyshortcut)
+                            let windowsMessageList = jsonShortcutList.windows;
+                            $scope.populateEntireDialog(windowsMessageList);
                         }
-                        $scope.shortcutObj = keyshortcut.getBannerShortcutList();
                         $timeout(function () {
-                            defaultAriaAccessibility(listExists);
+                            $scope.shortcutObj = sortAscendingShortcutList(keyshortcut.getBannerShortcutList());
+                            defaultAriaAccessibility(shortcutList);
                         }, 10);
-                    }, function myError(response) {
+                    }, function error(error) {
                         console.log("Error Occurred reading message keys from message.properties file");
+                        console.log("Status "+error.status+" Error Message is "+error.statusText);
                     });
                 } else {
-                  $timeout(function () {
-                        defaultAriaAccessibility(listExists);
+                    $timeout(function () {
+                        $scope.shortcutObj = sortAscendingShortcutList(keyshortcut.getBannerShortcutList());
+                        defaultAriaAccessibility(shortcutList);
                     }, 10);
                 }
             };
