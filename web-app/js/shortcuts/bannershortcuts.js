@@ -43,16 +43,10 @@
 
             this.symbolize = function (combo) {
                 if (combo.split('+') >= 0) {
-                    for (let i = 0; i < combo.length; i++) {
-                        combo[i] = this.map[combo[i]] || combo[i];
+                    for (let comb of combo) {
+                        comb = this.map[comb] || comb;
                     }
                     return combo.join(' + ');
-                } else if (combo.split('/').length > 1) {
-                    let testcombo = combo.split('/');
-                    for (let i = 0; i < testcombo.length; i++) {
-                        testcombo[i] = this.map[testcombo[i]] || testcombo[i];
-                    }
-                    return testcombo.join('/');
                 } else {
                     combo = this.map[combo] || combo;
                     return combo;
@@ -61,9 +55,8 @@
 
             this.addingSpecial = function (combo) {
                 combo = combo.split('+');
-
-                for (let i = 0; i < combo.length; i++) {
-                    combo[i] = this.map[combo[i]] || combo[i];
+                for (let comb of combo) {
+                    comb = this.map[comb] || comb;
                 }
                 return combo.join(' + ');
             };
@@ -72,8 +65,8 @@
                 let bannerObj = {};
                 bannerObj.sectionHeading = sectionHeading;
                 bannerObj.shortcutList = shortcutList;
-
-                var sectionHeadList = this.getBannerShortcutList().map(function (listOfBannerShortcut, index, array) {
+                //combining the shortcuts if the same sectionHeading is been used by App Team
+                let sectionHeadList = this.getBannerShortcutList().map(function (listOfBannerShortcut, index, array) {
                     return listOfBannerShortcut.sectionHeading;
                 });
                 let index = sectionHeadList.indexOf(sectionHeading);
@@ -86,8 +79,8 @@
             };
 
             this.addSectionShortcuts = function (sectionHeading, shortcutList) {
-                for (let i = 0; i < shortcutList.length - 1; i++) {
-                    this.addToList(shortcutList[i].combo.toString(), shortcutList[i].description, shortcutList[i].callback, shortcutList[i].scopeToBind);
+                for (const shortcutItem of shortcutList) {
+                    this.addToList(shortcutItem.combo.toString(), shortcutItem.description, shortcutItem.callback, shortcutItem.scopeToBind);
                 }
                 this.addBannerShortcut(sectionHeading, shortcutList);
             };
@@ -99,7 +92,6 @@
             this.addToHotkeys = function (combo, description, callback, passingScope) {
                 this.addToList(combo, description, callback, passingScope);
             };
-
 
             this.isMac = function () {
                 var isMac = false;
@@ -144,6 +136,7 @@
                 }
             });
 
+            // This is Aria Span's used to hold values to be read with JAWS
             var regionSpan1 = angular.element('<span></span>');
             regionSpan1.attr('role', 'status');
             regionSpan1.attr('aria-live', 'assertive');
@@ -218,8 +211,8 @@
                 Object.keys(objToIterate).forEach(function (key, index) {
                     var shortcutList = objToIterate[key];
                     var tempList = [];
-                    for (let i = 0; i < shortcutList.length; i++) {
-                        let temp1 = keyshortcut.shortcutObj(shortcutList[i].combination, shortcutList[i].description);
+                    for (const shortcutItem of shortcutList) {
+                        let temp1 = keyshortcut.shortcutObj(shortcutItem.combination, shortcutItem.description);
                         tempList.push(temp1);
                     }
                     keyshortcut.addSectionShortcuts(key, tempList);
