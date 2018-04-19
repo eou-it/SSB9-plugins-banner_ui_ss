@@ -43,8 +43,8 @@
 
             this.symbolize = function (combo) {
                 if (combo.split('+') >= 0) {
-                    for (let comb of combo) {
-                        comb = this.map[comb] || comb;
+                    for (let i = 0; i < combo.length; i++) {
+                        combo[i] = this.map[combo[i]] || combo[i];
                     }
                     return combo.join(' + ');
                 } else {
@@ -55,8 +55,8 @@
 
             this.addingSpecial = function (combo) {
                 combo = combo.split('+');
-                for (let comb of combo) {
-                    comb = this.map[comb] || comb;
+                for (let i = 0; i < combo.length; i++) {
+                    combo[i] = this.map[combo[i]] || combo[i];
                 }
                 return combo.join(' + ');
             };
@@ -79,8 +79,8 @@
             };
 
             this.addSectionShortcuts = function (sectionHeading, shortcutList) {
-                for (const shortcutItem of shortcutList) {
-                    this.addToList(shortcutItem.combo.toString(), shortcutItem.description, shortcutItem.callback, shortcutItem.scopeToBind);
+                for (let i = 0; i < shortcutList.length - 1; i++) {
+                    this.addToList(shortcutList[i].combo.toString(), shortcutList[i].description, shortcutList[i].callback, shortcutList[i].scopeToBind);
                 }
                 this.addBannerShortcut(sectionHeading, shortcutList);
             };
@@ -149,7 +149,6 @@
             regionSpan2.attr('class', 'keyboard-screen-reader-opens');
             angular.element(document.body).append(regionSpan2);
 
-            $scope.banner_shortcut_0 = true;
 
             $scope.backendCalled = false;
 
@@ -159,11 +158,9 @@
                     let descBlock = angular.element(displayBlock).find('div.banner-shortcut').attr('id');
                     $scope[descBlock] = !$scope[descBlock];
                     $timeout(function () {
-                        if ($scope[descBlock]) {
-                            $scope.ariaExpandCollpaseContent(event);
-                        } else {
-                            $scope.ariaExpandCollpaseContent(event);
-                        }
+                        $scope.ariaExpandCollpaseContent(event);
+                        event.preventDefault();
+                        return false;
                     }, 10);
                 }
             };
@@ -182,15 +179,15 @@
 
             function defaultAriaAccessibility(shortcutListObj) {
                 angular.element('.xe-popup-mask').attr('tabindex', 0).focus();
-                angular.element("#banner_shortcut_0").prev().prev().focus();
+                angular.element(".banner_shortcut_0").prev().prev().focus();
                 for (let i = 0; i <= shortcutListObj.length - 1; i++) {
-                    angular.element("#banner_shortcut_" + i).prev().prev().attr('aria-live', 'polite');
+                    angular.element(".banner_shortcut_" + i).prev().prev().attr('aria-live', 'polite');
                     let contentHeading = shortcutListObj[i].sectionHeading;
                     let contentDisplay = $.i18n.prop("platform.shortcut.aria.sectionheading") + contentHeading + "." + $.i18n.prop("platform.shortcut.aria.focussed");
-                    angular.element("#banner_shortcut_" + i).prev().prev().attr('aria-label', contentDisplay);
+                    angular.element(".banner_shortcut_" + i).prev().prev().attr('aria-label', contentDisplay);
                 }
-                let headingName = angular.element("#banner_shortcut_0").prev().prev().text();
-                let expandedClass = angular.element("#banner_shortcut_0").prev().prev().hasClass('shortcut-container-expanded');
+                let headingName = angular.element(".banner_shortcut_0").prev().prev().text();
+                const expandedClass = angular.element(".banner_shortcut_0").prev().prev().hasClass('shortcut-container-expanded');
                 if (expandedClass) {
                     headingName = headingName + " " + $.i18n.prop("platform.shortcut.aria.collapsed");
                 } else {
@@ -202,17 +199,19 @@
 
             function sortAscendingShortcutList(listToBeSorted) {
                 listToBeSorted.sort(function (a, b) {
-                    return a.sectionHeading > b.sectionHeading;
+                    if (a.sectionHeading > b.sectionHeading) return 1;
+                    if (a.sectionHeading < b.sectionHeading) return -1;
+                    return 0;
                 });
                 return listToBeSorted;
             }
 
-            $scope.populateEntireDialog= function(objToIterate) {
+            $scope.populateEntireDialog = function (objToIterate) {
                 Object.keys(objToIterate).forEach(function (key, index) {
                     var shortcutList = objToIterate[key];
                     var tempList = [];
-                    for (const shortcutItem of shortcutList) {
-                        let temp1 = keyshortcut.shortcutObj(shortcutItem.combination, shortcutItem.description);
+                    for (let i = 0; i < shortcutList.length; i++) {
+                        let temp1 = keyshortcut.shortcutObj(shortcutList[i].combination, shortcutList[i].description);
                         tempList.push(temp1);
                     }
                     keyshortcut.addSectionShortcuts(key, tempList);
@@ -239,17 +238,21 @@
                             let windowsMessageList = jsonShortcutList.windows;
                             $scope.populateEntireDialog(windowsMessageList);
                         }
+                        $scope.shortcutObj = sortAscendingShortcutList(keyshortcut.getBannerShortcutList());
                         $timeout(function () {
-                            $scope.shortcutObj = sortAscendingShortcutList(keyshortcut.getBannerShortcutList());
+                            let derivedScope = angular.element("#shortcut_module_added").scope();
+                            let firstShortcutScope = angular.element(".banner_shortcut_0").scope();
+                            let createId = "banner_shortcut_" + firstShortcutScope.$id;
+                            derivedScope[createId] = true;
                             defaultAriaAccessibility(shortcutList);
                         }, 10);
                     }, function error(error) {
                         console.log("Error Occurred reading message keys from message.properties file");
-                        console.log("Status "+error.status+" Error Message is "+error.statusText);
+                        console.log("Status " + error.status + " Error Message is " + error.statusText);
                     });
                 } else {
+                    $scope.shortcutObj = sortAscendingShortcutList(keyshortcut.getBannerShortcutList());
                     $timeout(function () {
-                        $scope.shortcutObj = sortAscendingShortcutList(keyshortcut.getBannerShortcutList());
                         defaultAriaAccessibility(shortcutList);
                     }, 10);
                 }
