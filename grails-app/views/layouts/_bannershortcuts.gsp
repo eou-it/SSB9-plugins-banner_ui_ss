@@ -8,7 +8,7 @@ Copyright 2018 Ellucian Company L.P. and its affiliates.
                 <div ng-repeat="bannershortcut in shortcutObj" ng-class="banner_shortcut_{{$index}} ? 'shortcut-container-expanded' : 'shortcut-container-collapse'">
                         <span class="content-heading-shortcut" tabindex="0" ng-keydown="showDescription($event)" data-ng-bind="bannershortcut.sectionHeading" ng-click="showDescription($event)"></span>
                         <span class="shortcutAccordion" ng-keydown="showDescription($event)" ng-click="showDescription($event)" ng-class="banner_shortcut_{{$index}} ? 'up' : 'down'"></span>
-                    <div class="banner-shortcut" id="banner_shortcut_{{$index}}" ng-show="banner_shortcut_{{$index}}">
+                    <div class="banner-shortcut banner_shortcut_{{$index}}" id="banner_shortcut_{{$id}}" ng-show="banner_shortcut_{{$id}}">
                         <div class="shortcut-row" ng-repeat="hotkey in bannershortcut.shortcutList">
                             <div class="shortcut-description" aria-label="{{hotkey.description}}" data-ng-bind="hotkey.description"></div>
                             <div class="column-container">
