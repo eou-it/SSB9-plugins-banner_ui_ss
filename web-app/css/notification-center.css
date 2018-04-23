@@ -68,19 +68,19 @@
     background-image: url(../images/icon-info-16x16.png);
 }
 
-.notification-center-flyout ul li.notification-center-message-success {
+.notification-center-flyout ul li.notification-center-message-success { //EDS
     background-color: #eaf7f2;  /*$color-success-fill*/
     color: #00804d; /*$color-success-fill-dark or $color-success-dark*/
     box-shadow: 0 1px 1px rgba(0, 175, 105,0.15);
 
 }
 
-.notification-center-flyout ul li.notification-center-message-error{
+.notification-center-flyout ul li.notification-center-message-error{ //EDS
     background-color: #ffeeed;  /*$color-error-fill*/
     color: #d42828; /*$color-error-fill-dark or $color-error-dark*/
 }
 
-.notification-center-flyout ul li.notification-center-message-warning {
+.notification-center-flyout ul li.notification-center-message-warning { //EDS
     background-color: #f5f2e7;  /*$color-warning-fill*/
     /*border-bottom: 2px solid #8a6a00;*/
     color: #8a6a00;  /*$color-warning-fill-dark or $color-warning-dark*/
@@ -127,7 +127,7 @@ body > .notification-center-shim {
     filter: alpha(opacity = 30);
 }
 
-#header-main-section li a.notification-message{
+#header-main-section li a.notification-message{ //EDS
     color: #d42828;  /*$color-error-dark or $color-error-fill-dark*/
     text-decoration: underline;
     cursor: pointer;
