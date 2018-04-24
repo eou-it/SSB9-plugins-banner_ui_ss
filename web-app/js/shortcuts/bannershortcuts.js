@@ -240,10 +240,10 @@
                         }
                         $scope.shortcutObj = sortAscendingShortcutList(keyshortcut.getBannerShortcutList());
                         $timeout(function () {
-                            let derivedScope = angular.element("#shortcut_module_added").scope();
+                            /*let derivedScope = angular.element("#shortcut_module_added").scope();
                             let firstShortcutScope = angular.element(".banner_shortcut_0").scope();
                             let createId = "banner_shortcut_" + firstShortcutScope.$id;
-                            derivedScope[createId] = true;
+                            derivedScope[createId] = false;*/
                             defaultAriaAccessibility(shortcutList);
                         }, 10);
                     }, function error(error) {
