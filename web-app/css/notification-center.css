@@ -68,6 +68,7 @@
     background-image: url(../images/icon-info-16x16.png);
 }
 
+/*EDS*/
 .notification-center-flyout ul li.notification-center-message-success {
     background-color: #eaf7f2;  /*$color-success-fill*/
     color: #00804d; /*$color-success-fill-dark or $color-success-dark*/
@@ -75,11 +76,13 @@
 
 }
 
+/*EDS*/
 .notification-center-flyout ul li.notification-center-message-error{
     background-color: #ffeeed;  /*$color-error-fill*/
     color: #d42828; /*$color-error-fill-dark or $color-error-dark*/
 }
 
+/*EDS*/
 .notification-center-flyout ul li.notification-center-message-warning {
     background-color: #f5f2e7;  /*$color-warning-fill*/
     /*border-bottom: 2px solid #8a6a00;*/
@@ -128,7 +131,7 @@ body > .notification-center-shim {
 }
 
 #header-main-section li a.notification-message{
-    color: #d42828;  /*$color-error-dark or $color-error-fill-dark*/
+    color: #d42828;  /*$color-error-dark or $color-error-fill-dark*/ /*EDS*/
     text-decoration: underline;
     cursor: pointer;
 }
