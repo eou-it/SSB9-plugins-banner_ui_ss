@@ -1,7 +1,9 @@
 /*********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
-
+.button-area {
+    font-size: 16px;
+}
 .eds-text-field {
     width: 18.75em;
     border-radius: 4px;
@@ -104,3 +106,4 @@
     background-color: #0A4982;
     border: none;
 }
+
