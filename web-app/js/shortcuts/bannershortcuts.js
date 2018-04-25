@@ -162,6 +162,40 @@
                         event.preventDefault();
                         return false;
                     }, 10);
+                } else if (event.shiftKey && event.keyCode === 9) {
+                    let prevHeader = angular.element(event.target).closest('div').prev();
+                    prevHeader = angular.element(prevHeader).find('span.content-heading-shortcut').text();
+                    if (prevHeader) {
+                        let expandedClass = angular.element(event.target).closest('div').prev().hasClass('shortcut-container-expanded');
+                        if (expandedClass) {
+                            angular.element(".keyboard-screen-reader-opens").text(prevHeader + " " + $.i18n.prop("platform.shortcut.aria.expanded"));
+                            prevHeader = prevHeader + ". " + $.i18n.prop("platform.shortcut.aria.instructnavigate");
+                            angular.element(".keyboard-hidden-screen-reader").text(prevHeader);
+                        } else {
+                            angular.element(".keyboard-screen-reader-opens").text(prevHeader + " " + $.i18n.prop("platform.shortcut.aria.collapsed"));
+                            prevHeader = prevHeader + " " + $.i18n.prop("platform.shortcut.aria.collapsed");
+                            angular.element(".keyboard-hidden-screen-reader").text(prevHeader);
+                        }
+                    }
+                    return true;
+                } else if (event.keyCode === 9) {
+                    let nextHeader = angular.element(event.target).closest('div').next();
+                    nextHeader = angular.element(nextHeader).find('span.content-heading-shortcut').text();
+                    if (nextHeader) {
+                        let expandedClass = angular.element(event.target).closest('div').next().hasClass('shortcut-container-expanded');
+                        if (expandedClass) {
+                            angular.element(".keyboard-screen-reader-opens").text(nextHeader + " " + $.i18n.prop("platform.shortcut.aria.expanded"));
+                            nextHeader = nextHeader + ". " + $.i18n.prop("platform.shortcut.aria.instructnavigate");
+                            angular.element(".keyboard-hidden-screen-reader").text(nextHeader);
+                        } else {
+                            angular.element(".keyboard-screen-reader-opens").text(nextHeader + " " + $.i18n.prop("platform.shortcut.aria.collapsed"));
+                            nextHeader = nextHeader + " " + $.i18n.prop("platform.shortcut.aria.collapsed");
+                            angular.element(".keyboard-hidden-screen-reader").text(nextHeader);
+                        }
+                    }
+                    return true;
+                } else {
+                    return true;
                 }
             };
 
@@ -169,9 +203,11 @@
                 let headerName = angular.element(event.target).text();
                 let expandedClass = angular.element(event.target).closest('div').hasClass('shortcut-container-expanded');
                 if (expandedClass) {
-                    headerName = headerName + " " + $.i18n.prop("platform.shortcut.aria.instructnavigate");
+                    angular.element(".keyboard-screen-reader-opens").text(headerName + " " + $.i18n.prop("platform.shortcut.aria.expanded"));
+                    headerName = headerName + ". " + $.i18n.prop("platform.shortcut.aria.instructnavigate");
                     angular.element(".keyboard-hidden-screen-reader").text(headerName);
                 } else {
+                    angular.element(".keyboard-screen-reader-opens").text(headerName + " " + $.i18n.prop("platform.shortcut.aria.collapsed"));
                     headerName = headerName + " " + $.i18n.prop("platform.shortcut.aria.collapsed");
                     angular.element(".keyboard-hidden-screen-reader").text(headerName);
                 }
@@ -179,19 +215,19 @@
 
             function defaultAriaAccessibility(shortcutListObj) {
                 angular.element('.xe-popup-mask').attr('tabindex', 0).focus();
-                angular.element(".banner_shortcut_0").prev().prev().focus();
+                angular.element(".banner_aria-shortcut_0").find('span.content-heading-shortcut').focus();
                 for (let i = 0; i <= shortcutListObj.length - 1; i++) {
-                    angular.element(".banner_shortcut_" + i).prev().prev().attr('aria-live', 'polite');
+                    angular.element(".banner_aria-shortcut_" + i).find('span.content-heading-shortcut').attr('aria-live', 'polite');
                     let contentHeading = shortcutListObj[i].sectionHeading;
-                    let contentDisplay = $.i18n.prop("platform.shortcut.aria.sectionheading") + contentHeading + "." + $.i18n.prop("platform.shortcut.aria.focussed");
-                    angular.element(".banner_shortcut_" + i).prev().prev().attr('aria-label', contentDisplay);
+                    let contentDisplay = $.i18n.prop("platform.shortcut.aria.sectionheading") + " " + contentHeading + ". " + $.i18n.prop("platform.shortcut.aria.focussed");
+                    angular.element(".banner_aria-shortcut_" + i).find('span.content-heading-shortcut').attr('aria-label', contentDisplay);
                 }
-                let headingName = angular.element(".banner_shortcut_0").prev().prev().text();
-                const expandedClass = angular.element(".banner_shortcut_0").prev().prev().hasClass('shortcut-container-expanded');
+                let headingName = angular.element(".banner_aria-shortcut_0").find('span.content-heading-shortcut').text();
+                const expandedClass = angular.element(".banner_aria-shortcut_0").hasClass('shortcut-container-expanded');
                 if (expandedClass) {
-                    headingName = headingName + " " + $.i18n.prop("platform.shortcut.aria.collapsed");
-                } else {
                     headingName = headingName + " " + $.i18n.prop("platform.shortcut.aria.expanded");
+                } else {
+                    headingName = headingName + " " + $.i18n.prop("platform.shortcut.aria.collapsed");
                 }
                 angular.element(".keyboard-hidden-screen-reader").text($.i18n.prop("platform.shortcut.aria.dialog.description"));
                 angular.element(".keyboard-screen-reader-opens").text(headingName);

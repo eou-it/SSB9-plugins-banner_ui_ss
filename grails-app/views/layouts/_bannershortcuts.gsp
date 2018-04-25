@@ -5,7 +5,7 @@ Copyright 2018 Ellucian Company L.P. and its affiliates.
     <xe-popup-modal show="modalShown" focusbackelement="tools" pageheader="${g.message(code: 'aurora.toolsmenu.keyboard.shortcuts.heading')}">
         <popup-content>
             <div>
-                <div ng-repeat="bannershortcut in shortcutObj" ng-class="banner_shortcut_{{$id}} ? 'shortcut-container-expanded' : 'shortcut-container-collapse'">
+                <div ng-repeat="bannershortcut in shortcutObj" class="banner_aria-shortcut_{{$index}}" ng-class="banner_shortcut_{{$id}} ? 'shortcut-container-collapse' : 'shortcut-container-expanded'">
                         <span class="content-heading-shortcut" tabindex="0" ng-keydown="showDescription($event)" data-ng-bind="bannershortcut.sectionHeading" ng-click="showDescription($event)"></span>
                         <span class="shortcutAccordion" ng-keydown="showDescription($event)" ng-click="showDescription($event)" ng-class="!banner_shortcut_{{$id}} ? 'up' : 'down'"></span>
                     <div class="banner-shortcut banner_shortcut_{{$index}}" id="banner_shortcut_{{$id}}" ng-show="!banner_shortcut_{{$id}}">

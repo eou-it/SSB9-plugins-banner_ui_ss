@@ -72,6 +72,10 @@
     width: 100%;
     padding-top: 0.25em;
     border-bottom:1px solid #EEEEEF;
+    /*-webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;*/
 }
 
 .column-container {
@@ -118,4 +122,9 @@
         margin-right: 0.35em;
         width: 3%;
     }
+
+    /*div#shortcut_module_added div#xeModalMask div.xe-popup-wrapper div.xe-popup-container {
+        width:50em !important;
+        height:100% !important;
+    }*/
 }
