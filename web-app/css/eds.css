@@ -13,7 +13,7 @@
     webkit-box-sizing: border-box;
     background-color: #FFFFFF;
     font-family: OpenSans-semibold !important;
-    font-size: 0.875em;
+    font-size: 0.875em !important;
     text-align: left;
 }
 
