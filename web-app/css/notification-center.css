@@ -73,19 +73,20 @@
     background-color: #eaf7f2;  /*$color-success-fill*/
     color: #00804d; /*$color-success-fill-dark or $color-success-dark*/
     box-shadow: 0 1px 1px rgba(0, 175, 105,0.15);
-
+    border-top: solid 2px #00804D ;
 }
 
 /*EDS*/
 .notification-center-flyout ul li.notification-center-message-error{
     background-color: #ffeeed;  /*$color-error-fill*/
     color: #d42828; /*$color-error-fill-dark or $color-error-dark*/
+    border-top: solid 2px #D42828; /*EDS*/
 }
 
 /*EDS*/
 .notification-center-flyout ul li.notification-center-message-warning {
     background-color: #f5f2e7;  /*$color-warning-fill*/
-    /*border-bottom: 2px solid #8a6a00;*/
+    border-top: 2px solid #8A6A00; /*EDS*/
     color: #8a6a00;  /*$color-warning-fill-dark or $color-warning-dark*/
     /*border-width: 1px 0px 0px 0px;*/
 }
