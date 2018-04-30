@@ -80,7 +80,7 @@
 .secondary:focus:not([disabled]) {
     border: 1px solid #81C8FF;
     -ms-user-select: none;
-    background-color: #065AA5;
+    background-color: #026BC8;
     color: #FFFFFF;
     outline: none;
 }
