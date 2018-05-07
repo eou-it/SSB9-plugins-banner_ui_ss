@@ -98,8 +98,7 @@
                 if (window.navigator.platform.indexOf('Mac') >= 0) {
                     isMac = true;
                 }
-                /*return isMac;*/
-                return true;
+                return isMac;
             };
 
             this.addToList = function (combo, description, callback, scopeToBind) {
