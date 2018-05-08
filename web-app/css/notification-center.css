@@ -5,7 +5,6 @@
     min-width: 25em;
     background-color: #0071A7;
     font-size: 1.2em;
-    /*box-shadow: 0 1px 1px #000000;*/
     right : 0;
     left : auto;
 }
@@ -70,25 +69,26 @@
 
 /*EDS*/
 .notification-center-flyout ul li.notification-center-message-success {
-    background-color: #eaf7f2;  /*$color-success-fill*/
-    color: #00804d; /*$color-success-fill-dark or $color-success-dark*/
-    box-shadow: 0 1px 1px rgba(0, 175, 105,0.15);
-    border-top: solid 2px #00804D ;
+    background-color: #eaf7f2;  /*EDS*/
+    color: #00804d; /*EDS*/
+    border: solid 1px #00804D ; /*EDS*/
+    border-top: solid 4px #00804D ; /*EDS*/
 }
 
 /*EDS*/
 .notification-center-flyout ul li.notification-center-message-error{
-    background-color: #ffeeed;  /*$color-error-fill*/
-    color: #d42828; /*$color-error-fill-dark or $color-error-dark*/
+    background-color: #ffeeed;  /*EDS*/
+    color: #d42828; /*EDS*/
+    border: solid 1px #D42828; /*EDS*/
     border-top: solid 2px #D42828; /*EDS*/
 }
 
 /*EDS*/
 .notification-center-flyout ul li.notification-center-message-warning {
-    background-color: #f5f2e7;  /*$color-warning-fill*/
-    border-top: 2px solid #8A6A00; /*EDS*/
-    color: #8a6a00;  /*$color-warning-fill-dark or $color-warning-dark*/
-    /*border-width: 1px 0px 0px 0px;*/
+    background-color: #f5f2e7;  /*EDS*/
+    border: 1px solid #8A6A00; /*EDS*/
+    border-top: 4px solid #8A6A00; /*EDS*/
+    color: #8a6a00;  /*EDS*/
 }
 
 li span.notification-item-prompt-message, li .notification-item-prompts, .notification-center-flyout-hidden, .notification-center-hidden {
@@ -113,8 +113,8 @@ button.notification-flyout-item:focus {
 li:first-child .notification-item-prompts {
     visibility: visible;
     display: block;
-    background-color: #EBEBEB;
-    border: 1px solid #C6CBCD;
+    background-color: #F4F4F4; /*EDS*/
+    border-top: 1px solid #C2BCBC; /*EDS*/
     text-align: right;
     padding: 0.25em 0.25em 0.25em 0;
 }
@@ -132,7 +132,7 @@ body > .notification-center-shim {
 }
 
 #header-main-section li a.notification-message{
-    color: #d42828;  /*$color-error-dark or $color-error-fill-dark*/ /*EDS*/
+    color: #d42828;  /*EDS*/
     text-decoration: underline;
     cursor: pointer;
 }
