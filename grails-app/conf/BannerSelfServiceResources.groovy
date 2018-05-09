@@ -187,6 +187,7 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/lrInfiniteScroll.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/moment.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-common.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/angular-dateparser.min.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/custom-number-input.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/currency-directive.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/directives/decimal-directive.js']

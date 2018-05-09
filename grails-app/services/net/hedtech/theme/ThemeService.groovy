@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 package net.hedtech.theme
@@ -22,7 +22,7 @@ class ThemeService {
     def static appId = "THEME"
     def static final types = [theme:'json', template:'scss']
     def static final typesList = ['json', 'scss']
-    private static final Logger log = Logger.getLogger( this.getClass() )
+    private static final Logger log = Logger.getLogger( ThemeService.class.name )
 
 
     def saveTheme(String name, String type, def content) {
