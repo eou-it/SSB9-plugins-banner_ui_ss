@@ -33,9 +33,9 @@ div#buttonContainer.buttonContainer {
     background: url("images/ui-select/dropdown_grey.svg") no-repeat 100% !important;
 }*/
 
-.select2-dropdown-open .select2-choice {
-    background: url("images/ui-select/dropdown_blue.svg") no-repeat 100%;
-}
+/*.select2-dropdown-open .select2-choice {
+       background: url("images/ui-select/dropdown_blue.svg") no-repeat 100%;
+   }*/
 
 @media (max-width: 768px) and (orientation: landscape) {
     .xe-popup-container xe-button .primary{
