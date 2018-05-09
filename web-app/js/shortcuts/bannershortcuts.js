@@ -95,7 +95,7 @@
 
             this.isMac = function () {
                 var isMac = false;
-                if (window.navigator.platform.indexOf('Mac') >= 0) {
+                if (window.navigator.platform.indexOf('Mac') >= 0 || window.navigator.platform.match(/iPhone|iPod|iPad/)) {
                     isMac = true;
                 }
                 return isMac;
