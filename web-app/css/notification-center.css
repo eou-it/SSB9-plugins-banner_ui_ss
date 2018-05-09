@@ -5,7 +5,6 @@
     min-width: 25em;
     background-color: #0071A7;
     font-size: 1.2em;
-    box-shadow: 0 1px 1px #000000;
     right : 0;
     left : auto;
 }
@@ -68,26 +67,28 @@
     background-image: url(../images/icon-info-16x16.png);
 }
 
+/*EDS*/
 .notification-center-flyout ul li.notification-center-message-success {
-    background-color: #DDF4C9;
-    border: 1px solid #B0C3A0;
-    border-bottom: 2px solid #B0C3A0;
-    color: #04661B;
+    background-color: #eaf7f2;  /*EDS*/
+    color: #00804d; /*EDS*/
+    border: solid 1px #00804D ; /*EDS*/
+    border-top: solid 4px #00804D ; /*EDS*/
 }
 
+/*EDS*/
 .notification-center-flyout ul li.notification-center-message-error{
-    background-color: #FAEDED;
-    border: 1px solid #E7C2C2;
-    border-bottom: 2px solid #EED2D2;
-    color: #CD3939;
+    background-color: #ffeeed;  /*EDS*/
+    color: #d42828; /*EDS*/
+    border: solid 1px #D42828; /*EDS*/
+    border-top: solid 2px #D42828; /*EDS*/
 }
 
+/*EDS*/
 .notification-center-flyout ul li.notification-center-message-warning {
-    background-color: #FFF6B3;
-    border: 1px solid #F3E58E;
-    border-bottom: 2px solid #F3E688;
-    color: #8B572A;
-    border-width: 1px 0px 0px 0px;
+    background-color: #f5f2e7;  /*EDS*/
+    border: 1px solid #8A6A00; /*EDS*/
+    border-top: 4px solid #8A6A00; /*EDS*/
+    color: #8a6a00;  /*EDS*/
 }
 
 li span.notification-item-prompt-message, li .notification-item-prompts, .notification-center-flyout-hidden, .notification-center-hidden {
@@ -106,23 +107,14 @@ button.notification-flyout-item:focus {
 }
 
 .notification-item-prompts button{
-    background-color: #908989;
-    border-color: #908989;
-    color: white;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    border: none;
-    height: 2em;
     margin: 0 0.2em;
-    padding: 0.3em;
-}
+ }
 
 li:first-child .notification-item-prompts {
     visibility: visible;
     display: block;
-    background-color: #EBEBEB;
-    border: 1px solid #C6CBCD;
+    background-color: #F4F4F4; /*EDS*/
+    border-top: 1px solid #C2BCBC; /*EDS*/
     text-align: right;
     padding: 0.25em 0.25em 0.25em 0;
 }
@@ -140,7 +132,7 @@ body > .notification-center-shim {
 }
 
 #header-main-section li a.notification-message{
-    color: #ff0000;
+    color: #d42828;  /*EDS*/
     text-decoration: underline;
     cursor: pointer;
 }

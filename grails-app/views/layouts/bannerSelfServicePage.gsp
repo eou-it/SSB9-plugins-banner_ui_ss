@@ -2,7 +2,7 @@
 <%@ page import="org.springframework.context.i18n.LocaleContextHolder" %>
 
 <%--
-Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
+Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 --%>
 <!DOCTYPE html>
 <html lang="${message(code: 'default.language.locale')}">
@@ -30,7 +30,6 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
     <meta name="transactionTimeout" content="${grails.util.Holders.config.transactionTimeout}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <link rel="apple-touch-icon" href="images/applicationIcon.png" />
     <link rel="apple-touch-startup-image" href="images/applicationStartup.png">
         <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
         <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
@@ -44,8 +43,6 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
         <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
         <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
         <title><g:layoutTitle default="Banner"/></title>
-        <link rel="shortcut icon" href="${resource(plugin: 'banner-ui-ss', dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
-
 
     <r:script>
         <g:i18nJavaScript/>
@@ -76,6 +73,22 @@ Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
     <g:customStylesheetIncludes/>
 
         <g:theme />
+
+    <link rel="apple-touch-icon" sizes="57x57" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-57x57.png')}"/>
+    <link rel="apple-touch-icon" sizes="60x60" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-60x60.png')}"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-72x72.png')}"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-76x76.png')}"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-114x114.png')}"/>
+    <link rel="apple-touch-icon" sizes="120x120" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-120x120.png')}"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-144x144.png')}"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-152x152.png')}"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-180x180.png')}"/>
+    <link rel="shortcut icon" type="image/png" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'favicon-32x32.png')}" sizes="32x32"/>
+    <link rel="shortcut icon" type="image/png" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'android-chrome-192x192.png')}" sizes="192x192"/>
+    <link rel="shortcut icon" type="image/png" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'favicon-96x96.png')}" sizes="96x96"/>
+    <link rel="shortcut icon" type="image/png" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'favicon-16x16.png')}" sizes="16x16"/>
+    <link rel="shortcut icon" href="${resource(plugin: 'banner-ui-ss', dir:'images/eds/',file:'favicon.ico')}" type="image/x-icon" />
+
 </head>
 <body>
     <div id="splash"></div>

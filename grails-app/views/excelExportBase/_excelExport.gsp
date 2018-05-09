@@ -40,7 +40,7 @@
                 <div class="excel-export-wizard-content-south">
                     <div class="buttons">
                         <button class="excel-export-button excel-export-wizard-export-button primary-button" aria-labeledBy="exportButtonDescription"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.export"/></button>
-                        <button class="excel-export-button excel-export-wizard-cancel-button secondary-button" aria-labeledBy="cancelButtonDescription"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.cancel"/></button>
+                        <button class="excel-export-button excel-export-wizard-cancel-button secondary" aria-labeledBy="cancelButtonDescription"><g:message code="net.hedtech.banner.export.ExcelExportBaseController.cancel"/></button>
                     </div>
                 </div>
             </div>

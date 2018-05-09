@@ -102,6 +102,7 @@ modules = {
         dependsOn "bannerSelfServiceWithoutAurora, aurora"
         defaultBundle environment == "development" ? false : "bannerSelfServiceLTR"
 
+        resource url:[plugin: 'banner-ui-ss', file: 'css/eds.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center.css'],      attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/jquery/jquery.ui.tooltip.css'], attrs:[media:'screen, projection']
@@ -116,6 +117,7 @@ modules = {
         dependsOn "bannerSelfServiceWithoutAurora, auroraRTL"
         defaultBundle environment == "development" ? false : "bannerSelfServiceRTL"
 
+        resource url:[plugin: 'banner-ui-ss', file: 'css/eds-rtl.css'],             attrs:[media:'screen, projection']
         resource id: 'themeRTL', url:[plugin:'banner-ui-ss', dir:'css/themeroller/jquery-ui-1.8.13-lt.gry.ov/css/custom-theme', file:'jquery-ui-1.8.13.custom-rtl.css'], attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/banner-ui-ss-rtl.css'],             attrs:[media:'screen, projection']
         resource url:[plugin: 'banner-ui-ss', file: 'css/notification-center-rtl.css'],      attrs:[media:'screen, projection']
