@@ -140,6 +140,7 @@ modules = {
         resource url: [plugin: 'banner-ui-ss', file: 'js/about/about.js']
         resource url: [plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
         resource url: [plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/shortcuts/bannershortcuts.css', attrs:[media:'screen, projection']]
         resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference.css', attrs: [media: 'screen, projection']]
     }
 
@@ -148,6 +149,7 @@ modules = {
         resource url: [plugin: 'banner-ui-ss', file: 'js/about/about.js']
         resource url: [plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
         resource url: [plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'css/shortcuts/bannershortcuts-rtl.css', attrs: [media: 'screen, projection']]
         resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference-rtl.css', attrs: [media: 'screen, projection']]
         resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference-rtl-patch.css', attrs: [media: 'screen, projection']]
     }
@@ -157,6 +159,7 @@ modules = {
         resource url: [plugin: 'banner-ui-ss', file: 'js/about/about.js']
         resource url: [plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
         resource url: [plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'css/shortcuts/bannershortcuts.css', attrs: [media: 'screen, projection']]
         resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference.css', attrs: [media: 'screen, projection']]
 
     }
@@ -166,6 +169,7 @@ modules = {
         resource url: [plugin: 'banner-ui-ss', file: 'js/about/about.js']
         resource url: [plugin: 'banner-ui-ss', file: 'js/menu/tools-menu.js']
         resource url: [plugin: 'banner-ui-ss', file: 'js/preference/userpreference.js']
+        resource url: [plugin: 'banner-ui-ss', file: 'css/shortcuts/bannershortcuts-rtl.css', attrs: [media: 'screen, projection']]
         resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference-rtl.css', attrs: [media: 'screen, projection']]
         resource url: [plugin: 'banner-ui-ss', file: 'css/preference/userpreference-rtl-patch.css', attrs: [media: 'screen, projection']]
     }
@@ -195,6 +199,8 @@ modules = {
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/locale-numeric-input/services/readonly-service.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/date-picker/directives/date-picker-directive.js']
         resource url:[plugin: 'banner-ui-ss',file: 'js/angular-components/i18n/i18n-filter.js']
+        resource url:[plugin: 'banner-ui-ss',file: 'js/angular/hotkeys.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/shortcuts/bannershortcuts.js']
     }
 
     'colorPicker' {

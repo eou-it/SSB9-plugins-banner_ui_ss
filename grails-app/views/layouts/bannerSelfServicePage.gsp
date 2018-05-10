@@ -102,6 +102,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <g:render template="/layouts/userPreference" plugin="banner_ui_ss"/>
 </g:if>
 
+    <g:render template="/layouts/bannershortcuts" plugin="banner_ui_ss"/>
     <g:layoutBody />
     <r:layoutResources/>
     <g:customJavaScriptIncludes/>
