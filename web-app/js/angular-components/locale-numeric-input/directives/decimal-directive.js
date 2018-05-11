@@ -1,6 +1,6 @@
 numericApp.directive('decimalInput',['$timeout', '$filter','readonlysvc', '$compile',function($timeout, $filter,readonlysvc,$compile) {
-    var withoutDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" ng-change="valNgChange()" only-number/><input value="{{formatted}}" id="{{id}}" ng-focus="textFocused()" class="form-control" ng-click="textFocused()" ng-hide="showNumber" only-number/>';
-    var withDecimal='<input type="number" ng-model="ngModel" class="form-control" ng-show="showNumber" ng-blur="numberBlurred()" ng-change="valNgChange()" /><input value="{{formatted}}" id="{{id}}" ng-focus="textFocused()" class="form-control" ng-click="textFocused()" ng-hide="showNumber" />';
+    var withoutDecimal='<input type="number" ng-model="ngModel" class="eds-text-field" ng-show="showNumber" ng-blur="numberBlurred()" ng-change="valNgChange()" only-number/><input value="{{formatted}}" id="{{id}}" ng-focus="textFocused()" class="eds-text-field" ng-click="textFocused()" ng-hide="showNumber" only-number/>';
+    var withDecimal='<input type="number" ng-model="ngModel" class="eds-text-field" ng-show="showNumber" ng-blur="numberBlurred()" ng-change="valNgChange()" /><input value="{{formatted}}" id="{{id}}" ng-focus="textFocused()" class="eds-text-field" ng-click="textFocused()" ng-hide="showNumber" />';
     var getTemplate = function(decimalLength){
         var template = '';
         decimalLength = decimalLength||0;
