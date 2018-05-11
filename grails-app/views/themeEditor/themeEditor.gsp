@@ -18,6 +18,7 @@
     </g:else>
     <g:applyLayout name="bannerWebPage">
     </g:applyLayout>
+
 </head>
 
 <body dir="${lang_dir}">
