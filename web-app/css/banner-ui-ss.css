@@ -563,7 +563,6 @@ input.combobox:focus + .ui-button.combobox, input.hasDatepicker:focus + button{
 }
 
 ul.ui-tabs-nav {
-    background: #CCDFE9 none;
     height:25px;
     bottom-border: 1px solod #7F9AAD;
 }
