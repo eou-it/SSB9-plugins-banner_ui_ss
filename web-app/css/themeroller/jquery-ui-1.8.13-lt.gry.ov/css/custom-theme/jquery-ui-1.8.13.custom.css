@@ -96,6 +96,10 @@
 .ui-state-active a{
     color: #FFFFFF!important;
 }
+/*EDS*/
+.ui-state-focus a{
+    color: #FFFFFF!important;
+}
 .ui-state-hover a, .ui-state-hover a:hover {
     color: #026BC8!important;/*EDS*/
     text-decoration: none;

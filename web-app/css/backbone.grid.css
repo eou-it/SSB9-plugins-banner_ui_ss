@@ -36,8 +36,8 @@
 }
 
 table.grid > thead > tr > th {
-    background-color: #EDF0F4 !important;
-    border-bottom: 2px solid #AAAAAA;
+    background-color: #FFFFFF !important;  /*EDS*/
+    border-bottom: 1px solid #EEEEEF !important;   /*EDS*/
     cursor: pointer;
     padding: 3px 0 3px 10px;
     height: 25px;
@@ -46,7 +46,7 @@ table.grid > thead > tr > th {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    border-left: 1px solid #DDDDDD !important;
+    border-left: 1px solid #EEEEEF !important;   /*EDS*/
     border-right: none !important;
 }
 
@@ -99,14 +99,16 @@ table.grid > thead > tr > th .title {
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
     padding: 0px 10px;
-    border-left: 1px solid #DDDDDD !important;
+    border-left: 1px solid #EEEEEF !important;     /*EDS*/
     border-right: none !important;
+    border-top: 1px solid #EEEEEF !important;     /*EDS*/
+    border-bottom: 1px solid #EEEEEF !important; /*EDS*/
     min-height: 30px;
 }
 
 .grid td.focus, .grid td.focus a{
-    background-color:#CCDFE9 !important;
-    color:#000000 !important
+    color:#000000 !important;  /*EDS*/
+    outline: 2px solid #81C8FF ;    /*EDS*/
 }
 
 .grid tbody tr td form input {
@@ -161,14 +163,14 @@ table.grid > thead > tr > th .title {
 .grid-main-wrapper .visibility-control-column {
     position:static;
     border-left: none !important;
-    border-right: 1px solid #DDDDDD !important;
+    border-right: 1px solid #EEEEEF !important;  /*EDS*/
     border-bottom:none;
     padding:0px;
     width:1.5%;
 }
 
 .grid-main-wrapper .grid th.visibility-control-column {
-    border-bottom:1px solid #DDDDDD !important;
+    border-bottom:1px solid #EEEEEF !important;  /*EDS*/
 }
 
 .grid-main-wrapper .grid td{
@@ -256,8 +258,8 @@ table.grid > thead > tr > th .title {
 }
 
 .grid td.readonly {
-    background-color: #F5F6F7;
-    color:#676A6E;
+    background-color: #ffffff; /* EDS*/
+    color:#151618;             /* EDS*/
 }
 
 /* editable component specific integration classes */
@@ -280,15 +282,15 @@ table.grid > thead > tr > th .title {
 }
 
 .add-row-hover {
-    background-color: #B2CEDE !important;
+    background-color: #F2F8FC !important;   /*EDS*/
     border: 1px solid #B1CEE0 !important;
     color:#000000 !important
 }
 
 .add-row-selected,.add-row-selected a:not(.select2-choice) {
-    border: 1px solid #005C96 !important;
-    color: #FFF !important;
-    background-color: #005C96 !important;
+    border: 1px solid #F8F8F8 !important;   /*EDS*/
+    color: #151618 !important;              /*EDS*/
+    background-color: #F8F8F8 !important;   /*EDS*/
 }
 
 .grid tr td:first-child {
@@ -303,17 +305,19 @@ table.grid > thead > tr > th .title {
     background-color: #FFF;
 }
 
-.grid tr {
-    border-bottom: 1px solid #BBBBBB !important;
-}
-
 .grid thead th {
     background-color: #EDF0F4 !important;
 }
 
 .grid tr.add-row-hover td.readonly,.grid tr.add-row-hover td.add-row-selected,.grid tr.add-row-hover td.add-row-selected a{
-    background-color: #B2CEDE !important;
+    background-color: #F2F8FC !important;  /*EDS*/
     border: 1px solid #B1CEE0 !important;
     color:#000000 !important
 }
 
+/*EDS*/
+.ui-widget-header {
+    background-color: #f9fafb!important;
+    color: #151618;
+    background-image: none!important;
+}
