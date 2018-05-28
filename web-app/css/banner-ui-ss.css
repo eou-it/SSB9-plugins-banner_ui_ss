@@ -456,9 +456,6 @@ table.display tr.even.row_hover td.sorting_1 {
 }
 
 .content-container-header {
-    box-shadow:0px 2px 2px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow:0px 2px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow:0px 2px 2px rgba(0, 0, 0, 0.3);
     position:relative;
     z-index:1;
 }

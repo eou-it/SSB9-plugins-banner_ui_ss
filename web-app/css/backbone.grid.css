@@ -167,6 +167,7 @@ table.grid > thead > tr > th .title {
     border-bottom:none;
     padding:0px;
     width:1.5%;
+    outline:0px!important;
 }
 
 .grid-main-wrapper .grid th.visibility-control-column {
@@ -283,7 +284,7 @@ table.grid > thead > tr > th .title {
 
 .add-row-hover {
     background-color: #F2F8FC !important;   /*EDS*/
-    border: 1px solid #B1CEE0 !important;
+    border: 1px solid #F2F8FC !important;   /*EDS*/
     color:#000000 !important
 }
 
@@ -311,7 +312,7 @@ table.grid > thead > tr > th .title {
 
 .grid tr.add-row-hover td.readonly,.grid tr.add-row-hover td.add-row-selected,.grid tr.add-row-hover td.add-row-selected a{
     background-color: #F2F8FC !important;  /*EDS*/
-    border: 1px solid #B1CEE0 !important;
+    border: 1px solid #F2F8FC !important; /*EDS*/
     color:#000000 !important
 }
 
