@@ -135,7 +135,7 @@ label.pb-label {
 }
 
 .pb-boolean .pb-item.pb-boolean:checked+label {
-    background-image: url(../../angular-components/css/images/checkbox/check-box-selected.svg);
+    background-image: url(../../../../css/xe-components/images/checkbox/checkbox-selected.svg);
 }
 .pb-boolean .pb-item.pb-boolean+label {
     background-repeat: no-repeat;
@@ -144,7 +144,7 @@ label.pb-label {
     line-height: 172%;
     cursor: pointer;
     padding-left: 30px;
-    background-image: url(../../angular-components/css/images/checkbox/check-box-normal.svg);
+    background-image: url(../../../../css/xe-components/images/checkbox/checkbox-default.svg);
 }
 
 .pb-boolean input[type="checkbox"] {
