@@ -28,17 +28,17 @@ package net.hedtech.banner.converters.json
 
 
 import grails.converters.JSON
-import org.codehaus.groovy.grails.commons.AnnotationDomainClassArtefactHandler
-import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
-import org.codehaus.groovy.grails.commons.GrailsClassUtils
-import org.codehaus.groovy.grails.commons.GrailsDomainClass
-import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
-import org.codehaus.groovy.grails.support.proxy.DefaultProxyHandler
-import org.codehaus.groovy.grails.support.proxy.ProxyHandler
-import org.codehaus.groovy.grails.web.converters.ConverterUtil
-import org.codehaus.groovy.grails.web.converters.exceptions.ConverterException
-import org.codehaus.groovy.grails.web.converters.marshaller.ObjectMarshaller
-import org.codehaus.groovy.grails.web.json.JSONWriter
+import org.grails.core.artefact.AnnotationDomainClassArtefactHandler
+import org.grails.core.artefact.DomainClassArtefactHandler
+import grails.util.GrailsClassUtils
+import grails.core.GrailsDomainClass
+import grails.core.GrailsDomainClassProperty
+import grails.core.support.proxy.DefaultProxyHandler
+import grails.core.support.proxy.ProxyHandler
+import org.grails.web.converters.ConverterUtil
+import org.grails.web.converters.exceptions.ConverterException
+import org.grails.web.converters.marshaller.ObjectMarshaller
+import org.grails.web.json.JSONWriter
 import org.springframework.beans.BeanWrapper
 import org.springframework.beans.BeanWrapperImpl
 

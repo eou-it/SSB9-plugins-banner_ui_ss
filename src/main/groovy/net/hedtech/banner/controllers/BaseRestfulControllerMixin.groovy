@@ -7,7 +7,7 @@ import net.hedtech.banner.exceptions.ApplicationException
 import grails.converters.JSON
 import grails.converters.XML
 import org.apache.log4j.Logger
-import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
+import org.grails.plugins.web.taglib.ValidationTagLib
 
 /**
  * A mixin to be used to add features provided by the RestfulControllerMixin, but that does require basic authentication.

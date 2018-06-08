@@ -5,7 +5,7 @@ package net.hedtech.banner.common
 
 
 import java.util.regex.Pattern
-import grails.util.BuildSettingsHolder
+import grails.util.BuildSettings
 import groovy.io.FileType
 
 /**

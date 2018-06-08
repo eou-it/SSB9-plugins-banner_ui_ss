@@ -12,7 +12,7 @@ import net.sf.ehcache.Element
 import net.sf.ehcache.config.CacheConfiguration
 import org.apache.log4j.Logger
 import org.apache.xalan.templates.ElemApplyImport
-import org.apache.commons.lang3.StringUtils
+import org.apache.commons.lang.StringUtils
 
 /**
  * Utility class instead of service to avoid BannerDS database connections

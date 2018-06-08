@@ -2,6 +2,8 @@ package banner.ui.ss
 
 import grails.plugins.*
 
+import javax.servlet.http.HttpServletRequest
+
 class BannerUiSsGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for

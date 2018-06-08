@@ -13,7 +13,7 @@ import org.apache.log4j.Logger
 import org.apache.commons.io.FilenameUtils
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.ConfigurationData
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import grails.web.context.ServletContextHolder
 import net.hedtech.banner.general.ConfigurationDataService
 
 class ThemeService {
