@@ -9,7 +9,6 @@ import grails.util.Holders
 import net.hedtech.banner.ui.theme.ThemeUtil
 import net.sf.ehcache.Cache
 import net.sf.ehcache.Element
-import org.apache.log4j.Logger
 import org.apache.commons.io.FilenameUtils
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.ConfigurationData
@@ -21,8 +20,7 @@ class ThemeService {
     def grailsApplication
     def static appId = "THEME"
     def static final types = [theme:'json', template:'scss']
-    def static final typesList = ['json', 'scss']
-    private static final Logger log = Logger.getLogger( ThemeService.class.name )
+    def static final typesList = ['json', 'scss']    
 
 
     def saveTheme(String name, String type, def content) {

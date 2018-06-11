@@ -7,12 +7,10 @@ package net.hedtech.banner.ui.theme
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.commons.io.FilenameUtils
-import org.apache.log4j.Logger
 import net.hedtech.banner.exceptions.ApplicationException
 
 class ThemeEditorController {
     def themeUtil = new ThemeUtil()
-    private static final Logger log = Logger.getLogger(ThemeEditorController.class.name)
     def static fileExtensions = ["json", "scss"]
     def themeService
 
