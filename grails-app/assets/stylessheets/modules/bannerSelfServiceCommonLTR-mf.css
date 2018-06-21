@@ -1,4 +1,6 @@
 /*
+*= require modules/bannerSelfServiceWithoutAurora-mf.css
+*= require modules/aurora-mf.css
 *= require eds.css
 *= require banner-ui-ss.css
 *= require notification-center.css

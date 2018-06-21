@@ -1,4 +1,6 @@
 /*
+*= require modules/bannerSelfServiceWithoutAurora-mf.css
+*= require modules/auroraRTL-mf.css
 *= require eds-rtl.css
 *= require custom-theme/jquery-ui-1.8.13.custom-rtl.css
 *= require banner-ui-ss-rtl.css

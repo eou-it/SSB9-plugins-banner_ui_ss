@@ -1,1 +1,2 @@
-//= require bootstrap.js
+//= require modules/jquery-mf.js
+//= require bootstrap/bootstrap.js

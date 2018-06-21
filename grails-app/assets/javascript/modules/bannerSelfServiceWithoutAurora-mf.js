@@ -1,3 +1,5 @@
+//= require modules/jquery-mf.js
+//= require modules/i18n-core-mf.js
 //= require html5shim.js
 //= require underscore.js
 //= require underscore.string.js
