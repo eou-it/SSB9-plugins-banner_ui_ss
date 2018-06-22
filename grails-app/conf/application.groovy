@@ -19,18 +19,18 @@
 // 3. Load the configuration file if its location was specified as a system environment variable
 //
 // Map [ environment variable or -D command line argument name : file path ]
-grails.config.locations = [] // leave this initialized to an empty list, and add your locations
+//grails.config.locations = [] // leave this initialized to an empty list, and add your locations
 // in the APPLICATION CONFIGURATION section below.
 
-def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
+//def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
 
-[ BANNER_APP_CONFIG:                 "banner_configuration.groovy",
+/*[ BANNER_APP_CONFIG:                 "banner_configuration.groovy",
   BANNER_CORE_TESTAPP_CONFIG: "banner_core_testapp_configuration.groovy",
-].each { envName, defaultFileName -> locationAdder(envName, defaultFileName) }
+].each { envName, defaultFileName -> locationAdder(envName, defaultFileName) }*/
 // In case logging is problematic, we'll just write this to the console immediately
-grails.config.locations.each {
+/*grails.config.locations.each {
     println "Using configuration: " + it
-}
+}*/
 
 
 grails.project.groupId = "net.hedtech" // used when deploying to a maven repo
@@ -446,21 +446,3 @@ hibernate {
             "classpath:hibernate-banner-general-utility.cfg.xml"
     ]
 }
-
-
-// environment specific settings
-environments {
-    development {
-        dataSource {
-        }
-    }
-    test {
-        dataSource {
-        }
-    }
-    production {
-        dataSource {
-        }
-    }
-}
-
