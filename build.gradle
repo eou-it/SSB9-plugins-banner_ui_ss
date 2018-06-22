@@ -61,10 +61,14 @@ dependencies {
     compile "org.hibernate:hibernate-ehcache:5.1.5.Final"
     compile 'org.grails.plugins:spring-security-core:3.2.1'
     compile 'xalan:xalan:2.7.2'
+}
 
-    compile project(":banner-core")
-    compile project(":banner-general-utility")
-    compile project(":i18n-core")
+grails {
+    plugins {
+        compile project(":banner-core")
+        compile project(":banner-general-utility")
+        compile project(":i18n-core")
+    }
 }
 
 bootRun {
