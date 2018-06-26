@@ -13,10 +13,12 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         window.mepCode='${session.mep}';
     </asset:script>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-        <r:require modules="bannerWebRTL"/>
+            <asset:javascript src="bannerWebRTL-mf.js"/>
+            <asset:stylesheet src="bannerWebRTL-mf.css"/>
     </g:if>
     <g:else>
-        <r:require modules="bannerWebLTR"/>
+            <asset:javascript src="bannerWebLTR-mf.js"/>
+            <asset:stylesheet src="bannerWebLTR-mf.css"/>
     </g:else>
 
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
@@ -24,30 +26,30 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}" />
 
     <meta charset="${message(code: 'default.character.encoding')}"/>
-        <meta name="dir" content="${message(code:'default.language.direction')}"/>
-        <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
+    <meta name="dir" content="${message(code:'default.language.direction')}"/>
+    <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
     <meta name="logLevel" content="${g.logLevel()}"/>
     <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
     <meta name="transactionTimeout" content="${grails.util.Holders.config.transactionTimeout}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-    <link rel="apple-touch-startup-image" href="images/applicationStartup.png">
-        <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
-        <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
-        <meta name="fullName" content="${g.fullName()}"/>
-        <meta name="loginEndpoint" content="${grails.util.Holders.config.loginEndpoint}"/>
-        <meta name="logoutEndpoint" content="${grails.util.Holders.config.logoutEndpoint}"/>
-        <meta name="guestLoginEnabled" content="${grails.util.Holders.config.guestLoginEnabled}"/>
-        <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
-        <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
-        <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
-        <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
-        <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+        <asset:link rel="apple-touch-startup-image" href="applicationStartup.png"/>
+    <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
+    <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
+    <meta name="fullName" content="${g.fullName()}"/>
+    <meta name="loginEndpoint" content="${grails.util.Holders.config.loginEndpoint}"/>
+    <meta name="logoutEndpoint" content="${grails.util.Holders.config.logoutEndpoint}"/>
+    <meta name="guestLoginEnabled" content="${grails.util.Holders.config.guestLoginEnabled}"/>
+    <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
+    <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
+    <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
+    <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
+    <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
         <title><g:layoutTitle default="Banner"/></title>
-       
 
-    <r:script>
-        <g:i18nJavaScript/>
+
+    <asset:script>
+        %{--<g:i18nJavaScript/>--}%
 
         var transactionTimeoutMeta    = $( "meta[name=transactionTimeout]" ),
             transactionTimeoutSeconds = ( transactionTimeoutMeta.length == 1 ? parseInt( transactionTimeoutMeta.attr( "content" ) ) : 30 ),
@@ -58,7 +60,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
         yepnope({
            test : window.JSON,
-           nope : '${resource(plugin: 'banner-ui-ss', file: 'js/json2.js')}'
+           nope : '${assetPath(src: 'js/json2.js')}'
             });
 
             $(window).load(function() {
@@ -66,7 +68,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
                     $( "#splash" ).remove();
                 });
             });
-    </r:script>
+    </asset:script>
 
     <r:layoutResources/>
 
@@ -76,20 +78,21 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
         <g:theme />
 
-    <link rel="apple-touch-icon" sizes="57x57" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-57x57.png')}"/>
-    <link rel="apple-touch-icon" sizes="60x60" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-60x60.png')}"/>
-    <link rel="apple-touch-icon" sizes="72x72" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-72x72.png')}"/>
-    <link rel="apple-touch-icon" sizes="76x76" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-76x76.png')}"/>
-    <link rel="apple-touch-icon" sizes="114x114" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-114x114.png')}"/>
-    <link rel="apple-touch-icon" sizes="120x120" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-120x120.png')}"/>
-    <link rel="apple-touch-icon" sizes="144x144" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-144x144.png')}"/>
-    <link rel="apple-touch-icon" sizes="152x152" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-152x152.png')}"/>
-    <link rel="apple-touch-icon" sizes="180x180" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'apple-touch-icon-180x180.png')}"/>
-    <link rel="shortcut icon" type="image/png" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'favicon-32x32.png')}" sizes="32x32"/>
-    <link rel="shortcut icon" type="image/png" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'android-chrome-192x192.png')}" sizes="192x192"/>
-    <link rel="shortcut icon" type="image/png" href="${assetPathassetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'favicon-96x96.png')}" sizes="96x96"/>
-    <link rel="shortcut icon" type="image/png" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'favicon-16x16.png')}" sizes="16x16"/>
-    <link rel="shortcut icon" href="${assetPath(plugin: 'banner-ui-ss', dir:'images/eds/',file:'favicon.ico')}" type="image/x-icon" />
+
+    <asset:link rel="apple-touch-icon" sizes="57x57" href="eds/apple-touch-icon-57x57.png"/>
+    <asset:link rel="apple-touch-icon" sizes="60x60" href="eds/apple-touch-icon-60x60.png"/>
+    <asset:link rel="apple-touch-icon" sizes="72x72" href="eds/apple-touch-icon-72x72.png"/>
+    <asset:link rel="apple-touch-icon" sizes="76x76" href="eds/apple-touch-icon-76x76.png"/>
+    <asset:link rel="apple-touch-icon" sizes="114x114" href="eds/apple-touch-icon-114x114.png"/>
+    <asset:link rel="apple-touch-icon" sizes="120x120" href="eds/apple-touch-icon-120x120.png"/>
+    <asset:link rel="apple-touch-icon" sizes="144x144" href="eds/apple-touch-icon-144x144.png"/>
+    <asset:link rel="apple-touch-icon" sizes="152x152" href="eds/apple-touch-icon-152x152.png"/>
+    <asset:link rel="apple-touch-icon" sizes="180x180" href="eds/apple-touch-icon-180x180.png"/>
+    <asset:link rel="shortcut icon" type="image/png" href="eds/favicon-32x32.png" sizes="32x32"/>
+    <asset:link rel="shortcut icon" type="image/png" href="eds/android-chrome-192x192.png" sizes="192x192"/>
+    <asset:link rel="shortcut icon" type="image/png" href="eds/favicon-96x96.png" sizes="96x96"/>
+    <asset:link rel="shortcut icon" type="image/png" href="eds/favicon-16x16.png" sizes="16x16"/>
+    <asset:link rel="shortcut icon"  sizes="57x57" href="eds/favicon.ico" type="image/x-icon"/>
 
     </head>
     <body>
