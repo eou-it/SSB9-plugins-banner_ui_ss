@@ -13,38 +13,39 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         window.mepCode='${session.mep}';
     </asset:script>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-            <asset:javascript src="bannerWebRTL-mf.js"/>
-            <asset:stylesheet src="bannerWebRTL-mf.css"/>
+        <asset:javascript src="modules/bannerWebRTL-mf.js"/>
+        <asset:stylesheet href="modules/bannerWebRTL-mf.css"/>
+
     </g:if>
     <g:else>
-            <asset:javascript src="bannerWebLTR-mf.js"/>
-            <asset:stylesheet src="bannerWebLTR-mf.css"/>
+        <asset:javascript src="modules/bannerWebLTR-mf.js"/>
+        <asset:stylesheet href="modules/bannerWebLTR-mf.css"/>
     </g:else>
 
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
         <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
         <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}" />
 
-    <meta charset="${message(code: 'default.character.encoding')}"/>
-    <meta name="dir" content="${message(code:'default.language.direction')}"/>
-    <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
-    <meta name="logLevel" content="${g.logLevel()}"/>
-    <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
-    <meta name="transactionTimeout" content="${grails.util.Holders.config.transactionTimeout}"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta charset="${message(code: 'default.character.encoding')}"/>
+        <meta name="dir" content="${message(code:'default.language.direction')}"/>
+        <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
+        <meta name="logLevel" content="${g.logLevel()}"/>
+        <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
+        <meta name="transactionTimeout" content="${grails.util.Holders.config.transactionTimeout}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <asset:link rel="apple-touch-startup-image" href="applicationStartup.png"/>
-    <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
-    <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
-    <meta name="fullName" content="${g.fullName()}"/>
-    <meta name="loginEndpoint" content="${grails.util.Holders.config.loginEndpoint}"/>
-    <meta name="logoutEndpoint" content="${grails.util.Holders.config.logoutEndpoint}"/>
-    <meta name="guestLoginEnabled" content="${grails.util.Holders.config.guestLoginEnabled}"/>
-    <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
-    <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
-    <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
-    <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
-    <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
+        <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
+        <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
+        <meta name="fullName" content="${g.fullName()}"/>
+        <meta name="loginEndpoint" content="${grails.util.Holders.config.loginEndpoint}"/>
+        <meta name="logoutEndpoint" content="${grails.util.Holders.config.logoutEndpoint}"/>
+        <meta name="guestLoginEnabled" content="${grails.util.Holders.config.guestLoginEnabled}"/>
+        <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
+        <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
+        <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
+        <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
+        <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
         <title><g:layoutTitle default="Banner"/></title>
 
 
@@ -70,14 +71,14 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
             });
     </asset:script>
 
-    <r:layoutResources/>
+    //TODO
+    %{--<r:layoutResources/>--}%
 
         <g:layoutHead />
 
     <g:customStylesheetIncludes/>
 
         <g:theme />
-
 
     <asset:link rel="apple-touch-icon" sizes="57x57" href="eds/apple-touch-icon-57x57.png"/>
     <asset:link rel="apple-touch-icon" sizes="60x60" href="eds/apple-touch-icon-60x60.png"/>
@@ -92,7 +93,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <asset:link rel="shortcut icon" type="image/png" href="eds/android-chrome-192x192.png" sizes="192x192"/>
     <asset:link rel="shortcut icon" type="image/png" href="eds/favicon-96x96.png" sizes="96x96"/>
     <asset:link rel="shortcut icon" type="image/png" href="eds/favicon-16x16.png" sizes="16x16"/>
-    <asset:link rel="shortcut icon"  sizes="57x57" href="eds/favicon.ico" type="image/x-icon"/>
+    <asset:link rel="shortcut icon" href="eds/favicon.ico" type="image/x-icon"/>
 
     </head>
     <body>
@@ -103,7 +104,8 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <g:analytics/>
     <g:layoutBody />
 
-    <r:layoutResources/>
+    //TODO
+    %{--<r:layoutResources/>--}%
 
     <g:customJavaScriptIncludes/>
 

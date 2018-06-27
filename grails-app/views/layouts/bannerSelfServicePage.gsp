@@ -15,12 +15,12 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         %{--<r:require modules="bannerSelfServiceRTL"/>--}%
         <asset:javascript src="modules/bannerSelfServiceRTL-mf.js"/>
-        <asset:stylesheet src="modules/bannerSelfServiceRTL-mf.css"/>
+        <asset:stylesheet href="modules/bannerSelfServiceRTL-mf.css"/>
     </g:if>
     <g:else>
         %{--<r:require modules="bannerSelfService"/>--}%
         <asset:javascript src="modules/bannerSelfService-mf.js"/>
-        <asset:stylesheet src="modules/bannerSelfService-mf.css"/>
+        <asset:stylesheet href="modules/bannerSelfService-mf.css"/>
     </g:else>
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
         <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
@@ -70,7 +70,8 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
             });
     </asset:script>
 
-    <r:layoutResources/>
+    //TODO
+    %{--<r:layoutResources/>--}%
 
     <g:layoutHead/>
 
@@ -109,7 +110,9 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
     <g:render template="/layouts/bannershortcuts" plugin="banner_ui_ss"/>
     <g:layoutBody />
-    <r:layoutResources/>
+
+    //TODO
+   %{-- <r:layoutResources/>--}%
     <g:customJavaScriptIncludes/>
 </body>
 </html>
