@@ -14,13 +14,13 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     </script>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         %{--<r:require modules="bannerSelfServiceRTL"/>--}%
-        <asset:javascript src="bannerSelfServiceRTL-mf.js"/>
-        <asset:stylesheet src="bannerSelfServiceRTL-mf.css"/>
+        <asset:javascript src="modules/bannerSelfServiceRTL-mf.js"/>
+        <asset:stylesheet src="modules/bannerSelfServiceRTL-mf.css"/>
     </g:if>
     <g:else>
         %{--<r:require modules="bannerSelfService"/>--}%
-        <asset:javascript src="bannerSelfService-mf.js"/>
-        <asset:stylesheet src="bannerSelfService-mf.css"/>
+        <asset:javascript src="modules/bannerSelfService-mf.js"/>
+        <asset:stylesheet src="modules/bannerSelfService-mf.css"/>
     </g:else>
         <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
         <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
