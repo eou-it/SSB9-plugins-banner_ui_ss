@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+85<!DOCTYPE html>
 <%-- Copyright 2016-2018 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" defaultCodec="none" %>
@@ -11,10 +11,12 @@
 
     <g:set var="lang_dir" value="${message(code: 'default.language.direction')}" scope="page" />
     <g:if test="${lang_dir  == 'rtl'}">
-        <r:require modules="themeEditorRTL"/>
+        <asset:stylesheet src="modules/themeEditorRTL-mf.css"/>
+        <asset:stylesheet href="modules/themeEditorRTL-mf.css"/>
     </g:if>
     <g:else>
-        <r:require modules="themeEditorLTR"/>
+        <asset:stylesheet src="modules/themeEditorLTR-mf.css"/>
+        <asset:stylesheet href="modules/themeEditorLTR-mf.css"/>
     </g:else>
     <g:applyLayout name="bannerWebPage">
     </g:applyLayout>
