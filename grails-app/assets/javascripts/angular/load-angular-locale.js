@@ -6,8 +6,9 @@
  logics as per the browser locale that would be used by $filter. Also, this would do a fall back logic.
  say if we selectthe locale which we don't support fr-fr and it has to fallback to fr.
  */
-
-var locale = $('meta[name=userLocale]').attr("content")
+// TODO :grails_332_change, needs to revisit
+//var locale = $('meta[name=userLocale]').attr("content")
+var locale = "en";
  locale = locale.replace('_','-');
  locale = locale.toLowerCase();
  if(!(locale=="en-us"|| locale=="en-au"|| locale=="en-gb"|| locale=="en-ie"|| locale=="en-in"|| locale=="en" || locale=="fr" || locale=="fr-ca" || locale=="pt" || locale=="es" || locale=="es-mx" || locale=="es-co" || locale=="es-pr" || locale=="es-cl" || locale=="es-cr" || locale=="es-do" || locale=="es-ec" || locale=="es-pe" || locale=="es-ve" || locale=="es-gt" || locale=="es-ar" || locale=="es-pa")){

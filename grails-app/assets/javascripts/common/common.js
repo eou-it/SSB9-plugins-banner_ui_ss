@@ -436,7 +436,8 @@ $(document).ready(function() {
     });
 
     addCssClass();
-    changeFavicon();
+    // TODO :grails_332_change, needs to revisit
+    //changeFavicon();
 });
 
 function changeFavicon() {
