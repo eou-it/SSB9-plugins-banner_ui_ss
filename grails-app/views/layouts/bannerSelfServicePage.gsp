@@ -9,16 +9,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-    %{--<r:require modules="bannerSelfServiceRTL"/>--}%
-        <asset:javascript src="modules/bannerSelfServiceRTL-mf.js"/>
-        <asset:stylesheet href="modules/bannerSelfServiceRTL-mf.css"/>
-    </g:if>
-    <g:else>
-    %{--<r:require modules="bannerSelfService"/>--}%
-        <asset:javascript src="modules/bannerSelfService-mf.js"/>
-        <asset:stylesheet href="modules/bannerSelfService-mf.css"/>
-    </g:else>
+
     <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
     <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
     <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}" />
@@ -49,8 +40,8 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
     <title><g:layoutTitle default="Banner"/></title>
 
-    <asset:script>
-    %{-- <g:i18nJavaScript/>--}%
+    %{--<asset:script type="text/javascript">
+     <g:i18nJavaScript/>
 
         var transactionTimeoutMeta    = $( "meta[name=transactionTimeout]" ),
             transactionTimeoutSeconds = ( transactionTimeoutMeta.length == 1 ? parseInt( transactionTimeoutMeta.attr( "content" ) ) : 30 ),
@@ -69,7 +60,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
                     $( "#splash" ).remove();
                 });
             });
-    </asset:script>
+    </asset:script>--}%
 
 
     <asset:link rel="apple-touch-icon" sizes="57x57" href="eds/apple-touch-icon-57x57.png"/>
@@ -90,28 +81,32 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
 </head>
 <body>
+Asffffffffffffffffffffffffffffffffffffffffffffffffff
 
-
-
+%{--
+// TODO :grails_332_change, needs to revisit
 <div id="splash"></div>
 <div id="spinner" class="spinner spinner-img" style="display:none;">
-</div>
+</div>--}%
 
 <g:analytics/>
 <div id="dialogAppDiv"></div>
 <g:if test="${grails.util.Holders.config.locale_userPreferenceEnable}">
     <g:render template="/layouts/userPreference"/>
 </g:if>
-%{--<g:render template="layouts/bannershortcuts" plugin="bannerUiSs"/>--}%
-%{--<g:render template="layouts/bannershortcuts"/>--}%
+%{--<g:render template="/layouts/bannershortcuts"/>--}%
 
+<g:layoutBody/>
+<g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
 %{--<r:require modules="bannerSelfServiceRTL"/>--}%
-%{--<g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
     <asset:javascript src="modules/bannerSelfServiceRTL-mf.js"/>
+    <asset:stylesheet href="modules/bannerSelfServiceRTL-mf.css"/>
 </g:if>
 <g:else>
-    <asset:stylesheet href="modules/bannerSelfService-mf.js"/>
-</g:else>--}%
-<g:layoutBody/>
+%{--<r:require modules="bannerSelfService"/>--}%
+    <asset:javascript src="modules/bannerSelfService-mf.js"/>
+    <asset:stylesheet href="modules/bannerSelfService-mf.css"/>
+</g:else>
+
 </body>
 </html>

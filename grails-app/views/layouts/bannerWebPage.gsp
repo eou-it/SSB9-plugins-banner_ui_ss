@@ -7,11 +7,11 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 <!DOCTYPE html>
 <html lang="${message(code: 'default.language.locale')}">
 <head>
-    <asset:script>
+   %{-- <asset:script>
         var extensibilityInfo =
                 ${raw(net.hedtech.extensibility.InfoService.getJSON(controllerName, resource(plugin:'web-app-extensibility', dir:'html')))};
         window.mepCode='${session.mep}';
-    </asset:script>
+    </asset:script>--}%
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         <asset:javascript src="modules/bannerWebRTL-mf.js"/>
         <asset:stylesheet href="modules/bannerWebRTL-mf.css"/>
@@ -28,7 +28,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
         <meta charset="${message(code: 'default.character.encoding')}"/>
         <meta name="dir" content="${message(code:'default.language.direction')}"/>
-        <meta name="synchronizerToken" content="${org.codehaus.groovy.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
+        <meta name="synchronizerToken" content="${org.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
         <meta name="logLevel" content="${g.logLevel()}"/>
         <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
         <meta name="transactionTimeout" content="${grails.util.Holders.config.transactionTimeout}"/>
@@ -61,7 +61,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
         yepnope({
            test : window.JSON,
-           nope : '${assetPath(src: 'js/json2.js')}'
+           nope : '${assetPath(src: 'json2.js')}'
             });
 
             $(window).load(function() {
@@ -107,13 +107,13 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     //TODO
     %{--<r:layoutResources/>--}%
 
-    <g:customJavaScriptIncludes/>
+    %{--<g:customJavaScriptIncludes/>--}%
 
     <div id="dialogAppDiv"></div>
     <g:if test="${grails.util.Holders.config.locale_userPreferenceEnable}">
         <g:render template="/layouts/userPreference" plugin="banner_ui_ss"/>
     </g:if>
 
-        <g:render template="/layouts/bannershortcuts" plugin="banner_ui_ss"/>
+        <g:render template="/layouts/bannershortcuts"/>
     </body>
 </html>
