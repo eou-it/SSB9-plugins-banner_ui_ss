@@ -94,10 +94,10 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 <body>
 
 %{--
-// TODO :grails_332_change, needs to revisit
+// TODO :grails_332_change, needs to revisit --}%
 <div id="splash"></div>
 <div id="spinner" class="spinner spinner-img" style="display:none;">
-</div>--}%
+</div>
 
 <g:analytics/>
     <div id="dialogAppDiv"></div>
@@ -112,6 +112,11 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <g:else>
         <asset:javascript src="modules/bannerSelfService-mf.js"/>
     </g:else>
+    <asset:script>
+        $(window).load(function() {
+               $( "#splash" ).remove();
+             });
+    </asset:script>
 
 
 <g:layoutBody/>

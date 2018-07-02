@@ -417,7 +417,7 @@ table.display tr.even.row_hover td.sorting_1 {
 
 .cell-save-successful {
     background-color: #FFFFFF !important;
-    background-image: url("../images/success_new.png");
+    background-image: url("success_new.png");
     background-origin: content;
     background-position: right center;
     background-repeat: no-repeat;
@@ -429,7 +429,7 @@ table.display tr.even.row_hover td.sorting_1 {
 
 .cell-error {
     background-color: #FFFFFF !important;
-    background-image: url("../images/error_icon.png");
+    background-image: url("error_icon.png");
     background-origin: content;
     background-position: right center;
     background-repeat: no-repeat;
@@ -488,11 +488,11 @@ table.display tr.even.row_hover td.sorting_1 {
 }
 
 .ui-layout-toggler-east-open {
-    background: url('../images/ui-layout-divider-arrow-e.png') no-repeat scroll center center !important;
+    background: url('ui-layout-divider-arrow-e.png') no-repeat scroll center center !important;
 }
 
 .ui-layout-toggler-east-closed {
-    background: url('../images/ui-layout-divider-arrow-w.png') no-repeat scroll center center !important;
+    background: url('ui-layout-divider-arrow-w.png') no-repeat scroll center center !important;
 }
 
 .ui-layout-pane {
@@ -528,19 +528,19 @@ table.display tr.even.row_hover td.sorting_1 {
 
 div.warnicon {
     padding-left: 20px;
-    background: url("../images/ssb/icon-warning.png") no-repeat left center;
+    background: url("ssb/icon-warning.png") no-repeat left center;
 }
 
 div.spinner-img {
-    background: url("../images/spinner.gif") no-repeat;
+    background: url("spinner.gif") no-repeat;
 }
 
 .ui-button.combobox{
-    background: url('../images/select-box-sprites.png') no-repeat scroll -7px 1px transparent!important;
+    background: url('select-box-sprites.png') no-repeat scroll -7px 1px transparent!important;
 }
 
 input.hasDatepicker + button{
-    background: url('../images/date-picker-sprites.png') no-repeat scroll -7px 1px transparent!important;
+    background: url('date-picker-sprites.png') no-repeat scroll -7px 1px transparent!important;
 }
 
 input.combobox:hover , input.hasDatepicker:hover{
@@ -677,7 +677,7 @@ div.ui-widget div.ui-widget-header {
 }
 
 #sidebar ul.ui-tabs-nav {
-    background: url(../images/tab-bg.jpg) repeat-x 0px bottom transparent;
+    background: url("tab-bg.jpg") repeat-x 0px bottom transparent;
     padding: 0 0 0 15px;
     z-index: 0;
 }
@@ -793,7 +793,7 @@ ul.ui-autocomplete a.ui-state-hover {
 .loading {
     opacity:0.4;
     filter:alpha(opacity=40); /* IE8 */
-    background:#000 url('../images/loading-animation.gif') no-repeat center;
+    background:#000 url('loading-animation.gif') no-repeat center;
 
     z-index:99999;
 

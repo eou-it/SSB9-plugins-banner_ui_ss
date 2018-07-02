@@ -73,6 +73,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
             });
     </asset:script> --}%
 
+
    <asset:link rel="apple-touch-icon" sizes="57x57" href="eds/apple-touch-icon-57x57.png"/>
    <asset:link rel="apple-touch-icon" sizes="60x60" href="eds/apple-touch-icon-60x60.png"/>
    <asset:link rel="apple-touch-icon" sizes="72x72" href="eds/apple-touch-icon-72x72.png"/>
@@ -104,10 +105,11 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
     %{--
     // TODO :grails_332_change, needs to revisit
+    --}%
     <div id="splash"></div>
     <div id="spinner" class="spinner spinner-img" style="display:none;">
 
-    </div>--}%
+    </div>
     <g:analytics/>
 
     <div id="dialogAppDiv"></div>
@@ -122,6 +124,11 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <g:else>
         <asset:javascript src="modules/bannerWebLTR-mf.js"/>
     </g:else>
+    <asset:script>
+        $(window).load(function() {
+               $( "#splash" ).remove();
+             });
+    </asset:script>
 
 
     <g:layoutBody />
