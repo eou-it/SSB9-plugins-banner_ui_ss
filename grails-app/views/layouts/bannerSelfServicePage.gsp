@@ -9,6 +9,14 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <%
+        def infoService = grailsApplication.classLoader.loadClass('net.hedtech.extensibility.InfoService').newInstance()
+        def extensibilityInfo = (infoService.getJSON(controllerName, resource(plugin:'web-app-extensibility', dir:'html')))
+    %>
+    <asset:script>
+        var extensibilityInfo = ${extensibilityInfo.encodeAsRaw()}
+        window.mepCode='${session.mep}';
+    </asset:script>
 
     <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         <asset:stylesheet href="modules/bannerSelfServiceRTL-mf.css"/>
