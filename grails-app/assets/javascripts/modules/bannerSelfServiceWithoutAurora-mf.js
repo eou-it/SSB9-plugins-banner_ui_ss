@@ -8,6 +8,9 @@
 //= require backbone.modelbinding.js
 //= require backbone.datagridview.js
 //= require backbone.pagedcollection.js
+// TODO :grails_332_change, needs to revisit
+// require html5shim.js
+// TODO :grails_332_change, needs to revisit
 //= require jquery-plugins/jquery.i18n.properties.js
 //= require yepnope.1.0.1-min.js
 //= require log4javascript.js
