@@ -15,6 +15,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         var extensibilityInfo = ${extensibilityInfo.encodeAsRaw()}
         window.mepCode='${session.mep}';
     </asset:script>
+
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
@@ -131,6 +132,8 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         $(window).load(function() {
                $( "#splash" ).remove();
              });
+
+        <g:i18nJavaScript/>
     </asset:script>
 
 

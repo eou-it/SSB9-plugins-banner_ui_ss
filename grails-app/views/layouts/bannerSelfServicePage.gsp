@@ -124,6 +124,8 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         $(window).load(function() {
                $( "#splash" ).remove();
              });
+
+        <g:i18nJavaScript/>
     </asset:script>
 
 
