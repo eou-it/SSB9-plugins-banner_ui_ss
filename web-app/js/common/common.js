@@ -437,8 +437,13 @@ $(document).ready(function() {
 
     addCssClass();
     changeFavicon();
-    showAipNotification();
 });
+
+$(window).load(function(){
+    //AIP notification will be triggered
+    showAipNotification();
+})
+
 function showAipNotification(){
     $.ajax({
         url: "aipNotification",
