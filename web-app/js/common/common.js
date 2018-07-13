@@ -446,7 +446,6 @@ function showAipNotification(){
         success: function(response){
             console.log("Response is ",response);
             if(response.isNotificationDiaplayed===false && response.hasActiveActionItems===true){
-
                 showAipPromptNotification(response.url);
             }
         },
@@ -458,18 +457,14 @@ function showAipNotification(){
 
 function showAipPromptNotification(url){
     var n = new Notification( {
-        //TODO : i18N this will be replace after approach is finalised
-        message: "You have pending action items",
-        type:"warning",
-        promptMessage: "Do you wish to navigate to action item processing page?"
-
+        message: $.i18n.prop( "platform.banner.aip.notification.prompt.message" ),
+        type:"warning"
     });
 
-
-    n.addPromptAction( "Navigate", function() {
+    n.addPromptAction( $.i18n.prop("platform.banner.aip.notification.prompt.viewactionitems"), function() {
         window.location.href=url;
     } );
-    n.addPromptAction(" Dismiss",function(){
+    n.addPromptAction($.i18n.prop("platform.banner.aip.notification.prompt.dismiss"),function(){
         notifications.remove( n );
     });
     notifications.addNotification( n );
