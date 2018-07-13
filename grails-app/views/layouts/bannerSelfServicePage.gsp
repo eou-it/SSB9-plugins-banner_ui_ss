@@ -114,12 +114,9 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     </g:if>
     <g:render template="/layouts/bannershortcuts"/>
 
-    <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-        <asset:javascript src="modules/bannerSelfServiceRTL-mf.js"/>
-    </g:if>
-    <g:else>
-        <asset:javascript src="modules/bannerSelfService-mf.js"/>
-    </g:else>
+
+    <asset:javascript src="modules/bannerSelfService-mf.js"/>
+
     <asset:script>
         $(window).load(function() {
                $( "#splash" ).remove();
