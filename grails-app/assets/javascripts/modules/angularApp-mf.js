@@ -1,5 +1,3 @@
-//= require modules/extensibilityCommon-mf.js
-// TODO to extensibilityCommon remove this dependency
 //= require angular/angular.js
 //= require angular/load-angular-locale.js
 //= require angular/angular-resource.min.js

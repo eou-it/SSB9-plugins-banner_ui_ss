@@ -13,10 +13,6 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         def infoService = grailsApplication.classLoader.loadClass('net.hedtech.extensibility.InfoService').newInstance()
         def extensibilityInfo = (infoService.getJSON(controllerName, resource(plugin:'web-app-extensibility', dir:'html')))
     %>
-    <asset:script>
-        var extensibilityInfo = ${extensibilityInfo.encodeAsRaw()}
-        window.mepCode='${session.mep}';
-    </asset:script>
 
     <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         <asset:stylesheet href="modules/bannerSelfServiceRTL-mf.css"/>
@@ -24,6 +20,13 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <g:else>
         <asset:stylesheet href="modules/bannerSelfService-mf.css"/>
     </g:else>
+    <asset:javascript src="modules/jquery-mf.js"/>
+    <asset:javascript src="modules/angularApp-mf.js"/>
+
+    <asset:script>
+        var extensibilityInfo = ${extensibilityInfo.encodeAsRaw()}
+        window.mepCode='${session.mep}';
+    </asset:script>
 
     <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
     <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />

@@ -1,5 +1,5 @@
-//= require modules/jquery-mf.js
-//= require modules/angularApp-mf.js
+//= require modules/extensibilityCommon-mf.js
+// TODO to extensibilityCommon remove this dependency
 //= require modules/bannerSelfServiceCommonLTR-mf.js
 //= require modules/extensibilityJQuery-mf.js
 //= require about/about.js
