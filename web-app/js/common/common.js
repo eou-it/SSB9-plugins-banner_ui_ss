@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 //IE fix to support indexOf method on Array objects
 Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
@@ -440,7 +440,6 @@ $(document).ready(function() {
 });
 
 $(window).load(function(){
-    //AIP notification will be triggered
     showAipNotification();
 })
 
@@ -449,13 +448,14 @@ function showAipNotification(){
         url: "aipNotification",
         cache: false,
         success: function(response){
-            console.log("Response is ",response);
-            if(response.isNotificationDiaplayed===false && response.hasActiveActionItems===true){
+            if(response.isNotificationDisplayed===false && response.hasActiveActionItems===true){
                 showAipPromptNotification(response.url);
             }
         },
         error:function( req, status, err ){
-            console.log("Error ",req);
+            console.log("Request:",req);
+            console.log("Status :",status);
+            console.log("Error  :",err);
         }
     });
 }
@@ -485,7 +485,7 @@ function changeFavicon() {
     link.className = 'favicon';
     var url = window.getComputedStyle(link).getPropertyValue('background-image');
     var urlRegex = /^url\("(.*)"\)$/;
-    
+
     if(urlRegex.test(url) && url.indexOf("$themefavicon") == -1){
         link.href = url.slice(4, -1).replace(/"/g, "");
         link.id = 'dynamic-favicon';
