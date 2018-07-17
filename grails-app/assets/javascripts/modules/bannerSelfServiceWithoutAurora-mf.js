@@ -1,4 +1,4 @@
-//= require modules/i18n-core-mf.js
+// require modules/i18n-core-mf.js
 //= require underscore.js
 //= require underscore.string.js
 //= require backbone.js
