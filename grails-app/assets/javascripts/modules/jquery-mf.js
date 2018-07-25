@@ -11,3 +11,4 @@
 //= require jquery.multi.calendars.picker.ext.js
 //= require multi.calendar.init.js
 //= require calendars/jquery.calendars.ummalqura.js
+//= require modules/bootstrap-mf.js
