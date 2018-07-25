@@ -11,11 +11,9 @@
 
     <g:set var="lang_dir" value="${message(code: 'default.language.direction')}" scope="page" />
     <g:if test="${lang_dir  == 'rtl'}">
-        <asset:stylesheet src="modules/themeEditorRTL-mf.css"/>
         <asset:stylesheet href="modules/themeEditorRTL-mf.css"/>
     </g:if>
     <g:else>
-        <asset:stylesheet src="modules/themeEditorLTR-mf.css"/>
         <asset:stylesheet href="modules/themeEditorLTR-mf.css"/>
     </g:else>
     <g:applyLayout name="bannerWebPage">
@@ -789,6 +787,6 @@ dev[ng-model="theme"] {
     </div>
   </div>
 </div>
-
+    <asset:javascript src="modules/themeEditorLTR-mf.js"/>
 </body>
 </html>
