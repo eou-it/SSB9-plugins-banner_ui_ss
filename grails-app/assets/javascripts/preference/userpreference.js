@@ -85,7 +85,11 @@
                     data: $scope.language.selected,
                     cache: false
                 }).then(function (response, status) {
-                    successNotification();
+                    if(response.data && response.data.status === 'success'){
+                        successNotification();
+                    } else {
+                        errorNotification();
+                    }
                 },function (data, status, headers, config) {
                     errorNotification();
                 });
