@@ -12,3 +12,4 @@
 //= require multi.calendar.init.js
 //= require calendars/jquery.calendars.ummalqura.js
 //= require modules/bootstrap-mf.js
+//= require modules/angularApp-mf.js

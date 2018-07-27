@@ -2,5 +2,5 @@
 *= require modules/bootstrap-mf.css
 *= require modules/angularApp-mf.css
 *= require modules/commonComponents-mf.css
-*= require uploadProperties.css
+*= require bootstrap/css/uploadProperties.css
 */

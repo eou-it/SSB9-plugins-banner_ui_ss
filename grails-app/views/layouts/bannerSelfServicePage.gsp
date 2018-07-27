@@ -21,7 +21,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         <asset:stylesheet href="modules/bannerSelfService-mf.css"/>
     </g:else>
     <asset:javascript src="modules/jquery-mf.js"/>
-    <asset:javascript src="modules/angularApp-mf.js"/>
+    %{--<asset:javascript src="modules/angularApp-mf.js"/>--}%
 
     <asset:script>
         var extensibilityInfo = ${extensibilityInfo.encodeAsRaw()}
