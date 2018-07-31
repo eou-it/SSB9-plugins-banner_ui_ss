@@ -447,30 +447,34 @@ function showAipNotification(){
     $.ajax({
         url: "aipNotification",
         cache: false,
-        success: function(response){
-            if(response.isNotificationDisplayed===false && response.hasActiveActionItems===true){
+        success: function (response) {
+            if (response.isNotificationDisplayed === false && response.hasActiveActionItems === true && window.location.href.indexOf("ssb/aip")===-1 ) {
                 showAipPromptNotification(response.url);
             }
         },
-        error:function( req, status, err ){
-            console.log("Request:",req);
-            console.log("Status :",status);
-            console.log("Error  :",err);
+        error: function (req, status, err) {
+            try {
+                console.log("Request:", req);
+                console.log("Status :", status);
+                console.log("Error  :", err);
+            } catch (e) {
+
+            }
         }
     });
 }
 
-function showAipPromptNotification(url){
-    var n = new Notification( {
-        message: $.i18n.prop( "platform.banner.aip.notification.prompt.message" ),
-        type:"warning"
+function showAipPromptNotification(url) {
+    var n = new Notification({
+        message: $.i18n.prop("net.hedtech.banner.general.aip.notification.prompt.message"),
+        type: "warning"
     });
 
-    n.addPromptAction( $.i18n.prop("platform.banner.aip.notification.prompt.viewactionitems"), function() {
-        window.location.href=url;
-    } );
-    n.addPromptAction($.i18n.prop("platform.banner.aip.notification.prompt.dismiss"),function(){
-        notifications.remove( n );
+    n.addPromptAction($.i18n.prop("net.hedtech.banner.general.aip.notification.prompt.view.actionitems"), function () {
+        window.location.href = url;
+    });
+    n.addPromptAction($.i18n.prop("net.hedtech.banner.general.aip.notification.prompt.dismiss"), function () {
+        notifications.remove(n);
     });
     notifications.addNotification( n );
 }
