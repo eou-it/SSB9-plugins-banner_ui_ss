@@ -31,7 +31,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
     <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
     <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?session.hideSSBHeaderComps: params?.hideSSBHeaderComps? params.hideSSBHeaderComps:false} " scope="session" />
-    %{--<g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}" />--}%
+    <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}" />
 
     <meta charset="${message(code: 'default.character.encoding')}"/>
     <meta name="dir" content="${message(code:'default.language.direction')}"/>
@@ -52,7 +52,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     %{--<meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>--}%
     <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
     <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
-    %{--<meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>--}%
+    <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
     <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
     <title><g:layoutTitle default="Banner"/></title>
 
