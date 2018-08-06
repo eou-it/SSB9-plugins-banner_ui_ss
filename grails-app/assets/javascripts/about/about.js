@@ -14,7 +14,7 @@
             }
             aboutServiceProvider.setBackendUrl(aboutUrl);
         })
-        .controller('ModalCtrl', function($scope, $timeout){
+        .controller('ModalCtrl',['$scope','$timeout', function($scope, $timeout){
             $scope.modalShown = false;
             $scope.toggleModal = function() {
                 $scope.modalShown = !$scope.modalShown;
@@ -33,5 +33,5 @@
                 close : 'api.close',
                 copyrightLegalNotice: 'about.banner.copyrightLegalNotice'
             };
-        });
+        }]);
 })();
