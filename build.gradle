@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-version "0.1"
+version "9.28.2"
 group "banner.ui.ss"
 
 apply plugin:"eclipse"

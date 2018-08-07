@@ -13,6 +13,7 @@ class BannerUiSsGrailsPlugin extends Plugin {
     def pluginExcludes = [
         "grails-app/views/error.gsp"
     ]
+    def loadAfter = ["bannerCore", "bannerGeneralUtility"]
 
     // TODO Fill in these fields
     def title = "Banner Ui Ss" // Headline display name of the plugin
