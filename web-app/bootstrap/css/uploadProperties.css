@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright 2017 Ellucian Company L.P. and its affiliates.                  *
+ *  Copyright 2018 Ellucian Company L.P. and its affiliates.                  *
  ******************************************************************************/
 
 
@@ -14,8 +14,7 @@
 
 .text-field {
     border-radius: 4px;
-    border: 1px solid #869FB1;
-    box-shadow: inset 4px 4px 4px #E2EAEF;
+    border: 1px solid #026BC8;
     font-family: OpenSans-semibold;
     font-size: .875em;
     width: 18.75em;
@@ -27,8 +26,7 @@
 
 select.pb-item.pb-select {
     color:#4F585F;
-    border: 2px solid #869FB1;
-    box-shadow: inset 0px -4px #DEE5E7;
+    border: 2px solid #026BC8;
     width: 18.75em;
     padding: 1em 0.75em;
     font-size: 0.875em;
@@ -58,27 +56,23 @@ h1 {
 }
 
 .primary, .primary:hover:not([disabled]), .primary:active:not([disabled]) {
-    color: #1e4095;
-    background-color: #d5def6;
+    color: #FFFFFF;
+    background-color: #026BC8;
     border-color: #112455;
 }
 .primary:hover:not([disabled]) {
     font-size: 14px;
-    background-color: #d5def6;
+    background-color: #026BC8;
     border: 1px solid #206E9F;
-    box-shadow: inset 0 -4px 0 #06304B;
 }
 .primary {
-    background-color: #d5def6;
-    border: 1px solid #206E9F;
-    box-shadow: inset 0 -4px 0 #0C5482;
-    color: #1e4095;
-    border-radius: 4px;
+    background-color: #026BC8;
+    color: #FFFFFF;
 }
 .primary, .secondary {
-    padding: .875em 5.75em;
-    font-size:14px;
-}
+     padding: .875em 5.75em;
+     font-size:14px;
+ }
 button, html input[type=button], input[type=reset], input[type=submit] {
     -webkit-appearance: button;
     cursor: pointer;
