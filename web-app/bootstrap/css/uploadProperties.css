@@ -1,9 +1,6 @@
 /******************************************************************************
  *  Copyright 2018 Ellucian Company L.P. and its affiliates.                  *
  ******************************************************************************/
-
-
-
 #uploadContent {
     font: 14px "Open Sans", sans-serif;
     padding-top: 2px;
@@ -12,21 +9,9 @@
     padding-bottom: 2px;
 }
 
-.text-field {
-    border-radius: 4px;
-    border: 1px solid #026BC8;
-    font-family: OpenSans-semibold;
-    font-size: .875em;
-    width: 18.75em;
-    padding: 1em .75em!important;
-    background-color: #FFF;
-    text-align: left;
-    box-sizing: border-box;
-}
-
 select.pb-item.pb-select {
-    color:#4F585F;
-    border: 2px solid #026BC8;
+    color:#5B5E65;
+    border: 1px solid #B2B3B7;
     width: 18.75em;
     padding: 1em 0.75em;
     font-size: 0.875em;
@@ -35,79 +20,16 @@ select.pb-item.pb-select {
     border-radius:4px;
 }
 
-select.pb-select:focus {
+select.pb-select:focus, select.pb-select:hover {
+    color:#151618;
     background-color: #FFFFFF;
-    border: 2px solid #206E9F;
+    border: 1px solid #026BC8;
 }
 
-
-
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: "Open Sans", sans-serif;
-    font-weight: 500;
-    line-height: 1.1;
-    color: inherit;
-}
-h1 {
-    font-size: 36px;
-}
-h1 {
-    margin: .67em 0;
-}
-
-.primary, .primary:hover:not([disabled]), .primary:active:not([disabled]) {
-    color: #FFFFFF;
-    background-color: #026BC8;
-    border-color: #112455;
-}
-.primary:hover:not([disabled]) {
-    font-size: 14px;
-    background-color: #026BC8;
-    border: 1px solid #206E9F;
-}
-.primary {
-    background-color: #026BC8;
-    color: #FFFFFF;
-}
-.primary, .secondary {
-     padding: .875em 5.75em;
-     font-size:14px;
- }
-button, html input[type=button], input[type=reset], input[type=submit] {
-    -webkit-appearance: button;
-    cursor: pointer;
-    height: 6.5%;
-}
-button, select {
-    text-transform: none;
-}
-button {
-    overflow: visible;
-}
-button, input, optgroup, select, textarea {
-    color: inherit;
-    font: inherit;
-    margin: 0;
-}
-input, button, select, textarea {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-}
-button, html input[type="button"], input[type="reset"], input[type="submit"] {
-    cursor: pointer;
-    -webkit-appearance: button;
-}
-button, select {
-    text-transform: none;
-}
-button, input {
-    line-height: normal;
-}
-button, input, select, textarea {
-    margin: 0;
-    font-family: inherit;
-    font-size: 100%;
+select.pb-select:active {
+    color:#151618;
+    background-color: #FFFFFF;
+    border: 1px solid #026BC8;
 }
 
 .pb-boolean input[type="checkbox"] {
@@ -123,13 +45,13 @@ label.pb-label.pb-boolean {
 }
 label.pb-label {
     size: 1em;
-    color: #4F585F;
     font-weight: 400;
     display: block;
+    margin-top:5px;
 }
 
 .pb-boolean .pb-item.pb-boolean:checked+label {
-    background-image: url(../../../../css/xe-components/images/checkbox/checkbox-selected.svg);
+    background-image: url(../../angular-components/css/images/checkbox/checkbox-selected_new.svg);;
 }
 .pb-boolean .pb-item.pb-boolean+label {
     background-repeat: no-repeat;
@@ -138,7 +60,7 @@ label.pb-label {
     line-height: 172%;
     cursor: pointer;
     padding-left: 30px;
-    background-image: url(../../../../css/xe-components/images/checkbox/checkbox-default.svg);
+    background-image: url(../../angular-components/css/images/checkbox/checkbox-default_new.svg);
 }
 
 .pb-boolean input[type="checkbox"] {
@@ -154,34 +76,13 @@ input[type="radio"], input[type="checkbox"] {
     line-height: normal;
 }
 
-/* Component containers
-----------------------------------*/
-.ui-widget  {
-    font-family:Verdana,Arial,sans-serif;
-    font-size:1.1em;
+table#resourceTable tr > th{
+    background-color: #F7F7F7 !important;
 }
-.ui-widget .ui-widget  {
-    font-size:1em;
+#uploadContent .ui-widget-header.content-container-header{
+    background-color: #EEEEEF !important;
 }
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button  {
-    font-family:Verdana,Arial,sans-serif;
-    font-size:1em;
+#uploadContent select option {
+    height:10px;
 }
-.ui-widget-content  {
-    border:1px solid #aaaaaa;
-    background:#ffffff url(../../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
 
-    color:#222222;
-}
-.ui-widget-content a  {
-    color:#222222;
-}
-.ui-widget-header  {
-    border:1px solid #aaaaaa;
-    background:#cccccc url(../../images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
-    color:#222222;
-    font-weight:bold;
-}
-.ui-widget-header a  {
-    color:#222222;
-}
