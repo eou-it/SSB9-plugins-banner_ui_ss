@@ -5,14 +5,14 @@
 (function(){
     'use strict';
     angular.module('userPreference', ['xe-ui-components'])
-        .config(function($httpProvider) {
+        .config(['$httpProvider',function($httpProvider) {
             $httpProvider.defaults.headers.common['Cache-Control'] = 'no-cache';
             $httpProvider.defaults.cache = false;
             if (!$httpProvider.defaults.headers.get) {
                 $httpProvider.defaults.headers.get = {};
             }
             $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
-        })
+        }])
         .controller('PopupCtrl',[ '$scope','$timeout','$http', function($scope, $timeout, $http ){
             $scope.modalShown = false;
             $scope.disableButton = true;

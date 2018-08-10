@@ -4,7 +4,7 @@
 (function(){
     'use strict';
     angular.module('dialogApp', ['xe-ui-components'])
-        .config(function(aboutServiceProvider) {
+        .config(['aboutServiceProvider',function(aboutServiceProvider) {
             aboutServiceProvider.setMethod('GET');
             var menuBaseURL = $('meta[name=menuBaseURL]').attr("content");
             var aboutUrl = $('meta[name=aboutUrl]').attr("content");
@@ -13,7 +13,7 @@
                 aboutUrl = aboutUrlContextPath + "/about/data?callback=JSON_CALLBACK";
             }
             aboutServiceProvider.setBackendUrl(aboutUrl);
-        })
+        }])
         .controller('ModalCtrl',['$scope','$timeout', function($scope, $timeout){
             $scope.modalShown = false;
             $scope.toggleModal = function() {
