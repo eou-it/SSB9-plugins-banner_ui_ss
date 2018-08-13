@@ -62,17 +62,17 @@
             <div xe-field="file">
                 <label class="pb-block pb-number pb-item pb-label  " for="files-saved">
                     <g:message code="upload.properties.files.saved"/></label>
-                <input id="files-saved" class="text-field" ng-model="name" value="{{filesSaved}}"/>
+                <input id="files-saved" class="eds-text-field" ng-model="name" value="{{filesSaved}}"/>
             </div>
             <div xe-field="total">
                 <label for="total-files" class="pb-block pb-number pb-item pb-label  ">
                     <g:message code="upload.properties.total.files"/></label>
-                <input id="total-files" class="text-field" ng-model="name" value="{{propFiles.length}}"/>
+                <input id="total-files" class="eds-text-field" ng-model="name" value="{{propFiles.length}}"/>
             </div>
             <div xe-field="resource">
                 <label for="resource-saved" class="pb-block pb-number pb-item pb-label  ">
                     <g:message code="upload.properties.resource.processed"/></label>
-                <input id="resource-saved" class="text-field" ng-model="name" value="{{textSaved}}"/>
+                <input id="resource-saved" class="eds-text-field" ng-model="name" value="{{textSaved}}"/>
             </div>
             <div>
                 <xe-text-box xe-label="{{textboxLabel}}" ng-model="textbox.readonlyVal" xe-id="readonly" xe-type="text"
@@ -94,7 +94,7 @@
                     </div>
                     {{name}}
                     <div class="ui-widget-content" xe-field="propFiles">
-                        <table class="display" id="demoPersonTable">
+                        <table class="display" id="resourceTable">
                             <thead>
                             <tr>
                                 <th id="include-col" class="biodem-firstName">
@@ -135,6 +135,7 @@
 </div>
 
 
+</div>
 </div>
 </div>
 </body>
