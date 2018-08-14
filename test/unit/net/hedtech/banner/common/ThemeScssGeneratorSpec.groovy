@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.common
 
@@ -88,7 +88,7 @@ class ThemeScssGeneratorSpec extends Specification {
         "font-family: 'lucidaGrande';\nfont-weight: normal;\n"                  |   ""
         "color: #ddd;font-weight: normal; "                                     |   "color:#DDDDDD;"
         "border: 1px solid #ccc"                                                |   "border-color:#CCCCCC;"
-        "outline: 10px dotted #eee"                                             |   'outline-color:$themecolor1-4;/*#eee*/'
+        "background-color:  #026BC8"                                            |   'background-color:$themecolor3;/*#026BC8*/'
     }
 
     def "test formatStyle ()"() {
@@ -148,7 +148,7 @@ class ThemeScssGeneratorSpec extends Specification {
         themeScssGenerator.getThemeVariable(color) == themeVariable
         where:
         color                              |   themeVariable
-        '#206E9F'                          |   '$themecolor1'
+        '#5353D1'                          |   '$themecolor1'
     }
     def "test convertTo6DigitHexColor()" () {
         expect:
