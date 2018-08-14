@@ -1,11 +1,43 @@
 /*******************************************************************************
-Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
+Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 /* global notifications */
 (function() {
     'use strict';
 
     window.console = window.console || { log: function() {} }; //IE9 console.log polyfill stub
+
+    //SASS mix function
+    //TODO - find a equivalent tinycolor method
+    //TODO - Move this inside Scss file and work on Sass compiler
+    var mix = function (color_1, color_2, weight) {
+        function d2h(d) {
+            return d.toString(16);
+        } // convert a decimal value to hex
+        function h2d(h) {
+            return parseInt(h, 16);
+        } // convert a hex value to decimal
+
+        weight = (typeof (weight) !== 'undefined') ? weight : 50; // set the weight to 50%, if that argument is omitted
+
+        var color = "#";
+
+        for (var i = 0; i <= 5; i += 2) { // loop through each of the 3 hex pairs—red, green, and blue
+            var v1 = h2d(color_1.substr(i, 2)), // extract the current pairs
+                v2 = h2d(color_2.substr(i, 2)),
+
+                // combine the current pairs from each source color, according to the specified weight
+                val = d2h(Math.round(v2 + (v1 - v2) * (weight / 100.0))); // Exact SASS value
+
+            while (val.length < 2) {
+                val = '0' + val;
+            } // prepend a '0' if val results in a single digit
+
+            color += val; // concatenate val to our new color string
+        }
+
+        return color; // PROFIT!
+    };
 
     var themeEditorApp = angular.module("themeEditor", ["color.picker", "extensibility"]);
 
@@ -50,11 +82,16 @@ Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
                     }
                 }
             }
+            fieldnames.push('color1-active');
+            fieldnames.push('color3-hover');
+            fieldnames.push('color3-active');
+            fieldnames.push('color3-light');
+
             $scope.newTheme();
 
-            $scope.color1 = '#206E9F';
-            $scope.color2 = '#D68C3D';
-            $timeout( function() { $scope.color3 = '#4F585F' }, 0 ); // after $watch has adjusted color3
+            $scope.color1 = '#5353D1';
+            $scope.color2 = '#51ABFF';
+            $timeout( function() { $scope.color3 = '#026BC8' }, 0 ); // after $watch has adjusted color3
         }
 
         var setTextColor = function( $scope, name, value ) {
@@ -130,6 +167,14 @@ Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
                         shade_i = shade( newValue, shades[i] );
                         $scope[ shadeName ] = shade_i;
                     }
+                    if(name == 'color1') {
+                        $scope['color1-active'] = mix("151618", newValue.substr(1), 40)
+                    }
+                    if(name == 'color3') {
+                        $scope['color3-hover'] = mix("151618", newValue.substr(1), 20)
+                        $scope['color3-active'] = mix("151618", newValue.substr(1), 40)
+                        $scope['color3-light'] = mix("FFFFFF", newValue.substr(1), 95)
+                    }
 
                     updatePreview( getData( $scope ));
                 }
@@ -195,7 +240,7 @@ Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
             }
         }
 
-        $scope.$watchGroup(['color1', 'color2'], deriveColor3);
+        //$scope.$watchGroup(['color1', 'color2'], deriveColor3);
 
         var autoReload = function( name ) {
             return '&reload=' + new Date().getTime();

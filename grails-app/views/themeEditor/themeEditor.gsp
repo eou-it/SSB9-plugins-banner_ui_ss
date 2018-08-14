@@ -100,11 +100,18 @@
 }
 
 .properties input {
-    border: 2px solid /*color1-3*/#206E9F;
+    border: 1px solid #B2B3B7;
     padding: 10px;
     border-radius: 5px;
-    background-color: /*color1-5*/#FFFFFF;
+    background-color: #FFFFFF;
     width: 55%;
+}
+
+.properties input:focus:not([valid]) {
+    border: 1px solid /*color3*/ #026BC8;
+    color: #151618;
+    outline: none;
+    font-family: OpenSans-semibold !important;
 }
 
 .themes h4, .properties h4 {
@@ -141,8 +148,6 @@
 .themes button, .properties button {
     padding: 10px 20px;
     margin: 10px 20px;
-    border-radius: 5px;
-    border: 1px solid;
 }
 
 .properties button {
@@ -206,7 +211,7 @@
 .preview .notification, .preview .close-page {
     float: left;
     height: 100%;
-    width: 60px;
+    width: 40px;
 }
 
 [dir=rtl] .preview .notification, .preview .close-page {
@@ -215,17 +220,18 @@
 
 .preview .notification {
     text-align: center;
-    margin: 0 5px 0 5px;
-    background-color: /*color2-3*/#FECF7F;
-    color: #ffffff;
+    background-color:  #efc728;
+    color: #151618;
 }
 
 .preview .notification-flyout {
     position: absolute;
-    right: 89px;
+    right: 24px;
     left: auto;
     top: 85px;
     width: 400px;
+    margin-top: -4px;
+    border: 1px solid #8A6A00;
 }
 
 [dir=rtl] .preview .notification-flyout {
@@ -234,19 +240,18 @@
 }
 
 .preview .notification-flyout .message {
-    background-color: /*color2-5*/ #FFFEEA;
+    background-color: #f5f2e7;
     padding: 20px;
-    border: 1px solid /*color2-2*/ #846011;
-    color: /*color2-2*/ #846011;
+    border-top: 4px solid #8A6A00;
+    color: #8a6a00;;
     font-size: 1.1em;
-    box-shadow: 0 -6px 0 0 /*color2-4*/#ECE6C8 inset;
 }
 
 .preview .notification-flyout .buttons {
-    padding: 20px 10px;
+    padding: 10px 5px;
     overflow: hidden;
-    background-color: #EBEBEB;
-    border: 1px solid #C6CBCD;
+    background-color: #F4F4F4;
+    border-top: 1px solid #C2BCBC;
     width:100%;
 }
 
@@ -266,8 +271,6 @@
     padding: 10px 20px;
     margin: 60px 10px 0 10px;
     border-radius: 5px;
-    border-width: 1px;
-    border-style: solid;
     float: right;
 }
 
@@ -278,10 +281,8 @@
 .preview .notification-flyout .buttons button {
     float: right;
     padding: 10px 20px;
-    margin: 0 10px 0 10px;
+    margin: 0 0px 0 10px;
     border-radius: 5px;
-    border-width: 1px;
-    border-style: solid;
 }
 
 [dir=rtl] .preview .notification-flyout .buttons button {
@@ -294,9 +295,13 @@
 
 .bread-crumb {
     font-size: 1.1em;
-    border-bottom: 1px solid #E2E2E2;
+    border-bottom: 2px solid #EEEEEF;
     height: 50px;
     line-height: 50px;
+    background-color: #F7F7F7;
+}
+.colors-dark-globalNavMobileTextColor:first-child  {
+    text-decoration: underline;
 }
 
 .bread-crumb span {
@@ -317,6 +322,7 @@
     margin: 20px 10px;
     font-size: 1.5em;
     display: inline-block;
+    background-color: #F7F7F7;;
 }
 
 .form {
@@ -365,6 +371,7 @@
 
 .inputs label {
     display: block;
+    color: #151618;
 }
 
 .inputs select {
@@ -389,10 +396,10 @@
 }
 
 .inputs input, .inputs select {
-    border-width: 2px;
+    border-width: 1px;
     border-style: solid;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 4px;
     background-color: #FFFFFF;
     width: 70%;
 }
@@ -424,46 +431,66 @@ span.approved {
 .global-nav svg,  .close-page svg {
     margin: 10px;
 }
-
-.preview .primary,
-.preview .primary:hover:not([disabled]),
-.preview .primary:active:not([disabled]) {
-    color: /*color1-2*/ #393939;
-    background-color: /*color1-5*/ #16fc16;
-    border-color: /*color1-1*/ #00a400;
-    box-shadow: /*color1-1*/ #00a400 0px -4px 0px 0px inset;
+.form-buttons .primary {
+    border: none;
+}
+.primary {
+    color: #ffffff;
+    background-color: /*color3*/ #026BC8;
+    border-color: /*color3*/ #026BC8;
+    border: 1px solid /*color3*/ !important;
 }
 
-.preview .secondary,
-.preview .secondary:hover:not([disabled]),
-.preview .secondary:active:not([disabled]) {
-    color: /*color2-2*/ #393939;
-    background-color: /*color2-5*/ #b9b9b9;
-    border-color: /*color2-1*/ #797979;
-    box-shadow: /*color2-1*/ #797979 0px -4px 0px 0px inset;
+.primary:hover:not([disabled])  {
+    background-color:  /*color3-hover*/ #065AA5; /*#065AA5*/
+    border: 1px solid /*color3-hover*/ #065AA5 !important;
 }
 
-.preview button.tertiary {
-    color: #000000;
-    background-color: #FFFFFF;
-    border: 1px solid #999999;
-    box-shadow: 0 -4px 0 0 #E0E0E0 inset;
+.primary:focus:not([disabled])  {
+    background-color: /*color3-hover*/ #065AA5; /*#065AA5*/
+    border: 1px solid  /*color2-4*/ #81C8FF !important;
+}
+
+.primary:active:not([disabled]) {
+    background-color: /*color3-active*/ #0A4982;
+}
+
+.secondary {
+    color: /*color3*/ #026BC8;
+    background-color: #ffffff;
+    border-color: /*color3*/ #026BC8;
+}
+
+.secondary:hover:not([disabled])  {
+    background-color:  /*color3-hover*/ #065AA5;
+}
+
+.secondary:focus:not([disabled])  {
+    border-color: /*color2-4*/ #026BC8;
+}
+
+.secondary:active:not([disabled]) {
+    background-color: /*color3-active*/ #0A4982;
 }
 
 .bg-colors-dark-subsectionHeading {
     background-color: #393939;
 }
+.page-title .colors-dark-headerBackground {
+    color: #151618 /*EDS*/;
+}
 
 .colors-dark-headerBackground {
-    color: /*color1*/ #a40000; /* Use chosen color */
+    color: /*color1*/ #5353D1; /* Use chosen color */
 }
 
 .border-colors-dark-headerBackground {
-    border-color: /*color1-3*/ #a40000;
+    border-color: /*color3*/ #026BC8;
 }
 
 .bg-colors-dark-headerBackground {
-    background-color: /*color1*/ #a40000;
+    background-color: /*color1*/ #5353D1;
+    border-bottom: 4px solid /*color2*/ #51ABFF;
 }
 
 .color-dark-headerTextColor {
@@ -476,15 +503,11 @@ span.approved {
 }
 
 .colors-dark-globalNavMobileTextColor {
-    color: /*color3-2*/ #008b00;
+    color: /*color3*/ #026BC8;
 }
 
 .bg-colors-dark-cardListTextColor {
     backgroundColor: #f8f8f8;
-}
-
-.colors-dark-globalNavMobileTextColor {
-    color: /*color3-2*/ #008b00;
 }
 
 .colors-dark-overlayContainerBorder {
@@ -645,8 +668,8 @@ dev[ng-model="theme"] {
           <ul xe-field="themes">
             <li style="margin:.2em 0" ng-repeat="theme in themes | orderBy: 'theme'">
                 <span class="w20">{{theme}}</span>
-                <button class="secondary" ng-click="setTheme(theme)"><g:message code="theme.applyTheme" args="['']" notargs="['{{theme}}']"/></button>
-                <button class="tertiary" ng-click="deleteTheme(theme)"><g:message code="theme.deleteTheme" args="['']"/></button>
+                <button class="primary" ng-click="setTheme(theme)"><g:message code="theme.applyTheme" args="['']" notargs="['{{theme}}']"/></button>
+                <button class="secondary" ng-click="deleteTheme(theme)"><g:message code="theme.deleteTheme" args="['']"/></button>
                 <span class="w10">
                     <a href="theme/get?name={{theme}}" class="center"><g:message code="theme.json"/></a>
                 </span>
@@ -657,7 +680,7 @@ dev[ng-model="theme"] {
             <ul xe-field="templates">
                 <li style="margin:.2em 0" ng-repeat="template in templates | orderBy: 'template'">
                     <span class="w20" title="{{template}}">{{template}}</span>
-                    <button class="tertiary" ng-click="deleteTemplate(template)"><g:message code="theme.deleteTheme" args="['']"/></button>
+                    <button class="secondary" ng-click="deleteTemplate(template)"><g:message code="theme.deleteTheme" args="['']"/></button>
                     <span class="w10">
                         <a href="theme/getTemplate?name={{template}}" class="center"><g:message code="template.scss"/></a>
                     </span>
@@ -702,13 +725,6 @@ dev[ng-model="theme"] {
             <span  class="color-dark-headerTextColor"><g:message code="theme.preview.title"/></span>
           <div class="right-section" >
             <div class="notification" ><g:message code="theme.preview.notification.count"/></div>
-            <div class="close-page" >
-              <div >
-                <svg version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 48 48" >
-                  <path fill="#FFFFFF" d="M26.3,24l9.1-9c0.6-0.6,0.6-1.6,0-2.3c-0.6-0.6-1.7-0.6-2.3,0 l-9.1,9l-9.1-9c-0.6-0.6-1.7-0.6-2.3,0c-0.6,0.6-0.6,1.6,0,2.3l9.1,9l-9.1,9c-0.6,0.6-0.6,1.6,0,2.3s1.7,0.6,2.3,0l9.1-9l9.1,9 c0.6,0.6,1.7,0.6,2.3,0c0.6-0.6,0.6-1.6,0-2.3L26.3,24" ></path>
-                </svg>
-              </div>
-            </div>
           </div>
         </div>
         <div class="content bg-colors-dark-cardListTextColor">
@@ -745,7 +761,7 @@ dev[ng-model="theme"] {
                                   <g id="Group-_x2B_-button-shape-_x2B_-button-shape-_x2B_-back-_x2B_-start-_x2B_-Results-found-32" transform="translate(20.000000, 753.000000)" >
                                     <g id="Group" transform="translate(566.000000, 0.000000)" >
                                       <g id="Shape-13" transform="translate(233.000000, 0.000000)" >
-                                        <path d="M-221,291.6l5,4.9l5-4.9H-221z"  fill="#a40000"></path>
+                                        <path d="M-221,291.6l5,4.9l5-4.9H-221z"  fill="#5353D1"></path>
                                       </g>
                                     </g>
                                   </g>
@@ -770,7 +786,6 @@ dev[ng-model="theme"] {
               <div class="form-buttons" >
                 <button class="primary"><g:message code="theme.preview.primary"/></button>
                 <button class="secondary" ><g:message code="theme.preview.secondary"/></button>
-                <button class="tertiary" ><g:message code="theme.preview.tertiary"/></button>
               </div>
             </div>
           </div>
@@ -778,9 +793,9 @@ dev[ng-model="theme"] {
         <div class="notification-flyout" >
           <div class="message" ><g:message code="theme.preview.savechanges"/></div>
           <div class="buttons" >
-            <button class="primary" ><g:message code="theme.preview.yes"/></button>
-            <button class="secondary" ><g:message code="theme.preview.no"/></button>
-            <button class="tertiary" ><g:message code="theme.preview.cancel"/></button>
+              <button class="secondary" ><g:message code="theme.preview.cancel"/></button>
+              <button class="secondary" ><g:message code="theme.preview.no"/></button>
+              <button class="primary" ><g:message code="theme.preview.yes"/></button>
           </div>
         </div>
       </div>
