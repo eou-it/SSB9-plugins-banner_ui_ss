@@ -82,7 +82,4 @@ table#resourceTable tr > th{
 #uploadContent .ui-widget-header.content-container-header{
     background-color: #EEEEEF !important;
 }
-#uploadContent select option {
-    height:10px;
-}
 
