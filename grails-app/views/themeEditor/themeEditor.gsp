@@ -442,7 +442,7 @@ span.approved {
 }
 
 .primary:hover:not([disabled])  {
-    background-color:  /*color3-hover*/ #065AA5; /*#065AA5*/
+    background-color:  /*color3-hover*/ #065AA5;
     border: 1px solid /*color3-hover*/ #065AA5 !important;
 }
 

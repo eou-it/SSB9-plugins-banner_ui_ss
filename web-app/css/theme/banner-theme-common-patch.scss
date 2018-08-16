@@ -13,10 +13,6 @@ body {
   width: 20em;
 }
 
-.splashBg .ellucianName {
-  background-image: url("$themelogo");
-}
-
 /*** Favicon ***/
 .favicon {
   background-image: url("$themefavicon");
@@ -37,7 +33,7 @@ body {
 }
 
 #header-main-section-east-part {
-  background-color: $themecolor1-active; /*missed in EDS phase 1*/
+  background-color: $themecolor1-active4d; /*settting transparency*/
 }
 
 /*** Tweaks to base UI */
@@ -101,50 +97,50 @@ body {
 }
 
 .login-primary {
-  background-color: $themecolor1;
-}
-
-.login-primary:focus:not([disabled]) {
-  border: 2px solid $themecolor2;
+  background-color: $themecolor3;
 }
 
 .login-primary:hover:not([disabled]) {
   background-color: $themecolor3-hover;
 }
 
-.splashBg .forgotpassword {
-  color: $themecolor2;
+.login-primary:focus:not([disabled]) {
+  background-color: $themecolor3-hover;
+  border-color: $themecolor2-4;
 }
 
-.splashBg .appName {
-  color: $themecolor2;
-}
-
-.pageBg {
-     background-color: $themecolor1-4; /*background-image*/
-     background-image: none;
+.login-primary:active:not([disabled]) {
+  background-color: $themecolor3-active;
 }
 
 .signin-button {
   background-color: $themecolor3;
-  border-color: $themecolor2;
+}
+
+.signin-button:hover:not([disabled]) {
+  background-color: $themecolor3-hover;
 }
 
 .signin-button:focus:not([disabled])  {
-  border-color: $themecolor2;
+  background-color: $themecolor3-hover;
+  border-color: $themecolor2-4;
 }
 
 .signin-button:active:not([disabled])  {
   background-color: $themecolor3-active;
 }
 
-.signin-button:focus:not([disabled])  {
-  border-color: $themecolor2;
+.splashBg .appName {
+  color: $themecolor3;
 }
 
-.signin-button:hover:not([disabled]) {
-  background-color: $themecolor3-hover;
-  border: none;
+.splashBg .forgotpassword {
+  color: $themecolor3;
+}
+
+.pageBg {
+  background-color: $themecolor1-4; /*background-image*/
+  background-image: none;
 }
 
 .xe-modal-mask {
@@ -152,4 +148,30 @@ body {
 }
 .xe-popup-mask {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+/*** Survey ***/
+.termstextdiv {
+  border-color: $themecolor1 /*#2874BB*/;
+  background-color: $themecolor1-5;
+  color: $themecolor1;
+  padding: 0.5em;
+  margin-bottom: 2em;
+}
+
+/*** Tweaks to buttons ***/
+.primary:hover:not([disabled])  {
+  background-color: $themecolor3-hover; /*#065AA5*/
+}
+
+.primary:focus:not([disabled])  {
+  background-color: $themecolor3-hover; /*#065AA5*/
+}
+
+.secondary:hover:not([disabled])  {
+  background-color: $themecolor3-hover; /*#065AA5*/
+}
+
+.secondary:focus:not([disabled])  {
+  background-color: $themecolor3-hover; /*#065AA5*/
 }

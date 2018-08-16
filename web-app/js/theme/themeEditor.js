@@ -91,7 +91,7 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
 
             $scope.color1 = '#5353D1';
             $scope.color2 = '#51ABFF';
-            $timeout( function() { $scope.color3 = '#026BC8' }, 0 ); // after $watch has adjusted color3
+            $scope.color3 = '#026BC8';
         }
 
         var setTextColor = function( $scope, name, value ) {
@@ -194,48 +194,48 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
         /**
          * Derive color3 as the triad of color1 that is most different from the hue of color2
          */
-        var deriveColor3 = function() {
-            var c1 = tinycolor( $scope.color1 ),
-                c2 = tinycolor( $scope.color2 );
-            if ( isValid6DigitColor( c1 ) && isValid6DigitColor( c2 )) {
-// triad off color1, pick triad color farthest from color2
-//                var triad = c1.triad(),
-//                    color3 = triad[1],
-//                    hueColor2 = c2.toHsl().h,
-//                    hueA = triad[1].toHsl().h,
-//                    hueB = triad[2].toHsl().h;
-//                if ( Math.abs( hueColor2 - hueB ) > Math.abs( hueColor2 - hueA )) {
-//                    color3 = triad[2];
-//                }
-//                color3.l=.5;
-//                $scope.color3 = color3.toHexString();
-
-// pick color3 as equally far from color1 as color2 is
-//                var hsl3 = tinycolor( c1 ).toHsl(),
-//                    h1 = c1.toHsl().h,
-//                    h2 = c2.toHsl().h;
+//         var deriveColor3 = function() {
+//             var c1 = tinycolor( $scope.color1 ),
+//                 c2 = tinycolor( $scope.color2 );
+//             if ( isValid6DigitColor( c1 ) && isValid6DigitColor( c2 )) {
+// // triad off color1, pick triad color farthest from color2
+// //                var triad = c1.triad(),
+// //                    color3 = triad[1],
+// //                    hueColor2 = c2.toHsl().h,
+// //                    hueA = triad[1].toHsl().h,
+// //                    hueB = triad[2].toHsl().h;
+// //                if ( Math.abs( hueColor2 - hueB ) > Math.abs( hueColor2 - hueA )) {
+// //                    color3 = triad[2];
+// //                }
+// //                color3.l=.5;
+// //                $scope.color3 = color3.toHexString();
 //
-//                hsl3.h = (h1 + (h1-h2)) % 360;
-//                console.log( 'deriveColor3', h1, h2, hsl3.h, (h1-h2), (hsl3.h - h1));
+// // pick color3 as equally far from color1 as color2 is
+// //                var hsl3 = tinycolor( c1 ).toHsl(),
+// //                    h1 = c1.toHsl().h,
+// //                    h2 = c2.toHsl().h;
+// //
+// //                hsl3.h = (h1 + (h1-h2)) % 360;
+// //                console.log( 'deriveColor3', h1, h2, hsl3.h, (h1-h2), (hsl3.h - h1));
+// //
+// //                $scope.color3 = tinycolor(hsl3).toHexString();
 //
-//                $scope.color3 = tinycolor(hsl3).toHexString();
-
-// pick color3 as 10% off of complement, farthest from color2
-                var hsl3 = tinycolor( c1 ).toHsl(),
-                    h1 = c1.toHsl().h,
-                    h2 = c2.toHsl().h,
-                    delta = 36,
-                    hA = (h1 + 180 + delta) % 360,
-                    hB = (h1 + 180 - delta) % 360;
-                hsl3.h = hA;
-                if ( hueDistance( h2, hB ) > hueDistance( h2, hA )) {
-                    hsl3.h = hB;
-                }
-            console.log( 'deriveColor3', 'h1', h1, 'h2', h2, 'h3', hsl3.h, hueDistance(h2, hA), hueDistance(h2, hB), c1.complement().toHsl().h);
-
-                $scope.color3 = tinycolor(hsl3).toHexString();
-            }
-        }
+// // pick color3 as 10% off of complement, farthest from color2
+//                 var hsl3 = tinycolor( c1 ).toHsl(),
+//                     h1 = c1.toHsl().h,
+//                     h2 = c2.toHsl().h,
+//                     delta = 36,
+//                     hA = (h1 + 180 + delta) % 360,
+//                     hB = (h1 + 180 - delta) % 360;
+//                 hsl3.h = hA;
+//                 if ( hueDistance( h2, hB ) > hueDistance( h2, hA )) {
+//                     hsl3.h = hB;
+//                 }
+//             console.log( 'deriveColor3', 'h1', h1, 'h2', h2, 'h3', hsl3.h, hueDistance(h2, hA), hueDistance(h2, hB), c1.complement().toHsl().h);
+//
+//                 $scope.color3 = tinycolor(hsl3).toHexString();
+//             }
+//         }
 
         //$scope.$watchGroup(['color1', 'color2'], deriveColor3);
 
