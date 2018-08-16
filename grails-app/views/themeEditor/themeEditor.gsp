@@ -471,6 +471,7 @@ span.approved {
 
 .secondary:focus:not([disabled])  {
     border-color: /*color2-4*/ #026BC8;
+    background-color: /*color3-hover*/ #065AA5;
 }
 
 .secondary:active:not([disabled]) {
@@ -585,6 +586,9 @@ dev[ng-model="theme"] {
 .w10 {
     display: inline-block;
 /*    width:15%;*/
+}
+.w10 a {
+    color: /*color3*/ #026BC8;
 }
 .center {
     text-align: center;
