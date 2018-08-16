@@ -114,6 +114,11 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
         }
 
         var updateTheme = function( text, values ) {
+            $scope['color1-active'] = mix("151618", $scope.color1.substr(1), 40)
+            $scope['color3-hover'] = mix("151618", $scope.color3.substr(1), 20)
+            $scope['color3-active'] = mix("151618", $scope.color3.substr(1), 40)
+            $scope['color3-light'] = mix("FFFFFF", $scope.color3.substr(1), 95)
+
             console.log( 'updateTheme ', values );
             var rx, newText;
             for ( var k in values ) {
@@ -166,14 +171,6 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
                         shadeName = name + '-' + i;
                         shade_i = shade( newValue, shades[i] );
                         $scope[ shadeName ] = shade_i;
-                    }
-                    if(name == 'color1') {
-                        $scope['color1-active'] = mix("151618", newValue.substr(1), 40)
-                    }
-                    if(name == 'color3') {
-                        $scope['color3-hover'] = mix("151618", newValue.substr(1), 20)
-                        $scope['color3-active'] = mix("151618", newValue.substr(1), 40)
-                        $scope['color3-light'] = mix("FFFFFF", newValue.substr(1), 95)
                     }
 
                     updatePreview( getData( $scope ));

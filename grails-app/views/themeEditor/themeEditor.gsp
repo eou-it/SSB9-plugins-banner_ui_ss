@@ -455,6 +455,10 @@ span.approved {
     background-color: /*color3-active*/ #0A4982;
 }
 
+.primary:disabled {
+    border: none !important;
+}
+
 .secondary {
     color: /*color3*/ #026BC8;
     background-color: #ffffff;
