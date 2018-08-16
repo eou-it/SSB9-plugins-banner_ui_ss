@@ -33,6 +33,7 @@ body {
 }
 
 #header-main-section-east-part {
+  background-color: $themecolor1-active; /*fallback for IE and edge*/
   background-color: $themecolor1-active4d; /*settting transparency*/
 }
 
