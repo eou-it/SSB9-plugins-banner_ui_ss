@@ -18,6 +18,7 @@ apply plugin:"org.grails.grails-plugin"
 apply plugin:"org.grails.grails-plugin-publish"
 apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
+apply plugin: "java" //TODO: Remove it if not required later
 
 repositories {
     mavenLocal()
@@ -91,7 +92,10 @@ grailsPublish {
     developers = [johndoe:"John Doe"]
 }
 
-
+task(executertlcssgenerator, type: JavaExec ) {
+    main = 'net.hedtech.banner.common.RtlCssGenerator'
+    classpath = sourceSets.main.runtimeClasspath
+}
 
 assets {
     packagePlugin = true

@@ -382,14 +382,13 @@ class RtlCssGenerator {
 
         def filesToGenerate = []
 
-        if (includePluginsDir) {
-            filesToGenerate.addAll( getFilesToTransformMapList( BuildSettingsHolder.settings.projectPluginsDir ) )
-            if(new File("${BuildSettingsHolder.settings.baseDir.absolutePath}/plugins/").exists()) {
-                filesToGenerate.addAll( getFilesToTransformMapList( new File("${BuildSettingsHolder.settings.baseDir.absolutePath}/plugins/")) )
-            }
-        }
+        String currentWorkingDir = System.getProperty("user.dir")
+        String requiredDir = new File(new File(currentWorkingDir).getParent()).getParent()
 
-        filesToGenerate.addAll( getFilesToTransformMapList( new File( "${BuildSettingsHolder.settings.baseDir.absolutePath}/web-app/css/" )))
+        if (includePluginsDir) {
+            filesToGenerate.addAll( getFilesToTransformMapList( new File("$requiredDir/plugins/")) )
+        }
+        filesToGenerate.addAll( getFilesToTransformMapList( new File( "$requiredDir/grails-app/assets/stylesheets/")) )
 
         if (filesToGenerate) {
             filesToGenerate.each {
@@ -399,4 +398,11 @@ class RtlCssGenerator {
             println "Generated RTL version${filesToGenerate.size() > 1 ? "s" : "" } of ${filesToGenerate.source.canonicalFile}"
         }
     }
+
+    //TODO: Remove it later but as of now keeping this as temproray solution
+    public static void main(String[] args) {
+        RtlCssGenerator rtlCssGenerator = new RtlCssGenerator()
+        rtlCssGenerator.generateRTLCss(true)
+    }
+
 }
