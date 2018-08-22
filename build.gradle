@@ -92,7 +92,14 @@ grailsPublish {
     developers = [johndoe:"John Doe"]
 }
 
-task(executertlcssgenerator, type: JavaExec ) {
+classes {
+    doLast{
+        println("Executing RtlCSSGenerator...")
+        tasks["executertlcssgenerator"].execute()
+    }
+}
+
+task(executertlcssgenerator, type: JavaExec) {
     main = 'net.hedtech.banner.common.RtlCssGenerator'
     classpath = sourceSets.main.runtimeClasspath
 }

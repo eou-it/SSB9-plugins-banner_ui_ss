@@ -5,7 +5,6 @@ package net.hedtech.banner.common
 
 
 import java.util.regex.Pattern
-import grails.util.BuildSettings
 import groovy.io.FileType
 
 /**
@@ -378,8 +377,8 @@ class RtlCssGenerator {
     }
 
 
-    public generateRTLCss(includePluginsDir = null) {
-
+    public generateRTLCss() {
+        def includePluginsDir = true
         def filesToGenerate = []
 
         String currentWorkingDir = System.getProperty("user.dir")
@@ -402,7 +401,7 @@ class RtlCssGenerator {
     //TODO: Remove it later but as of now keeping this as temproray solution
     public static void main(String[] args) {
         RtlCssGenerator rtlCssGenerator = new RtlCssGenerator()
-        rtlCssGenerator.generateRTLCss(true)
+        rtlCssGenerator.generateRTLCss()
     }
 
 }
