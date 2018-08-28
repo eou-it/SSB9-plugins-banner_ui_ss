@@ -28,20 +28,37 @@ package net.hedtech.banner.converters.json
 
 
 import grails.converters.JSON
+import grails.util.Holders
 import org.grails.core.artefact.AnnotationDomainClassArtefactHandler
+
+//import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
 import org.grails.core.artefact.DomainClassArtefactHandler
+
+//import org.codehaus.groovy.grails.commons.GrailsClassUtils
 import grails.util.GrailsClassUtils
-import grails.core.GrailsDomainClass
-import grails.core.GrailsDomainClassProperty
+
+//import org.codehaus.groovy.grails.commons.GrailsDomainClass
+//import grails.core.GrailsDomainClass this class is depricated
+import org.grails.datastore.mapping.model.PersistentEntity
+
+//import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
+//import grails.core.GrailsDomainClassProperty this class is depricated
+import org.grails.datastore.mapping.model.PersistentProperty
+
 import grails.core.support.proxy.DefaultProxyHandler
 import grails.core.support.proxy.ProxyHandler
+
 import org.grails.web.converters.ConverterUtil
 import org.grails.web.converters.exceptions.ConverterException
 import org.grails.web.converters.marshaller.ObjectMarshaller
 import org.grails.web.json.JSONWriter
+import org.grails.datastore.mapping.model.types.Association
 import org.springframework.beans.BeanWrapper
 import org.springframework.beans.BeanWrapperImpl
 
+import org.grails.datastore.mapping.model.types.Embedded
+import org.grails.datastore.mapping.model.types.ManyToOne
+import org.grails.datastore.mapping.model.types.OneToOne
 /**
  * @author Siegfried Puchbauer
  * @since 1.1
@@ -81,28 +98,28 @@ public class JSONDomainMarshaller implements ObjectMarshaller<JSON> {
         JSONWriter writer = json.getWriter()
         value = proxyHandler.unwrapIfProxy(value)
         Class<?> clazz = value.getClass()
-        GrailsDomainClass domainClass = grails.util.Holders.getGrailsApplication().getArtefact(DomainClassArtefactHandler.TYPE, ConverterUtil.trimProxySuffix(clazz.getName()))
+        PersistentEntity domainClass = Holders.getGrailsApplication().getMappingContext().getPersistentEntity( ConverterUtil.trimProxySuffix(clazz.getName()))
         BeanWrapper beanWrapper = new BeanWrapperImpl(value)
 
         writer.object()
-        writer.key("class").value(domainClass.getClazz().getName())
+        writer.key("class").value(domainClass.getClass().getName())
 
-        GrailsDomainClassProperty id = domainClass.getIdentifier()
+        PersistentProperty id = domainClass.getIdentity()
         Object idValue = extractValue(value, id)
 
         json.property("id", idValue)
 
         if (isIncludeVersion()) {
-            GrailsDomainClassProperty versionProperty = domainClass.getVersion()
+            PersistentProperty versionProperty = domainClass.getVersion()
             Object version = extractValue(value, versionProperty)
             json.property("version", version)
         }
 
-        GrailsDomainClassProperty[] properties = domainClass.getPersistentProperties()
+        PersistentProperty[] properties = domainClass.getPersistentProperties()
 
         properties.each { property ->
             writer.key(property.getName())
-            if (!property.isAssociation()) {
+            if (!(property instanceof Association)) {
                 // Write non-relation property
                 def name = property.getName()
                 def processedValue = valuePreprocessor( name, beanWrapper.getPropertyValue(property.getName() ))
@@ -139,19 +156,21 @@ public class JSONDomainMarshaller implements ObjectMarshaller<JSON> {
                         json.value(null)
                     }
                     else {
-                        GrailsDomainClass referencedDomainClass = property.getReferencedDomainClass()
+                        PersistentEntity referencedDomainClass = ((Association) property).getAssociatedEntity();
 
                         // Embedded are now always fully rendered
-                        if (referencedDomainClass == null || property.isEmbedded() || GrailsClassUtils.isJdk5Enum(property.getType())) {
+                        //if (referencedDomainClass == null || property instanceof Embedded || GrailsClassUtils.isJdk5Enum(property.getType())) {
+                        if (referencedDomainClass == null || property instanceof Embedded) {
                             json.convertAnother(referenceObject)
                         }
-                        else if (property.isOneToOne() || property.isManyToOne() || property.isEmbedded()) {
-                            asShortObject(referenceObject, json, referencedDomainClass.getIdentifier(), referencedDomainClass)
+                        else if (property instanceof OneToOne ||
+                                property instanceof ManyToOne || property instanceof Embedded) {
+                            asShortObject(referenceObject, json, referencedDomainClass.getIdentity(), referencedDomainClass)
                         }
                         else {
-                            GrailsDomainClassProperty referencedIdProperty = referencedDomainClass.getIdentifier()
+                            PersistentProperty referencedIdProperty = referencedDomainClass.getIdentity()
                             @SuppressWarnings("unused")
-                            String refPropertyName = referencedDomainClass.propertyName
+                            String refPropertyName = referencedDomainClass.getName()
                             if (referenceObject instanceof Collection) {
                                 writer.array()
 
@@ -179,7 +198,7 @@ public class JSONDomainMarshaller implements ObjectMarshaller<JSON> {
         writer.endObject()
     }
 
-    protected void asShortObject(Object refObj, JSON json, GrailsDomainClassProperty idProperty, GrailsDomainClass referencedDomainClass) throws ConverterException {
+    protected void asShortObject(Object refObj, JSON json, PersistentProperty idProperty, PersistentEntity referencedDomainClass) throws ConverterException {
         JSONWriter writer = json.getWriter()
         writer.object()
         writer.key("class").value(referencedDomainClass.getName())
@@ -187,7 +206,7 @@ public class JSONDomainMarshaller implements ObjectMarshaller<JSON> {
         writer.endObject()
     }
 
-    protected Object extractValue(Object domainObject, GrailsDomainClassProperty property) {
+    protected Object extractValue(Object domainObject, PersistentProperty property) {
         BeanWrapper beanWrapper = new BeanWrapperImpl(domainObject)
         return beanWrapper.getPropertyValue(property.getName())
     }
