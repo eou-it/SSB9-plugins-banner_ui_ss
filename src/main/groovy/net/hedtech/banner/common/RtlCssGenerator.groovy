@@ -6,6 +6,7 @@ package net.hedtech.banner.common
 
 import java.util.regex.Pattern
 import groovy.io.FileType
+import groovy.io.FileVisitResult
 
 /**
  * This class is a utility class used to take as input a CSS file that is created to support left to right languages
@@ -364,15 +365,18 @@ class RtlCssGenerator {
 
     def getFilesToTransformMapList(dir) {
         def files = []
-
-        dir.traverse( type: FileType.FILES, nameFilter: ~/.*\.css/, excludeNameFilter: ~/.*rtl.*\.css/ ) { source ->
+        final excludedDirs = ['modules', 'javascripts', 'build']
+        dir.traverse( type: FileType.FILES, nameFilter: ~/.*(?<!-patch|-mf|rtl).css/,
+                excludeNameFilter: { it in excludedDirs },
+                preDir: {if(it.name in excludedDirs) return FileVisitResult.SKIP_SUBTREE }) { source ->
+            String absolutePathOfFile = source.absolutePath.toString()
             def destPath = getRTLFileName(source)
             File target = new File( destPath );
             if (!target.exists() || (target.lastModified() < source.lastModified())) {
                 files << [ "source": source, "target": target]
             }
         }
-
+        println "Number of files to transform map is: " + files.size()
         return files
     }
 
