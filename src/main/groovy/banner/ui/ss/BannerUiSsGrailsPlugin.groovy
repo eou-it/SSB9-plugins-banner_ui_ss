@@ -1,10 +1,15 @@
 package banner.ui.ss
 
+import grails.converters.JSON
 import grails.plugins.*
+import groovy.util.logging.Slf4j
 import net.hedtech.banner.i18n.DateConverterService
+import org.apache.commons.logging.LogFactory
+import org.grails.web.json.JSONObject
 
 import javax.servlet.http.HttpServletRequest
 
+@Slf4j
 class BannerUiSsGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for
@@ -22,27 +27,10 @@ class BannerUiSsGrailsPlugin extends Plugin {
     def description = '''\
 Brief summary/description of the plugin.
 '''
-    def profiles = ['web']
+
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/banner-ui-ss"
-
-    // Extra (optional) plugin metadata
-
-    // License: one of 'APACHE', 'GPL2', 'GPL3'
-//    def license = "APACHE"
-
-    // Details of company behind the plugin (if there is one)
-//    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
-
-    // Any additional developers beyond the author specified above.
-//    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
-
-    // Location of the plugin's issue tracker.
-//    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
-
-    // Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
 
     Closure doWithSpring() { {->
             // TODO Implement runtime spring config (optional)
@@ -78,7 +66,7 @@ Brief summary/description of the plugin.
                 try {
                     json = JSON.parse(request)
                 } catch (Exception e) {
-                    log.info "Error when parsing the JSON"
+                    log.error "Error when parsing the JSON"
                     json = JSONObject.NULL
                 }
             }
