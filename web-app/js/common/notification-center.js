@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2011-2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2011-2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 
 $(document).ready(function() {
@@ -58,12 +58,18 @@ $(document).ready(function() {
                 this.remove( foundNotification );
                 this.add( notification );
                 if (notification.get( "flash" )) {
-                    var removeNotification = function() {
-                        this.remove( notification );
+                    var removeNotification = function(event) {
+                        if(event.type =="keydown"){
+                            if(!(event.altKey || event.keyCode == 9 || event.shiftKey  ||  (event.altKey && event.keyCode ==78))){
+                                this.remove( notification );
+                            }
+                        }
+                        else
+                            this.remove( notification );
                     };
 
                     removeNotification = _.bind( removeNotification, this );
-                    _.delay( removeNotification, 10000 );
+                    $('body').on('mousedown keydown', removeNotification);
                 }
                 return foundNotification;
             }
@@ -82,12 +88,19 @@ $(document).ready(function() {
 
                 // If the notification is a flash, we are going to set to remove it automagically.
                 if (notification.get( "flash" )) {
-                    var removeNotification = function() {
-                        this.remove( notification );
+                    var removeNotification = function(event) {
+                        if(event.type =="keydown"){
+                            if(!(event.altKey || event.keyCode == 9 || event.shiftKey  ||  (event.altKey && event.keyCode ==78)) ){
+                                this.remove( notification );
+                            }
+                        }
+                        else
+                            this.remove( notification );
                     };
 
                     removeNotification = _.bind( removeNotification, this );
-                    _.delay( removeNotification, 10000 );
+                    $('body').on('mousedown keydown', removeNotification);
+
                 }
                 return notification;
             }
@@ -281,6 +294,7 @@ $(document).ready(function() {
                             prompt.action();
                         });
                     b.addClass('notification-flyout-item');
+                    b.addClass('secondary');
                     promptsDiv.append( b );
                 }, this );
             }
@@ -303,6 +317,8 @@ $(document).ready(function() {
             }
             else if(notificationType == "warning"){
                 var actionButton = promptsDiv.find('button:first');
+                actionButton.removeClass('secondary');
+                actionButton.addClass('primary');
                 actionButton.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage+ " " + actionButton.text(), "off", "aria-labelledby");
             }
             else{
@@ -614,7 +630,7 @@ $(document).ready(function() {
                 }
             };
 
-            $('body').on('mousedown', closeFlyout);
+
         },
         checkAndCloseFlyout: function(event){
             if($(event.target).closest('.notification-center').length == 0){
@@ -634,7 +650,7 @@ $(document).ready(function() {
             }
             else{
                 window.componentToFocusOnFlyoutClose = this.notificationCenterAnchor;
-            }
+          }
 
         }
     });
