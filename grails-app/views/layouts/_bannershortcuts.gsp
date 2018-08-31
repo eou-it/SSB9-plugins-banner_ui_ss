@@ -1,7 +1,7 @@
 <%--
 Copyright 2018 Ellucian Company L.P. and its affiliates.
 --%>
-<div id="shortcut_module_added" dir="auto">
+<div ng-cloak id="shortcut_module_added" dir="auto">
     <xe-popup-modal show="modalShown" focusbackelement="tools" pageheader="${g.message(code: 'aurora.toolsmenu.keyboard.shortcuts.heading')}">
         <popup-content>
             <div>
