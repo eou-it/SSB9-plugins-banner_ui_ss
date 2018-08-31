@@ -1,6 +1,5 @@
 /*
-*= require modules/bannerWebRTL-mf.css
-*= require modules/uploadProperties-mf.css
+*= require bootstrap/css/uploadProperties-rtl.css
 *= require modules/commonComponentsRTL-mf.css
-*= require uploadProperties-rtl.css
+*= require bootstrap/css/uploadProperties-rtl.css
 */
