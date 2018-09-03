@@ -1,11 +1,11 @@
-//= require angular/angular.js
+//= require angular/angular.min.js
 //= require angular/load-angular-locale.js
 //= require angular/angular-resource.min.js
-//= require angular/angular-route.js
+//= require angular/angular-route.min.js
 //= require angular/angular-sanitize.min.js
 //= require angular/angular-animate.min.js
 //= require angular/angular-ui-router.min.js
-//= require angular/angular-messages.js
+//= require angular/angular-messages.min.js
 //= require angular/angular-translate.min.js
 //= require angular/ui-bootstrap-tpls.min.js
 //= require angular/lrInfiniteScroll.js

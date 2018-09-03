@@ -117,7 +117,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         <g:render template="/layouts/userPreference"/>
     </g:if>
     <g:render template="/layouts/bannershortcuts"/>
-
+</body>
 
     <asset:javascript src="modules/bannerSelfService-mf.js"/>
 
@@ -135,5 +135,5 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
     <g:customJavaScriptIncludes/>
 
-</body>
+
 </html>
