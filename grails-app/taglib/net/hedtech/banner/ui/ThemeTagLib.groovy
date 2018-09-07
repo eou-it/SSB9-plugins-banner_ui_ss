@@ -12,22 +12,23 @@ class ThemeTagLib {
         def eteUrl
         
         //ETE and BTE mep code compatibility
-        if(themeConfig?.url) {
+        if(session.mep) {
+            if (themeConfig?.url) {
                 eteUrl = (themeConfig.url ==~ /.*theme.*.elluciancloud.com.*/)
-                if(session.mep) {
-                    if(eteUrl) {
-                        themeName = themeConfig.name ? themeConfig.name : ''
-                    } else {
-                        themeName = themeConfig.name ? (themeConfig.name + session.mep) : session.mep
-                    }
-                    mepCodeParam = "&mepCode=${session.mep}"
+                if (eteUrl) {
+                    themeName = themeConfig.name ? themeConfig.name : ''
                 } else {
-                    if(themeConfig.name) {
-                        themeName = themeConfig.name
-                    }
-                    mepCodeParam=''
+                    themeName = themeConfig.name ? (themeConfig.name + session.mep) : session.mep
                 }
+                mepCodeParam = "&mepCode=${session.mep}"
+            }
+        } else {
+            if(themeConfig.name) {
+                themeName = themeConfig.name
+            }
+            mepCodeParam=''
         }
+
         
         String themeTemplate = themeConfig.template
         String cssLink
