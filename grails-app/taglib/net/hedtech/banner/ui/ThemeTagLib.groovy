@@ -16,7 +16,7 @@ class ThemeTagLib {
                 eteUrl = (themeConfig.url ==~ /.*theme.*.elluciancloud.com.*/)
                 if(session.mep) {
                     if(eteUrl) {
-                        themeName = themeConfig.name ? themeConfig.name: ''
+                        themeName = themeConfig.name ? themeConfig.name : ''
                     } else {
                         themeName = themeConfig.name ? (themeConfig.name + session.mep) : session.mep
                     }
@@ -31,7 +31,7 @@ class ThemeTagLib {
         
         String themeTemplate = themeConfig.template
         String cssLink
-        if(themeName && themeTemplate) {
+        if((themeName || session.mep) && themeTemplate) {
             cssLink = "<link rel='stylesheet' type='text/css' "
             if (themeConfig?.url) {
                 cssLink += "href='${themeConfig.url}/getTheme?name=${themeName}&template=${themeTemplate + mepCodeParam}'>"
