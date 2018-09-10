@@ -402,10 +402,24 @@ class RtlCssGenerator {
         }
     }
 
-    //TODO: Remove it later but as of now keeping this as temproray solution
+    //TODO: Remove it later, if found the better approach to call generateRTLCss() directly from build.gradle task
+    // Else we need to stick with the below appraoch
     public static void main(String[] args) {
         RtlCssGenerator rtlCssGenerator = new RtlCssGenerator()
         rtlCssGenerator.generateRTLCss()
+
+        //TODO: Below ThemeScssGenerator related code need to be fixed
+//        Class ThemeScssGenerator = classLoader.loadClass("net.hedtech.banner.common.ThemeScssGenerator", true)
+//        def themeScssGenerator = ThemeScssGenerator.newInstance()
+//        def scssFilePath = "${basedir}/web-app/css/theme/"
+//        def scssFileName = grails.util.Metadata.current.'app.name'+".scss"
+//        def scssFile = scssFilePath+scssFileName
+//        try {
+//            themeScssGenerator.generateThemeSCSSFile(scssFile);
+//        } catch (FileNotFoundException e) {
+//            println "Unable to generate theme SCSS file - unexpected exception"
+//            e.printStackTrace()
+//        }
     }
 
 }

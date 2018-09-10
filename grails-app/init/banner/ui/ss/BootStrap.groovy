@@ -2,8 +2,12 @@ package banner.ui.ss
 
 class BootStrap {
 
-    def init = { servletContext ->
+    def themeService
+
+    def init = {
+        themeService.importTemplates(false)
     }
+
     def destroy = {
     }
 }
