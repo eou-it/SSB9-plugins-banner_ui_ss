@@ -20,7 +20,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <meta charset="${message(code: 'default.character.encoding')}"/>
     <meta name="dir" content="${message(code:'default.language.direction')}"/>
     <meta name="synchronizerToken" content="${org.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
-    %{--<meta name="logLevel" content="${g.logLevel()}"/>--}%
+    <meta name="logLevel" content="${g.logLevel()}"/>
     <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
     <meta name="transactionTimeout" content="${grails.util.Holders.config.transactionTimeout}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
