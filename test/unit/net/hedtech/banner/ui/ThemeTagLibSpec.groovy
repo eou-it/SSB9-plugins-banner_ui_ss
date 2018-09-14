@@ -62,7 +62,7 @@ class ThemeTagLibSpec extends Specification {
         config.banner.theme.template = "TestTemplate"
         request.session['mep'] = 'BANNER'
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=BANNER&template=TestTemplate&mepCode=BANNER'>"
+        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=&template=TestTemplate&mepCode=BANNER'>"
     }
 
     void "test ThemeTagLib with MEP code, theme URL, theme name and without template name configured"() {
