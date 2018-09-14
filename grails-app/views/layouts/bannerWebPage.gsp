@@ -20,7 +20,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <meta charset="${message(code: 'default.character.encoding')}"/>
     <meta name="dir" content="${message(code:'default.language.direction')}"/>
     <meta name="synchronizerToken" content="${org.grails.web.servlet.mvc.SynchronizerTokensHolder.store( session ).generateToken(request.forwardURI)}"/>
-    %{--<meta name="logLevel" content="${g.logLevel()}"/>--}%
+    <meta name="logLevel" content="${g.logLevel()}"/>
     <meta name="maxInactiveInterval" content="${session.maxInactiveInterval}"/>
     <meta name="transactionTimeout" content="${grails.util.Holders.config.transactionTimeout}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -46,7 +46,6 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         <asset:stylesheet href="modules/bannerWebLTR-mf.css"/>
     </g:else>
     <asset:javascript src="modules/jquery-mf.js" />
-    %{--<asset:javascript src="modules/angularApp-mf.js"/>--}%
 
     <asset:script>
         var extensibilityInfo = ${extensibilityInfo.encodeAsRaw()}
@@ -55,7 +54,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
     <title><g:layoutTitle default="Banner"/></title>
 
-
+    %{--// TODO :grails_332_change, needs to revisit--}%
     %{-- <asset:script>
          <g:i18nJavaScript/>
 
@@ -94,7 +93,6 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <asset:link rel="shortcut icon" type="image/png" href="eds/favicon-16x16.png" sizes="16x16"/>
     <asset:link rel="shortcut icon" href="eds/favicon.ico" type="image/x-icon"/>
 
-    %{--// TODO :grails_332_change, needs to revisit--}%
 
     <asset:deferredScripts/>
 
@@ -108,9 +106,6 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 </head>
 <body>
 
-%{--
-// TODO :grails_332_change, needs to revisit
---}%
 <div id="splash"></div>
 <div id="spinner" class="spinner spinner-img" style="display:none;">
 
@@ -136,7 +131,6 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
 <g:layoutBody />
 
-%{--// TODO :grails_332_change, needs to revisit--}%
 <asset:deferredScripts/>
 
 <g:customJavaScriptIncludes/>
