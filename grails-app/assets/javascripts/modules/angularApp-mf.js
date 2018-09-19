@@ -22,3 +22,4 @@
 //= require angular-components/i18n/i18n-filter.js
 //= require angular/hotkeys.js
 //= require shortcuts/bannershortcuts.js
+//= require json2.js
