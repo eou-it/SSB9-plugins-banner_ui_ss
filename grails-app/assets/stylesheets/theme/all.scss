@@ -320,9 +320,7 @@ div[id=mainMenuContainer] .navList .parent:focus span {
 
 /*Tablet device*/
 
-@media only screen
-and (min-width: 768px)
-and (max-width: 1024px) {
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
 
     #header-main-section-east-part #signInButton {
         border-left: 0px; /*!!1px*/
@@ -348,9 +346,7 @@ a.breadcrumbButton:link, a.breadcrumbButton:active, a.breadcrumbButton:visited ,
     color: $themecolor2-3; /*!!#557287;*/
 }
 
-@media only screen
-and (min-width: 0px)
-and (max-width: 767px) {
+@media only screen and (min-width: 0px) and (max-width: 767px) {
 
     #breadcrumb-panel{
         color: $themecolor1-2; /*41566F;*/
