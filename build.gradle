@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-version "9.28.2"
+version "9.30"
 group "banner.ui.ss"
 
 apply plugin:"eclipse"
@@ -18,7 +18,7 @@ apply plugin:"org.grails.grails-plugin"
 apply plugin:"org.grails.grails-plugin-publish"
 apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
-apply plugin: "java" //TODO: Remove it if not required later
+apply plugin: "java"
 
 repositories {
     mavenLocal()

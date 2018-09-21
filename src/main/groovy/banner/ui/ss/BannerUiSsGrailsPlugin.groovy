@@ -2,6 +2,7 @@ package banner.ui.ss
 
 import grails.converters.JSON
 import grails.plugins.*
+import grails.util.GrailsMetaClassUtils
 import groovy.util.logging.Slf4j
 import net.hedtech.banner.i18n.DateConverterService
 import org.apache.commons.logging.LogFactory
@@ -20,14 +21,10 @@ class BannerUiSsGrailsPlugin extends Plugin {
     ]
     def loadAfter = ["bannerCore", "bannerGeneralUtility"]
 
-    // TODO Fill in these fields
-    def title = "Banner Ui Ss" // Headline display name of the plugin
-    def author = "Your name"
+    def title = "Banner UI SS Plugin" // Headline display name of the plugin
+    def author = "ellucian"
     def authorEmail = ""
-    def description = '''\
-Brief summary/description of the plugin.
-'''
-
+    def description = '''Web user interface components for Banner Self-Service.'''
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/banner-ui-ss"
@@ -72,14 +69,12 @@ Brief summary/description of the plugin.
             }
             return json
         }
-        def requestMc = GroovySystem.metaClassRegistry.getMetaClass(HttpServletRequest)
 
-		//Commented for Grails-3
-		/*
+        // For injecting the getJSON method to request object,
+        // using GrailsMetaClassUtils class getExpandoMetaClass() method
+        def requestMc = GrailsMetaClassUtils.getExpandoMetaClass(HttpServletRequest)
         requestMc.getJSON = getNewJSONMethod
-		*/
 
-        //application.controllerClasses.each { controller ->
 		grailsApplication.controllerClasses.each { controller ->
             def originalMap = controller.metaClass.getMetaMethod("render", [Map] as Class[])
             def originalString = controller.metaClass.getMetaMethod("render", [String] as Class[])
