@@ -46,7 +46,6 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         <asset:stylesheet href="modules/bannerSelfService-mf.css"/>
     </g:else>
     <asset:javascript src="modules/jquery-mf.js"/>
-    %{--<asset:javascript src="modules/angularApp-mf.js"/>--}%
 
     <asset:script>
         var extensibilityInfo = ${extensibilityInfo.encodeAsRaw()}
@@ -56,27 +55,14 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
     <title><g:layoutTitle default="Banner"/></title>
 
-    %{--<asset:script type="text/javascript">
-     <g:i18nJavaScript/>
-
+   <asset:script type="text/javascript">
         var transactionTimeoutMeta    = $( "meta[name=transactionTimeout]" ),
             transactionTimeoutSeconds = ( transactionTimeoutMeta.length == 1 ? parseInt( transactionTimeoutMeta.attr( "content" ) ) : 30 ),
             transactionTimeoutPadding = 10 * 1000,
             transactionTimeoutMilli   = ( transactionTimeoutSeconds * 1000 ) + transactionTimeoutPadding;
 
         $.ajaxSetup( { timeout: transactionTimeoutMilli } );
-
-        yepnope({
-           test : window.JSON,
-           nope : '${assetPath(src: 'json2.js')}'
-            });
-
-            $(window).load(function() {
-                _.defer( function() {
-                    $( "#splash" ).remove();
-                });
-            });
-    </asset:script>--}%
+   </asset:script>
 
 
     <asset:link rel="apple-touch-icon" sizes="57x57" href="eds/apple-touch-icon-57x57.png"/>
@@ -124,7 +110,19 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <asset:script>
         $(window).load(function() {
                $( "#splash" ).remove();
-             });
+        });
+
+         yepnope({
+         test : window.JSON,
+         nope : '${assetPath(src: 'json2.js')}'
+          });
+
+          $(window).load(function() {
+              _.defer( function() {
+                  $( "#splash" ).remove();
+              });
+          });
+
 
         <g:i18nJavaScript/>
     </asset:script>

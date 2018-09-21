@@ -365,7 +365,7 @@ class RtlCssGenerator {
 
     def getFilesToTransformMapList(dir) {
         def files = []
-        final excludedDirs = ['modules', 'javascripts', 'build']
+        final excludedDirs = ['modules', 'javascripts', 'build','xe-ui-components','.git','.gradle']
         dir.traverse( type: FileType.FILES, nameFilter: ~/.*(?<!-patch|-mf|rtl).css/,
                 excludeNameFilter: { it in excludedDirs },
                 preDir: {if(it.name in excludedDirs) return FileVisitResult.SKIP_SUBTREE }) { source ->
