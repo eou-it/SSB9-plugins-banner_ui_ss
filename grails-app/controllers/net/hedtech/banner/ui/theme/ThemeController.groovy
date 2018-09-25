@@ -57,10 +57,11 @@ class ThemeController {
         assert params.name
         def templateName = params.template
         def themeName = params.name
+        def themeConfig = grailsApplication.config.banner?.theme
         def content
 
         if ( !templateName ) {
-            templateName = 'all'
+            templateName = themeConfig.template
         }
         try {
             content = themeService.getCSS(themeName, templateName)

@@ -9,18 +9,29 @@ class ThemeTagLib {
         def themeConfig = grailsApplication.config.banner?.theme
         String themeName
         String mepCodeParam
+        def eteUrl
+
+        //ETE and BTE mep code compatibility
         if(session.mep) {
-            themeName = themeConfig.name ? (themeConfig.name + session.mep) : session.mep
-            mepCodeParam = "&mepCode=${session.mep}"
+            if (themeConfig?.url) {
+                eteUrl = (themeConfig.url ==~ /.*theme.*.elluciancloud.com.*/)
+                if (eteUrl) {
+                    themeName = themeConfig.name ? themeConfig.name : ''
+                } else {
+                    themeName = themeConfig.name ? (themeConfig.name + session.mep) : session.mep
+                }
+                mepCodeParam = "&mepCode=${session.mep}"
+            }
         } else {
             if(themeConfig.name) {
                 themeName = themeConfig.name
             }
             mepCodeParam=''
         }
-        String themeTemplate = themeConfig.template ?: 'all'
+
+        String themeTemplate = themeConfig.template
         String cssLink
-        if(themeName && themeTemplate) {
+        if((themeName || session.mep) && themeTemplate) {
             cssLink = "<link rel='stylesheet' type='text/css' "
             if (themeConfig?.url) {
                 cssLink += "href='${themeConfig.url}/getTheme?name=${themeName}&template=${themeTemplate + mepCodeParam}'>"

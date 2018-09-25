@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 package net.hedtech.banner.ui
@@ -40,7 +40,7 @@ class ThemeTagLibSpec extends Specification {
         config.banner.theme.name = "TestTheme"
         config.banner.theme.url = "http://<HOST>:<PORT>/<APP_NAME>/ssb/theme"
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='http://<HOST>:<PORT>/<APP_NAME>/ssb/theme/getTheme?name=TestTheme&template=all'>"
+        applyTemplate('<g:theme />') == ""
     }
 
     void "test ThemeTagLib without Template Configured"() {
@@ -53,7 +53,7 @@ class ThemeTagLibSpec extends Specification {
         def request = GrailsWebUtil.bindMockWebRequest()
         request.session['mep'] = 'BANNER'
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=BANNER&template=all&mepCode=BANNER'>"
+        applyTemplate('<g:theme />') == ""
     }
 
     void "test ThemeTagLib with MEP code, theme URL, template name configured"() {
@@ -62,7 +62,7 @@ class ThemeTagLibSpec extends Specification {
         config.banner.theme.template = "TestTemplate"
         request.session['mep'] = 'BANNER'
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=BANNER&template=TestTemplate&mepCode=BANNER'>"
+        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=&template=TestTemplate&mepCode=BANNER'>"
     }
 
     void "test ThemeTagLib with MEP code, theme URL, theme name and without template name configured"() {
@@ -70,6 +70,6 @@ class ThemeTagLibSpec extends Specification {
         def request = GrailsWebUtil.bindMockWebRequest()
         request.session['mep'] = 'BANNER'
         expect:
-        applyTemplate('<g:theme />') == "<link rel='stylesheet' type='text/css' href='/theme/getTheme?name=BANNER&template=all&mepCode=BANNER'>"
+        applyTemplate('<g:theme />') == ""
     }
 }
