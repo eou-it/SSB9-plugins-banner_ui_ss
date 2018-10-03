@@ -35,25 +35,6 @@ class BannerUiSsGrailsPlugin extends Plugin {
     }
 
     void doWithDynamicMethods() {
-        // TODO Implement registering dynamic methods to classes (optional)
-
-        // Explicitly inject the log into the resources plugin artifacts, to circumvent NPEs
-        
-		//application.allClasses.each {
-		grailsApplication.allClasses.each {
-            if (it.name?.contains("plugin.resource")) {
-                log.info "adding log property to $it"
-
-                // Note: weblogic throws an error if we try to inject the method if it is already present
-                if (!it.metaClass.methods.find { m -> m.name.matches("getLog") }) {
-                    def name = it.name // needed as this 'it' is not visible within the below closure...
-                    try {
-                        it.metaClass.getLog = { LogFactory.getLog("$name") }
-                    }
-                    catch (e) { } // rare case where we'll bury it...
-                }
-            }
-        }
 
         def getNewJSONMethod = {->
             def json

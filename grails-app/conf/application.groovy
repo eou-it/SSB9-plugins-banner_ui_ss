@@ -322,12 +322,8 @@ formControllerMap = [
 grails.plugin.springsecurity.useRequestMapDomainClass = false
 //grails.plugin.springsecurity.rejectIfNoRule = true
 
-grails.plugin.springsecurity.filterChain.chainMap = [
-        '/api/**': 'authenticationProcessingFilter,basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
-        '/**': 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
-]
+grails.plugin.springsecurity.securityConfigType = grails.plugin.springsecurity.SecurityConfigType.InterceptUrlMap
 
-grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
 
 
 // ******************************************************************************
@@ -337,22 +333,20 @@ grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUr
 // ******************************************************************************
 
 grails.plugin.springsecurity.interceptUrlMap = [
-        '/': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/zkau/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/zkau**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/login/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/index**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/logout/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/js/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/images/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/plugins/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/errors/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/help/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/uiCatalog/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/theme/**' : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/themeEditor/**' : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
-        '/ssb/uploadProperties/**' : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
+        [pattern:'/', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/login/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/index**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/logout/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/javascripts/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/stylesheets/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/images/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/plugins/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/errors/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/help/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/uiCatalog/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/theme/**', access:['IS_AUTHENTICATED_ANONYMOUSLY']],
+        [pattern:'/themeEditor/**', access:['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M']],
+        [pattern:'/ssb/uploadProperties/**', access:['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M']],
 
         // ALL URIs specified with the BannerAccessDecisionVoter.ROLE_DETERMINED_DYNAMICALLY
         // 'role' (it's not a real role) will result in authorization being determined based
@@ -366,7 +360,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         // by explicitly specifying true roles instead -- as long as ROLE_DETERMINED_DYNAMICALLY
         // is NOT specified.
         //
-        '/**': [ 'ROLE_DETERMINED_DYNAMICALLY' ]
+        [pattern:'/**', access:['ROLE_DETERMINED_DYNAMICALLY']],
 ]
 
 dataSource {
