@@ -290,12 +290,13 @@ html[dir="rtl"] .select2-dropdown-open .select2-choice .select2-arrow b {
     background-position: -16px 1px;
 }
 
-.select2-hidden-accessible {
+.select2-hidden-accessible ,.select2-choice-status-hidden-accessible{
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
     margin: -1px;
     overflow: hidden;
+    visibility: hidden;
     padding: 0;
     position: absolute;
     width: 1px;
