@@ -547,7 +547,7 @@ class ThemeScssGenerator {
     def getHexColor(String color) {
         def hexColorCode
         color = color.trim()
-        if(color.toLowerCase().startsWith('rgb')) {
+        if(color.toLowerCase() ==~ /^rgb[^a].*/ ) { /* hex codes don't support alpha transparency, so keep them as rgba */
             hexColorCode = getHexColorFromRGB(color)
         } else {
             hexColorCode = getHexColorFromNamedColor(color)
