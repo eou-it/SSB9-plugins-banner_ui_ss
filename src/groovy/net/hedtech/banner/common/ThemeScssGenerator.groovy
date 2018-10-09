@@ -467,6 +467,7 @@ class ThemeScssGenerator {
     def getCSSFiles(dir) {
         def files = []
 
+        //System.out.println "Looking for CSS files in ${dir}"
         dir.traverse(type: FileType.FILES, nameFilter: ~/.*Resources\.groovy/) { file ->
 
             def fileText = file.text
@@ -490,11 +491,13 @@ class ThemeScssGenerator {
             while(matcherResource.find()){
                 resourceStr = matcherResource.group(0)
                 if (!resourceStr.contains('rtl')) {
+                    //System.out.println "Looking at resource ${resourceStr}"
                     resourceStr = resourceStr.replace(" ", "")
                     matcherDir = regexDir.matcher(resourceStr)
                     while (matcherDir.find()) {
                         directory = matcherDir.group(2)
                     }
+                    plugin = null
                     matcherPlugin = regexPlugin.matcher(resourceStr)
                     while (matcherPlugin.find()) {
                         plugin = matcherPlugin.group(2).replace("-", "_") + '.git' + '/web-app/'
@@ -503,10 +506,12 @@ class ThemeScssGenerator {
                         }else{
                             plugin = checkFileExists(baseDirPath) ? plugin : plugin.replace("_", "-")
                         }
+                        //System.out.println "Identified plugin - translated ${matcherPlugin.group(2)} to ${plugin}"
                     }
                     matcherCSSFile = regexCssFile.matcher(resourceStr)
                     while (matcherCSSFile.find()) {
                         fileTmpStr = matcherCSSFile.group(2)
+                        //System.out.println "Matched CSS file from ${resourceStr} found ${fileTmpStr}"
                     }
                 }
                 if(directory) {
@@ -517,8 +522,12 @@ class ThemeScssGenerator {
                 }else{
                     cssFile =  '/web-app/' + fileTmpStr
                 }
+                //System.out.println "Checking if file exists: ${cssFile}"
                 if(checkFileExists(baseDirPath+cssFile)) {
                     files << ["file": new File(baseDirPath + cssFile)]
+                    //System.out.println "Found CSS file: ${cssFile}"
+                } else {
+                    System.err.println "Cannot find CSS file: ${baseDirPath+cssFile}"
                 }
             }
         }
