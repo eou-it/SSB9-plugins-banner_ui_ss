@@ -14,7 +14,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         def extensibilityInfo = (infoService.getJSON(controllerName, resource(plugin: 'web-app-extensibility', dir: 'html')))
     %>
     <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
-    <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps.trim() ? session.hideSSBHeaderComps.trim()  : params?.hideSSBHeaderComps.trim()  ? params.hideSSBHeaderComps : false}" scope="session"/>
+    <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps?.trim() ? session.hideSSBHeaderComps?.trim()  : params?.hideSSBHeaderComps?.trim()  ? params.hideSSBHeaderComps : false}" scope="session"/>
     <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}"/>
 
     <meta charset="${message(code: 'default.character.encoding')}"/>
@@ -35,7 +35,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
     <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
     <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
-    <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
+    <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps}">
     <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
     <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
 
