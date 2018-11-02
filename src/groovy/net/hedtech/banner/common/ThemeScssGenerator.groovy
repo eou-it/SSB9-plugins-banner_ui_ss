@@ -5,6 +5,8 @@ package net.hedtech.banner.common
 
 import groovy.io.FileType
 import groovy.util.FileNameFinder
+import java.util.Date
+import java.text.SimpleDateFormat
 
 /**
  * This class is a utility class used to take all the CSS files from *Resources.groovy file and transform into SCSS file
@@ -790,11 +792,19 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
         }
     }
 
-    public generateThemeSCSSFile(String SCSSFile) {
+    def writeHeader( scssFile, appName, appVersion ) {
+        def date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format( new Date() )
+        def message = "/* $scssFile.name\n   application version: $grails.util.Metadata.current['app.version']\n   generated: $date\n*/\n"
+        System.out.println "\nWriting header ${message}\n\n"
+        scssFile.append( message )
+    }
+
+    public generateThemeSCSSFile(String SCSSFile, String appName, String appVersion) {
         def cssFiles = []
         def SCSS
+        def scssFile = new File(SCSSFile)
 
-        checkFileExists(SCSSFile) ? new File(SCSSFile).delete() : new File(SCSSFile).getParentFile().mkdirs()
+        checkFileExists(SCSSFile) ? scssFile.delete() : scssFile.getParentFile().mkdirs()
 
         cssFiles.addAll(getCSSFiles(new File("${baseDirPath}/grails-app/conf/")))
         if (new File("${baseDirPath}/plugins/").exists()) {
@@ -803,8 +813,8 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
         cssFiles = cssFiles.unique()
         cssFiles = orderCSSFiles(cssFiles)
         if (cssFiles) {
-            checkFileExists(SCSSFile) ? new File(SCSSFile).delete() : new File(SCSSFile).getParentFile().mkdirs()
-            if(new File(SCSSFile).getParentFile().exists()) {
+            if(scssFile.getParentFile().exists()) {
+                writeHeader( scssFile, appName, appVersion );
                 cssFiles.each { File file ->
                     if(file.exists()) {
                         SCSS = generateSCSS(file.text)
@@ -817,6 +827,6 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
         }
         appendCommonPatchFile(SCSSFile)
         appendSCSSPatchFile(SCSSFile)
-        println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
+        System.out.println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
     }
 }
