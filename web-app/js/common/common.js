@@ -154,11 +154,11 @@ window.InactivityTimer = ActivityTimer.extend({
         // If it is when the timer fires, we are goign to automatically call the logoutAction.
 
         window.setTimeout( _.bind( function() {
-                if (notifications.find( function( notification ) { return notification === n; })) {
-                    this.logoutAction();
-                }
-            }, this ),
-                60 * 1000 /** 60 seconds */ );
+            if (notifications.find( function( notification ) { return notification === n; })) {
+                this.logoutAction();
+            }
+        }, this ),
+            60 * 1000 /** 60 seconds */ );
 
     },
     activityEvents: [ "ajaxStart" ],
@@ -170,9 +170,9 @@ var inactivityTimer = new InactivityTimer({
     delay: (parseInt( $("meta[name='maxInactiveInterval']").attr( "content" ) ) - 90 /** Subtract 90 seconds to give a notification prior session invalidating **/ ) * 1000
 });
 
-inactivityTimer.start();
-
-$(document).ready(function(){
+// Calling Timeout after the notification component is ready and fired the event
+$(document).bind('notification-use-ready', function (e) {
+    inactivityTimer.start();
     CommonContext.resetInActivityTimer=inactivityTimer; // putting inactivity timer as a callback to reset when keepalive message received from application navigator
 });
 
@@ -448,7 +448,7 @@ function changeFavicon() {
     link.className = 'favicon';
     var url = window.getComputedStyle(link).getPropertyValue('background-image');
     var urlRegex = /^url\("(.*)"\)$/;
-    
+
     if(urlRegex.test(url) && url.indexOf("$themefavicon") == -1){
         link.href = url.slice(4, -1).replace(/"/g, "");
         link.id = 'dynamic-favicon';
