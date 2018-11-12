@@ -11,7 +11,7 @@ eventCompileEnd = {
     Class ThemeScssGenerator = classLoader.loadClass("net.hedtech.banner.common.ThemeScssGenerator", true)
     def themeScssGenerator = ThemeScssGenerator.newInstance()
     def scssFilePath = "${basedir}/web-app/css/theme/"
-    def scssFileName = grails.util.Metadata.current.'app.name' + "-" + grails.util.Metadata.current.'app.version' + ".scss"
+    def scssFileName = (grails.util.Metadata.current.'app.name' + "-" + grails.util.Metadata.current.'app.version').replaceAll(/\./, '_') + ".scss"
     def scssFile = scssFilePath+scssFileName
     try {
         themeScssGenerator.generateThemeSCSSFile(scssFile, grails.util.Metadata.current.'app.name', grails.util.Metadata.current.'app.version');

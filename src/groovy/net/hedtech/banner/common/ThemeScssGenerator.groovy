@@ -794,8 +794,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
 
     def writeHeader( scssFile, appName, appVersion ) {
         def date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format( new Date() )
-        def message = "/* $scssFile.name\n   application version: $grails.util.Metadata.current['app.version']\n   generated: $date\n*/\n"
-        System.out.println "\nWriting header ${message}\n\n"
+        def message = "/*\n  $scssFile.name\n  application version: $appVersion\n  generated: $date\n*/\n"
         scssFile.append( message )
     }
 
