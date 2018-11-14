@@ -9,6 +9,9 @@ import spock.lang.Unroll
 
 
 class ThemeScssGeneratorSpec extends Specification {
+    def APP_NAME="ThemeScssGeneratorUnitTest"
+    def APP_VERSION="0.0"
+
     def themeScssGenerator = new ThemeScssGenerator()
 
     def "test remove comments ()"() {
@@ -44,12 +47,7 @@ class ThemeScssGeneratorSpec extends Specification {
 
     def "test generateThemeSCSSFile"() {
          when:
-         def scssFilePath = "${System.properties['base.dir']}/web-app/css/theme/"
-         def appName = grails.util.Metadata.current.'app.name'
-         def appVersion = grails.util.Metadata.current.'app.version'
-         def scssFileName = (appName+ "-" + appVersion).replaceAll(/\./, '_') + ".scss"
-         def scssFile = scssFilePath+scssFileName
-         themeScssGenerator.generateThemeSCSSFile( scssFile, appName, appVersion)
+         themeScssGenerator.generateThemeSCSSFile( scssFile, APP_NAME, APP_VERSION )
          then:
          themeScssGenerator.checkFileExists(scssFile)
     }
@@ -184,12 +182,7 @@ class ThemeScssGeneratorSpec extends Specification {
     def "includes -patch file exactly once"() {
         when:
         String markerText = "/* banner-ui-ss-patch.scss */"
-        def scssFilePath = "${System.properties['base.dir']}/web-app/css/theme/"
-        def appName = grails.util.Metadata.current.'app.name'
-        def appVersion = grails.util.Metadata.current.'app.version'
-        def scssFileName = (appName+ "-" + appVersion).replaceAll(/\./, '_') + ".scss"
-        def scssFile = scssFilePath+scssFileName
-        themeScssGenerator.generateThemeSCSSFile( scssFile, appName, appVersion)
+        themeScssGenerator.generateThemeSCSSFile( scssFile, APP_NAME, APP_VERSION )
         String scss = new File(scssFile).text
 
         // logging on failure is too verbose with whole scss string, so just test result
@@ -203,12 +196,7 @@ class ThemeScssGeneratorSpec extends Specification {
 
     def "includes banner-theme-common-patch.scss file"() {
         when:
-        def scssFilePath = "${System.properties['base.dir']}/web-app/css/theme/"
-        def appName = grails.util.Metadata.current.'app.name'
-        def appVersion = grails.util.Metadata.current.'app.version'
-        def scssFileName = (appName+ "-" + appVersion).replaceAll(/\./, '_') + ".scss"
-        def scssFile = scssFilePath+scssFileName
-        themeScssGenerator.generateThemeSCSSFile( scssFile, appName, appVersion)
+        themeScssGenerator.generateThemeSCSSFile( scssFile, APP_NAME, APP_VERSION )
         String scss = new File(scssFile).text
 
         // logging on failure is too verbose with whole scss string, so just test result
