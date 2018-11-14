@@ -9,16 +9,12 @@ body {
 
 /*** Branding Logo ***/
 .institutionalBranding {
-  @if variable-exists(logo){
     background-image: url("#{$themelogo}");
-  }
 }
 
 /*** Favicon ***/
 .favicon {
-  @if variable-exists(favicon){
     background-image: url("#{$themefavicon}");
-  }
 }
 
 /*** Global focus ***/
