@@ -110,5 +110,14 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     </g:if>
 
         <g:render template="/layouts/bannershortcuts" plugin="banner_ui_ss"/>
+
+    <script type="text/javascript">
+        var mepcodeChanged='${request.mepcodeChanged}';
+        if(null !== mepcodeChanged && undefined !== mepcodeChanged && mepcodeChanged == "true"){
+            $(document).bind('notification-use-ready', function (e) {
+                mepcodeNotificationAddition(window.mepCode)
+            });
+        }
+    </script>
     </body>
 </html>

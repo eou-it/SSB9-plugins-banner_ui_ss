@@ -697,3 +697,24 @@ var DirtyCheck = {
         return CommonContext.isAppDirty();
     }
 }
+
+function mepcodeNotificationAddition(sessionMepCode){
+    var n = new Notification( {
+        message: $.i18n.prop('js.notification.mep.changed.onLoad', [sessionMepCode]),
+        type:"warning",
+        promptMessage: $.i18n.prop("js.notification.inactivityTimer.promptMessage")
+    });
+
+    var logoutMepUser = function( event ) {
+        window.location = 'logout';
+    };
+
+    var ignoreMepChangeAction = function() {
+        notifications.remove( n );
+    };
+
+    n.addPromptAction( $.i18n.prop("js.notification.inactivityTimer.keepAliveButton"), ignoreMepChangeAction );
+    n.addPromptAction( $.i18n.prop("js.notification.inactivityTimer.logoutButton"), logoutMepUser );
+
+    notifications.addNotification(n);
+}

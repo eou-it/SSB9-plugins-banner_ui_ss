@@ -11,6 +11,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         var extensibilityInfo =
                 ${raw(net.hedtech.extensibility.InfoService.getJSON(controllerName, resource(plugin:'web-app-extensibility', dir:'html')))};
         window.mepCode='${session.mep}';
+
     </script>
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         <r:require modules="bannerSelfServiceRTL"/>
@@ -106,5 +107,14 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <g:layoutBody />
     <r:layoutResources/>
     <g:customJavaScriptIncludes/>
+
+<script type="text/javascript">
+    var mepcodeChanged='${request.mepcodeChanged}';
+    if(null !== mepcodeChanged && undefined !== mepcodeChanged && mepcodeChanged == "true"){
+        $(document).bind('notification-use-ready', function (e) {
+            mepcodeNotificationAddition(window.mepCode)
+        });
+    }
+</script>
 </body>
 </html>
