@@ -797,7 +797,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
     }
 
     def writeHeader( scssFile, appName, appVersion ) {
-        def message = "/*\n  $scssFile.name\n  application version: $appVersion\n*/\n"
+        def message = "/*\n  $scssFile.name\n  application: $appName\n  application version: $appVersion\n*/\n"
         scssFile.append( message )
     }
 
