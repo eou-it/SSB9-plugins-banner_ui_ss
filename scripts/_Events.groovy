@@ -13,7 +13,8 @@ eventCompileEnd = {
     def scssFilePath = "${basedir}/web-app/css/theme/"
     def appName = grails.util.Metadata.current.'app.name'
     def appVersion = grails.util.Metadata.current.'app.version'
-    def scssFileName = (appName+ "-" + appVersion).replaceAll(/\./, '_') + ".scss"
+    def versionText = appVersion ? ("-" + appVersion).replaceAll(/\./, '_') : ""
+    def scssFileName = (appName + versionText) + ".scss"
     def scssFile = scssFilePath+scssFileName
     try {
         themeScssGenerator.generateThemeSCSSFile(scssFile, appName, appVersion);
