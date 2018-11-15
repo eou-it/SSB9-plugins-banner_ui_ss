@@ -9,14 +9,12 @@ body {
 
 /*** Branding Logo ***/
 .institutionalBranding {
-  background-image: url("$themelogo");
-  width: 20em;
+    background-image: url("#{$themelogo}");
 }
 
 /*** Favicon ***/
 .favicon {
-  background-image: url("$themefavicon");
-  width: 20em;
+    background-image: url("#{$themefavicon}");
 }
 
 /*** Global focus ***/
@@ -139,10 +137,7 @@ body {
   color: $themecolor3;
 }
 
-.pageBg {
-  background-color: $themecolor1-4; /*background-image*/
-  background-image: none;
-}
+
 
 .xe-modal-mask {
   background-color: rgba(0, 0, 0, 0.3);
@@ -175,4 +170,27 @@ body {
 
 .secondary:focus:not([disabled])  {
   background-color: $themecolor3-hover; /*#065AA5*/
+}
+
+.pageBg {
+  @if variable_exists(themebgimage) {
+    background-image: url("#{$themebgimage}");
+  }
+}
+
+/* This is for adding patch to Colleague Application*/
+.esg-header-bar__logo-image{
+  @if variable-exists(logo) {
+    content:url("#{$themelogo}");
+  }
+}
+
+.esg-sign-in__page:before{
+  @if variable-exists(themebgimage){
+    background-image: url("#{$themebgimage}");
+  }
+}
+
+.esg-form__input--sign-in, input[type=password].esg-form__input--sign-in, input[type=text].esg-form__input--sign-in {
+  background-color: hsla(0,0%,100%,.08);
 }
