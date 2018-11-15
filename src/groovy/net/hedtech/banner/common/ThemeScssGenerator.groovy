@@ -7,11 +7,13 @@ import groovy.io.FileType
 import groovy.util.FileNameFinder
 import java.util.Date
 import java.text.SimpleDateFormat
+import org.apache.log4j.Logger
 
 /**
  * This class is a utility class used to take all the CSS files from *Resources.groovy file and transform into SCSS file
  */
 class ThemeScssGenerator {
+    private static final Logger log = Logger.getLogger( ThemeScssGenerator.class.name )
     static def baseDirPath = System.properties['base.dir']
     static def colorMap = [
             ALICEBLUE: '#F0F8FF',
@@ -342,7 +344,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
             newMap[ key.toUpperCase() ] = value
         }
         themeColorVariablesMap = newMap
-        System.out.println( themeColorVariablesMap )
+        log.debug themeColorVariablesMap
     }
 
     def checkFileExists(file) {
@@ -638,7 +640,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
     def getCSSFiles(dir) {
         def files = []
 
-        //System.out.println "Looking for CSS files in ${dir}"
+        log.debug "Looking for CSS files in ${dir}"
         dir.traverse(type: FileType.FILES, nameFilter: ~/.*Resources\.groovy/) { file ->
 
             def fileText = file.text
@@ -662,7 +664,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
             while(matcherResource.find()){
                 resourceStr = matcherResource.group(0)
                 if (!resourceStr.contains('rtl')) {
-                    //System.out.println "Looking at resource ${resourceStr}"
+                    log.debug "Looking at resource ${resourceStr}"
                     resourceStr = resourceStr.replace(" ", "")
                     matcherDir = regexDir.matcher(resourceStr)
                     while (matcherDir.find()) {
@@ -677,12 +679,12 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
                         }else{
                             plugin = checkFileExists(baseDirPath) ? plugin : plugin.replace("_", "-")
                         }
-                        //System.out.println "Identified plugin - translated ${matcherPlugin.group(2)} to ${plugin}"
+                        log.debug "Identified plugin - translated ${matcherPlugin.group(2)} to ${plugin}"
                     }
                     matcherCSSFile = regexCssFile.matcher(resourceStr)
                     while (matcherCSSFile.find()) {
                         fileTmpStr = matcherCSSFile.group(2)
-                        //System.out.println "Matched CSS file from ${resourceStr} found ${fileTmpStr}"
+                        log.debug "Matched CSS file from ${resourceStr} found ${fileTmpStr}"
                     }
                 }
                 if(directory) {
@@ -693,12 +695,12 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
                 }else{
                     cssFile =  '/web-app/' + fileTmpStr
                 }
-                //System.out.println "Checking if file exists: ${cssFile}"
+                log.debug "Checking if file exists: ${cssFile}"
                 if(checkFileExists(baseDirPath+cssFile)) {
                     files << ["file": new File(baseDirPath + cssFile)]
-                    //System.out.println "Found CSS file: ${cssFile}"
+                    log.debug "Found CSS file: ${cssFile}"
                 } else {
-                    System.err.println "Cannot find CSS file: ${baseDirPath+cssFile}"
+                    log.error "Cannot find CSS file: ${baseDirPath+cssFile}"
                 }
             }
         }
@@ -772,23 +774,27 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
         return variable
     }
 
-    def appendFile(String filename, String SCSSFile) {
-        File fileToAppend = new File(filename)
+    def appendFile(String fileStr, String SCSSFile) {
+        File fileToAppend = new File(fileStr)
         if(fileToAppend.exists()) {
-            log.debug "Appending patch file ${filename} at offset ${new File( SCSSFile ).length()}"
+            log.debug "Appending patch file ${fileStr} at offset ${new File( SCSSFile ).length()}"
             appendToScssFile(fileToAppend.text, SCSSFile, fileToAppend)
         }
     }
 
-    def appendSCSSPatchFile(String SCSSFile) {
-        String patchFilename = SCSSFile.substring(0, SCSSFile.indexOf('.scss'))+'-patch.scss'
-        appendFile( patchFilename, SCSSFile )
+    def appendSCSSPatchFile(String scssFilePath) {
+        new File(scssFilePath).getParentFile().eachFileRecurse(FileType.FILES) {
+            if(it.name.endsWith('-patch.scss') && it.name != 'banner-theme-common-patch.scss') {
+                appendFile( it.getPath(), scssFilePath )
+            }
+        }
     }
 
     def appendCommonPatchFile( String scssFile ) {
         def names = new FileNameFinder().getFileNames(baseDirPath, '**/banner-theme-common-patch.scss' )
         if ( names ) {
             appendFile( names[0], scssFile )
+            log.debug "Appended banner-theme-common-patch.scss file"
         }
     }
 
@@ -798,8 +804,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
         scssFile.append( message )
     }
 
-    public generateThemeSCSSFile(String SCSSFile, String appName, String appVersion) {
-        def cssFiles = []
+    public generateThemeSCSSFile(String SCSSFile, String appName, String appVersion) { def cssFiles = []
         def SCSS
         def scssFile = new File(SCSSFile)
 
@@ -825,7 +830,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
             }
         }
         appendCommonPatchFile(SCSSFile)
-        appendSCSSPatchFile(SCSSFile)
-        System.out.println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
+        appendSCSSPatchFile(SCSSFile) //Appends all patch file inside the scss file directory
+        println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
     }
 }
