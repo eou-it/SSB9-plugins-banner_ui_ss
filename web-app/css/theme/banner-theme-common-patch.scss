@@ -173,7 +173,6 @@ body {
 }
 
 .pageBg {
-  background-color: $themecolor1-4; /*background-image*/
   @if variable_exists(themebgimage) {
     background-image: url("#{$themebgimage}");
   }
