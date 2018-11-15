@@ -9,7 +9,8 @@ body {
 
 /*** Branding Logo ***/
 .institutionalBranding {
-    background-image: url("#{$themelogo}");
+  background-image: url("$themelogo");
+  width: 20em;
 }
 
 /*** Favicon ***/
@@ -180,15 +181,11 @@ body {
 
 /* This is for adding patch to Colleague Application*/
 .esg-header-bar__logo-image{
-  @if variable-exists(logo) {
-    content:url("#{$themelogo}");
-  }
+  content:url("#{$themelogo}");
 }
 
 .esg-sign-in__page:before{
-  @if variable-exists(themebgimage){
-    background-image: url("#{$themebgimage}");
-  }
+  background-image: url("#{$themebgimage}");
 }
 
 .esg-form__input--sign-in, input[type=password].esg-form__input--sign-in, input[type=text].esg-form__input--sign-in {
