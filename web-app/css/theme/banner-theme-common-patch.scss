@@ -31,11 +31,6 @@ body {
     border-bottom-color: $themecolor2;
 }
 
-#header-main-section-east-part {
-  background-color: $themecolor1-active; /*fallback for IE and edge*/
-  background-color: $themecolor1-active4d; /*settting transparency*/
-}
-
 /*** Tweaks to base UI */
 #header-main-section-east-part #username,
 #header-main-section-east-part #mepDiv {
@@ -101,16 +96,16 @@ body {
 }
 
 .login-primary:hover:not([disabled]) {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
 }
 
 .login-primary:focus:not([disabled]) {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
   border-color: $themecolor2-4;
 }
 
 .login-primary:active:not([disabled]) {
-  background-color: $themecolor3-active;
+  background-color: $themecolor3-1; /*active*/
 }
 
 .signin-button {
@@ -118,16 +113,16 @@ body {
 }
 
 .signin-button:hover:not([disabled]) {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
 }
 
 .signin-button:focus:not([disabled])  {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
   border-color: $themecolor2-4;
 }
 
 .signin-button:active:not([disabled])  {
-  background-color: $themecolor3-active;
+  background-color: $themecolor3-1; /*active*/
 }
 
 .splashBg .appName {
@@ -158,19 +153,19 @@ body {
 
 /*** Tweaks to buttons ***/
 .primary:hover:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .primary:focus:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .secondary:hover:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .secondary:focus:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .pageBg {
