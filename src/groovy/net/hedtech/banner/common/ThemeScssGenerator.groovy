@@ -296,7 +296,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
         '#B0DEEC': '$themecolor1-4',
         '#B2DEEB': '$themecolor1-4',
 
-        '#e1effd': '$themecolor1-5', //#f6f6fd
+        '#E1EFFD': '$themecolor1-5', //#f6f6fd
         '#F3FCFF': '$themecolor1-5',
         '#D9E7EF': '$themecolor1-5',
 
