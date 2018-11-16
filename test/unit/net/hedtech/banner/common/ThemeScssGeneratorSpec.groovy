@@ -10,9 +10,10 @@ import spock.lang.Unroll
 
 class ThemeScssGeneratorSpec extends Specification {
     def APP_NAME="ThemeScssGeneratorUnitTest"
-    def APP_VERSION="0.0"
+    def APP_VERSION=null
 
     def themeScssGenerator = new ThemeScssGenerator()
+    def scssFile = "${System.properties['base.dir']}/target/web-app/css/theme/${APP_NAME}.scss"
 
     def "test remove comments ()"() {
         expect:
