@@ -780,12 +780,13 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
         }
     }
 
-    def appendSCSSPatchFile(String scssFilePath) {
-        new File(scssFilePath).getParentFile().eachFileRecurse(FileType.FILES) {
-            if(it.name.endsWith('-patch.scss') && it.name != 'banner-theme-common-patch.scss') {
-                appendFile( it.getPath(), scssFilePath )
-            }
-        }
+    /**
+     * appends the SCSSPatch file corresponding to a .CSS file
+     */
+    def appendSCSSPatchFile(String cssFileName, String outputFileName) {
+        String patchFilename = cssFileName.substring(0, cssFileName.lastIndexOf('.'))+'-patch.scss'
+        log.debug "Css: ${cssFileName} patch: ${patchFilename} out: ${outputFileName}"
+        appendFile( patchFilename, outputFileName )
     }
 
     def appendCommonPatchFile( String scssFile ) {
@@ -801,7 +802,8 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
         scssFile.append( message )
     }
 
-    public generateThemeSCSSFile(String SCSSFile, String appName, String appVersion) { def cssFiles = []
+    public generateThemeSCSSFile(String SCSSFile, String appName, String appVersion) {
+        def cssFiles = []
         def SCSS
         def scssFile = new File(SCSSFile)
 
@@ -827,7 +829,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
             }
         }
         appendCommonPatchFile(SCSSFile)
-        appendSCSSPatchFile(SCSSFile) //Appends all patch file inside the scss file directory
+        appendSCSSPatchFile("web-app/css/theme/${appName}.scss", SCSSFile ) // allow SCSSFile to be in a different directory
         println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
     }
 }
