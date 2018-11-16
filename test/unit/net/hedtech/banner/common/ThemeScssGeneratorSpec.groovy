@@ -9,7 +9,7 @@ import spock.lang.Unroll
 
 
 class ThemeScssGeneratorSpec extends Specification {
-    def APP_NAME="ThemeScssGeneratorUnitTest"
+    def APP_NAME=grails.util.Metadata.current.'app.name'
     def APP_VERSION=null
 
     def themeScssGenerator = new ThemeScssGenerator()
