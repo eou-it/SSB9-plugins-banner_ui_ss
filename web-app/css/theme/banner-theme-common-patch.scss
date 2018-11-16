@@ -178,16 +178,3 @@ body {
     background-image: url("#{$themebgimage}");
   }
 }
-
-/* This is for adding patch to Colleague Application*/
-.esg-header-bar__logo-image{
-  content:url("#{$themelogo}");
-}
-
-.esg-sign-in__page:before{
-  background-image: url("#{$themebgimage}");
-}
-
-.esg-form__input--sign-in, input[type=password].esg-form__input--sign-in, input[type=text].esg-form__input--sign-in {
-  background-color: hsla(0,0%,100%,.08);
-}
