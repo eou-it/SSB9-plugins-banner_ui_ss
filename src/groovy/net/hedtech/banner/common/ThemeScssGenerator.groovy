@@ -661,6 +661,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
 
             while(matcherResource.find()){
                 resourceStr = matcherResource.group(0)
+                directory="" //if not made blank everytime it picks the previous value of directory.
                 if (!resourceStr.contains('rtl')) {
                     log.debug "Looking at resource ${resourceStr}"
                     resourceStr = resourceStr.replace(" ", "")
