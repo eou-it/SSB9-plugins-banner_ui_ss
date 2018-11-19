@@ -173,3 +173,8 @@ body {
     background-image: url("#{$themebgimage}");
   }
 }
+
+/* for login password link*/
+.splashBg .forgotpassword {
+  color: $themecolor3 !important; /*EDS*/
+}
