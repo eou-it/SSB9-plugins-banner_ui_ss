@@ -489,6 +489,7 @@ class ThemeScssGenerator {
 
             while(matcherResource.find()){
                 resourceStr = matcherResource.group(0)
+                directory="" //if not made blank everytime it picks the previous value of directory.
                 if (!resourceStr.contains('rtl')) {
                     resourceStr = resourceStr.replace(" ", "")
                     matcherDir = regexDir.matcher(resourceStr)
