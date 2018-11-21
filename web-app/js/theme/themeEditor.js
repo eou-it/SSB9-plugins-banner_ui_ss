@@ -58,7 +58,7 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
             colors = [],
             fieldnames = [],
             generated_lightness = [.25, .9],
-            shades = [.1, .2, .35, .5, .8, .9],
+            shades = [.1, .2, .35, .5, .8, .99],
             saveError = 'saveError';
             $scope.isDisabled=true;
 
