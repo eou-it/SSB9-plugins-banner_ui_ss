@@ -15,8 +15,7 @@ body {
 
 /*** Favicon ***/
 .favicon {
-  background-image: url("$themefavicon");
-  width: 20em;
+    background-image: url("#{$themefavicon}");
 }
 
 /*** Global focus ***/
@@ -30,11 +29,6 @@ body {
     background-color: $themecolor1; /* use selected color */
     color: $themecolor1_text;
     border-bottom-color: $themecolor2;
-}
-
-#header-main-section-east-part {
-  background-color: $themecolor1-active; /*fallback for IE and edge*/
-  background-color: $themecolor1-active4d; /*settting transparency*/
 }
 
 /*** Tweaks to base UI */
@@ -102,16 +96,16 @@ body {
 }
 
 .login-primary:hover:not([disabled]) {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
 }
 
 .login-primary:focus:not([disabled]) {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
   border-color: $themecolor2-4;
 }
 
 .login-primary:active:not([disabled]) {
-  background-color: $themecolor3-active;
+  background-color: $themecolor3-1; /*active*/
 }
 
 .signin-button {
@@ -119,16 +113,16 @@ body {
 }
 
 .signin-button:hover:not([disabled]) {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
 }
 
 .signin-button:focus:not([disabled])  {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
   border-color: $themecolor2-4;
 }
 
 .signin-button:active:not([disabled])  {
-  background-color: $themecolor3-active;
+  background-color: $themecolor3-1; /*active*/
 }
 
 .splashBg .appName {
@@ -139,10 +133,7 @@ body {
   color: $themecolor3;
 }
 
-.pageBg {
-  background-color: $themecolor1-4; /*background-image*/
-  background-image: none;
-}
+
 
 .xe-modal-mask {
   background-color: rgba(0, 0, 0, 0.3);
@@ -162,17 +153,28 @@ body {
 
 /*** Tweaks to buttons ***/
 .primary:hover:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .primary:focus:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .secondary:hover:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .secondary:focus:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
+}
+
+.pageBg {
+  @if variable_exists(themebgimage) {
+    background-image: url("#{$themebgimage}");
+  }
+}
+
+/* for login password link*/
+.splashBg .forgotpassword {
+  color: $themecolor3 !important; /*EDS*/
 }
