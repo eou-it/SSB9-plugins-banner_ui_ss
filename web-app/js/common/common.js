@@ -439,9 +439,9 @@ $(document).ready(function() {
     changeFavicon();
 });
 
-$(window).load(function(){
+$(document).bind('notification-use-ready', function (e) {
     showAipNotification();
-})
+});
 
 function showAipNotification(){
     if($("meta[name='hasActiveActionItems']").attr( "content" )=== 'true'){
