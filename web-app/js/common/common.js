@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 //IE fix to support indexOf method on Array objects
 Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
@@ -439,6 +439,32 @@ $(document).ready(function() {
     changeFavicon();
 });
 
+$(document).bind('notification-use-ready', function (e) {
+    showAipNotification();
+});
+
+function showAipNotification(){
+    if($("meta[name='hasActiveActionItems']").attr( "content" )=== 'true'){
+        showAipPromptNotification($("meta[name='aipUrl']").attr( "content" ));
+    }
+}
+
+function showAipPromptNotification(url) {
+    var n = new Notification({
+        message: $.i18n.prop("js.banner.general.aip.notification.prompt.message"),
+        type: "warning"
+    });
+
+    n.addPromptAction($.i18n.prop("js.banner.general.aip.notification.prompt.view.actionitems"), function () {
+        window.location.href = url;
+    });
+    n.addPromptAction($.i18n.prop("js.banner.general.aip.notification.prompt.dismiss"), function () {
+        notifications.remove(n);
+    });
+    notifications.addNotification( n );
+}
+
+
 function changeFavicon() {
     var link = document.querySelector("link[rel*='shortcut icon']")||document.createElement('link'),
         oldLink = document.querySelector("link[rel*='shortcut icon']")||document.getElementById('dynamic-favicon');
@@ -448,7 +474,7 @@ function changeFavicon() {
     link.className = 'favicon';
     var url = window.getComputedStyle(link).getPropertyValue('background-image');
     var urlRegex = /^url\("(.*)"\)$/;
-    
+
     if(urlRegex.test(url) && url.indexOf("$themefavicon") == -1){
         link.href = url.slice(4, -1).replace(/"/g, "");
         link.id = 'dynamic-favicon';
