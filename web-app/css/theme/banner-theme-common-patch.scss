@@ -2,33 +2,33 @@
   content:  $themename;
 }
 
+/*** Transparent background ***/
+body {
+  background-color: #ffffff;
+}
+
 /*** Branding Logo ***/
 .institutionalBranding {
   background-image: url("$themelogo");
   width: 20em;
 }
 
+/*** Favicon ***/
 .favicon {
-  background-image: url("$themefavicon");
-  width: 20em;
+    background-image: url("#{$themefavicon}");
 }
 
+/*** Global focus ***/
+:focus {
+  outline-color: $themecolor2-4 /*#81C8FF*/;
+}
+
+/*** Header ***/
 #banner-header-main-section,
 #header-main-section {
     background-color: $themecolor1; /* use selected color */
     color: $themecolor1_text;
-}
-
-.notification-center-anchor {
-  background-color: $themecolor2;
-}
-
-.notification-center-count {
-  color: $themecolor2_text;
-}
-
-:focus {
-  outline-color: $themecolor3-4;
+    border-bottom-color: $themecolor2;
 }
 
 /*** Tweaks to base UI */
@@ -44,11 +44,6 @@
 #header-main-section-east-part #toolsButton {
   border-left: 0px; /* Removed 1px unneeded line  */
   border-right: 0px;
-}
-
-#toolsList .canvas-item:hover,
-#toolsList .canvas-item:focus {
-  background-color: $themecolor3-5 ;
 }
 
 /** Page Builder */
@@ -86,11 +81,6 @@
     border-top-color: $themecolor1-2; /*#9AC0D2*/
 }
 
-#toolsList .canvas-item:hover,
-#toolsList .canvas-item:focus {
-  background-color: $themecolor3-5 ;
-}
-
 /* Hide button bar in header of old-style pages */
 .buttonBar {
   visibility: hidden;
@@ -101,39 +91,90 @@
   color: #ffffff;
 }
 
-.pageBg {
-     background-color: $themecolor1-4; /*#4c8db5;*/
-     background-image: linear-gradient( $themecolor1-1 /*#015d96*/, $themecolor1-4 /*#4c8db5*/ );
+.login-primary {
+  background-color: $themecolor3;
 }
 
-.splashBg {
-  background-color: $themecolor1-3 /*#4e8bbb*/; /* center section background */
-  border-color: $themecolor1-1 /*#00579a*/;
+.login-primary:hover:not([disabled]) {
+  background-color: $themecolor3-2; /*hover*/
 }
 
-.splashBg:before {
-  background-color: $themecolor1-3 /*#70a4c4*/;
-  background-image: linear-gradient( to right, $themecolor1-4 /*#70a4c4*/, $themecolor1-2 /*#337dab*/ );
-  border-image: linear-gradient( to right, $themecolor1-2 /*#4287b1*/, $themecolor1-1 /*#005c96*/ ) 1;
+.login-primary:focus:not([disabled]) {
+  background-color: $themecolor3-2; /*hover*/
+  border-color: $themecolor2-4;
 }
 
-.splashBg .copyright {
-  background-image: linear-gradient( to right, $themecolor1-3 /*#3f85b0*/, $themecolor1-1 /*#0d649b*/ );
-  border-image: linear-gradient( to right, $themecolor1-2 /*#367fac*/, $themecolor1-1 /*#005c96*/ ) 1;
+.login-primary:active:not([disabled]) {
+  background-color: $themecolor3-1; /*active*/
 }
 
 .signin-button {
-  background: $themecolor2-3;
-  background-image:linear-gradient($themecolor2-3, $themecolor2-2);
-  border-color: $themecolor2-1;
+  background-color: $themecolor3;
 }
 
-.signin-button:hover {
-  background: $themecolor2-4;
-  background-image:linear-gradient($themecolor2-4, $themecolor2-3);
+.signin-button:hover:not([disabled]) {
+  background-color: $themecolor3-2; /*hover*/
 }
 
-.signin-button:active {
-  background: $themecolor2-2;
-  background-image:linear-gradient($themecolor2-2, $themecolor2-3);
+.signin-button:focus:not([disabled])  {
+  background-color: $themecolor3-2; /*hover*/
+  border-color: $themecolor2-4;
+}
+
+.signin-button:active:not([disabled])  {
+  background-color: $themecolor3-1; /*active*/
+}
+
+.splashBg .appName {
+  color: $themecolor3;
+}
+
+.splashBg .forgotpassword {
+  color: $themecolor3;
+}
+
+
+
+.xe-modal-mask {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.xe-popup-mask {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/*** Survey ***/
+.termstextdiv {
+  border-color: $themecolor1 /*#2874BB*/;
+  background-color: $themecolor1-5;
+  color: $themecolor1;
+  padding: 0.5em;
+  margin-bottom: 2em;
+}
+
+/*** Tweaks to buttons ***/
+.primary:hover:not([disabled])  {
+  background-color: $themecolor3-2; /*#065AA5*/
+}
+
+.primary:focus:not([disabled])  {
+  background-color: $themecolor3-2; /*#065AA5*/
+}
+
+.secondary:hover:not([disabled])  {
+  background-color: $themecolor3-2; /*#065AA5*/
+}
+
+.secondary:focus:not([disabled])  {
+  background-color: $themecolor3-2; /*#065AA5*/
+}
+
+.pageBg {
+  @if variable_exists(themebgimage) {
+    background-image: url("#{$themebgimage}");
+  }
+}
+
+/* for login password link*/
+.splashBg .forgotpassword {
+  color: $themecolor3 !important; /*EDS*/
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.common
 
@@ -9,8 +9,11 @@ import spock.lang.Unroll
 
 
 class ThemeScssGeneratorSpec extends Specification {
+    def APP_NAME=grails.util.Metadata.current.'app.name'
+    def APP_VERSION=null
+
     def themeScssGenerator = new ThemeScssGenerator()
-    def scssFile = "${System.properties['base.dir']}/web-app/css/theme/banner-ui-ss.scss"
+    def scssFile = "${System.properties['base.dir']}/target/web-app/css/theme/${APP_NAME}.scss"
 
     def "test remove comments ()"() {
         expect:
@@ -45,7 +48,7 @@ class ThemeScssGeneratorSpec extends Specification {
 
     def "test generateThemeSCSSFile"() {
          when:
-         themeScssGenerator.generateThemeSCSSFile( scssFile )
+         themeScssGenerator.generateThemeSCSSFile( scssFile, APP_NAME, APP_VERSION )
          then:
          themeScssGenerator.checkFileExists(scssFile)
     }
@@ -88,7 +91,7 @@ class ThemeScssGeneratorSpec extends Specification {
         "font-family: 'lucidaGrande';\nfont-weight: normal;\n"                  |   ""
         "color: #ddd;font-weight: normal; "                                     |   "color:#DDDDDD;"
         "border: 1px solid #ccc"                                                |   "border-color:#CCCCCC;"
-        "outline: 10px dotted #eee"                                             |   'outline-color:$themecolor1-4;/*#eee*/'
+        "background-color:  #026BC8"                                            |   'background-color:$themecolor3;/*#026BC8*/'
     }
 
     def "test formatStyle ()"() {
@@ -148,7 +151,7 @@ class ThemeScssGeneratorSpec extends Specification {
         themeScssGenerator.getThemeVariable(color) == themeVariable
         where:
         color                              |   themeVariable
-        '#206E9F'                          |   '$themecolor1'
+        '#5353D1'                          |   '$themecolor1'
     }
     def "test convertTo6DigitHexColor()" () {
         expect:
@@ -180,7 +183,7 @@ class ThemeScssGeneratorSpec extends Specification {
     def "includes -patch file exactly once"() {
         when:
         String markerText = "/* banner-ui-ss-patch.scss */"
-        themeScssGenerator.generateThemeSCSSFile( scssFile )
+        themeScssGenerator.generateThemeSCSSFile( scssFile, APP_NAME, APP_VERSION )
         String scss = new File(scssFile).text
 
         // logging on failure is too verbose with whole scss string, so just test result
@@ -194,7 +197,7 @@ class ThemeScssGeneratorSpec extends Specification {
 
     def "includes banner-theme-common-patch.scss file"() {
         when:
-        themeScssGenerator.generateThemeSCSSFile( scssFile )
+        themeScssGenerator.generateThemeSCSSFile( scssFile, APP_NAME, APP_VERSION )
         String scss = new File(scssFile).text
 
         // logging on failure is too verbose with whole scss string, so just test result

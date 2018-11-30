@@ -233,17 +233,17 @@ modules = {
     }
 
     'uploadProperties' {
-        dependsOn "bootstrap", "angularApp", "commonComponents"
+        dependsOn "angularApp", "commonComponents"
         resource url:[plugin: 'banner-ui-ss', file: 'js/uploadProperties/uploadProperties.js']
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/uploadProperties.css'], attrs: [media: 'screen, projection']
     }
 
     'uploadPropertiesLTR' {
-        dependsOn "bannerWebLTR, uploadProperties, commonComponentsLTR"
+        dependsOn "bannerWebLTR, bootstrap, uploadProperties, commonComponentsLTR"
     }
 
     'uploadPropertiesRTL' {
-        dependsOn "bannerWebRTL, uploadProperties, commonComponentsRTL"
+        dependsOn "bannerWebRTL, bootstrapRTL, uploadProperties, commonComponentsRTL"
         resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/uploadProperties-rtl.css'], attrs: [media: 'screen, projection']
     }
 

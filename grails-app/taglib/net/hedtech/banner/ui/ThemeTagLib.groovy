@@ -18,7 +18,7 @@ class ThemeTagLib {
             }
             mepCodeParam=''
         }
-        String themeTemplate = themeConfig.template ?: 'all'
+        String themeTemplate = themeConfig.template ?: null
         String cssLink
         if(themeName && themeTemplate) {
             cssLink = "<link rel='stylesheet' type='text/css' "

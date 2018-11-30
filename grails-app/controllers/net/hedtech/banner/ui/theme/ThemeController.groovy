@@ -56,25 +56,31 @@ class ThemeController {
     }
 
     def getTheme() {
-        assert params.name
-        def templateName = params.template
-        def themeName = params.name
-        def content
+        if(params.name) {
+            def templateName = params.template
+            def themeName = params.name
+            def themeConfig = grailsApplication.config.banner?.theme
+            def content
 
-        if ( !templateName ) {
-            templateName = 'all'
-        }
-        try {
-            content = themeService.getCSS(themeName, templateName)
-            if(content) {
-                render(text: content, contentType: "text/css")
-            } else {
-                log.error "Failed to format theme ${themeName} in ${templateName}"
-                response.status = 404
-                render(text: "", contentType: "text/css")
+            if (!templateName) {
+                templateName = themeConfig.template   //Preview does not pass template name, it should use configured template
             }
-        } catch ( ApplicationException ae ) {
-            log.error "Failed to format theme ${themeName} in ${templateName}. ${ae}"
+            try {
+                content = themeService.getCSS(themeName, templateName)
+                if (content) {
+                    render(text: content, contentType: "text/css")
+                } else {
+                    log.error "Failed to format theme ${themeName} in ${templateName}"
+                    response.status = 404
+                    render(text: "", contentType: "text/css")
+                }
+            } catch (ApplicationException ae) {
+                log.error "Failed to format theme ${themeName} in ${templateName}. ${ae}"
+                response.status = 404
+                render ""
+            }
+        } else {
+            log.error "No theme name in URL"
             response.status = 404
             render ""
         }
