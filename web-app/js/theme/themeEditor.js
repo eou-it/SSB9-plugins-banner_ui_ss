@@ -431,7 +431,7 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
                         type: "error",
                         id: saveError
                     }))
-                }).finally(function() {
+                })['finally'](function() {
                     angular.element("input[type='file']").val(null);
                      $scope.isDisabled=true;
                 });
