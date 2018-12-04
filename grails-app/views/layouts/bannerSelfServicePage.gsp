@@ -42,6 +42,8 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
         <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
         <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
+        <meta name="hasActiveActionItems" content="${session.hasActiveActionItems}"/>
+        <meta name="aipUrl" content="${session.aipUrl}"/>
         <title><g:layoutTitle default="Banner"/></title>
 
     <r:script>
