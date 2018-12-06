@@ -699,10 +699,10 @@ var DirtyCheck = {
 }
 
 function mepcodeNotificationAddition(sessionMepCode){
+    var mepDescription = $('meta[name=ssbMepDesc]').attr("content");
     var n = new Notification( {
-        message: $.i18n.prop('js.notification.mep.changed.onLoad', [sessionMepCode]),
-        type:"warning",
-        promptMessage: $.i18n.prop("js.notification.inactivityTimer.promptMessage")
+        message: $.i18n.prop('js.notification.mep.changed.onLoad', [mepDescription]),
+        type:"warning"
     });
 
     var logoutMepUser = function( event ) {
@@ -713,8 +713,8 @@ function mepcodeNotificationAddition(sessionMepCode){
         notifications.remove( n );
     };
 
-    n.addPromptAction( $.i18n.prop("js.notification.inactivityTimer.keepAliveButton"), ignoreMepChangeAction );
-    n.addPromptAction( $.i18n.prop("js.notification.inactivityTimer.logoutButton"), logoutMepUser );
+    n.addPromptAction( $.i18n.prop("js.notification.mep.buttons.continue"), ignoreMepChangeAction );
+    n.addPromptAction( $.i18n.prop("js.notification.mep.buttons.logout"), logoutMepUser );
 
     notifications.addNotification(n);
 }
