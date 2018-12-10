@@ -382,3 +382,7 @@ hibernate {
             "classpath:hibernate-banner-general-utility.cfg.xml"
     ]
 }
+
+grails.config.locations = [
+        BANNER_APP_CONFIG: "banner_configuration.groovy"
+]
