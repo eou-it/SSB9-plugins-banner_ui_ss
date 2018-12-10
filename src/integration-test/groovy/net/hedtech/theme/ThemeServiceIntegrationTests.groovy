@@ -1,12 +1,14 @@
 /*******************************************************************************
- Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 package net.hedtech.theme
 
 import grails.converters.JSON
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import net.hedtech.banner.testing.BaseIntegrationTestCase
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import grails.web.context.ServletContextHolder
 import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
@@ -16,6 +18,8 @@ import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNull
 
+@Integration
+@Rollback
 class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
 
     def grailsApplication

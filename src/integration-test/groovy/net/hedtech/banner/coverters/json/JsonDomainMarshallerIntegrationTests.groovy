@@ -1,20 +1,24 @@
 /*******************************************************************************
-Copyright 2017 Ellucian Company L.P. and its affiliates.
+Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 package net.hedtech.banner.coverters.json
 
 import grails.converters.JSON
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import net.hedtech.banner.converters.json.JSONBeanMarshaller
 import net.hedtech.banner.converters.json.JSONDomainMarshaller
 import net.hedtech.banner.testing.BaseIntegrationTestCase
-import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
-import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
-import org.codehaus.groovy.grails.support.proxy.ProxyHandler
-import org.codehaus.groovy.grails.web.converters.exceptions.ConverterException
+import org.grails.core.DefaultGrailsDomainClass
+import grails.core.GrailsDomainClassProperty
+import grails.core.support.proxy.ProxyHandler
+import org.grails.web.converters.exceptions.ConverterException
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+@Integration
+@Rollback
 class JsonDomainMarshallerIntegrationTests extends BaseIntegrationTestCase {
     def jsonDomainMarshaller
 

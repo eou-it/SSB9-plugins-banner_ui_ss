@@ -364,18 +364,20 @@ grails.plugin.springsecurity.interceptUrlMap = [
 ]
 
 dataSource {
-    configClass = GrailsAnnotationConfiguration.class
+    //configClass = GrailsAnnotationConfiguration.class
     dialect = "org.hibernate.dialect.Oracle10gDialect"
-    loggingSql = false
+    //loggingSql = false
 }
 
 
 hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = true
-    cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
-    hbm2ddl.auto = null
+    cache.region.factory_class = 'org.hibernate.cache.ehcache.EhCacheRegionFactory'
+    //hbm2ddl.auto = null
     show_sql = false
+    packagesToScan="net.hedtech.**.*"
+    flush.mode = AUTO
     dialect = "org.hibernate.dialect.Oracle10gDialect"
     config.location = [
             "classpath:hibernate-banner-core.cfg.xml",

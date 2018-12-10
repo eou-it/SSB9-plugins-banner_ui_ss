@@ -1,8 +1,10 @@
 /*******************************************************************************
-Copyright 2017 Ellucian Company L.P. and its affiliates.
+Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 package net.hedtech.banner.controllers
 
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.exceptions.BusinessLogicValidationException
 import net.hedtech.banner.testing.BaseIntegrationTestCase
@@ -14,6 +16,8 @@ import org.springframework.dao.DataIntegrityViolationException
 import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertTrue
 
+@Integration
+@Rollback
 class BaseRestfulControllerMixinIntegrationTests extends BaseIntegrationTestCase {
 
     def baseRestfulControllerMixin

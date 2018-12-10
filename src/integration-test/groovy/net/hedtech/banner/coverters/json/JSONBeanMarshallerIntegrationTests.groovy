@@ -1,16 +1,20 @@
 /*******************************************************************************
-Copyright 2017 Ellucian Company L.P. and its affiliates.
+Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 package net.hedtech.banner.coverters.json
 
 import grails.converters.JSON
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import net.hedtech.banner.converters.json.JSONBeanMarshaller
 import net.hedtech.banner.testing.BaseIntegrationTestCase
-import org.codehaus.groovy.grails.web.converters.exceptions.ConverterException
+import org.grails.web.converters.exceptions.ConverterException
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+@Integration
+@Rollback
 class JSONBeanMarshallerIntegrationTests extends BaseIntegrationTestCase {
 
     def jsonBeanMarshaller

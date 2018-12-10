@@ -1,12 +1,17 @@
 package net.hedtech.banner.uploadproperties
 
-import grails.test.spock.IntegrationSpec
+import grails.gorm.transactions.Rollback
+//import grails.test.spock.IntegrationSpec
+import grails.testing.mixin.integration.Integration
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class UploadPropertiesControllerIntegrationTest extends IntegrationSpec {
+@Integration
+@Rollback
+//class UploadPropertiesControllerIntegrationTest extends IntegrationSpec {
+class UploadPropertiesControllerIntegrationTest {
 
     def uploadProperties
     public void setup() {

@@ -1,5 +1,7 @@
 package net.hedtech.banner.webtailor
 
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import net.hedtech.banner.security.FormContext
 
 /*********************************************************************************
@@ -23,6 +25,8 @@ import org.junit.Test
  *
  */
 
+@Integration
+@Rollback
 class WebTailorUtilityIntegrationTests extends BaseIntegrationTestCase {
 
     def dataSource  // injected by Spring
