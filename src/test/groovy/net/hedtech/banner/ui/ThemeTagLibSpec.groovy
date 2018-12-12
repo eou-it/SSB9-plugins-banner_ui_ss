@@ -4,11 +4,11 @@
 
 package net.hedtech.banner.ui
 
-import grails.test.mixin.TestFor
+//import grails.test.mixin.TestFor
 import grails.util.GrailsWebUtil
 import spock.lang.Specification
 
-@TestFor(ThemeTagLib)
+//@TestFor(ThemeTagLib)
 class ThemeTagLibSpec extends Specification {
 
     def setup() {

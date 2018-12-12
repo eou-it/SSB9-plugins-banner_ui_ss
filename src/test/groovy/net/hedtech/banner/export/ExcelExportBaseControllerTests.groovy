@@ -4,13 +4,13 @@
 package net.hedtech.banner.export
 
 import grails.test.mixin.*
-import grails.test.runtime.FreshRuntime
+//import grails.test.runtime.FreshRuntime
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(ExcelExportBaseController)
-@FreshRuntime
+//@TestFor(ExcelExportBaseController)
+//@FreshRuntime
 class ExcelExportBaseControllerTests {
 
     void testDefaultSecurity() {

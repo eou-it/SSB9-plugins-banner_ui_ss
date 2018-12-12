@@ -3,9 +3,9 @@
  ****************************************************************************** */
 package net.hedtech.banner.common
 
-import grails.test.GrailsUnitTestCase
+import org.grails.testing.GrailsUnitTest
 
-class RtlCssGeneratorTests extends GrailsUnitTestCase {
+class RtlCssGeneratorTests implements GrailsUnitTest {
     def rtlCssGenerator = new RtlCssGenerator()
 
     def commentWithBrace = '/* { */'

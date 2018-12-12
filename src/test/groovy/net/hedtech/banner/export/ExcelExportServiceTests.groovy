@@ -4,14 +4,15 @@
 package net.hedtech.banner.export
 
 import net.hedtech.banner.exceptions.ApplicationException
-import grails.test.GrailsUnitTestCase
+import org.grails.testing.GrailsUnitTest
+
 import java.text.SimpleDateFormat
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.ss.usermodel.Row
 
 
-class ExcelExportServiceTests extends GrailsUnitTestCase{
+class ExcelExportServiceTests implements GrailsUnitTest {
     def excelExportService = new ExcelExportService()
 
     void testAssertions() {
