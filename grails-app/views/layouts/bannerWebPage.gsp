@@ -43,6 +43,8 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
         <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
         <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
+        <meta name="hasActiveActionItems" content="${session.hasActiveActionItems}"/>
+        <meta name="aipUrl" content="${session.aipUrl}"/>
         <title><g:layoutTitle default="Banner"/></title>
        
 
@@ -66,6 +68,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
                     $( "#splash" ).remove();
                 });
             });
+
     </r:script>
 
     <r:layoutResources/>
@@ -110,5 +113,14 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     </g:if>
 
         <g:render template="/layouts/bannershortcuts" plugin="banner_ui_ss"/>
+
+    <script type="text/javascript">
+        var mepcodeChanged='${request.mepcodeChanged}';
+        if(null !== mepcodeChanged && undefined !== mepcodeChanged && mepcodeChanged == "true"){
+            $(document).bind('notification-use-ready', function (e) {
+                mepcodeNotificationAddition(window.mepCode)
+            });
+        }
+    </script>
     </body>
 </html>

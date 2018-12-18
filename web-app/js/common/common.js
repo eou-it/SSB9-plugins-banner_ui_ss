@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2009-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 //IE fix to support indexOf method on Array objects
 Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
@@ -154,11 +154,11 @@ window.InactivityTimer = ActivityTimer.extend({
         // If it is when the timer fires, we are goign to automatically call the logoutAction.
 
         window.setTimeout( _.bind( function() {
-                if (notifications.find( function( notification ) { return notification === n; })) {
-                    this.logoutAction();
-                }
-            }, this ),
-                60 * 1000 /** 60 seconds */ );
+            if (notifications.find( function( notification ) { return notification === n; })) {
+                this.logoutAction();
+            }
+        }, this ),
+            60 * 1000 /** 60 seconds */ );
 
     },
     activityEvents: [ "ajaxStart" ],
@@ -170,9 +170,9 @@ var inactivityTimer = new InactivityTimer({
     delay: (parseInt( $("meta[name='maxInactiveInterval']").attr( "content" ) ) - 90 /** Subtract 90 seconds to give a notification prior session invalidating **/ ) * 1000
 });
 
-inactivityTimer.start();
-
-$(document).ready(function(){
+// Calling Timeout after the notification component is ready and fired the event
+$(document).bind('notification-use-ready', function (e) {
+    inactivityTimer.start();
     CommonContext.resetInActivityTimer=inactivityTimer; // putting inactivity timer as a callback to reset when keepalive message received from application navigator
 });
 
@@ -439,6 +439,32 @@ $(document).ready(function() {
     changeFavicon();
 });
 
+$(document).bind('notification-use-ready', function (e) {
+    showAipNotification();
+});
+
+function showAipNotification(){
+    if($("meta[name='hasActiveActionItems']").attr( "content" )=== 'true'){
+        showAipPromptNotification($("meta[name='aipUrl']").attr( "content" ));
+    }
+}
+
+function showAipPromptNotification(url) {
+    var n = new Notification({
+        message: $.i18n.prop("js.banner.general.aip.notification.prompt.message"),
+        type: "warning"
+    });
+
+    n.addPromptAction($.i18n.prop("js.banner.general.aip.notification.prompt.view.actionitems"), function () {
+        window.location.href = url;
+    });
+    n.addPromptAction($.i18n.prop("js.banner.general.aip.notification.prompt.dismiss"), function () {
+        notifications.remove(n);
+    });
+    notifications.addNotification( n );
+}
+
+
 function changeFavicon() {
     var link = document.querySelector("link[rel*='shortcut icon']")||document.createElement('link'),
         oldLink = document.querySelector("link[rel*='shortcut icon']")||document.getElementById('dynamic-favicon');
@@ -448,7 +474,7 @@ function changeFavicon() {
     link.className = 'favicon';
     var url = window.getComputedStyle(link).getPropertyValue('background-image');
     var urlRegex = /^url\("(.*)"\)$/;
-    
+
     if(urlRegex.test(url) && url.indexOf("$themefavicon") == -1){
         link.href = url.slice(4, -1).replace(/"/g, "");
         link.id = 'dynamic-favicon';
@@ -696,4 +722,25 @@ var DirtyCheck = {
     isDirty : function() {
         return CommonContext.isAppDirty();
     }
+}
+
+function mepcodeNotificationAddition(sessionMepCode){
+    var mepDescription = $('meta[name=ssbMepDesc]').attr("content");
+    var n = new Notification( {
+        message: $.i18n.prop('js.notification.mep.changed.onLoad', [mepDescription]),
+        type:"warning"
+    });
+
+    var logoutMepUser = function( event ) {
+        window.location = 'logout';
+    };
+
+    var ignoreMepChangeAction = function() {
+        notifications.remove( n );
+    };
+
+    n.addPromptAction( $.i18n.prop("js.notification.mep.buttons.continue"), ignoreMepChangeAction );
+    n.addPromptAction( $.i18n.prop("js.notification.mep.buttons.logout"), logoutMepUser );
+
+    notifications.addNotification(n);
 }
