@@ -1,6 +1,6 @@
 /*******************************************************************************
-Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
-*******************************************************************************/
+ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 /* global notifications */
 (function() {
     'use strict';
@@ -58,9 +58,9 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
             colors = [],
             fieldnames = [],
             generated_lightness = [.25, .9],
-            shades = [.1, .2, .35, .5, .8, .9],
+            shades = [.1, .2, .35, .5, .8, .99],
             saveError = 'saveError';
-            $scope.isDisabled=true;
+        $scope.isDisabled=true;
 
         var init = function() {
             console.log("theme init");
@@ -96,7 +96,7 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
 
         var setTextColor = function( $scope, name, value ) {
             $scope[ name + '_text' ] = tinycolor.
-                mostReadable( value, ['#393939', '#888888', '#333333', '#cccccc'], { includeFallbackColors: true }).toHexString();
+            mostReadable( value, ['#393939', '#888888', '#333333', '#cccccc'], { includeFallbackColors: true }).toHexString();
         }
 
         var shade = function( color, lum ) {
@@ -110,7 +110,7 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
             var FULL_HEX_STRING_LENGTH = 6,
                 tc = tinycolor( value );
             return ( tc.isValid() &&
-                     (tc._format !== 'hex' || tc._originalInput.length >= FULL_HEX_STRING_LENGTH ));
+                (tc._format !== 'hex' || tc._originalInput.length >= FULL_HEX_STRING_LENGTH ));
         }
 
         var updateTheme = function( text, values ) {
@@ -194,7 +194,7 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
         /**
          * Derive color3 as the triad of color1 that is most different from the hue of color2
          */
-            //         var deriveColor3 = function() {
+//         var deriveColor3 = function() {
 //             var c1 = tinycolor( $scope.color1 ),
 //                 c2 = tinycolor( $scope.color2 );
 //             if ( isValid6DigitColor( c1 ) && isValid6DigitColor( c2 )) {
@@ -240,8 +240,8 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
             //$scope.$watchGroup(['color1', 'color2'], deriveColor3);
 
         var autoReload = function( name ) {
-            return '&reload=' + new Date().getTime();
-        }
+                return '&reload=' + new Date().getTime();
+            }
 
         $scope.loadTheme = function( name ) {
             console.log( 'loadTheme ' + name );
@@ -388,13 +388,13 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
                     if (errorPresent) {
                         notifications.remove(errorPresent);
                     }
-                   if(d=='invalidFormat'){
-                       var errorNotification = new Notification({
-                           message:$.i18n.prop("js.notification.upload.type") ,
-                           type: "error",
-                           flash: true
-                            });
-                       notifications.addNotification(errorNotification);
+                    if(d=='invalidFormat'){
+                        var errorNotification = new Notification({
+                            message:$.i18n.prop("js.notification.upload.type") ,
+                            type: "error",
+                            flash: true
+                        });
+                        notifications.addNotification(errorNotification);
                     }else if(d=='largeData') {
                         var errorNotification = new Notification({
                             message:$.i18n.prop("js.notification.upload.size") ,
@@ -402,27 +402,27 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
                             flash: true});
                         notifications.addNotification(errorNotification);
                     }
-                   else if(d=='noData') {
-                       var errorNotification = new Notification({
-                           message:$.i18n.prop("js.notification.upload.nodata") ,
-                           type: "error",
-                           flash: true});
-                       notifications.addNotification(errorNotification);
-                   }else if(d=='error') {
-                       var errorNotification = new Notification({
-                           message:$.i18n.prop("js.notification.upload.error") ,
-                           type: "error",
-                           id: saveError});
-                       notifications.addNotification(errorNotification);
-                   }else{
-                       notifications.addNotification(new Notification({
-                           message: $.i18n.prop("js.notification.upload.success"),
-                           type: "success",
-                           flash: true
-                       }))
+                    else if(d=='noData') {
+                        var errorNotification = new Notification({
+                            message:$.i18n.prop("js.notification.upload.nodata") ,
+                            type: "error",
+                            flash: true});
+                        notifications.addNotification(errorNotification);
+                    }else if(d=='error') {
+                        var errorNotification = new Notification({
+                            message:$.i18n.prop("js.notification.upload.error") ,
+                            type: "error",
+                            id: saveError});
+                        notifications.addNotification(errorNotification);
+                    }else{
+                        notifications.addNotification(new Notification({
+                            message: $.i18n.prop("js.notification.upload.success"),
+                            type: "success",
+                            flash: true
+                        }))
 
-                       $scope.getThemes();
-                       $scope.getTemplates();
+                        $scope.getThemes();
+                        $scope.getTemplates();
                     }
                 })
                 .error(function () {
@@ -431,10 +431,10 @@ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
                         type: "error",
                         id: saveError
                     }))
-                }).finally(function() {
-                    angular.element("input[type='file']").val(null);
-                     $scope.isDisabled=true;
-                });
+                })['finally'](function() {
+                angular.element("input[type='file']").val(null);
+                $scope.isDisabled=true;
+            });
 
         }
 

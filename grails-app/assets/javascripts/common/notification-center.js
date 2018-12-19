@@ -514,6 +514,7 @@ $(document).ready(function() {
 
             document.addEventListener('mousedown',this.setComponentToFocusOnFlyoutClose,true);
             document.addEventListener('keydown',this.setComponentToFocusOnFlyoutClose,true);
+            $.event.trigger('notification-use-ready');
         },
         render: function() {
             return this;
@@ -650,7 +651,7 @@ $(document).ready(function() {
             }
             else{
                 window.componentToFocusOnFlyoutClose = this.notificationCenterAnchor;
-          }
+            }
 
         }
     });
