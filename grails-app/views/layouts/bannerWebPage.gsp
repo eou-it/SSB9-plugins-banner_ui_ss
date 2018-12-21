@@ -107,7 +107,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 </g:if>
 <g:render template="/layouts/bannershortcuts"/>
 
-<asset:javascript src="modules/bannerWebLTR-mf.js"/>
+<asset:javascript src="modules/bannerWeb-mf.js"/>
 
 <asset:script>
     $(window).load(function() {

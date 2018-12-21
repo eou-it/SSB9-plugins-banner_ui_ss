@@ -139,6 +139,6 @@
 </div>
 </div>
 </div>
-    <asset:javascript src="modules/uploadPropertiesLTR-mf.js"/>
+    <asset:javascript src="modules/uploadProperties-mf.js"/>
 </body>
 </html>

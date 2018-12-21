@@ -814,6 +814,6 @@ dev[ng-model="theme"] {
     </div>
   </div>
 </div>
-    <asset:javascript src="modules/themeEditorLTR-mf.js"/>
+    <asset:javascript src="modules/themeEditor-mf.js"/>
 </body>
 </html>
