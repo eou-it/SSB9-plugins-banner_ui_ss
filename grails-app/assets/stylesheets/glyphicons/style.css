@@ -92,13 +92,13 @@ hr {
 	border-right: none;	
 }
 ul {
-	padding-left: 40px;	
+	padding-left: 40px;
 }
 
 @font-face {
 	font-family: 'ellucian';
-	src: url('fonts/ellucian.eot');
-	src: url('fonts/ellucian.eot?#iefix') format('embedded-opentype'), url('fonts/ellucian.woff') format('woff'), url('fonts/ellucian.ttf') format('truetype'), url('fonts/ellucian.svg#success') format('svg');
+	src: url('../../images/glyphicons/fonts/ellucian.eot');
+	src: url('../../images/glyphicons/fonts/ellucian.eot?#iefix') format('embedded-opentype'), url('../../images/glyphicons/fonts/ellucian.woff') format('woff'), url('../../images/glyphicons/fonts/ellucian.ttf') format('truetype'), url('../../images/glyphicons/fonts/ellucian.svg#success') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
