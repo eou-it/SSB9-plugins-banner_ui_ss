@@ -2,9 +2,12 @@
 Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 package net.hedtech.banner.webtailor
+
+import grails.util.Holders
 import groovy.sql.Sql
 import grails.util.Holders as SCH
 import org.grails.web.util.GrailsApplicationAttributes as GA
+import org.springframework.context.ApplicationContext
 
 /**
  * This is a helper class that is used to help common validation and other processing for
@@ -14,7 +17,7 @@ import org.grails.web.util.GrailsApplicationAttributes as GA
 class WebTailorUtility {
 
     public static String getInfoText(String name, String label, String source = '') {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
+        ApplicationContext ctx = Holders.getGrailsApplication().getMainContext()
         def sessionFactory = ctx.sessionFactory
         def session = sessionFactory.currentSession
         def sql = new Sql(session.connection())

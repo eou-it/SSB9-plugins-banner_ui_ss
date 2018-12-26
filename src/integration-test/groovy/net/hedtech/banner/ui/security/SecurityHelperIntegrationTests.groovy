@@ -6,19 +6,26 @@ package net.hedtech.banner.ui.security
 
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
+import grails.util.GrailsWebMockUtil
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.context.request.RequestContextHolder
 
 @Integration
 @Rollback
 class SecurityHelperIntegrationTests extends BaseIntegrationTestCase {
 
+    @Autowired
+    WebApplicationContext ctx
+
     @Before
     public void setUp() {
         formContext = ['GUAGMNU']
+        GrailsWebMockUtil.bindMockWebRequest(ctx)
         super.setUp()
     }
 
