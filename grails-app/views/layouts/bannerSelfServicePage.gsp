@@ -39,6 +39,8 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps?.trim()}">
     <meta name="aboutUrl" content="${!aboutServiceUrl ? '' : aboutServiceUrl}"/>
     <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
+    <meta name="hasActiveActionItems" content="${session.hasActiveActionItems}"/>
+    <meta name="aipUrl" content="${session.aipUrl}"/>
 
     <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         <asset:stylesheet href="modules/bannerSelfServiceRTL-mf.css"/>
@@ -127,6 +129,15 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
         <g:i18nJavaScript/>
     </asset:script>
+
+    <script type="text/javascript">
+        var mepcodeChanged='${request.mepcodeChanged}';
+        if(null !== mepcodeChanged && undefined !== mepcodeChanged && mepcodeChanged == "true"){
+            $(document).bind('notification-use-ready', function (e) {
+                mepcodeNotificationAddition(window.mepCode)
+            });
+        }
+    </script>
 
 
 <g:layoutBody/>

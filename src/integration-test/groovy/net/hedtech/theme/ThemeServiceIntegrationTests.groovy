@@ -91,12 +91,12 @@ class ThemeServiceIntegrationTests extends BaseIntegrationTestCase {
 
     @Test
     void testListTemplates(){
-        themeService.saveTheme("testtemplate", types.template, templateSCSS)
+        themeService.saveTheme("testtemplate2", types.template, templateSCSS)
         def list = themeService.listTemplates([sort: "name", order: "asc"])
-        assertTrue list.size() > 1
+        assertTrue list.size() >= 1
     }
 
-   @Test
+    @Test
     void testDeleteTemplate(){
         def templateInstance = themeService.saveTheme("testtemplate", types.template, templateSCSS)
         themeService.deleteTemplate("testtemplate")
