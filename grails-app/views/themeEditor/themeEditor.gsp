@@ -5,6 +5,7 @@
 <html xmlns:ng="http://angularjs.org" ng-strict-di>
 <head>
     <title><g:message code="theme.editor.title"/></title>
+    <meta name="layout" content="bannerWebPage"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="menuEndPoint" content="${g.createLink(controller: 'selfServiceMenu', action: 'data')}" />
     <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
@@ -16,8 +17,8 @@
     <g:else>
         <asset:stylesheet href="modules/themeEditorLTR-mf.css"/>
     </g:else>
-    <g:applyLayout name="bannerWebPage">
-    </g:applyLayout>
+
+     <asset:javascript src="modules/themeEditor-mf.js"/>
 
 </head>
 
@@ -814,6 +815,6 @@ dev[ng-model="theme"] {
     </div>
   </div>
 </div>
-    <asset:javascript src="modules/themeEditor-mf.js"/>
+    <asset:javascript src="modules/themeEditorLTR-mf.js"/>
 </body>
 </html>

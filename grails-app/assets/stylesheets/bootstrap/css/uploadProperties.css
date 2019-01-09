@@ -51,7 +51,7 @@ label.pb-label {
 }
 
 .pb-boolean .pb-item.pb-boolean:checked+label {
-    background-image: url(images/checkbox/checkbox-selected_new.svg);;
+    background-image: url('../../checkbox/checkbox-selected_new.svg');
 }
 .pb-boolean .pb-item.pb-boolean+label {
     background-repeat: no-repeat;
@@ -60,7 +60,7 @@ label.pb-label {
     line-height: 172%;
     cursor: pointer;
     padding-left: 30px;
-    background-image: url(images/checkbox/checkbox-default_new.svg);
+    background-image: url('../../checkbox/checkbox-default_new.svg');
 }
 
 .pb-boolean input[type="checkbox"] {

@@ -3,6 +3,7 @@
  ****************************************************************************** */
 package net.hedtech.banner.common
 
+import grails.util.BuildSettings
 import groovy.io.FileType
 import groovy.util.FileNameFinder
 
@@ -10,7 +11,7 @@ import groovy.util.FileNameFinder
  * This class is a utility class used to take all the CSS files from *Resources.groovy file and transform into SCSS file
  */
 class ThemeScssGenerator {
-    static def baseDirPath = System.properties['base.dir']
+    static def baseDirPath
     static def colorMap = [
             ALICEBLUE: '#F0F8FF',
             ANTIQUEWHITE: '#FAEBD7',
@@ -464,63 +465,58 @@ class ThemeScssGenerator {
         return css
     }
 
-    def getCSSFiles(dir) {
-        def files = []
-
-        dir.traverse(type: FileType.FILES, nameFilter: ~/.*Resources\.groovy/) { file ->
-
-            def fileText = file.text
-
-            def regexCSSResource = ~/resource url(.+?).css('|")/
-            def regexDir = ~/dir:('|")(.+?)('|")/
-            def regexPlugin = ~/plugin:('|")(.+?)('|")/
-            def regexCssFile = ~/file:('|")(.+?)('|")/    /*' terminate string for highlighting */
-
-            def matcherResource = regexCSSResource.matcher(fileText)
-            def matcherDir
-            def matcherPlugin
-            def matcherCSSFile
-
-            def resourceStr
-            def directory
-            def plugin
-            def cssFile
-            def fileTmpStr
-
-            while(matcherResource.find()){
-                resourceStr = matcherResource.group(0)
-                if (!resourceStr.contains('rtl')) {
-                    resourceStr = resourceStr.replace(" ", "")
-                    matcherDir = regexDir.matcher(resourceStr)
-                    while (matcherDir.find()) {
-                        directory = matcherDir.group(2)
-                    }
-                    matcherPlugin = regexPlugin.matcher(resourceStr)
-                    while (matcherPlugin.find()) {
-                        plugin = matcherPlugin.group(2).replace("-", "_") + '.git' + '/web-app/'
-                        if(!baseDirPath.contains('/plugins')) {
-                            plugin = checkFileExists(baseDirPath+"/plugins/"+plugin) ? plugin : plugin.replace("_", "-")
-                        }else{
-                            plugin = checkFileExists(baseDirPath) ? plugin : plugin.replace("_", "-")
+    def getfileNameList (file, resourceList){
+        def regexCSSMatcher = ~'= require '
+        def matcherResource
+        File parDir
+        def lines = file.readLines()
+        lines.each { String line ->
+            matcherResource = regexCSSMatcher.matcher(line)
+            if(matcherResource.find()){
+                def path = line.split(" ")
+                def moduleFile = path[2].toLowerCase()
+                if (!moduleFile.contains('-mf.css')) {
+                    if (!moduleFile.contains('-rtl') && !moduleFile.contains('-ltr')
+                            && !moduleFile.contains('jquery') && !moduleFile.contains('custom')){
+                        parDir = getActualFile(file, path[2])
+                        if(parDir){
+                            resourceList<< ['file':parDir]
                         }
                     }
-                    matcherCSSFile = regexCssFile.matcher(resourceStr)
-                    while (matcherCSSFile.find()) {
-                        fileTmpStr = matcherCSSFile.group(2)
+                }else{
+                    parDir = getActualFile(file, path[2] )
+                    if(parDir) {
+                        getfileNameList(parDir, resourceList)
                     }
                 }
-                if(directory) {
-                    fileTmpStr = directory+"/"+fileTmpStr
-                }
-                if(!baseDirPath.contains('/plugins')) {
-                    cssFile = plugin ? "/plugins/" + plugin + fileTmpStr : '/web-app/' + fileTmpStr
-                }else{
-                    cssFile =  '/web-app/' + fileTmpStr
-                }
-                if(checkFileExists(baseDirPath+cssFile)) {
-                    files << ["file": new File(baseDirPath + cssFile)]
-                }
             }
+        }
+        return resourceList
+    }
+
+    def getActualFile(file, cssFileName){
+        def submod = cssFileName.split("/")
+        def fileName = submod[submod.size()-1]
+        submod.each{
+            file = new File(new File(file.getParent()).getPath())
+        }
+        File actualFile
+        file.traverse(type: FileType.FILES, nameFilter: ~/.*${fileName}/) { fil ->
+            actualFile=fil
+        }
+        return actualFile
+    }
+
+    def getCSSFiles(dir) {
+        def files = []
+        List resourceList = []
+        dir.traverse(type: FileType.FILES, nameFilter: ~/.*-mf\.css/) { file ->
+            resourceList = new ArrayList()
+            if(!file.getName().toLowerCase().contains('rtl')){
+                resourceList.addAll(getfileNameList(file, resourceList))
+            }
+
+            files.addAll(resourceList)
         }
         files
     }
@@ -595,7 +591,7 @@ class ThemeScssGenerator {
     def appendFile(String filename, String SCSSFile) {
         File fileToAppend = new File(filename)
         if(fileToAppend.exists()) {
-            log.debug "Appending patch file ${filename} at offset ${new File( SCSSFile ).length()}"
+            println "Appending patch file ${filename} at offset ${new File( SCSSFile ).length()}"
             appendToScssFile(fileToAppend.text, SCSSFile, fileToAppend)
         }
     }
@@ -612,16 +608,20 @@ class ThemeScssGenerator {
         }
     }
 
-    public generateThemeSCSSFile(String SCSSFile) {
+    public generateThemeSCSSFile(String SCSSFile, String appName, String appVersion) {
         def cssFiles = []
         def SCSS
 
         checkFileExists(SCSSFile) ? new File(SCSSFile).delete() : new File(SCSSFile).getParentFile().mkdirs()
-
-        cssFiles.addAll(getCSSFiles(new File("${baseDirPath}/grails-app/conf/")))
+        cssFiles.addAll(getCSSFiles(new File("${baseDirPath}/grails-app/assets/stylesheets")))
         if (new File("${baseDirPath}/plugins/").exists()) {
             cssFiles.addAll(getCSSFiles(new File("${baseDirPath}/plugins/")))
         }
+        /*cssFiles.addAll(getCSSFiles(new File("C:\\Users\\gurunathdk\\projects\\banner_ui_ss_testapp/grails-app/assets/stylesheets")))
+        if (new File("C:\\Users\\gurunathdk\\projects\\banner_ui_ss_testapp/plugins/").exists()) {
+            cssFiles.addAll(getCSSFiles(new File("C:\\Users\\gurunathdk\\projects\\banner_ui_ss_testapp/plugins/")))
+        }*/
+
         cssFiles = cssFiles.unique()
         cssFiles = orderCSSFiles(cssFiles)
         if (cssFiles) {
@@ -640,5 +640,18 @@ class ThemeScssGenerator {
         appendCommonPatchFile(SCSSFile)
         appendSCSSPatchFile(SCSSFile)
         println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
+    }
+
+    //TODO: Remove it later, if found the better approach to call generateThemeSCSSFile() directly from build.gradle task
+    // Else we need to stick with the below appraoch
+    public static void main(String[] args) {
+        ThemeScssGenerator scssGenerator = new ThemeScssGenerator()
+        scssGenerator.generateThemeSCSSFile(System.getProperty("scssFile"), System.getProperty("appName"),
+                System.getProperty("appVersion"))
+    }
+
+    static {
+        String currentWorkingDir = System.getProperty("user.dir")
+        baseDirPath = new File(new File(currentWorkingDir).getParent()).getParent()
     }
 }

@@ -5,6 +5,7 @@
 package net.hedtech.theme
 
 import grails.converters.JSON
+import grails.gorm.transactions.Transactional
 import grails.util.Holders
 import net.hedtech.banner.ui.theme.ThemeUtil
 import net.sf.ehcache.Cache
@@ -15,6 +16,8 @@ import net.hedtech.banner.general.ConfigurationData
 import grails.web.context.ServletContextHolder
 import net.hedtech.banner.general.ConfigurationDataService
 
+
+@Transactional
 class ThemeService {
     def configurationDataService
     def grailsApplication
