@@ -473,24 +473,41 @@ class ThemeScssGenerator {
         lines.each { String line ->
             matcherResource = regexCSSMatcher.matcher(line)
             if(matcherResource.find()){
-                def path = line.split(" ")
-                def moduleFile = path[2].toLowerCase()
+                def moduleFile = line.toLowerCase()
                 if (!moduleFile.contains('-mf.css')) {
                     if (!moduleFile.contains('-rtl')){
-                        parDir = getActualFile(file, path[2])
+                        parDir = getDirectory(line)//(file, path[2])
                         if(parDir){
                             resourceList<< ['file':parDir]
                         }
                     }
                 }else{
-                    parDir = getActualFile(file, path[2] )
-                    if(parDir) {
+                    parDir = getDirectory(line)
+                    if (parDir) {
                         getfileNameList(parDir, resourceList)
                     }
                 }
             }
         }
         return resourceList
+    }
+
+    private getDirectory(String fname){
+        if(fname.contains('/')) {
+            fname = fname.substring(fname.lastIndexOf('/') + 1)
+        }else{
+            fname = fname.substring(fname.lastIndexOf(' ') + 1)
+        }
+        if(fname){
+            def dir = cssFileMap.get(fname)
+            if(dir){
+                return new File(dir)
+            }else{
+                return null
+            }
+        }else{
+            return null
+        }
     }
 
     def getActualFile(file, cssFileName){
@@ -610,6 +627,7 @@ class ThemeScssGenerator {
     public generateThemeSCSSFile(String SCSSFile, String appName, String appVersion) {
         def cssFiles = []
         def SCSS
+        createcssFileMap()
 
         checkFileExists(SCSSFile) ? new File(SCSSFile).delete() : new File(SCSSFile).getParentFile().mkdirs()
         cssFiles.addAll(getCSSFiles(new File("${baseDirPath}/grails-app/assets/stylesheets")))
@@ -636,6 +654,14 @@ class ThemeScssGenerator {
         appendSCSSPatchFile(SCSSFile)
         println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
     }
+    def cssFileMap = new HashMap<String, String>()
+
+    def createcssFileMap(){
+        new File(baseDirPath).traverse (type: FileType.FILES, nameFilter: ~/.*\.css/) { file ->
+            cssFileMap.put(file.getName(), file.getPath())
+        }
+
+    }
 
     //TODO: Remove it later, if found the better approach to call generateThemeSCSSFile() directly from build.gradle task
     // Else we need to stick with the below appraoch
@@ -648,5 +674,6 @@ class ThemeScssGenerator {
     static {
         String currentWorkingDir = System.getProperty("user.dir")
         baseDirPath = new File(new File(currentWorkingDir).getParent()).getParent()
+        /*baseDirPath = "C:\\Users\\gurunathdk\\projects\\banner_ui_ss_testapp\\"*/
     }
 }
