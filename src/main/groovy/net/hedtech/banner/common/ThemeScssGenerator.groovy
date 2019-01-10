@@ -476,8 +476,7 @@ class ThemeScssGenerator {
                 def path = line.split(" ")
                 def moduleFile = path[2].toLowerCase()
                 if (!moduleFile.contains('-mf.css')) {
-                    if (!moduleFile.contains('-rtl') && !moduleFile.contains('-ltr')
-                            && !moduleFile.contains('jquery') && !moduleFile.contains('custom')){
+                    if (!moduleFile.contains('-rtl')){
                         parDir = getActualFile(file, path[2])
                         if(parDir){
                             resourceList<< ['file':parDir]
@@ -617,10 +616,6 @@ class ThemeScssGenerator {
         if (new File("${baseDirPath}/plugins/").exists()) {
             cssFiles.addAll(getCSSFiles(new File("${baseDirPath}/plugins/")))
         }
-        /*cssFiles.addAll(getCSSFiles(new File("C:\\Users\\gurunathdk\\projects\\banner_ui_ss_testapp/grails-app/assets/stylesheets")))
-        if (new File("C:\\Users\\gurunathdk\\projects\\banner_ui_ss_testapp/plugins/").exists()) {
-            cssFiles.addAll(getCSSFiles(new File("C:\\Users\\gurunathdk\\projects\\banner_ui_ss_testapp/plugins/")))
-        }*/
 
         cssFiles = cssFiles.unique()
         cssFiles = orderCSSFiles(cssFiles)

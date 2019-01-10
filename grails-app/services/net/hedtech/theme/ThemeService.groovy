@@ -142,6 +142,7 @@ class ThemeService {
                                 value       : file.text,
                                 dataOrigin  : 'Banner',
                                 lastModified: new Date(),
+                                lastModifiedBy: 'Default',
                                 appId : appId
 
                         ]
