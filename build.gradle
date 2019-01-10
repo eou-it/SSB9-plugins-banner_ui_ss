@@ -102,7 +102,7 @@ task (generateSCSSFile, type: JavaExec)  {
     println("Executing SCSS Generator...")
     main = 'net.hedtech.banner.common.ThemeScssGenerator'
     println("Inside Generator script method ...")
-    def scssFilePath = "${project.rootDir}/web-app/css/theme/"
+    def scssFilePath = "${project.rootDir}/src/main/webapp/css/theme/"
     def appName = "${rootProject.name}"
     def appVersion = grails.util.Metadata.current.'app.version'
     def versionText = appVersion ? ("-" + appVersion).replaceAll(/\./, '_') : ""
