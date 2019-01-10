@@ -90,7 +90,12 @@ public class JSONDomainMarshaller implements ObjectMarshaller<JSON> {
     }
 
     public boolean supports(Object object) {
-        return AnnotationDomainClassArtefactHandler.isDomainClass(object.getClass()) || AnnotationDomainClassArtefactHandler.isJPADomainClass(object.getClass())
+        PersistentEntity domain = Holders.getGrailsApplication().getMappingContext().getPersistentEntity(object.getClass().getName());
+        if ( domain != null ) {
+            return true
+        }
+        return false
+
     }
 
     @SuppressWarnings("unchecked")
