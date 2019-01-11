@@ -624,6 +624,11 @@ class ThemeScssGenerator {
         }
     }
 
+    def writeHeader( scssFile, appName, appVersion ) {
+        def message = "/*\n  $scssFile.name\n  application: $appName\n  application version: $appVersion\n*/\n"
+        scssFile.append( message )
+    }
+
     public generateThemeSCSSFile(String SCSSFile, String appName, String appVersion) {
         def cssFiles = []
         def SCSS
@@ -634,12 +639,13 @@ class ThemeScssGenerator {
         if (new File("${baseDirPath}/plugins/").exists()) {
             cssFiles.addAll(getCSSFiles(new File("${baseDirPath}/plugins/")))
         }
-
+        def scssFile = new File(SCSSFile)
         cssFiles = cssFiles.unique()
         cssFiles = orderCSSFiles(cssFiles)
         if (cssFiles) {
             checkFileExists(SCSSFile) ? new File(SCSSFile).delete() : new File(SCSSFile).getParentFile().mkdirs()
             if(new File(SCSSFile).getParentFile().exists()) {
+                writeHeader( scssFile, appName, appVersion )
                 cssFiles.each { File file ->
                     if(file.exists()) {
                         SCSS = generateSCSS(file.text)
@@ -674,6 +680,5 @@ class ThemeScssGenerator {
     static {
         String currentWorkingDir = System.getProperty("user.dir")
         baseDirPath = new File(new File(currentWorkingDir).getParent()).getParent()
-        /*baseDirPath = "C:\\Users\\gurunathdk\\projects\\banner_ui_ss_testapp\\"*/
     }
 }
