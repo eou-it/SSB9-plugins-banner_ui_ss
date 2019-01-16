@@ -109,6 +109,7 @@ task (generateSCSSFile, type: JavaExec)  {
     def scssFileName = (appName + versionText) + ".scss"
 
     def scssFile = scssFilePath+scssFileName
+    System.setProperty('scssFile',scssFile)
     try {
         System.properties.each { k,v->
             if (k.startsWith("scssFile")) {
