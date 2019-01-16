@@ -607,6 +607,7 @@ class ThemeScssGenerator {
     def appendFile(String filename, String SCSSFile) {
         File fileToAppend = new File(filename)
         if(fileToAppend.exists()) {
+            println "Appending patch file ${filename} at offset ${new File( SCSSFile ).length()}"
             appendToScssFile(fileToAppend.text, SCSSFile, fileToAppend)
         }
     }
@@ -657,6 +658,7 @@ class ThemeScssGenerator {
         }
         appendCommonPatchFile(SCSSFile)
         appendSCSSPatchFile(SCSSFile)
+        println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
     }
     def cssFileMap = new HashMap<String, String>()
 
@@ -671,8 +673,8 @@ class ThemeScssGenerator {
     // Else we need to stick with the below appraoch
     public static void main(String[] args) {
         ThemeScssGenerator scssGenerator = new ThemeScssGenerator()
-        scssGenerator.generateThemeSCSSFile(System.getProperty("scssFile"), System.getProperty("appName"),
-                System.getProperty("appVersion"))
+        scssGenerator.generateThemeSCSSFile(System.getProperty("scssFile"), System.getProperty("app.name"),
+                System.getProperty("app.version"))
     }
 
     static {

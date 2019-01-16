@@ -110,10 +110,17 @@ task (generateSCSSFile, type: JavaExec)  {
 
     def scssFile = scssFilePath+scssFileName
     try {
+        System.properties.each { k,v->
+            if (k.startsWith("scssFile")) {
+                systemProperty 'scssFile', scssFile
+            }else if (k.startsWith("app.name")){
+                systemProperty 'app.name', appName
+            }else if(k.startsWith("app.version")){
+                systemProperty 'app.version', appVersion
+            }
+        }
         classpath = sourceSets.main.runtimeClasspath
-        systemProperty 'scssFile',  scssFile
-        systemProperty 'appName' , appName
-        systemProperty 'appVersion' , appVersion
+        
     } catch (FileNotFoundException e) {
         println "Unable to generate theme SCSS file - unexpected exception"
         e.printStackTrace()
