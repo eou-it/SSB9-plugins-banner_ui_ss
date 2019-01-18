@@ -104,7 +104,7 @@ task (generateSCSSFile, type: JavaExec)  {
     println("Inside Generator script method ...")
     def scssFilePath = "${project.rootDir}/src/main/webapp/css/theme/"
     def appName = "${rootProject.name}"
-    def appVersion = grails.util.Metadata.current.'app.version'
+    def appVersion ="${rootProject.version}"
     def versionText = appVersion ? ("-" + appVersion).replaceAll(/\./, '_') : ""
     def scssFileName = (appName + versionText) + ".scss"
 
@@ -115,9 +115,9 @@ task (generateSCSSFile, type: JavaExec)  {
             if (k.startsWith("scssFile")) {
                 systemProperty 'scssFile', scssFile
             }else if (k.startsWith("app.name")){
-                systemProperty 'app.name', appName
+                systemProperty 'appName', appName
             }else if(k.startsWith("app.version")){
-                systemProperty 'app.version', appVersion
+                systemProperty 'appVersion', appVersion
             }
         }
         classpath = sourceSets.main.runtimeClasspath

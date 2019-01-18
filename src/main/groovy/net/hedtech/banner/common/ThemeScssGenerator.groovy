@@ -673,8 +673,8 @@ class ThemeScssGenerator {
     // Else we need to stick with the below appraoch
     public static void main(String[] args) {
         ThemeScssGenerator scssGenerator = new ThemeScssGenerator()
-        scssGenerator.generateThemeSCSSFile(System.getProperty("scssFile"), System.getProperty("app.name"),
-                System.getProperty("app.version"))
+        scssGenerator.generateThemeSCSSFile(System.getProperty("scssFile"), System.getProperty("appName"),
+                System.getProperty("appVersion"))
     }
 
     static {
