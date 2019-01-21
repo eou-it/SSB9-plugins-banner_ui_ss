@@ -4,6 +4,7 @@
 
 package net.hedtech.banner.ui.theme
 
+import grails.gorm.transactions.Transactional
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.commons.io.FilenameUtils
@@ -20,7 +21,7 @@ class ThemeEditorController {
             themeService.listThemes([sort: "name", order: "asc"])
         })
     }
-
+    @Transactional
     def save() {
         def data = request.JSON
         assert data.name, "Must include name of theme"

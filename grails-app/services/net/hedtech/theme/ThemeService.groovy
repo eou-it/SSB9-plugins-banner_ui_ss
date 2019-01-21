@@ -39,7 +39,7 @@ class ThemeService {
             theme = configurationDataService.update(theme)
         } else {
             theme = configurationDataService.create([name: name, type: type, value: content ,appId: appId,
-                                                     lastModifiedBy: user, lastModified: new Date(), dataOrigin: 'Banner'])
+                                                     lastModifiedBy: user, lastModified: new Date(), dataOrigin: 'Banner'],false)
         }
         log.debug "Saved theme $theme"
         def cacheKey
