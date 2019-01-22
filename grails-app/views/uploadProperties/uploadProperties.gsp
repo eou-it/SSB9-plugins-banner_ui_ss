@@ -117,9 +117,9 @@
                                                 {{filename.basename}}
                                                 </label></div>
                                     </td>
-                                    <td style="text-align: center"><a href="${request.contextPath}/admin/i18n?locale={{fileLoc}}&amp;name={{filename.basename}}"
+                                    <td class="tableContent"><a href="${request.contextPath}/admin/i18n?locale={{fileLoc}}&amp;name={{filename.basename}}"
                                            target="_blank"><g:message code="upload.properties.viewother.window"/></a></td>
-                                    <td style="text-align: center" id="count{{$index}}"></td>
+                                    <td class="tableContent" id="count{{$index}}"></td>
                                 </tr>
                             </tbody>
                         </table>

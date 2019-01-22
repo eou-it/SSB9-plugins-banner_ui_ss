@@ -21,7 +21,7 @@ class ThemeEditorController {
             themeService.listThemes([sort: "name", order: "asc"])
         })
     }
-    @Transactional
+
     def save() {
         def data = request.JSON
         assert data.name, "Must include name of theme"
