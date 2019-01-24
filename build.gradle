@@ -99,21 +99,27 @@ assets {
 }
 
 task (generateSCSSFile, type: JavaExec)  {
-    println("Executing SCSS Generator...")
     main = 'net.hedtech.banner.common.ThemeScssGenerator'
-    println("Inside Generator script method ...")
     def scssFilePath = "${project.rootDir}/src/main/webapp/css/theme/"
     def appName = "${rootProject.name}"
-    def appVersion = grails.util.Metadata.current.'app.version'
+    def appVersion ="${rootProject.version}"
     def versionText = appVersion ? ("-" + appVersion).replaceAll(/\./, '_') : ""
     def scssFileName = (appName + versionText) + ".scss"
 
     def scssFile = scssFilePath+scssFileName
+    System.setProperty('scssFile',scssFile)
     try {
+        System.properties.each { k,v->
+            if (k.startsWith("scssFile")) {
+                systemProperty 'scssFile', scssFile
+            }else if (k.startsWith("app.name")){
+                systemProperty 'appName', appName
+            }else if(k.startsWith("app.version")){
+                systemProperty 'appVersion', appVersion
+            }
+        }
         classpath = sourceSets.main.runtimeClasspath
-        systemProperty 'scssFile',  scssFile
-        systemProperty 'appName' , appName
-        systemProperty 'appVersion' , appVersion
+        
     } catch (FileNotFoundException e) {
         println "Unable to generate theme SCSS file - unexpected exception"
         e.printStackTrace()

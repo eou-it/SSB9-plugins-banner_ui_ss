@@ -15,8 +15,7 @@ body {
 
 /*** Favicon ***/
 .favicon {
-  background-image: url("$themefavicon");
-  width: 20em;
+  background-image: url("#{$themefavicon}");
 }
 
 /*** Global focus ***/
@@ -27,14 +26,9 @@ body {
 /*** Header ***/
 #banner-header-main-section,
 #header-main-section {
-    background-color: $themecolor1; /* use selected color */
-    color: $themecolor1_text;
-    border-bottom-color: $themecolor2;
-}
-
-#header-main-section-east-part {
-  background-color: $themecolor1-active; /*fallback for IE and edge*/
-  background-color: $themecolor1-active4d; /*settting transparency*/
+  background-color: $themecolor1; /* use selected color */
+  color: $themecolor1_text;
+  border-bottom-color: $themecolor2;
 }
 
 /*** Tweaks to base UI */
@@ -54,27 +48,27 @@ body {
 
 /** Page Builder */
 .admin-menu-section-main {
-    border-color: $themecolor1-2; /*#9AC0D2*/
+  border-color: $themecolor1-2; /*#9AC0D2*/
 }
 .admin-menu {
-    color: $themecolor1-3; /*#206E9F;*/
+  color: $themecolor1-3; /*#206E9F;*/
 }
 
 .admin-menu-section-sub>div:first-of-type {
-    border-right-color: $themecolor1-2; /*#9AC0D2*/
-    border-left-color: $themecolor1-2; /*#9AC0D2*/
+  border-right-color: $themecolor1-2; /*#9AC0D2*/
+  border-left-color: $themecolor1-2; /*#9AC0D2*/
 }
 
 .admin-menu-section-sub {
-    border-color: $themecolor1-2; /*#9AC0D2*/
+  border-color: $themecolor1-2; /*#9AC0D2*/
 }
 .app-list-container {
-    border: 1px solid $themecolor1-2;
+  border: 1px solid $themecolor1-2;
 }
 
 
 .admin-menu-section-main {
-    border-color: $themecolor1-2; /*#9AC0D2*/
+  border-color: $themecolor1-2; /*#9AC0D2*/
 }
 
 @media (max-width: 991px) {
@@ -84,7 +78,7 @@ body {
 }
 
 .app-list-container>div {
-    border-top-color: $themecolor1-2; /*#9AC0D2*/
+  border-top-color: $themecolor1-2; /*#9AC0D2*/
 }
 
 /* Hide button bar in header of old-style pages */
@@ -102,16 +96,16 @@ body {
 }
 
 .login-primary:hover:not([disabled]) {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
 }
 
 .login-primary:focus:not([disabled]) {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
   border-color: $themecolor2-4;
 }
 
 .login-primary:active:not([disabled]) {
-  background-color: $themecolor3-active;
+  background-color: $themecolor3-1; /*active*/
 }
 
 .signin-button {
@@ -119,16 +113,16 @@ body {
 }
 
 .signin-button:hover:not([disabled]) {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
 }
 
 .signin-button:focus:not([disabled])  {
-  background-color: $themecolor3-hover;
+  background-color: $themecolor3-2; /*hover*/
   border-color: $themecolor2-4;
 }
 
 .signin-button:active:not([disabled])  {
-  background-color: $themecolor3-active;
+  background-color: $themecolor3-1; /*active*/
 }
 
 .splashBg .appName {
@@ -139,10 +133,7 @@ body {
   color: $themecolor3;
 }
 
-.pageBg {
-  background-color: $themecolor1-4; /*background-image*/
-  background-image: none;
-}
+
 
 .xe-modal-mask {
   background-color: rgba(0, 0, 0, 0.3);
@@ -162,17 +153,28 @@ body {
 
 /*** Tweaks to buttons ***/
 .primary:hover:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .primary:focus:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .secondary:hover:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
 }
 
 .secondary:focus:not([disabled])  {
-  background-color: $themecolor3-hover; /*#065AA5*/
+  background-color: $themecolor3-2; /*#065AA5*/
+}
+
+.pageBg {
+  @if variable_exists(themebgimage) {
+    background-image: url("#{$themebgimage}");
+  }
+}
+
+/* for login password link*/
+.splashBg .forgotpassword {
+  color: $themecolor3 !important; /*EDS*/
 }
