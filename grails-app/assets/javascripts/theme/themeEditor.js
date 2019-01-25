@@ -308,6 +308,14 @@
             console.log("saveTheme:", $scope);
             var data = getData($scope);
             console.log("saving data:", data);
+            if(!data.name){
+                var errorNotification  = notifications.addNotification(new Notification({
+                    message: $.i18n.prop("js.notification.upload.error"),
+                    type: "error",
+                    id: saveError
+                }))
+                return
+            }
 
             return $http.post( themeEditorPath + "/save", data)
                 .success( function() {
@@ -327,7 +335,6 @@
                     }))
                 })
                 .error( function(response) {
-                    console.log( response );
                     console.log( "failed to save theme: ", response.status );
                     var errorNotification  = notifications.addNotification(new Notification({
                         message: $.i18n.prop("js.notification.upload.error"),

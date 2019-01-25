@@ -1,21 +1,43 @@
 package net.hedtech.banner.uploadproperties
 
-import grails.gorm.transactions.Rollback
 //import grails.test.spock.IntegrationSpec
-import grails.testing.mixin.integration.Integration
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Specification
+
+import grails.util.GrailsWebMockUtil
+import org.grails.plugins.testing.GrailsMockHttpServletRequest
+import org.grails.plugins.testing.GrailsMockHttpServletResponse
+import org.springframework.mock.web.MockHttpServletRequest
+import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.web.context.WebApplicationContext
+
+//class UploadPropertiesControllerIntegrationTest extends IntegrationSpec {
+
+import grails.testing.mixin.integration.Integration
 
 @Integration
-@Rollback
-//class UploadPropertiesControllerIntegrationTest extends IntegrationSpec {
-class UploadPropertiesControllerIntegrationTest {
+class UploadPropertiesControllerIntegrationTest extends Specification {
 
-    def uploadProperties
+    @Autowired
+    WebApplicationContext webAppCtx
+
+    //def uploadProperties
+
+    @Autowired
+    UploadPropertiesController uploadProperties
+
     public void setup() {
-        uploadProperties = new UploadPropertiesController()
+        //uploadProperties = new UploadPropertiesController()
+        //Grails-3 modification for controllers
+        MockHttpServletRequest request = new GrailsMockHttpServletRequest(webAppCtx.servletContext)
+        MockHttpServletResponse response = new GrailsMockHttpServletResponse()
+        GrailsWebMockUtil.bindMockWebRequest(webAppCtx, request, response)
+
+        //uploadProperties = new UploadPropertiesController()
     }
 
 
