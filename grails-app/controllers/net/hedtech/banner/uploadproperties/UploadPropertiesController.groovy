@@ -8,6 +8,7 @@ import grails.converters.JSON
 class UploadPropertiesController {
 
     def resourceBundleService
+    private Object savePropLock= new Object()
 
     def index() {
         render(view: "uploadProperties")
@@ -30,8 +31,10 @@ class UploadPropertiesController {
     }
 
     def save() {
-        def data = request.JSON
-        def result = resourceBundleService.save(data)
-        render result as JSON
+        synchronized (savePropLock) {
+            def data = request.JSON
+            def result = resourceBundleService.save(data)
+            render result as JSON
+        }
     }
 }
