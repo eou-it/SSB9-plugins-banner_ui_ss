@@ -1,3 +1,7 @@
+/*******************************************************************************
+ Copyright 2016-2019 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
+/* global notifications */
 package net.hedtech.banner.uploadproperties
 
 //import grails.test.spock.IntegrationSpec
