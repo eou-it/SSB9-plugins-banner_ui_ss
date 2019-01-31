@@ -108,13 +108,16 @@ task (generateSCSSFile, type: JavaExec)  {
 
     def scssFile = scssFilePath+scssFileName
     System.setProperty('scssFile',scssFile)
+    System.setProperty('appName',appName)
+    System.setProperty('appVersion',appVersion)
+    
     try {
         System.properties.each { k,v->
             if (k.startsWith("scssFile")) {
                 systemProperty 'scssFile', scssFile
-            }else if (k.startsWith("app.name")){
+            }else if (k.startsWith("appName")){
                 systemProperty 'appName', appName
-            }else if(k.startsWith("app.version")){
+            }else if(k.startsWith("appVersion")){
                 systemProperty 'appVersion', appVersion
             }
         }
