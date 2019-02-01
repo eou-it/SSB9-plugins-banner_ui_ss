@@ -15,7 +15,7 @@ body {
 
 /*** Favicon ***/
 .favicon {
-  background-image: url("#{$themefavicon}");
+  background-image: url("$themefavicon");
 }
 
 /*** Global focus ***/
@@ -170,7 +170,7 @@ body {
 
 .pageBg {
   @if variable_exists(themebgimage) {
-    background-image: url("#{$themebgimage}");
+    background-image: url("$themebgimage");
   }
 }
 
