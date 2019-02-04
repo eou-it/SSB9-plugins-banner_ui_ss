@@ -437,7 +437,7 @@ $(document).ready(function() {
 
     addCssClass();
     // TODO :grails_332_change, needs to revisit
-    //changeFavicon();
+    changeFavicon();
 });
 
 $(document).bind('notification-use-ready', function (e) {
@@ -468,7 +468,8 @@ function showAipPromptNotification(url) {
 
 function changeFavicon() {
     var link = document.querySelector("link[rel*='shortcut icon']")||document.createElement('link'),
-        oldLink = document.querySelector("link[rel*='shortcut icon']")||document.getElementById('dynamic-favicon');
+        oldLink = document.querySelector("link[type*='image/x-icon']") || document.querySelector("link[rel*='shortcut icon']")
+            ||document.getElementById('dynamic-favicon');
     var defaultUrl = link.href;
     link.rel = 'shortcut icon';
     link.type = 'image/x-icon';
