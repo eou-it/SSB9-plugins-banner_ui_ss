@@ -29,7 +29,7 @@ class ResponseHeaderInterceptor {
         response.setHeader('X-Content-Type-Options', 'nosniff')
         response.setHeader("X-XSS-Protection", "1; mode=block")
         response.setHeader('X-Frame-Options', 'sameorigin')
-        response.setHeader("Content-Security-Policy", "style-src 'self'; img-src 'self'; font-src 'self';")
+//        response.setHeader("Content-Security-Policy", "style-src 'self'; img-src 'self'; font-src 'self';")
         true
     }
 
