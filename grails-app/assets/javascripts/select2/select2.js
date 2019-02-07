@@ -1473,6 +1473,7 @@ var requestTimeout
             this.positionDropdown();
             this.dropdown.show();
             this.positionDropdown();
+            $(document).trigger('mousedown');
 
             this.dropdown.addClass("select2-drop-active");
 
