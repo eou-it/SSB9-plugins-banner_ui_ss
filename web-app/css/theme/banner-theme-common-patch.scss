@@ -15,7 +15,7 @@ body {
 
 /*** Favicon ***/
 .favicon {
-    background-image: url("#{$themefavicon}");
+    background-image: url("$themefavicon");
 }
 
 /*** Global focus ***/
@@ -79,6 +79,15 @@ body {
 
 .app-list-container>div {
     border-top-color: $themecolor1-2; /*#9AC0D2*/
+}
+
+/*This css is for pagebuilder landing page mapping it with the CTA Color*/
+.pb-block a, .pb-link span{
+  color: $themecolor3;
+}
+
+.pagination-container .pagination-controls button:hover, .pagination-container .pagination-controls button:focus {
+  background-color: $themecolor3;
 }
 
 /* Hide button bar in header of old-style pages */
@@ -170,7 +179,8 @@ body {
 
 .pageBg {
   @if variable_exists(themebgimage) {
-    background-image: url("#{$themebgimage}");
+    /* @if is only supported on ETE, but bgimage is also only supported on ETE */
+    background-image: url("$themebgimage");
   }
 }
 
