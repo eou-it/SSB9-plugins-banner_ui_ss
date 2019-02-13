@@ -6,7 +6,7 @@
     'use strict';
     var _listOfBannerShortcuts = [];
     angular.module('keyboardshortcut', ['bannerBindkeys', 'xe-ui-components'])
-        //service
+    //service
         .service('keyshortcut', ['hotkeys', function (hotkeys) {
             this.shortcutObj = function (combination, description, callback, bindingScope) {
                 let shortcut = {};
@@ -264,25 +264,26 @@
                         method: "GET",
                         url: backendURL + "/shortcut/data",
                         cache: true
-                    }).then(function success(response) {
-                        let jsonShortcutList = response.data;
-                        $scope.backendCalled = true;
-                        if (keyshortcut.isMac()) {
-                            let macMessageList = jsonShortcutList.mac;
-                            $scope.populateEntireDialog(macMessageList);
-                        } else {
-                            let windowsMessageList = jsonShortcutList.windows;
-                            $scope.populateEntireDialog(windowsMessageList);
-                        }
-                        $scope.shortcutObj = sortAscendingShortcutList(keyshortcut.getBannerShortcutList());
-                        $timeout(function () {
-                            /*let derivedScope = angular.element("#shortcut_module_added").scope();
-                            let firstShortcutScope = angular.element(".banner_shortcut_0").scope();
-                            let createId = "banner_shortcut_" + firstShortcutScope.$id;
-                            derivedScope[createId] = false;*/
-                            defaultAriaAccessibility(shortcutList);
-                        }, 10);
-                    }, function error(error) {
+                    }).then(function onSuccess(response, status) {
+                            let jsonShortcutList = response.data;
+                            $scope.backendCalled = true;
+                            if (keyshortcut.isMac()) {
+                                let macMessageList = jsonShortcutList.mac;
+                                $scope.populateEntireDialog(macMessageList);
+                            } else {
+                                let windowsMessageList = jsonShortcutList.windows;
+                                $scope.populateEntireDialog(windowsMessageList);
+                            }
+                            $scope.shortcutObj = sortAscendingShortcutList(keyshortcut.getBannerShortcutList());
+                            $timeout(function () {
+                                /*let derivedScope = angular.element("#shortcut_module_added").scope();
+                                let firstShortcutScope = angular.element(".banner_shortcut_0").scope();
+                                let createId = "banner_shortcut_" + firstShortcutScope.$id;
+                                derivedScope[createId] = false;*/
+                                defaultAriaAccessibility(shortcutList);
+                            }, 10);
+                        }).catch(function onError(error) {
+                        // Handle error
                         console.log("Error Occurred reading message keys from message.properties file");
                         console.log("Status " + error.status + " Error Message is " + error.statusText);
                     });
