@@ -436,7 +436,6 @@ $(document).ready(function() {
     });
 
     addCssClass();
-    // TODO :grails_332_change, needs to revisit
     changeFavicon();
 });
 
@@ -467,25 +466,37 @@ function showAipPromptNotification(url) {
 
 
 function changeFavicon() {
-    var link = document.querySelector("link[rel*='shortcut icon']")||document.createElement('link'),
-        oldLink = document.querySelector("link[type*='image/x-icon']") || document.querySelector("link[rel*='shortcut icon']")
-            ||document.getElementById('dynamic-favicon');
-    var defaultUrl = link.href;
+    // get the dynamic favicon link, an existing favicon link, or create a link to use
+    var ID = 'dynamic-favicon';
+    var link = document.getElementById(ID);
+    if ( !link ) {
+        // must append the link to the document head before we can use getComputedStyle
+        link = document.head.appendChild(document.createElement('link'));
+
+        // look for the favicon URL as the background image of link.favicon
+        link.className = 'favicon';
     link.rel = 'shortcut icon';
     link.type = 'image/x-icon';
-    link.className = 'favicon';
-    var url = window.getComputedStyle(link).getPropertyValue('background-image');
-    var urlRegex = /^url\("(.*)"\)$/;
-
-    if(urlRegex.test(url) && url.indexOf("$themefavicon") == -1){
-        link.href = url.slice(4, -1).replace(/"/g, "");
-        link.id = 'dynamic-favicon';
+        link.id = ID;
     }
 
-    if (oldLink)
-        document.getElementsByTagName('head')[0].removeChild(oldLink);
+    // get the assigned .favicon background-image URL from the theme stylesheet
+    var backgroundImage = window.getComputedStyle(link).getPropertyValue('background-image');
 
-    document.getElementsByTagName('head')[0].appendChild(link);
+    // check if we have a url(___), possibly with quotes. IE doesn't put quotes around the URL.
+    var urlRegex = /^url\("?(.*)"?\)$/;
+    if(urlRegex.test(backgroundImage) && backgroundImage.indexOf("$themefavicon") == -1){
+        // remove all old links of the various ways they are specified by UXD
+        // includes shortcut icon and apple-touch-icon
+        var oldLinks = document.querySelectorAll("link[rel*='icon']");
+        Array.prototype.forEach.call( oldLinks, function(element) {
+            document.head.removeChild(element);
+        })
+
+        // replace with a single updated favicon URL
+        link.href = backgroundImage.slice(4, -1).replace(/"/g, "");
+        document.head.appendChild(link);
+    }
 }
 
 function addCssClass() {
