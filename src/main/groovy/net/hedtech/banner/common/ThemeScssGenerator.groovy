@@ -1,15 +1,17 @@
 /** *****************************************************************************
- Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2019 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.common
 
 import grails.util.BuildSettings
 import groovy.io.FileType
 import groovy.util.FileNameFinder
+import groovy.util.logging.Slf4j
 
 /**
  * This class is a utility class used to take all the CSS files from *Resources.groovy file and transform into SCSS file
  */
+@Slf4j
 class ThemeScssGenerator {
     static def baseDirPath
     static def colorMap = [
@@ -162,19 +164,188 @@ class ThemeScssGenerator {
             YELLOW: '#FFFF00',
             YELLOWGREEN: '#9ACD32'
     ]
-    static def themColorVariablesMap = [
-            '#5353D1': '$themecolor1',
-            '#4845B8': '$themecolor1-active',
+    /* Example theme.json with standard starting colors
+
+eds2 color generation
+The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much less saturated)
+"color1":"#5353D1","color1-hover":"#4747ac","color1-active":"#3a3b87","color1-light":"#f6f6fd","color1_text":"#ffffff",
+"color1_dark":"#3a3b87","color1_dark_text":"#ffffff","color1_light":"#f6f6fd","color1_light_text":"#151618",
+"color1-0":"#0b0b28","color1-1":"#3a3b87","color1-2":"#4747ac","color1-3":"#3636c9","color1-4":"#afafe9","color1-5":"#f6f6fd",
+
+"color2":"#51ABFF","color2-hover":"#458dd1","color2-active":"#396fa3","color2-light":"#f6fbff","color2_text":"#151618",
+"color2_dark":"#396fa3","color2_dark_text":"#ffffff","color2_light":"#f6fbff","color2_light_text":"#151618",
+"color2-0":"#001a33","color2-1":"#396fa3","color2-2":"#458dd1","color2-3":"#0084ff","color2-4":"#99ceff","color2-5":"#f6fbff",
+
+"color3":"#026BC8","color3-hover":"#065aa5","color3-active":"#0a4982","color3-light":"#f2f8fc","color3_text":"#ffffff",
+"color3_dark":"#0a4982","color3_dark_text":"#ffffff","color3_light":"#f2f8fc","color3_light_text":"#151618",
+"color3-0":"#011b32","color3-1":"#0a4982","color3-2":"#065aa5","color3-3":"#0387fc","color3-4":"#9acffe","color3-5":"#f2f8fc",
+
+// old color generation
+
+"color1":"#5353D1","color1_text":"#ffffff",
+"color1-0":"#0b0b28","color1-1":"#161650","color1-2":"#26268d","color1-3":"#3636c9","color1-4":"#afafe9","color1-5":"#d7d7f4",
+"color1_dark":"#1b1b65","color1_dark_text":"#cccccc","color1_light":"#d7d7f4","color1_light_text":"#333333",
+
+"color2":"#51ABFF","color2_text":"#333333",
+"color2-0":"#001a33","color2-1":"#003566","color2-2":"#005cb3","color2-3":"#0084ff","color2-4":"#99ceff","color2-5":"#cce6ff",
+"color2_dark":"#004280","color2_dark_text":"#cccccc","color2_light":"#cce6ff","color2_light_text":"#333333",
+
+"color3":"#026BC8", "color3_text":"#ffffff",
+"color3-0":"#011b32", "color3-1":"#013665", "color3-2":"#025fb1", "color3-3":"#0387fc", "color3-4":"#9acffe", "color3-5":"#cde7fe",
+"color3_dark":"#01447e", "color3_dark_text":"#cccccc", "color3_light":"#cde7fe", "color3_light_text":"#333333",
+*/
+
+    static def themeColorVariablesMap = [
+            // map colors used in our applications to the appropriate theme color variables.
+
+            // When mapping EDS2 compliant applications to themecolors, each color should be used
+            // consistently with the correct meaning. Non-standard colors listed below should be
+            // replaced with a theme color that gives a similar brightness and saturation.
+
+            // Colors used in Banner Platform w/ EDS2 Phase 1 in ETE updated color generation, -1 =
+            // -active, -2 = -hover, -5 =-light using the numbers here allows older theme editors to
+            // work with the templates, even if colors aren't exactly the same.
+
+            // colors in comments come from sample EDS2 theme above
+
+            '#5353d1': '$themecolor1',
+            '#4845B8': '$themecolor1-1', //-active
             '#51ABFF': '$themecolor2',
-            '#81C8FF': '$themecolor2-4',
+            '#81C8FF': '$themecolor2-4', //#99ceff
             '#026BC8': '$themecolor3',
-            '#0A4982': '$themecolor3-active',
-            '#065AA5': '$themecolor3-hover',
-            '#F2F8FC': '$themecolor3-light',
-            '#EFF4F8': '$themecolor1-5',
-            '#557287': '$themecolor1-2',
-            '#BECCD7': '$themecolor1-4'
+            '#0A4982': '$themecolor3-1', //-active
+            '#065AA5': '$themecolor3-2', //-hover
+            '#EFF4F8': '$themecolor1-5', //#f6f6fd ** slightly under-saturated and brighter, but OK
+
+
+            // also retain support for legacy colors used in banner applications so the generator can be
+            // used with any version of our apps
+
+            // When using the user-selected themecolorN values, as opposed to the derived colors as a
+            // background or foreground color, the opposing foreground or background color must be
+            // specified as themecolorN-text to ensure sufficient contrast. This may require entries in
+            // the -patch file.
+
+            // Strong colors should be mapped to colors of similar brightness to preserve contrast.
+            // "Dark" colors are 0-3, and should be paired with a "light" text color.  4-5 are "light"
+            // colors and need a dark text color.
+
+            // Very light colors may not show their hue unless compared against a similar background on
+            // a good monitor! (e.g., the blue of #EFF4F8 may not be easily apparent, but shows up
+            // against #f4f4f4). These may be replaced with a corresponding -light/-5 color, or it may
+            // be more appropriate to make them a grey by averaging the hex values.
+
+            // If the application is not consistent in its use of color, it may require entries in the
+            // -patch file to correct the color mapping for specific elements, or possibly addition of
+            // colors to the mapping below (comment the source of the colors).
+
+            // Our older applications also used a lot of slightly-different shades throughout the
+            // UI. The theme colors will thus necessarily map many different colors to the shame
+            // variable. This reduces color variation in the UI.  Conversely, some of the older color
+            // shades may not be appropriate to replace any of the colors identified in the
+            // applications.
+
+            // Text should generally be black or white (or close), but not a strong hue.
+
+            '#206E9F': '$themecolor1',
+            '#194F85': '$themecolor1-1', //#3a3b87
+            '#005C96': '$themecolor1-1',
+            '#0C4E8C': '$themecolor1-1',
+
+            '#1B6496': '$themecolor1-2', //#4747ac
+            '#13689E': '$themecolor1-2',
+            '#11679D': '$themecolor1-2',
+            '#1B6496': '$themecolor1-2',
+
+            '#3875D7': '$themecolor1-3', //#3636c9
+            '#0C60A6': '$themecolor1-3',
+            '#3875D7': '$themecolor1-3',
+            '#337AB7': '$themecolor1-3',
+            '#336699': '$themecolor1-3',
+            '#2A6496': '$themecolor3-1', // bootstrap link hover/focus
+            '#3A87AD': '$themecolor1-3',
+            '#3276B1': '$themecolor1-3',
+            '#357EBD': '$themecolor1-3',
+            '#357EBD': '$themecolor1-3',
+            '#225A85': '$themecolor1-3',
+            '#2E6EBE': '$themecolor1-3',
+            '#0989D7': '$themecolor1-3',
+            '#3A87AD': '$themecolor1-3',
+
+            '#4282B3': '$themecolor1-3', //#3636c9 These were 1-4, but not enough contrast with light text
+            '#477B9C': '$themecolor1-3',
+            '#477B9C': '$themecolor1-3',
+            '#2477C1': '$themecolor1-3',
+            '#3071A9': '$themecolor1-3',
+            '#0C8CB4': '$themecolor1-3',
+
+            '#7FADCA': '$themecolor1-4', //#afafe9 was 1-2, but that doesn't have enough contrast with dark text
+            '#46B8DA': '$themecolor1-4', //#afafe9 these were 1-3, but not enough contrast with dark text
+            '#39B3D7': '$themecolor1-4',
+            '#39B3D7': '$themecolor1-4',
+
+            '#5897FB': '$themecolor1-4', //#afafe9
+            '#B0DEEC': '$themecolor1-4',
+            '#5897FB': '$themecolor1-4',
+            '#428BCA': '$themecolor3', //bootstrap link color
+            '#66AFE9': '$themecolor1-4',
+            '#5BC0DE': '$themecolor1-4',
+            '#428BCA': '$themecolor1-4',
+            '#31B0D5': '$themecolor1-4',
+            '#BCE8F1': '$themecolor1-4',
+            '#A6E1EC': '$themecolor1-4',
+            '#B0DEEC': '$themecolor1-4',
+            '#B2DEEB': '$themecolor1-4',
+
+            '#E1EFFD': '$themecolor1-5', //#f6f6fd
+            '#F3FCFF': '$themecolor1-5',
+            '#D9E7EF': '$themecolor1-5',
+
+            '#0084D5': '$themecolor2-3', //#0084ff
+            '#0099FF': '$themecolor2-3',
+
+            '#9ECAED': '$themecolor3-4', //#9acffe
+            '#9ECAED': '$themecolor3-4',
+
+
+            // these are near-grey or medium-brightness colors that should probably just be mapped to
+            // grey rather than introduce strong colors from EDS2.  These are judgement calls.
+
+            '#41566F': '#575757',
+            '#4F585F': '#585858',
+            '#515A61': '#595959',
+            '#557287': '#656565',
+            '#719CAC': '#939393',
+            '#778FA0': '#8c8c8c',
+            '#778FA0': '#a2a2a2',
+            '#7F9AAD': '#979797',
+            '#869FB1': '#9c9c9c',
+            '#98AEBE': '#aeaeae',
+            '#9AC0D2': '#b9b9b9',
+            '#9FBED4': '#bbbbbb',
+            '#B1CEE0': '#cacaca',
+            '#B2CEDE': '#cacaca',
+            '#B2CEDF': '#cacaca',
+            '#BECCD7': '#cbcbcb',
+            '#CAD5DE': '#d5d5d5',
+            '#CCDFE9': '#dcdcdc',
+            '#D0DBDE': '#d5d5d5',
+            '#DEE5E7': '#e3e3e3',
+            '#E0E6EB': '#e5e5e5',
+            '#E3E6E8': '#e6e6e6',
+            '#F3F7F8': '#f5f5f5'
+
     ]
+
+    static {
+        def newMap = [:]
+        themeColorVariablesMap.each { key, value ->
+            newMap[ key.toUpperCase() ] = value
+        }
+        themeColorVariablesMap = newMap
+        //log.debug themeColorVariablesMap
+    }
+
     def checkFileExists(file) {
         new File(file).exists() ? true : false
     }
@@ -559,7 +730,7 @@ class ThemeScssGenerator {
     def getHexColor(String color) {
         def hexColorCode
         color = color.trim()
-        if(color.toLowerCase().startsWith('rgb')) {
+        if(color.toLowerCase() ==~ /^rgb[^a].*/ ) { /* hex codes don't support alpha transparency, so keep them as rgba */
             hexColorCode = getHexColorFromRGB(color)
         } else {
             hexColorCode = getHexColorFromNamedColor(color)
@@ -600,13 +771,14 @@ class ThemeScssGenerator {
             color = getHexColor(color)
         }
         color = color.toUpperCase()
-        variable = themColorVariablesMap[color] ? themColorVariablesMap[color]: color
+        variable = themeColorVariablesMap[color] ? themeColorVariablesMap[color]: color
         return variable
     }
 
     def appendFile(String filename, String SCSSFile) {
         File fileToAppend = new File(filename)
         if(fileToAppend.exists()) {
+            println "Appending patch file ${filename} at offset ${new File( SCSSFile ).length()}"
             appendToScssFile(fileToAppend.text, SCSSFile, fileToAppend)
         }
     }
@@ -657,6 +829,7 @@ class ThemeScssGenerator {
         }
         appendCommonPatchFile(SCSSFile)
         appendSCSSPatchFile(SCSSFile)
+        println "Generated theme '${SCSSFile}' from ${cssFiles.size()} CSS files"
     }
     def cssFileMap = new HashMap<String, String>()
 

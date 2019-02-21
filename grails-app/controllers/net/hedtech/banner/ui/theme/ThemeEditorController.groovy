@@ -4,6 +4,7 @@
 
 package net.hedtech.banner.ui.theme
 
+import grails.gorm.transactions.Transactional
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.commons.io.FilenameUtils
