@@ -17,6 +17,10 @@ class ResponseHeaderInterceptor {
             response.addHeader('Cache-Control', 'no-store')
             response.setHeader( 'X-UA-Compatible', 'IE=edge' )
         }
+        response.setHeader('X-Content-Type-Options', 'nosniff')
+        response.setHeader("X-XSS-Protection", "1; mode=block")
+        response.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;")
+
         true
     }
 
@@ -25,11 +29,6 @@ class ResponseHeaderInterceptor {
         response.addHeader('Cache-Control', 'no-cache')
         response.addHeader('Cache-Control', 'no-store')
         response.setHeader( 'X-UA-Compatible', 'IE=edge' )
-
-        response.setHeader('X-Content-Type-Options', 'nosniff')
-        response.setHeader("X-XSS-Protection", "1; mode=block")
-        response.setHeader('X-Frame-Options', 'sameorigin')
-//        response.setHeader("Content-Security-Policy", "style-src 'self'; img-src 'self'; font-src 'self';")
         true
     }
 
