@@ -14,10 +14,8 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
         def extensibilityInfo = (infoService.getJSON(controllerName, resource(plugin: 'web-app-extensibility', dir: 'html')))
     %>
     <g:set var="mep" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('ssbMepDesc')}"/>
-    <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps ? session.hideSSBHeaderComps : params?.hideSSBHeaderComps ? params.hideSSBHeaderComps : false}" scope="session"/>
-
+    <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps ? session.hideSSBHeaderComps : (Boolean.parseBoolean(params?.hideSSBHeaderComps)) ? params.hideSSBHeaderComps : false}" scope="session"/>
     <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}"/>
-
     <meta charset="${message(code: 'default.character.encoding')}"/>
     <meta name="dir" content="${message(code: 'default.language.direction')}"/>
     <meta name="synchronizerToken" content="${org.grails.web.servlet.mvc.SynchronizerTokensHolder.store(session).generateToken(request.forwardURI)}"/>
