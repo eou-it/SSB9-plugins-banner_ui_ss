@@ -1,7 +1,10 @@
-package banner.ui.ss
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2018-2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
+package banner.ui.ss
+
+import grails.util.Holders
+
 class ResponseHeaderInterceptor {
 
 
@@ -17,9 +20,12 @@ class ResponseHeaderInterceptor {
             response.addHeader('Cache-Control', 'no-store')
             response.setHeader( 'X-UA-Compatible', 'IE=edge' )
         }
-        response.setHeader('X-Content-Type-Options', 'nosniff')
-        response.setHeader("X-XSS-Protection", "1; mode=block")
-        response.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;")
+        Holders.config.securityHeader.XContentTypeOptions = Holders.config.securityHeader.XContentTypeOptions ? Holders.config.securityHeader.XContentTypeOptions : 'nosniff'
+        Holders.config.securityHeader.XXSSProtection = Holders.config.securityHeader.XXSSProtection ? Holders.config.securityHeader.XXSSProtection : '1;mode=block'
+        Holders.config.securityHeader.ContentSecurityPolicy = Holders.config.securityHeader.ContentSecurityPolicy ? Holders.config.securityHeader.ContentSecurityPolicy : "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;"
+        response.setHeader('X-Content-Type-Options', Holders.config.securityHeader.XContentTypeOptions.toString())
+        response.setHeader("X-XSS-Protection",  Holders.config.securityHeader.XXSSProtection.toString())
+        response.setHeader("Content-Security-Policy", Holders.config.securityHeader.ContentSecurityPolicy.toString())
 
         true
     }
