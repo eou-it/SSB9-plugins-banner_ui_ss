@@ -49,10 +49,11 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
 
     @Test
     void testResponseInterceptorHeaderChanged(){
+        Holders.config.securityHeader.XXSSProtection = "1; report=<reporting-uri>"
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
-        assertEquals('nosniff',Holders.config.securityHeader.XContentTypeOptions)
-        assertEquals('1;mode=block',Holders.config.securityHeader.XXSSProtection)
+        assertEquals("nosniff",Holders.config.securityHeader.XContentTypeOptions)
+        assertEquals("1; report=<reporting-uri>",Holders.config.securityHeader.XXSSProtection)
         assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;",Holders.config.securityHeader.ContentSecurityPolicy)
     }
 
