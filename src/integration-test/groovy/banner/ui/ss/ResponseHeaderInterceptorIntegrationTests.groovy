@@ -54,4 +54,16 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
         Holders.config.securityHeader.remove("XXSSProtection")
     }
 
+    @Test
+    void testResponseInterceptorHeaderType() {
+        Holders.config.securityHeader.XXSSProtection = 1
+        ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
+        responseHeaderInterceptor.before()
+        def headerList = RequestContextHolder.currentRequestAttributes().response.headers
+        assertEquals("nosniff", headerList.get("X-Content-Type-Options").getValue())
+        assertEquals("1", headerList.get("X-XSS-Protection").getValue())
+        assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;", headerList.get("Content-Security-Policy").getValue())
+        Holders.config.securityHeader.remove("XXSSProtection")
+    }
+
 }
