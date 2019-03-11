@@ -7,14 +7,11 @@ import banner.ui.ss.ResponseHeaderInterceptor
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
 import grails.util.Holders
-import net.hedtech.banner.controllers.BaseRestfulControllerMixin
-import net.hedtech.banner.exceptions.ApplicationException
-import net.hedtech.banner.exceptions.BusinessLogicValidationException
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.web.context.request.RequestContextHolder
 
 @Integration
 @Rollback
@@ -32,29 +29,29 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
     @After
     public void tearDown() {
         super.tearDown()
-        Holders.config.securityHeader.remove("XContentTypeOptions")
-        Holders.config.securityHeader.remove("XXSSProtection")
-        Holders.config.securityHeader.remove("ContentSecurityPolicy")
     }
 
     @Test
-    void testResponseInterceptorHeader(){
+    void testResponseInterceptorHeader() {
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
-        assertEquals('nosniff',Holders.config.securityHeader.XContentTypeOptions)
-        assertEquals('1;mode=block',Holders.config.securityHeader.XXSSProtection)
-        assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;",Holders.config.securityHeader.ContentSecurityPolicy)
+        def headerList = RequestContextHolder.currentRequestAttributes().response.headers
+        assertEquals("nosniff", headerList.get("X-Content-Type-Options").getValue())
+        assertEquals("1;mode=block", headerList.get("X-XSS-Protection").getValue())
+        assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;", headerList.get("Content-Security-Policy").getValue())
     }
 
 
     @Test
-    void testResponseInterceptorHeaderChanged(){
+    void testResponseInterceptorHeaderChanged() {
         Holders.config.securityHeader.XXSSProtection = "1; report=<reporting-uri>"
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
-        assertEquals("nosniff",Holders.config.securityHeader.XContentTypeOptions)
-        assertEquals("1; report=<reporting-uri>",Holders.config.securityHeader.XXSSProtection)
-        assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;",Holders.config.securityHeader.ContentSecurityPolicy)
+        def headerList = RequestContextHolder.currentRequestAttributes().response.headers
+        assertEquals("nosniff", headerList.get("X-Content-Type-Options").getValue())
+        assertEquals("1; report=<reporting-uri>", headerList.get("X-XSS-Protection").getValue())
+        assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;", headerList.get("Content-Security-Policy").getValue())
+        Holders.config.securityHeader.remove("XXSSProtection")
     }
 
 }

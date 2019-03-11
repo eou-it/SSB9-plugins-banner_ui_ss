@@ -20,12 +20,12 @@ class ResponseHeaderInterceptor {
             response.addHeader('Cache-Control', 'no-store')
             response.setHeader( 'X-UA-Compatible', 'IE=edge' )
         }
-        Holders.config.securityHeader.XContentTypeOptions = Holders.config.securityHeader.XContentTypeOptions ? Holders.config.securityHeader.XContentTypeOptions : 'nosniff'
-        Holders.config.securityHeader.XXSSProtection = Holders.config.securityHeader.XXSSProtection ? Holders.config.securityHeader.XXSSProtection : '1;mode=block'
-        Holders.config.securityHeader.ContentSecurityPolicy = Holders.config.securityHeader.ContentSecurityPolicy ? Holders.config.securityHeader.ContentSecurityPolicy : "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;"
-        response.setHeader('X-Content-Type-Options', Holders.config.securityHeader.XContentTypeOptions.toString())
-        response.setHeader("X-XSS-Protection",  Holders.config.securityHeader.XXSSProtection.toString())
-        response.setHeader("Content-Security-Policy", Holders.config.securityHeader.ContentSecurityPolicy.toString())
+        String XContentTypeOptions = Holders.config.securityHeader.XContentTypeOptions ? Holders.config.securityHeader.XContentTypeOptions : 'nosniff'
+        String XXSSProtection = Holders.config.securityHeader.XXSSProtection ? Holders.config.securityHeader.XXSSProtection : '1;mode=block'
+        String ContentSecurityPolicy = Holders.config.securityHeader.ContentSecurityPolicy ? Holders.config.securityHeader.ContentSecurityPolicy : "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;"
+        response.setHeader('X-Content-Type-Options', XContentTypeOptions)
+        response.setHeader("X-XSS-Protection", XXSSProtection)
+        response.setHeader("Content-Security-Policy", ContentSecurityPolicy)
 
         true
     }
