@@ -44,26 +44,26 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
 
     @Test
     void testResponseInterceptorHeaderChanged() {
-        Holders.config.securityHeader.XXSSProtection = "1; report=<reporting-uri>"
+        Holders.config.responseHeaders.x_xss_protection = "1; report=<reporting-uri>"
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
         def headerList = RequestContextHolder.currentRequestAttributes().response.headers
         assertEquals("nosniff", headerList.get("X-Content-Type-Options").getValue())
         assertEquals("1; report=<reporting-uri>", headerList.get("X-XSS-Protection").getValue())
         assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;", headerList.get("Content-Security-Policy").getValue())
-        Holders.config.securityHeader.remove("XXSSProtection")
+        Holders.config.responseHeaders.remove("x_xss_protection")
     }
 
     @Test
     void testResponseInterceptorHeaderType() {
-        Holders.config.securityHeader.XXSSProtection = 1
+        Holders.config.responseHeaders.x_xss_protection = 1
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
         def headerList = RequestContextHolder.currentRequestAttributes().response.headers
         assertEquals("nosniff", headerList.get("X-Content-Type-Options").getValue())
         assertEquals("1", headerList.get("X-XSS-Protection").getValue())
         assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;", headerList.get("Content-Security-Policy").getValue())
-        Holders.config.securityHeader.remove("XXSSProtection")
+        Holders.config.responseHeaders.remove("x_xss_protection")
     }
 
 }

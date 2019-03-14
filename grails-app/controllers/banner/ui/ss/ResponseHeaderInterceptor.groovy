@@ -14,27 +14,13 @@ class ResponseHeaderInterceptor {
     }
 
     boolean before() {
-        if (request.getHeader('X-Requested-With')?.equals('XMLHttpRequest')) {
-            response.setHeader('Expires', '-1')
-            response.setHeader('Cache-Control', 'no-cache')
-            response.addHeader('Cache-Control', 'no-store')
-            response.setHeader( 'X-UA-Compatible', 'IE=edge' )
-        }
-        String XContentTypeOptions = Holders.config.securityHeader.XContentTypeOptions ? Holders.config.securityHeader.XContentTypeOptions : 'nosniff'
-        String XXSSProtection = Holders.config.securityHeader.XXSSProtection ? Holders.config.securityHeader.XXSSProtection : '1;mode=block'
-        String ContentSecurityPolicy = Holders.config.securityHeader.ContentSecurityPolicy ? Holders.config.securityHeader.ContentSecurityPolicy : "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;"
-        response.setHeader('X-Content-Type-Options', XContentTypeOptions)
-        response.setHeader("X-XSS-Protection", XXSSProtection)
-        response.setHeader("Content-Security-Policy", ContentSecurityPolicy)
+        String contentTypeOptions = Holders.config.responseHeaders.x_content_type_options ?: 'nosniff'
+        String xSSProtection = Holders.config.responseHeaders.x_xss_protection ?: '1;mode=block'
+        String contentSecurityPolicy = Holders.config.responseHeaders.content_security_policy ?: "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;"
+        response.setHeader('X-Content-Type-Options', contentTypeOptions)
+        response.setHeader("X-XSS-Protection", xSSProtection)
+        response.setHeader("Content-Security-Policy", contentSecurityPolicy)
 
-        true
-    }
-
-    boolean after() {
-        response.setHeader('Expires', '-1')
-        response.addHeader('Cache-Control', 'no-cache')
-        response.addHeader('Cache-Control', 'no-store')
-        response.setHeader( 'X-UA-Compatible', 'IE=edge' )
         true
     }
 
