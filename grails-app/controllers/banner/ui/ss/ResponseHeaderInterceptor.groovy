@@ -8,7 +8,7 @@ import grails.util.Holders
 class ResponseHeaderInterceptor {
 
 
-    ResponseHeaderInterceptor(){
+    ResponseHeaderInterceptor() {
         match controller: '*', action: '*'
         match uri: '/**'
     }
@@ -19,7 +19,7 @@ class ResponseHeaderInterceptor {
             response.setHeader('Cache-Control', 'no-cache')
             response.addHeader('Cache-Control', 'no-store')
         }
-        response.setHeader( 'X-UA-Compatible', 'IE=edge' )
+        response.setHeader('X-UA-Compatible', 'IE=edge')
         String contentTypeOptions = Holders.config.responseHeaders.x_content_type_options ?: 'nosniff'
         String xssProtection = Holders.config.responseHeaders.x_xss_protection ?: '1;mode=block'
         String contentSecurityPolicy = Holders.config.responseHeaders.content_security_policy ?: "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;"
