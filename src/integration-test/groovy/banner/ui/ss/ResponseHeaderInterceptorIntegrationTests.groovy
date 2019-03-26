@@ -1,6 +1,6 @@
 /*******************************************************************************
-Copyright 2018 Ellucian Company L.P. and its affiliates.
-*******************************************************************************/
+ Copyright 2018 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 package banner.ui.ss
 
 import banner.ui.ss.ResponseHeaderInterceptor
@@ -19,6 +19,11 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
 
     def responseHeaderInterceptor
 
+    static final CONTENT_SECURITY_POLICY = "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;"
+    static final X_XSS_PROTECTION = "1; mode=block"
+    static final X_CONTENT_TYPE_OPTIONS = "nosniff"
+    static final STRICT_TRANSPORT_SECURITY = "max-age=31536000;"
+
     @Before
     public void setUp() {
         responseHeaderInterceptor = new ResponseHeaderInterceptor()
@@ -36,34 +41,48 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
         def headerList = RequestContextHolder.currentRequestAttributes().response.headers
-        assertEquals("nosniff", headerList.get("X-Content-Type-Options").getValue())
-        assertEquals("1;mode=block", headerList.get("X-XSS-Protection").getValue())
-        assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;", headerList.get("Content-Security-Policy").getValue())
+        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.get("X-Content-Type-Options").getValue())
+        assertEquals(X_XSS_PROTECTION, headerList.get("X-XSS-Protection").getValue())
+        assertEquals(CONTENT_SECURITY_POLICY, headerList.get("Content-Security-Policy").getValue())
     }
 
 
     @Test
     void testResponseInterceptorHeaderChanged() {
-        Holders.config.responseHeaders.x_xss_protection = "1; report=<reporting-uri>"
+        Holders.config.responseHeaders = ["X-XSS-Protection": "1; report=<reporting-uri>"]
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
         def headerList = RequestContextHolder.currentRequestAttributes().response.headers
-        assertEquals("nosniff", headerList.get("X-Content-Type-Options").getValue())
+        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.get("X-Content-Type-Options").getValue())
         assertEquals("1; report=<reporting-uri>", headerList.get("X-XSS-Protection").getValue())
-        assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;", headerList.get("Content-Security-Policy").getValue())
-        Holders.config.responseHeaders.remove("x_xss_protection")
+        assertEquals(CONTENT_SECURITY_POLICY, headerList.get("Content-Security-Policy").getValue())
+        Holders.config.responseHeaders.remove("X-XSS-Protection")
     }
 
     @Test
     void testResponseInterceptorHeaderType() {
-        Holders.config.responseHeaders.x_xss_protection = 1
+        Holders.config.responseHeaders = ["X-XSS-Protection": "1"]
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
         def headerList = RequestContextHolder.currentRequestAttributes().response.headers
-        assertEquals("nosniff", headerList.get("X-Content-Type-Options").getValue())
+        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.get("X-Content-Type-Options").getValue())
         assertEquals("1", headerList.get("X-XSS-Protection").getValue())
-        assertEquals("default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;", headerList.get("Content-Security-Policy").getValue())
-        Holders.config.responseHeaders.remove("x_xss_protection")
+        assertEquals(CONTENT_SECURITY_POLICY, headerList.get("Content-Security-Policy").getValue())
+        Holders.config.responseHeaders.remove("X-XSS-Protection")
+    }
+
+    @Test
+    void testAdditionalPropertyAddedInHeader() {
+        Holders.config.responseHeaders = ["Strict-Transport-Security": "max-age=31536000;"]
+        ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
+        responseHeaderInterceptor.before()
+        def headerList = RequestContextHolder.currentRequestAttributes().response.headers
+        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.get("X-Content-Type-Options").getValue())
+        assertEquals(X_XSS_PROTECTION, headerList.get("X-XSS-Protection").getValue())
+        assertEquals(CONTENT_SECURITY_POLICY, headerList.get("Content-Security-Policy").getValue())
+        assertEquals(STRICT_TRANSPORT_SECURITY, headerList.get("Strict-Transport-Security").getValue())
+        Holders.config.responseHeaders.remove("X-XSS-Protection")
+        Holders.config.responseHeaders.remove("Strict-Transport-Security")
     }
 
 }

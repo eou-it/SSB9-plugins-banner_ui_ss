@@ -127,9 +127,9 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
           });
 
 
-        <g:i18nJavaScript/>
-    </asset:script>
 
+    </asset:script>
+    <g:i18nJavaScript/>
     <script type="text/javascript">
         var mepcodeChanged='${request.mepcodeChanged}';
         if(null !== mepcodeChanged && undefined !== mepcodeChanged && mepcodeChanged == "true"){

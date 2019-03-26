@@ -20,12 +20,22 @@ class ResponseHeaderInterceptor {
             response.addHeader('Cache-Control', 'no-store')
         }
         response.setHeader('X-UA-Compatible', 'IE=edge')
-        String contentTypeOptions = Holders.config.responseHeaders.x_content_type_options ?: 'nosniff'
-        String xssProtection = Holders.config.responseHeaders.x_xss_protection ?: '1;mode=block'
-        String contentSecurityPolicy = Holders.config.responseHeaders.content_security_policy ?: "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;"
-        response.setHeader('X-Content-Type-Options', contentTypeOptions)
-        response.setHeader("X-XSS-Protection", xssProtection)
-        response.setHeader("Content-Security-Policy", contentSecurityPolicy)
+
+        def responseHeadersMap = Holders.config.defaultResponseHeadersMap
+
+        def configResponseHeadersMap = Holders.config.responseHeaders
+        if (!configResponseHeadersMap.isEmpty()) {
+            configResponseHeadersMap.each { configResponseHeader ->
+                String configResponseHeaderKey = configResponseHeader.key
+                String configResponseHeaderValue = configResponseHeader.value
+                responseHeadersMap.put(configResponseHeaderKey, configResponseHeaderValue)
+            }
+        }
+        responseHeadersMap.each { responseHeaderMap ->
+            String responseHeaderKey = responseHeaderMap.key
+            String responseHeaderValue = responseHeaderMap.value
+            response.setHeader(responseHeaderKey, responseHeaderValue)
+        }
 
         true
     }
@@ -33,4 +43,5 @@ class ResponseHeaderInterceptor {
     void afterView() {
         // no-op
     }
+
 }
