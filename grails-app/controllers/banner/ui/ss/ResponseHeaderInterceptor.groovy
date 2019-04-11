@@ -21,17 +21,17 @@ class ResponseHeaderInterceptor {
         }
         response.setHeader('X-UA-Compatible', 'IE=edge')
 
-        def responseHeadersMap = Holders.config.defaultResponseHeadersMap
+        def defaultResponseHeadersMap = Holders.config.defaultResponseHeadersMap
 
         def configResponseHeadersMap = Holders.config.responseHeaders
-        if (!configResponseHeadersMap.isEmpty()) {
+        if (configResponseHeadersMap.size() > 0) {
             configResponseHeadersMap.each { configResponseHeader ->
                 String configResponseHeaderKey = configResponseHeader.key
                 String configResponseHeaderValue = configResponseHeader.value
-                responseHeadersMap.put(configResponseHeaderKey, configResponseHeaderValue)
+                defaultResponseHeadersMap.put(configResponseHeaderKey, configResponseHeaderValue)
             }
         }
-        responseHeadersMap.each { responseHeaderMap ->
+        defaultResponseHeadersMap.each { responseHeaderMap ->
             String responseHeaderKey = responseHeaderMap.key
             String responseHeaderValue = responseHeaderMap.value
             response.setHeader(responseHeaderKey, responseHeaderValue)
