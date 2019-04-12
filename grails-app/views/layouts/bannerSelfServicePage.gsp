@@ -128,6 +128,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
 
         <g:i18nJavaScript/>
+        <g:pageAccessAudit/>
     </asset:script>
 
     <script type="text/javascript">
