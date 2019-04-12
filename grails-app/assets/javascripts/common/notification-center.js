@@ -255,9 +255,18 @@ $(document).ready(function() {
             //  Evaluate the notification type to determine what css class to append to the notification.
             var notificationType = this.model.get("type");
             var view = this;
-            var notificationMessage = this.model.get("message" );
+            var notificationMessage = '' + this.model.get("message" );
             var messageContainer = $("<span></span>");
             var component = this.model.get("component");
+            var flashContainer = $('.aria-flashnotification-screen-reader');
+            if (flashContainer.length === 0) {
+                var ariaRegion1 = $('<span></span>');
+                ariaRegion1.attr('role', 'status');
+                ariaRegion1.attr('aria-live', 'assertive');
+                ariaRegion1.attr('class', 'aria-flashnotification-screen-reader');
+                $(document.body).append(ariaRegion1);
+            }
+
             if(notificationType=="error" && component){
                 messageContainer = $("<a tabindex='0' role='link' class='notification-flyout-item'></a>");
                 messageContainer.addClass('notification-message');
@@ -322,10 +331,10 @@ $(document).ready(function() {
                 actionButton.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage+ " " + actionButton.text(), "off", "aria-labelledby");
             }
             else{
-                var ariaNotificationItemTextElement = "<b class='offscreen' id='ariaNotificationCountText'>"+ariaLabelledbyText+"</b>";
+                var ariaNotificationItemTextElement = "<b class='offscreen' id='ariaNotificationCountText'> "+ ariaLabelledbyText +"</b>";
                 $(messageContainer).addClass('notification-flyout-item')
                     .attr('tabindex','0')
-                    .prepend(ariaNotificationItemTextElement);
+                    .prepend(' '+ariaNotificationItemTextElement);
             }
 
             return this;
@@ -556,7 +565,8 @@ $(document).ready(function() {
 
         openNotificationFlyout: function () {
             var promptElementToFocus = $('.prompt-container .notification-flyout-item:first');
-            var errorElementToFocus = $('.error-container .notification-flyout-item:first')
+            var errorElementToFocus = $('.error-container .notification-flyout-item:first');
+            var flashElementContent = $('.flash-container .notification-flyout-item:first');
             if(window.componentToFocusOnFlyoutClose == null){
                 window.componentToFocusOnFlyoutClose = $(document.activeElement);
             }
@@ -564,6 +574,13 @@ $(document).ready(function() {
             this.notificationCenterFlyout.display();
             this.configureNotificationOverlay();
             $('.notification-center-flyout')[0].addEventListener('keydown', this.pressEscToClose , true );
+
+            if(flashElementContent.length > 0){
+                $(".aria-flashnotification-screen-reader").text('');
+                $(".aria-flashnotification-screen-reader").text(flashElementContent.text());
+            }
+
+
             if(_.isUndefined(notifications.hasFlash())){
                 $('.notification-flyout-item:first').focus();
             }
@@ -581,8 +598,11 @@ $(document).ready(function() {
         },
         closeNotificationFlyout: function () {
             this.notificationCenterFlyout.hide();
+            var flashElementContent = $('.flash-container .notification-flyout-item:first');
+            if(flashElementContent.length > 0) {
+                $(".aria-flashnotification-screen-reader").text('');
+            }
             $('.notification-center-flyout')[0].removeEventListener('keydown',  this.pressEscToClose, true );
-
         },
         closeNotificationFlyoutAndSetFocus: function(){
             this.closeNotificationFlyout();

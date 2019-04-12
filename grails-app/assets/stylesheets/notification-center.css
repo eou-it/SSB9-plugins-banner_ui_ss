@@ -145,6 +145,16 @@ body > .notification-center-shim {
     height: inherit;
 }
 
+/* Accessibility for flash notification */
+.aria-flashnotification-screen-reader{
+    opacity: 0;
+    height: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
 
 /*Mobile device*/
 
@@ -175,6 +185,8 @@ body > .notification-center-shim {
         position: fixed;
     }
 }
+
+
 
 /*Tablet device*/
 
