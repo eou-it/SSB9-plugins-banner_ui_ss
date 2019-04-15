@@ -1,11 +1,14 @@
-package banner.ui.ss
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2018-2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
+package banner.ui.ss
+
+import grails.util.Holders
+
 class ResponseHeaderInterceptor {
 
 
-    ResponseHeaderInterceptor(){
+    ResponseHeaderInterceptor() {
         match controller: '*', action: '*'
         match uri: '/**'
     }
@@ -15,16 +18,24 @@ class ResponseHeaderInterceptor {
             response.setHeader('Expires', '-1')
             response.setHeader('Cache-Control', 'no-cache')
             response.addHeader('Cache-Control', 'no-store')
-            response.setHeader( 'X-UA-Compatible', 'IE=edge' )
         }
-        true
-    }
+        response.setHeader('X-UA-Compatible', 'IE=edge')
 
-    boolean after() {
-        response.setHeader('Expires', '-1')
-        response.addHeader('Cache-Control', 'no-cache')
-        response.addHeader('Cache-Control', 'no-store')
-        response.setHeader( 'X-UA-Compatible', 'IE=edge' )
+        def defaultResponseHeadersMap = Holders.config.defaultResponseHeadersMap
+
+        def configResponseHeadersMap = Holders.config.responseHeaders
+        if (configResponseHeadersMap.size() > 0) {
+            configResponseHeadersMap.each { configResponseHeader ->
+                String configResponseHeaderKey = configResponseHeader.key
+                String configResponseHeaderValue = configResponseHeader.value
+                defaultResponseHeadersMap.put(configResponseHeaderKey, configResponseHeaderValue)
+            }
+        }
+        defaultResponseHeadersMap.each { responseHeaderMap ->
+            String responseHeaderKey = responseHeaderMap.key
+            String responseHeaderValue = responseHeaderMap.value
+            response.setHeader(responseHeaderKey, responseHeaderValue)
+        }
 
         true
     }
@@ -32,4 +43,5 @@ class ResponseHeaderInterceptor {
     void afterView() {
         // no-op
     }
+
 }
