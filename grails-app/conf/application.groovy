@@ -388,3 +388,13 @@ hibernate {
 grails.config.locations = [
         BANNER_APP_CONFIG: "banner_configuration.groovy"
 ]
+
+environments{
+    test {
+        defaultResponseHeadersMap = [
+                                     "X-Content-Type-Options": "nosniff",
+                                     "X-XSS-Protection": "1; mode=block",
+                                     "Content-Security-Policy": "default-src 'self'; img-src 'self' www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google-analytics.com;"
+                                    ]
+    }
+}

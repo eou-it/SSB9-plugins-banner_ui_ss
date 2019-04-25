@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2016-2019 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 (function(){
     'use strict';
@@ -26,6 +26,7 @@
                 title: 'api.title',
                 name: 'about.banner.application.name',
                 version: 'about.banner.application.version',
+                platformVersion: 'about.banner.platform.version',
                 general: 'about.banner.tab.general',
                 plugin: 'about.banner.plugins',
                 otherPlugin: 'about.banner.other.plugins',
