@@ -1,0 +1,14 @@
+//= require jquery/jquery-1.7.2.js
+//= require jquery/jquery-ui-1.8.15.custom.js
+//= require calendars/jquery.calendars.js
+//= require calendars/jquery.calendars.plus.js
+//= require calendars/jquery.calendars.picker.js
+//= require calendars/jquery.calendars.picker.ext.js
+//= require calendars/jquery.calendars.islamic.js
+//= require time/jquery.timeentry.js
+//= require jquery.multi.calendars.picker.js
+//= require jquery.jeditable.multi.datepicker.js
+//= require jquery.multi.calendars.picker.ext.js
+//= require multi.calendar.init.js
+//= require calendars/jquery.calendars.ummalqura.js
+//= require modules/bootstrap-mf.js

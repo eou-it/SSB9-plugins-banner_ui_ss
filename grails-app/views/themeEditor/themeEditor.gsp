@@ -1,23 +1,24 @@
-<!DOCTYPE html>
+85<!DOCTYPE html>
 <%-- Copyright 2016-2018 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" defaultCodec="none" %>
 <html xmlns:ng="http://angularjs.org" ng-strict-di>
 <head>
     <title><g:message code="theme.editor.title"/></title>
+    <meta name="layout" content="bannerWebPage"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="menuEndPoint" content="${g.createLink(controller: 'selfServiceMenu', action: 'data')}" />
     <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
 
     <g:set var="lang_dir" value="${message(code: 'default.language.direction')}" scope="page" />
     <g:if test="${lang_dir  == 'rtl'}">
-        <r:require modules="themeEditorRTL"/>
+        <asset:stylesheet href="modules/themeEditorRTL-mf.css"/>
     </g:if>
     <g:else>
-        <r:require modules="themeEditorLTR"/>
+        <asset:stylesheet href="modules/themeEditorLTR-mf.css"/>
     </g:else>
-    <g:applyLayout name="bannerWebPage">
-    </g:applyLayout>
+
+     <asset:javascript src="modules/themeEditor-mf.js"/>
 
 </head>
 
@@ -243,7 +244,7 @@
     background-color: #f5f2e7;
     padding: 20px;
     border-top: 4px solid #8A6A00;
-    color: #8a6a00;;
+    color: #8a6a00;
     font-size: 1.1em;
 }
 
@@ -322,7 +323,7 @@
     margin: 20px 10px;
     font-size: 1.5em;
     display: inline-block;
-    background-color: #F7F7F7;;
+    background-color: #F7F7F7;
 }
 
 .form {
@@ -434,6 +435,7 @@ span.approved {
 .form-buttons .primary {
     border: none;
 }
+
 .primary {
     color: #ffffff;
     background-color: /*color3*/ #026BC8;
@@ -481,6 +483,7 @@ span.approved {
 .bg-colors-dark-subsectionHeading {
     background-color: #393939;
 }
+
 .page-title .colors-dark-headerBackground {
     color: #151618 /*EDS*/;
 }
@@ -490,7 +493,7 @@ span.approved {
 }
 
 .border-colors-dark-headerBackground {
-    border-color: /*color3*/ #026BC8;
+    border-color: /*color1-3*/ #a40000;
 }
 
 .bg-colors-dark-headerBackground {
@@ -587,9 +590,11 @@ dev[ng-model="theme"] {
     display: inline-block;
 /*    width:15%;*/
 }
+
 .w10 a {
     color: /*color3*/ #026BC8;
 }
+
 .center {
     text-align: center;
 }
@@ -810,6 +815,6 @@ dev[ng-model="theme"] {
     </div>
   </div>
 </div>
-
+    <asset:javascript src="modules/themeEditor-mf.js"/>
 </body>
 </html>

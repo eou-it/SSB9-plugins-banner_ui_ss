@@ -1,0 +1,9 @@
+
+.readonly
+{
+    /*EDS Changes*/
+    background-color: #F7F7F7; /*EDS*/
+    border: 1px solid #151618;/*EDS*/
+    color: #5B5E65; /*EDS*/
+    opacity: 100%;
+}

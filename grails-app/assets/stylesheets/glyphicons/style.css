@@ -1,0 +1,603 @@
+html {
+	font-size: 62.5%; /* =10px */
+}
+* {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #333;
+	font-size: 14px;
+	font-size: 1.4rem; /* =14px */
+	line-height: 1.5; /* =21px (1.5 x 1.4 = 2.1) Unit-less because length and percentage line-heights have poor inheritance behavior */
+	padding: 20px;
+}
+pre {
+    background: none repeat scroll 0 0 #555;
+    color: #FFFFFF;
+    font-family: Courier, MonoSpace;
+    line-height: 1.8;
+	font-size: 14px;
+    margin: 10px 0;
+    overflow: auto;
+    padding: 0 20px;
+    position: relative;
+	white-space: pre;
+	box-shadow: inset 0 0 6px #111;
+	border-radius: 6px;
+}
+h1 {
+	font-size: 2.9rem;
+} /* =29px */
+h2 {
+	font-size: 2.6rem;
+} /* =26px */
+h3 {
+	font-size: 2.3rem;
+} /* =23px */
+h4 {
+	font-size: 2.0rem;
+} /* =20px */
+h5 {
+	font-size: 1.7rem;
+} /* =17px */
+h6 {
+	font-size: 1.4rem;
+} /* =14px */
+/* Subheaders */
+.subheader {
+	font-weight: normal;
+	color: #777;
+}
+h1.subheader {
+	font-size: 2.7rem;
+}
+h2.subheader {
+	font-size: 2.5rem;
+}
+h3.subheader {
+	font-size: 2.1rem;
+}
+h4.subheader {
+	font-size: 1.9rem;
+}
+h5.subheader {
+	font-size: 1.7rem;
+}
+h6.subheader {
+	font-size: 1.4rem;
+}
+p {
+	padding-bottom: .3em;
+}
+section, header, footer {
+	display: block;
+}
+a {
+	text-decoration: underline;
+	color: #333;	
+}
+a:hover {
+	text-decoration: none;
+}
+hr {
+	margin: 20px 0;
+	border-top: 1px solid #ddd;
+	border-bottom: none;
+	border-left: none;
+	border-right: none;	
+}
+ul {
+	padding-left: 40px;
+}
+
+@font-face {
+	font-family: 'ellucian';
+	src: url('../../images/glyphicons/fonts/ellucian.eot');
+	src: url('../../images/glyphicons/fonts/ellucian.eot?#iefix') format('embedded-opentype'), url('../../images/glyphicons/fonts/ellucian.woff') format('woff'), url('../../images/glyphicons/fonts/ellucian.ttf') format('truetype'), url('../../images/glyphicons/fonts/ellucian.svg#success') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+	font-family: 'ellucian';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	font-size: 16px;
+	font-size: 1.6rem;
+}
+/* Use the following CSS code if you want to have a class per icon */
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="icon-"] {
+*/
+.icon-success, .icon-warning, .icon-error, .icon-information, .icon-help, .icon-in-progress, .icon-circle, .icon-triangle, .icon-circle-outline, .icon-caret-previous-silhouette, .icon-caret-next-silhouette, .icon-caret-previous, .icon-caret-next, .icon-caret-beginning, .icon-caret-end, .icon-caret-down, .icon-add-square-silhouette, .icon-add-circle-silhouette, .icon-add, .icon-remove-square-silhouette, .icon-remove-circle-silhouette, .icon-remove, .icon-close, .icon-location, .icon-twitter, .icon-facebook, .icon-phone, .icon-chat, .icon-email, .icon-book, .icon-attach, .icon-flag, .icon-star, .icon-announcement, .icon-menu-panel, .icon-list, .icon-grid, .icon-search, .icon-filter, .icon-home, .icon-settings, .icon-checklist, .icon-export, .icon-document, .icon-print, .icon-edit, .icon-secure, .icon-refresh, .icon-duplicate, .icon-calendar-month, .icon-calendar-month-large, .icon-calendar-day, .icon-calendar-day-large, .icon-photo, .icon-person {
+	font-family: 'ellucian';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	font-size: 16px;
+	font-size: 1.6rem;
+}
+/* Two-tone Icons */
+.icon-success:after {
+	content: "\e000";
+	color: #268d1f;
+	position: relative;
+}
+.icon-warning:after {
+	content: "\e001";
+	color: #ffc51e;
+	position: relative;
+}
+.icon-error:after {
+	content: "\e002";
+	color: #cc0000;
+	position: relative;
+}
+.icon-information:after {
+	content: "\e003";
+	color: #93bfc9;
+	position: relative;
+}
+.icon-help:after {
+	content: "\e004";
+	color: #0070a6;
+	position: relative;
+}
+.icon-in-progress:after {
+	content: "\e005";
+	color: #268d1f;
+	position: relative;
+}
+.icon-circle:before {
+	content: "\e006";
+	color: #FFFFFF;
+	position: absolute;
+}
+.icon-triangle:before {
+	content: "\e007";
+	color: #FFFFFF;
+	position: absolute;
+}
+
+
+/* Displaying as isolated shapes */
+.icon-circle-shape:before {
+	content: "\e006";
+	color: #FFFFFF;
+	line-height: 1.3;
+}
+.icon-triangle-shape:before {
+	content: "\e007";
+	color: #FFFFFF;
+	line-height: 1.3;
+}
+
+.icon-circle-outline:before {
+	content: "\e008";
+	vertical-align: middle;
+}
+.icon-caret-previous-silhouette:before {
+	content: "\e009";
+	vertical-align: middle;
+}
+.icon-caret-next-silhouette:before {
+	content: "\e010";
+	vertical-align: middle;
+}
+.icon-caret-previous:before {
+	content: "\e011";
+	vertical-align: middle;
+}
+.icon-caret-next:before {
+	content: "\e012";
+	vertical-align: middle;
+}
+.icon-caret-beginning:before {
+	content: "\e013";
+	vertical-align: middle;
+}
+.icon-caret-end:before {
+	content: "\e014";
+	vertical-align: middle;
+}
+.icon-caret-down:before {
+	content: "\e015";
+	vertical-align: middle;
+}
+.icon-add-square-silhouette:before {
+	content: "\e016";
+	vertical-align: middle;
+}
+.icon-add-circle-silhouette:before {
+	content: "\e017";
+	vertical-align: middle;
+}
+.icon-add:before {
+	content: "\e018";
+	vertical-align: middle;
+}
+.icon-remove-square-silhouette:before {
+	content: "\e019";
+	vertical-align: middle;
+}
+.icon-remove-circle-silhouette:before {
+	content: "\e020";
+	vertical-align: middle;
+}
+.icon-remove:before {
+	content: "\e021";
+	vertical-align: middle;
+}
+.icon-close:before {
+	content: "\e022";
+	vertical-align: middle;
+}
+.icon-location:before {
+	content: "\e023";
+	vertical-align: middle;
+}
+.icon-twitter:before {
+	content: "\e024";
+	vertical-align: middle;
+}
+.icon-facebook:before {
+	content: "\e025";
+	vertical-align: middle;
+}
+.icon-phone:before {
+	content: "\e026";
+	vertical-align: middle;
+}
+.icon-chat:before {
+	content: "\e027";
+	vertical-align: middle;
+}
+.icon-email:before {
+	content: "\e028";
+	vertical-align: middle;
+}
+.icon-book:before {
+	content: "\e029";
+	vertical-align: middle;
+}
+.icon-attach:before {
+	content: "\e030";
+	vertical-align: middle;
+}
+.icon-flag:before {
+	content: "\e031";
+	vertical-align: middle;
+}
+.icon-star:before {
+	content: "\e032";
+	vertical-align: middle;
+}
+.icon-announcement:before {
+	content: "\e033";
+	vertical-align: middle;
+}
+.icon-menu-panel:before {
+	content: "\e034";
+	vertical-align: middle;
+}
+.icon-list:before {
+	content: "\e035";
+	vertical-align: middle;
+}
+.icon-grid:before {
+	content: "\e036";
+	vertical-align: middle;
+}
+.icon-search:before {
+	content: "\e037";
+	vertical-align: middle;
+}
+.icon-filter:before {
+	content: "\e038";
+	vertical-align: middle;
+}
+.icon-home:before {
+	content: "\e039";
+	vertical-align: middle;
+}
+.icon-settings:before {
+	content: "\e040";
+	vertical-align: middle;
+}
+.icon-checklist:before {
+	content: "\e041";
+	vertical-align: middle;
+}
+.icon-export:before {
+	content: "\e042";
+	vertical-align: middle;
+}
+.icon-document:before {
+	content: "\e043";
+	vertical-align: middle;
+}
+.icon-print:before {
+	content: "\e044";
+	vertical-align: middle;
+}
+.icon-edit:before {
+	content: "\e045";
+	vertical-align: middle;
+}
+.icon-secure:before {
+	content: "\e046";
+	vertical-align: middle;
+}
+.icon-refresh:before {
+	content: "\e047";
+	vertical-align: middle;
+}
+.icon-duplicate:before {
+	content: "\e048";
+	vertical-align: middle;
+}
+.icon-calendar-month:before {
+	content: "\e049";
+	vertical-align: middle;
+}
+.icon-calendar-month-large:before {
+	content: "\e050";
+	vertical-align: middle;
+	font-size: 32px;
+	font-size: 3.2rem;
+}
+.icon-calendar-day:before {
+	content: "\e051";
+	vertical-align: middle;
+}
+.icon-calendar-day-large:before {
+	content: "\e052";
+	vertical-align: middle;
+	font-size: 32px;
+	font-size: 3.2rem;
+}
+.icon-photo:before {
+	content: "\e053";
+	vertical-align: middle;
+}
+.icon-person:before {
+	content: "\e054";
+	vertical-align: middle;
+}
+
+
+
+
+
+/* Table styling */
+.data, .data-large {
+	border: 1px solid #999999;
+	border-spacing: 0;
+	width: 100%;
+	margin: 15px 0;
+}
+th {
+	text-align: left;
+	background: -moz-linear-gradient(center top, #FFFFFF 0%, #CCCCCC 100%) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFFFFF), color-stop(100%, #CCCCCC));
+	background: -webkit-linear-gradient(top, #FFFFFF 0%, #CCCCCC 100%);
+	background: -o-linear-gradient(top, #FFFFFF 0%, #CCCCCC 100%);
+	background: -ms-linear-gradient(top, #FFFFFF 0%, #CCCCCC 100%);
+ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#CCCCCC', GradientType=0 );
+	background: linear-gradient(top, #FFFFFF 0%, #CCCCCC 100%);
+	border-bottom: 1px solid #a5a5a5;
+	border-right: 1px solid #C1C1C1;
+	color: #333333;
+	padding: 6px 12px;
+}
+th:last-child {
+	border-right: none;
+}
+.count {
+	float: right;
+}
+tr {
+	font-size: 1em;
+}
+td {
+	padding: 6px 12px;
+	border-bottom: 1px solid #DDDDDD;
+	line-height: 1.3;
+}
+tr:last-of-type td {
+	border-bottom: none;
+}
+
+/* With Text styling */
+.example {
+	background: none repeat scroll 0 0 #F1F1F1;
+    border: 2px dashed #DDDDDD;
+	margin: 10px 0 15px;
+}
+.example td {
+	padding: 12px;	
+}
+.example .icon-settings:before {
+	content: "\e040";
+	vertical-align: bottom;
+	line-height: normal;
+}
+.example .icon {
+	display: inline;
+}
+
+/* 2-color styling */
+.dark {
+	background: #aaa;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+.dark:last-child {
+	border-right: none;
+}
+tr:last-of-type td.dark {
+	border-bottom: none;
+}
+.dark .icon-warning, .dark .icon-success, .dark .icon-triangle, .dark .icon-circle {
+	font-size: 40px;
+	font-size: 4rem;
+}
+.icon {
+	position: relative;	
+	display: inline-block;
+	line-height: normal;
+}
+.icon .icon-success:after, .icon .icon-warning:after {
+	position: relative;
+}
+.icon .icon-circle:before, .icon .icon-triangle:before {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.icon-shape .icon-circle:before, .icon-shape .icon-triangle:before {
+	position: relative;
+}
+.example-two-color {
+	background: #DDF4C9;	
+	border: 2px dashed #DDDDDD;
+	margin: 10px 0 15px;
+}
+.example-two-color td {
+	padding: 12px;	
+}
+.example-two-color .icon-settings:before {
+	content: "\e040";
+	vertical-align: bottom;
+	line-height: normal;
+}
+.example-two-color .icon {
+	vertical-align: middle;
+}
+.success-text {
+	color: #000000;
+	vertical-align: top;
+	padding-left: 6px;	
+}
+
+/* Icon styling */
+.icon-textshadow .icon-settings {
+	font-size: 64px;
+	font-size: 6.4rem;
+	text-shadow: 3px 3px 3px #aaaaaa;	
+}
+.icon-hover .icon-settings {
+	font-size: 64px;
+	font-size: 6.4rem;	
+}
+.icon-hover .icon-settings:hover {
+	font-size: 64px;
+	font-size: 6.4rem;
+	color: #006699;
+	cursor: pointer;	
+}
+.icon-hover-transition .icon-settings {
+	font-size: 64px;
+	font-size: 6.4rem;
+	transition: color 0.5s ease; 	
+}
+.icon-hover-transition .icon-settings:hover {
+	font-size: 64px;
+	font-size: 6.4rem;
+	color: #006699;
+	cursor: pointer;
+}
+.icon-gradient .icon-settings {
+	font-size: 64px;
+	font-size: 6.4rem;
+	background: -webkit-linear-gradient(#006699, #333);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;	
+}
+.icon-styling .icon-settings {
+	font-size: 64px;
+	font-size: 6.4rem;
+	color: #006699;
+    display: block;
+    padding: 12px;
+    text-shadow: 0px 1px 0px rgba(255,255,255,.7);
+	background: -moz-linear-gradient(top, #eeeeee 0%, #aaaaaa);
+	background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#aaaaaa));
+	background-image: -ms-linear-gradient(90deg, #eeeeee, #aaaaaa);
+	background-image: -o-linear-gradient(90deg, #eeeeee, #aaaaaa);
+ 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#aaaaaa');
+	transition: all 0.25s linear; 
+	background-size: 1px 100px;	
+	border-radius: .25em;
+	width: 100px;
+	text-align: center;
+	border: 1px solid #ccc;
+}
+.icon-styling .icon-settings:hover {
+	font-size: 64px;
+	font-size: 6.4rem;
+	color: #003366;
+    background-position: 100px;	
+	text-shadow: 0px 1px 0px rgba(255,255,255,1);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.24) inset;
+	cursor: pointer;
+}
+
+/* Link styles */
+.icon a {
+	color: #006699;
+    padding: 0.75em;
+    text-shadow: 0px 1px 0px rgba(255,255,255,.7);	
+	text-decoration: none;
+}
+.icon a:hover {
+	color: #003366;
+	text-shadow: 0px 1px 0px rgba(255,255,255,1);
+}
+
+/* Sizing */
+.icon-twentyfour .icon-settings {
+	font-size: 24px;
+	font-size: 2.4rem;	
+}
+.icon-thirtytwo .icon-settings {
+	font-size: 32px;
+	font-size: 3.2rem;	
+}
+.icon-fortyeight .icon-settings {
+	font-size: 48px;
+	font-size: 4.8rem;	
+}
+.icon-sixtyfour .icon-settings {
+	font-size: 64px;
+	font-size: 6.4rem;	
+}
+
+/* Contrast */
+.dark-background {
+	background: none repeat scroll 0 0 #222222;
+    border: 2px dashed #777777;
+}
+.dark-background .icon-settings {
+	color: #fff;
+}
+.light-background {
+	background: none repeat scroll 0 0 #eeeeee;
+    border: 2px dashed #cccccc;
+}
+
