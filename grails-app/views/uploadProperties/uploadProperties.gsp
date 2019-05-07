@@ -7,12 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="menuEndPoint" content="${g.createLink(controller: 'selfServiceMenu', action: 'data')}" />
     <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
+
     <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-        <r:require modules="uploadPropertiesRTL"/>
+        <asset:stylesheet href="modules/uploadPropertiesRTL-mf.css"/>
     </g:if>
     <g:else>
-        <r:require modules="uploadPropertiesLTR"/>
+        <asset:stylesheet href="modules/uploadPropertiesLTR-mf.css"/>
     </g:else>
+
     <g:applyLayout name="bannerWebPage">
     </g:applyLayout>
 
@@ -115,9 +117,9 @@
                                                 {{filename.basename}}
                                                 </label></div>
                                     </td>
-                                    <td><a href="${request.contextPath}/admin/i18n?locale={{fileLoc}}&amp;name={{filename.basename}}"
+                                    <td class="tableContent"><a href="${request.contextPath}/admin/i18n?locale={{fileLoc}}&amp;name={{filename.basename}}"
                                            target="_blank"><g:message code="upload.properties.viewother.window"/></a></td>
-                                    <td id="count{{$index}}"></td>
+                                    <td class="tableContent" id="count{{$index}}"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -134,9 +136,9 @@
     </div>
 </div>
 
-
 </div>
 </div>
 </div>
+    <asset:javascript src="modules/uploadProperties-mf.js"/>
 </body>
 </html>

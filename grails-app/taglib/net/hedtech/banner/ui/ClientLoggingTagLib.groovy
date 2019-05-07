@@ -11,14 +11,15 @@
  **********************************************************************************/
 package net.hedtech.banner.ui
 
-import org.apache.commons.logging.LogFactory
+import org.slf4j.LoggerFactory;
 
 /**
  * Class that helps with client side logging.
  */
 class ClientLoggingTagLib {
+
     def logLevel = { attrs ->
-        def logger = LogFactory.getLog( "${grailsApplication.getArtefactByLogicalPropertyName( "Controller", attrs.name ?: controllerName ).clazz.name}.${actionName}").logger.log4jLogger
+        def logger = LoggerFactory.getLogger("${grailsApplication.getArtefactByLogicalPropertyName( "Controller", attrs.name ?: controllerName ).clazz.name}.${actionName}");
         out << getLevel( logger )
     }
 

@@ -24,3 +24,6 @@ plugin.xml
 *-rtl.css
 messages_ar_SA.properties
 banner-ui-ss.scss
+build/
+gradle-wrapper.properties
+.gradle/

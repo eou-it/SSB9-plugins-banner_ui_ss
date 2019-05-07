@@ -5,36 +5,41 @@
 package net.hedtech.theme
 
 import grails.converters.JSON
+import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.util.Holders
 import net.hedtech.banner.ui.theme.ThemeUtil
 import net.sf.ehcache.Cache
 import net.sf.ehcache.Element
-import org.apache.log4j.Logger
 import org.apache.commons.io.FilenameUtils
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.ConfigurationData
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import grails.web.context.ServletContextHolder
 import net.hedtech.banner.general.ConfigurationDataService
 
+
+@Transactional
 class ThemeService {
     def configurationDataService
     def grailsApplication
     def static appId = "THEME"
     def static final types = [theme:'json', template:'scss']
     def static final typesList = ['json', 'scss']
-    private static final Logger log = Logger.getLogger( ThemeService.class.name )
+    SpringSecurityService springSecurityService
 
 
     def saveTheme(String name, String type, def content) {
         name = ThemeUtil.sanitizeName(name).toLowerCase()
         ConfigurationData theme = ConfigurationData.fetchByNameAndType(name, type,appId)
+        def user = springSecurityService.principal.username
         if (theme) {
             theme.name = name
             theme.value = content
             theme.appId = appId
             theme = configurationDataService.update(theme)
         } else {
-            theme = configurationDataService.create([name: name, type: type, value: content ,appId: appId])
+            theme = configurationDataService.create([name: name, type: type, value: content ,appId: appId,
+                                                     lastModifiedBy: user, lastModified: new Date(), dataOrigin: 'Banner'],false)
         }
         log.debug "Saved theme $theme"
         def cacheKey
@@ -141,6 +146,7 @@ class ThemeService {
                                 value       : file.text,
                                 dataOrigin  : 'Banner',
                                 lastModified: new Date(),
+                                lastModifiedBy: 'Default',
                                 appId : appId
 
                         ]
