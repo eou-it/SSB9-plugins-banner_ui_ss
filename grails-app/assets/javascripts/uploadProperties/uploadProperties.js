@@ -39,10 +39,10 @@
         $scope.fileLoc = 'root';
 
         $scope.getFiles = function() {
-            $http.get(uploadProperties + '/list').success( function(response) {
-                $scope.propFiles = response;
+            $http.get(uploadProperties + '/list').then( function(response) {
+                $scope.propFiles = response.data;
                 console.log( 'Files : ', $scope.templates, $scope );
-            }).error(function (error, status) {
+            }).catch(function (error, status) {
                 var errorNotification = new Notification({
                     message:$.i18n.prop("upload.properties.language.fetchFail") ,
                     type: "error",
@@ -85,7 +85,7 @@
                     }
                 };
                 $http(request)
-                    .success(function (d) {
+                    .then(function (d) {
                         filesSaved= filesSaved+1;
                         textSaved= textSaved+d.count;
                         $scope.filesSaved = filesSaved;
@@ -94,7 +94,7 @@
                         $("#count"+d.id).text(d.count)
                         console.log( 'Files : ', $scope.templates, $scope );
                     })
-                    .error(function (error, status) {
+                    .catch(function (error, status) {
                         var errorNotification = new Notification({
                             message:$.i18n.prop("upload.properties.language.uploadFail",[item.basename]) ,
                             type: "error"});
@@ -133,7 +133,7 @@
                         }
                     };
                     $http(request)
-                        .success(function (d) {
+                        .then(function (d) {
                             filesSaved= filesSaved+1;
                             textSaved= textSaved+d.count;
                             $scope.filesSaved = filesSaved;
@@ -142,7 +142,7 @@
                             $("#count"+d.id).text(d.count)
                             console.log( 'Files : ',  $scope );
                         })
-                        .error(function (error, status) {
+                        .catch(function (error, status) {
                             var errorNotification = new Notification({
                                 message:$.i18n.prop("upload.properties.language.uploadFail",[request.data.basename]) ,
                                 type: "error"});

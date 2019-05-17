@@ -261,7 +261,7 @@
         }
 
         $scope.setTheme = function( name ) {
-            $http.get( themePath + "/get?name=" + name + autoReload() ).success( function( response ) {
+            $http.get( themePath + "/get?name=" + name + autoReload() ).then( function( response ) {
                 var data = {};
                 for ( var i in fieldnames ) {
                     var f = fieldnames[i];
@@ -272,7 +272,7 @@
                     $timeout( function() { $scope.color3 = response['color3'] }, 0 ); // after $watch has adjusted color3
                 }
                 $scope.loadTheme( name );
-            }).error( function( response ) {
+            }).catch( function( response ) {
                 console.log( "failed to load theme " + name, response );
             });
         }
@@ -287,19 +287,19 @@
         }
 
         $scope.getThemes = function() {
-            $http.get(themePath + '/list').success( function(response) {
-                $scope.themes = response;
+            $http.get(themePath + '/list').then( function(response) {
+                $scope.themes = response.data;
                 console.log( 'themes: ', $scope.themes, $scope );
-            }).error( function(response) {
+            }).catch( function(response) {
                 console.log( 'Unable to load existing themes', response.status );
             });
         }
 
         $scope.getTemplates = function() {
-            $http.get(themePath + '/listTemplates').success( function(response) {
-                $scope.templates = response;
+            $http.get(themePath + '/listTemplates').then( function(response) {
+                $scope.templates = response.data;
                 console.log( 'templates: ', $scope.templates, $scope );
-            }).error( function(response) {
+            }).catch( function(response) {
                 console.log( 'Unable to load existing templates', response.status );
             });
         }
@@ -318,12 +318,12 @@
             }
 
             return $http.post( themeEditorPath + "/save", data)
-                .success( function() {
+                .then( function() {
                     console.log("success");
                     $scope.getThemes();
                     $scope.loadTheme($scope.name);
                 })
-                .success(function(data) {
+                .then(function(data) {
                     var errorNotification =  notifications.get('saveError');
                     if (errorNotification) {
                         notifications.remove(errorNotification);
@@ -334,7 +334,7 @@
                         flash: true
                     }))
                 })
-                .error( function(response) {
+                .catch( function(response) {
                     console.log( "failed to save theme: ", response.status );
                     var errorNotification  = notifications.addNotification(new Notification({
                         message: $.i18n.prop("js.notification.upload.error"),
@@ -349,11 +349,11 @@
             console.log("deleteTheme:", name);
             //!! TODO: RESTFUL
             return $http.post( themeEditorPath + "/deleteTheme?name=" + name )
-                .success( function() {
+                .then( function() {
                     console.log("delete success");
                     $scope.getThemes();
                 })
-                .error( function(response) {
+                .catch( function(response) {
                     console.log( response );
                     console.log( "failed to delete theme: ", response.status );
                 });
@@ -363,11 +363,11 @@
             console.log("deleteTemplate:", name);
             //!! TODO: RESTFUL
             return $http.post( themeEditorPath + "/deleteTemplate?name=" + name )
-                .success( function() {
+                .then( function() {
                     console.log("delete success");
                     $scope.getTemplates();
                 })
-                .error( function(response) {
+                .catch( function(response) {
                     console.log( response );
                     console.log( "failed to delete template: ", response.status );
                 });
@@ -390,7 +390,7 @@
 
             // SEND THE FILES.
             return $http(request)
-                .success(function (d) {
+                .then(function (d) {
                     var errorPresent =  notifications.get(saveError);
                     if (errorPresent) {
                         notifications.remove(errorPresent);
@@ -432,7 +432,7 @@
                         $scope.getTemplates();
                     }
                 })
-                .error(function () {
+                .catch(function () {
                     var errorNotification  = notifications.addNotification(new Notification({
                         message: $.i18n.prop("js.notification.upload.error"),
                         type: "error",
