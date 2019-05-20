@@ -265,7 +265,7 @@
                 var data = {};
                 for ( var i in fieldnames ) {
                     var f = fieldnames[i];
-                    $scope[f] = response[f];
+                    $scope[f] = response.data[f];
                 }
 
                 if ( response['color3'] ) {

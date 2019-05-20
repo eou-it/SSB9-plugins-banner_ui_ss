@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2017-2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 /* global notifications */
@@ -85,13 +85,13 @@
                     }
                 };
                 $http(request)
-                    .then(function (d) {
+                    .then(function (response) {
                         filesSaved= filesSaved+1;
-                        textSaved= textSaved+d.count;
+                        textSaved= textSaved+response.data.count;
                         $scope.filesSaved = filesSaved;
                         $scope.textSaved = textSaved;
-                        $scope.uploadedFile = d;
-                        $("#count"+d.id).text(d.count)
+                        $scope.uploadedFile = response.data;
+                        $("#count"+response.data.id).text(response.data.count)
                         console.log( 'Files : ', $scope.templates, $scope );
                     })
                     .catch(function (error, status) {
@@ -133,13 +133,13 @@
                         }
                     };
                     $http(request)
-                        .then(function (d) {
+                        .then(function (response) {
                             filesSaved= filesSaved+1;
-                            textSaved= textSaved+d.count;
+                            textSaved= textSaved+response.data.count;
                             $scope.filesSaved = filesSaved;
                             $scope.textSaved = textSaved;
-                            $scope.uploadedFile = d;
-                            $("#count"+d.id).text(d.count)
+                            $scope.uploadedFile = response.data;
+                            $("#count"+response.data.id).text(response.data.count)
                             console.log( 'Files : ',  $scope );
                         })
                         .catch(function (error, status) {
