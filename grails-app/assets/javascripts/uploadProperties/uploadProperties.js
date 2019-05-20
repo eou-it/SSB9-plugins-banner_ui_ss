@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2017-2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 /* global notifications */
@@ -39,10 +39,10 @@
         $scope.fileLoc = 'root';
 
         $scope.getFiles = function() {
-            $http.get(uploadProperties + '/list').success( function(response) {
-                $scope.propFiles = response;
+            $http.get(uploadProperties + '/list').then( function(response) {
+                $scope.propFiles = response.data;
                 console.log( 'Files : ', $scope.templates, $scope );
-            }).error(function (error, status) {
+            }).catch(function (error, status) {
                 var errorNotification = new Notification({
                     message:$.i18n.prop("upload.properties.language.fetchFail") ,
                     type: "error",
@@ -85,16 +85,16 @@
                     }
                 };
                 $http(request)
-                    .success(function (d) {
+                    .then(function (response) {
                         filesSaved= filesSaved+1;
-                        textSaved= textSaved+d.count;
+                        textSaved= textSaved+response.data.count;
                         $scope.filesSaved = filesSaved;
                         $scope.textSaved = textSaved;
-                        $scope.uploadedFile = d;
-                        $("#count"+d.id).text(d.count)
+                        $scope.uploadedFile = response.data;
+                        $("#count"+response.data.id).text(response.data.count)
                         console.log( 'Files : ', $scope.templates, $scope );
                     })
-                    .error(function (error, status) {
+                    .catch(function (error, status) {
                         var errorNotification = new Notification({
                             message:$.i18n.prop("upload.properties.language.uploadFail",[item.basename]) ,
                             type: "error"});
@@ -133,16 +133,16 @@
                         }
                     };
                     $http(request)
-                        .success(function (d) {
+                        .then(function (response) {
                             filesSaved= filesSaved+1;
-                            textSaved= textSaved+d.count;
+                            textSaved= textSaved+response.data.count;
                             $scope.filesSaved = filesSaved;
                             $scope.textSaved = textSaved;
-                            $scope.uploadedFile = d;
-                            $("#count"+d.id).text(d.count)
+                            $scope.uploadedFile = response.data;
+                            $("#count"+response.data.id).text(response.data.count)
                             console.log( 'Files : ',  $scope );
                         })
-                        .error(function (error, status) {
+                        .catch(function (error, status) {
                             var errorNotification = new Notification({
                                 message:$.i18n.prop("upload.properties.language.uploadFail",[request.data.basename]) ,
                                 type: "error"});
