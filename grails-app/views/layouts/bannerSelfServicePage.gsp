@@ -27,7 +27,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <asset:link rel="apple-touch-startup-image" href="applicationStartup.png"/>
-    <meta name="keepAliveURL" content="${createLink(controller:'keepAlive')}"/>
+    <meta name="keepAliveURL" content="${createLink(uri: '/ssb/keepAlive/data')}"/>
     <meta name="ssbMepDesc" content="${!mep ? '' : mep}"/>
     <meta name="fullName" content="${g.fullName()}"/>
     <meta name="loginEndpoint" content="${grails.util.Holders.config.loginEndpoint}"/>
