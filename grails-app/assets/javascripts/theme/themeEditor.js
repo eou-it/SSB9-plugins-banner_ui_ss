@@ -390,32 +390,32 @@
 
             // SEND THE FILES.
             return $http(request)
-                .then(function (d) {
+                .then(function (response) {
                     var errorPresent =  notifications.get(saveError);
                     if (errorPresent) {
                         notifications.remove(errorPresent);
                     }
-                    if(d=='invalidFormat'){
+                    if(response.data=='invalidFormat'){
                         var errorNotification = new Notification({
                             message:$.i18n.prop("js.notification.upload.type") ,
                             type: "error",
                             flash: true
                         });
                         notifications.addNotification(errorNotification);
-                    }else if(d=='largeData') {
+                    }else if(response.data=='largeData') {
                         var errorNotification = new Notification({
                             message:$.i18n.prop("js.notification.upload.size") ,
                             type: "error",
                             flash: true});
                         notifications.addNotification(errorNotification);
                     }
-                    else if(d=='noData') {
+                    else if(response.data=='noData') {
                         var errorNotification = new Notification({
                             message:$.i18n.prop("js.notification.upload.nodata") ,
                             type: "error",
                             flash: true});
                         notifications.addNotification(errorNotification);
-                    }else if(d=='error') {
+                    }else if(response.data=='error') {
                         var errorNotification = new Notification({
                             message:$.i18n.prop("js.notification.upload.error") ,
                             type: "error",
