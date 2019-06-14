@@ -402,14 +402,7 @@
                             flash: true
                         });
                         notifications.addNotification(errorNotification);
-                    }else if(response.data=='largeData') {
-                        var errorNotification = new Notification({
-                            message:$.i18n.prop("js.notification.upload.size") ,
-                            type: "error",
-                            flash: true});
-                        notifications.addNotification(errorNotification);
-                    }
-                    else if(response.data=='noData') {
+                    } else if(response.data=='noData') {
                         var errorNotification = new Notification({
                             message:$.i18n.prop("js.notification.upload.nodata") ,
                             type: "error",
