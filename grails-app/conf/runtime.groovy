@@ -3,5 +3,5 @@
  *******************************************************************************/
 
 //set maximum upload file size in bytes for uploading themes/templates inside themeEditor
-grails.controllers.upload.maxFileSize = 10000000 //10MB
-grails.controllers.upload.maxRequestSize = 10000000 //10MB
+grails.controllers.upload.maxFileSize = 1000000 //1MB
+grails.controllers.upload.maxRequestSize = 1000000 //1MB

@@ -375,67 +375,78 @@
 
         var formdata = new FormData();
         $scope.uploadFiles = function() {
-            var dispMsg = document.getElementById("uploadMsg");
-            console.log("upload file:", $scope);
-            var data = formdata;
-            var request = {
-                method: 'POST',
-                url: themeEditorPath + '/upload',
-                cache: false,
-                data: formdata,
-                headers: {
-                    'Content-Type': undefined
-                }
-            };
-
-            // SEND THE FILES.
-            return $http(request)
-                .then(function (response) {
-                    var errorPresent =  notifications.get(saveError);
-                    if (errorPresent) {
-                        notifications.remove(errorPresent);
+            var fileSize = document.getElementById("file").files[0].size / 1000000
+            if(fileSize > 1) { //file size > 1 MB, Reject the file
+                console.error("File exceeds the maximum size allowed 1 MB")
+                var errorNotification  = notifications.addNotification(new Notification({
+                    message: $.i18n.prop("js.notification.upload.error"),
+                    type: "error",
+                    id: saveError
+                }))
+            } else {
+                var dispMsg = document.getElementById("uploadMsg");
+                console.log("upload file:", $scope);
+                var data = formdata;
+                var request = {
+                    method: 'POST',
+                    url: themeEditorPath + '/upload',
+                    cache: false,
+                    data: formdata,
+                    headers: {
+                        'Content-Type': undefined
                     }
-                    if(response.data=='invalidFormat'){
-                        var errorNotification = new Notification({
-                            message:$.i18n.prop("js.notification.upload.type") ,
+                };
+
+                // SEND THE FILES.
+                return $http(request)
+                    .then(function (response) {
+                        var errorPresent = notifications.get(saveError);
+                        if (errorPresent) {
+                            notifications.remove(errorPresent);
+                        }
+                        if (response.data == 'invalidFormat') {
+                            var errorNotification = new Notification({
+                                message: $.i18n.prop("js.notification.upload.type"),
+                                type: "error",
+                                flash: true
+                            });
+                            notifications.addNotification(errorNotification);
+                        } else if (response.data == 'noData') {
+                            var errorNotification = new Notification({
+                                message: $.i18n.prop("js.notification.upload.nodata"),
+                                type: "error",
+                                flash: true
+                            });
+                            notifications.addNotification(errorNotification);
+                        } else if (response.data == 'error') {
+                            var errorNotification = new Notification({
+                                message: $.i18n.prop("js.notification.upload.error"),
+                                type: "error",
+                                id: saveError
+                            });
+                            notifications.addNotification(errorNotification);
+                        } else {
+                            notifications.addNotification(new Notification({
+                                message: $.i18n.prop("js.notification.upload.success"),
+                                type: "success",
+                                flash: true
+                            }))
+
+                            $scope.getThemes();
+                            $scope.getTemplates();
+                        }
+                    })
+                    .catch(function () {
+                        var errorNotification = notifications.addNotification(new Notification({
+                            message: $.i18n.prop("js.notification.upload.error"),
                             type: "error",
-                            flash: true
-                        });
-                        notifications.addNotification(errorNotification);
-                    } else if(response.data=='noData') {
-                        var errorNotification = new Notification({
-                            message:$.i18n.prop("js.notification.upload.nodata") ,
-                            type: "error",
-                            flash: true});
-                        notifications.addNotification(errorNotification);
-                    }else if(response.data=='error') {
-                        var errorNotification = new Notification({
-                            message:$.i18n.prop("js.notification.upload.error") ,
-                            type: "error",
-                            id: saveError});
-                        notifications.addNotification(errorNotification);
-                    }else{
-                        notifications.addNotification(new Notification({
-                            message: $.i18n.prop("js.notification.upload.success"),
-                            type: "success",
-                            flash: true
+                            id: saveError
                         }))
-
-                        $scope.getThemes();
-                        $scope.getTemplates();
-                    }
-                })
-                .catch(function () {
-                    var errorNotification  = notifications.addNotification(new Notification({
-                        message: $.i18n.prop("js.notification.upload.error"),
-                        type: "error",
-                        id: saveError
-                    }))
-                })['finally'](function() {
-                angular.element("input[type='file']").val(null);
-                $scope.isDisabled=true;
-            });
-
+                    })['finally'](function () {
+                    angular.element("input[type='file']").val(null);
+                    $scope.isDisabled = true;
+                });
+            }
         }
 
         $scope.getTheFiles = function ($files) {
