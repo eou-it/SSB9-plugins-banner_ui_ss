@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2018-2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 package banner.ui.ss
 
@@ -40,10 +40,10 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
     void testResponseInterceptorHeader() {
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
-        def headerList = RequestContextHolder.currentRequestAttributes().response.headers
-        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.get("X-Content-Type-Options").getValue())
-        assertEquals(X_XSS_PROTECTION, headerList.get("X-XSS-Protection").getValue())
-        assertEquals(CONTENT_SECURITY_POLICY, headerList.get("Content-Security-Policy").getValue())
+        def headerList = RequestContextHolder.currentRequestAttributes().response
+        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.getHeader("X-Content-Type-Options"))
+        assertEquals(X_XSS_PROTECTION, headerList.getHeader("X-XSS-Protection"))
+        assertEquals(CONTENT_SECURITY_POLICY, headerList.getHeader("Content-Security-Policy"))
     }
 
 
@@ -52,10 +52,10 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
         Holders.config.responseHeaders = ["X-XSS-Protection": "1; report=<reporting-uri>"]
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
-        def headerList = RequestContextHolder.currentRequestAttributes().response.headers
-        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.get("X-Content-Type-Options").getValue())
-        assertEquals("1; report=<reporting-uri>", headerList.get("X-XSS-Protection").getValue())
-        assertEquals(CONTENT_SECURITY_POLICY, headerList.get("Content-Security-Policy").getValue())
+        def headerList = RequestContextHolder.currentRequestAttributes().response
+        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.getHeader("X-Content-Type-Options"))
+        assertEquals("1; report=<reporting-uri>", headerList.getHeader("X-XSS-Protection"))
+        assertEquals(CONTENT_SECURITY_POLICY, headerList.getHeader("Content-Security-Policy"))
         Holders.config.responseHeaders.remove("X-XSS-Protection")
     }
 
@@ -64,10 +64,10 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
         Holders.config.responseHeaders = ["X-XSS-Protection": "1"]
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
-        def headerList = RequestContextHolder.currentRequestAttributes().response.headers
-        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.get("X-Content-Type-Options").getValue())
-        assertEquals("1", headerList.get("X-XSS-Protection").getValue())
-        assertEquals(CONTENT_SECURITY_POLICY, headerList.get("Content-Security-Policy").getValue())
+        def headerList = RequestContextHolder.currentRequestAttributes().response
+        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.getHeader("X-Content-Type-Options"))
+        assertEquals("1", headerList.getHeader("X-XSS-Protection"))
+        assertEquals(CONTENT_SECURITY_POLICY, headerList.getHeader("Content-Security-Policy"))
         Holders.config.responseHeaders.remove("X-XSS-Protection")
     }
 
@@ -76,11 +76,11 @@ class ResponseHeaderInterceptorIntegrationTests extends BaseIntegrationTestCase 
         Holders.config.responseHeaders = ["Strict-Transport-Security": "max-age=31536000;"]
         ResponseHeaderInterceptor responseHeaderInterceptor = new ResponseHeaderInterceptor()
         responseHeaderInterceptor.before()
-        def headerList = RequestContextHolder.currentRequestAttributes().response.headers
-        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.get("X-Content-Type-Options").getValue())
-        assertEquals(X_XSS_PROTECTION, headerList.get("X-XSS-Protection").getValue())
-        assertEquals(CONTENT_SECURITY_POLICY, headerList.get("Content-Security-Policy").getValue())
-        assertEquals(STRICT_TRANSPORT_SECURITY, headerList.get("Strict-Transport-Security").getValue())
+        def headerList = RequestContextHolder.currentRequestAttributes().response
+        assertEquals(X_CONTENT_TYPE_OPTIONS, headerList.getHeader('X-Content-Type-Options'))
+        assertEquals(X_XSS_PROTECTION, headerList.getHeader("X-XSS-Protection"))
+        assertEquals(CONTENT_SECURITY_POLICY, headerList.getHeader("Content-Security-Policy"))
+        assertEquals(STRICT_TRANSPORT_SECURITY, headerList.getHeader("Strict-Transport-Security"))
         Holders.config.responseHeaders.remove("X-XSS-Protection")
         Holders.config.responseHeaders.remove("Strict-Transport-Security")
     }
