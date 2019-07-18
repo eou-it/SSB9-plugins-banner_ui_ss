@@ -7,12 +7,10 @@ package net.hedtech.banner.ui.theme
 import grails.converters.JSON
 import groovy.json.JsonOutput
 import net.hedtech.banner.exceptions.ApplicationException
-import org.apache.log4j.Logger
 
 
 class ThemeController {
     def themeService
-    private static final Logger log = Logger.getLogger( ThemeController.class.name )
 
     def index() {
         render "index"
@@ -56,31 +54,26 @@ class ThemeController {
     }
 
     def getTheme() {
-        if(params.name) {
-            def templateName = params.template
-            def themeName = params.name
-            def themeConfig = grailsApplication.config.banner?.theme
-            def content
+        assert params.name
+        def templateName = params.template
+        def themeName = params.name
+        def themeConfig = grailsApplication.config.banner?.theme
+        def content
 
-            if (!templateName) {
-                templateName = themeConfig.template   //Preview does not pass template name, it should use configured template
-            }
-            try {
-                content = themeService.getCSS(themeName, templateName)
-                if (content) {
-                    render(text: content, contentType: "text/css")
-                } else {
-                    log.error "Failed to format theme ${themeName} in ${templateName}"
-                    response.status = 404
-                    render(text: "", contentType: "text/css")
-                }
-            } catch (ApplicationException ae) {
-                log.error "Failed to format theme ${themeName} in ${templateName}. ${ae}"
+        if ( !templateName ) {
+            templateName = themeConfig.template
+        }
+        try {
+            content = themeService.getCSS(themeName, templateName)
+            if(content) {
+                render(text: content, contentType: "text/css")
+            } else {
+                log.error "Failed to format theme ${themeName} in ${templateName}"
                 response.status = 404
-                render ""
+                render(text: "", contentType: "text/css")
             }
-        } else {
-            log.error "No theme name in URL"
+        } catch ( ApplicationException ae ) {
+            log.error "Failed to format theme ${themeName} in ${templateName}. ${ae}"
             response.status = 404
             render ""
         }
