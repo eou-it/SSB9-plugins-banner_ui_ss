@@ -1,16 +1,17 @@
-package banner.ui.ss
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2018-2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-import net.hedtech.banner.i18n.DateConverterService
-import org.grails.core.artefact.ControllerArtefactHandler
-import org.apache.commons.io.IOUtils
-import org.grails.web.converters.Converter
-import javax.servlet.http.HttpServletRequest
-import grails.converters.JSON
-import org.grails.web.json.JSONObject
+package banner.ui.ss
 
+import org.apache.commons.io.IOUtils
+import org.grails.core.artefact.ControllerArtefactHandler
+import org.grails.web.converters.Converter
+
+import grails.converters.JSON
+import net.hedtech.banner.i18n.DateConverterService
+
+import javax.servlet.http.HttpServletRequest
 
 class DateFormattingInterceptor {
 
@@ -27,7 +28,7 @@ class DateFormattingInterceptor {
 
                 def dateConverterService = new DateConverterService();
                 Map mapJSONData = new HashMap()
-                if(json != JSONObject.NULL) {
+                if(JSON.parse('{ "json": null }') != null) {
                     json.each { key, data ->
                         //if(!data.isEmpty()) {
                             def newJSONData = dateConverterService.JSONDateUnmarshaller(data, dateFields)
