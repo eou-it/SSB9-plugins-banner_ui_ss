@@ -10,6 +10,8 @@ import org.grails.web.json.JSONObject
 
 import javax.servlet.http.HttpServletRequest
 
+import grails.converters.JSON
+
 @Slf4j
 class BannerUiSsGrailsPlugin extends Plugin {
 
@@ -40,12 +42,13 @@ class BannerUiSsGrailsPlugin extends Plugin {
             def json
             def request = (HttpServletRequest) delegate
             json = request.getAttribute("JSON")
-            if (json == null || json == JSONObject.NULL) {
+
+            if (json == null || JSON.parse('{ "json": null }') == null) {
                 try {
                     json = JSON.parse(request)
                 } catch (Exception e) {
                     log.error "Error when parsing the JSON"
-                    json = JSONObject.NULL
+                    json = JSON.parse('{ "a": null }').a
                 }
             }
             return json
@@ -90,7 +93,7 @@ class BannerUiSsGrailsPlugin extends Plugin {
                         def dateConverterService = new DateConverterService()
                         def json = JSON.parse(txt);
                         def dateFields = controller.getPropertyValue("dateFields")
-                        if (dateFields && !dateFields.isEmpty() && json != JSONObject.NULL) {
+                        if (dateFields && !dateFields.isEmpty() && JSON.parse('{ "json": null }') != null) {
                             json = dateConverterService.JSONDateMarshaller(json, dateFields)
                             txt = json.toString()
                         }
