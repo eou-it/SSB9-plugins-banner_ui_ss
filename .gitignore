@@ -27,3 +27,4 @@ banner-ui-ss.scss
 build/
 gradle-wrapper.properties
 .gradle/
+**-rtl.css
