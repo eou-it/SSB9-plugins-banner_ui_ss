@@ -1,15 +1,15 @@
 /*******************************************************************************
-Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
+Copyright 2009-2019 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 package net.hedtech.banner.i18n
 
+import groovy.util.logging.Slf4j
 import org.springframework.context.i18n.LocaleContextHolder as LCH
 
 import net.hedtech.banner.exceptions.ApplicationException
 import java.text.NumberFormat
 import java.text.ParseException
-import org.apache.log4j.Logger
 import grails.util.Holders
 import org.springframework.context.MessageSource
 
@@ -20,6 +20,7 @@ import org.springframework.context.MessageSource
  *
  * Parse methods return null and empty string unchanged, and throw ApplicationException if the value is not parseable correctly.
  */
+@Slf4j
 class LocalizeUtil {
     def static formatNumber = { n ->
         def formatClosure = { it ->
@@ -62,14 +63,14 @@ class LocalizeUtil {
                 value = it?.format(pattern)
             }
             catch (IllegalArgumentException x) {
-                Logger.getLogger( LocalizeUtil ).error "Invalid default.date.format=${pattern} in locale: ${LCH.getLocale()}"
+                log.error "Invalid default.date.format=${pattern} in locale: ${LCH.getLocale()}"
                 // return an unusual format to highlight the error
                 // but not Java default format because it is locale-specific and breaks JSON rendering in Arabic.
                 value = it?.format('yyyy-MM-dd')
             }
         }
         catch (Exception x) {
-            Logger.getLogger( LocalizeUtil ).debug( "Unexpected exception formatting date", x )
+            log.debug( "Unexpected exception formatting date", x )
             // Eat the exception and do nothing
         }
 

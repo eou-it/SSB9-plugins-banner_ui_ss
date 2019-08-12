@@ -1,12 +1,12 @@
 /** *****************************************************************************
- Copyright 2011 - 2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2011 - 2019 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.controllers
 
+import groovy.util.logging.Slf4j
 import net.hedtech.banner.exceptions.ApplicationException
 import grails.converters.JSON
 import grails.converters.XML
-import org.apache.log4j.Logger
 import org.grails.plugins.web.taglib.ValidationTagLib
 
 /**
@@ -16,10 +16,8 @@ import org.grails.plugins.web.taglib.ValidationTagLib
  *
  * TODO:  This should be folded into the RestfulControllerMixin at some point.
  */
+@Slf4j
 class BaseRestfulControllerMixin {
-
-    @Lazy // note: Lazy annotation is needed here to ensure 'this' refers to the service we're mixed into (if we're mixed in)
-    def log = Logger.getLogger( this.getClass() )
 
     def localizer = { mapToLocalize ->
         new ValidationTagLib().message( mapToLocalize )
