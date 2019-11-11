@@ -17,6 +17,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
 
     <g:set var="hideSSBHeaderComps" value="${session.hideSSBHeaderComps ? session.hideSSBHeaderComps : (Boolean.parseBoolean(params?.hideSSBHeaderComps)) ? params.hideSSBHeaderComps : false}" scope="session"/>
     <g:set var="aboutServiceUrl" value="${net.hedtech.banner.controllers.ControllerUtils.aboutServiceUrl()}" />
+    <g:set var="privacyPolicyUrl" value="${net.hedtech.banner.controllers.ControllerUtils.privacyPolicyUrl()}"/>
 
     <meta charset="${message(code: 'default.character.encoding')}"/>
     <meta name="dir" content="${message(code:'default.language.direction')}"/>
@@ -41,6 +42,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <meta name="aboutUrlContextPath" content="${request.contextPath}/ssb"/>
     <meta name="hasActiveActionItems" content="${session.hasActiveActionItems}"/>
     <meta name="aipUrl" content="${session.aipUrl}"/>
+    <meta name="privacyPolicyUrl" content="${!privacyPolicyUrl ? '' : privacyPolicyUrl}"/>
 
     <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
         <asset:stylesheet href="modules/bannerSelfServiceRTL-mf.css"/>
