@@ -1,9 +1,12 @@
 /*******************************************************************************
-Copyright 2009-2019 Ellucian Company L.P. and its affiliates.
+Copyright 2009-2020 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 package net.hedtech.banner.i18n
 
+import com.ibm.icu.text.DateFormatSymbols
+import com.ibm.icu.text.DateFormat
+import com.ibm.icu.text.SimpleDateFormat
 import groovy.util.logging.Slf4j
 import org.springframework.context.i18n.LocaleContextHolder as LCH
 
@@ -12,6 +15,9 @@ import java.text.NumberFormat
 import java.text.ParseException
 import grails.util.Holders
 import org.springframework.context.MessageSource
+
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 /**
  * Utility methods for parsing and formatting fields with the current locale from LocaleContextHolder
@@ -57,10 +63,20 @@ class LocalizeUtil {
 
     def static formatDate = {
         def pattern = getDateFormat()
+        def dateConverterService = new DateConverterService()
         def value = it
         try {
             try {
-                value = it?.format(pattern)
+                String currentLocale = LCH.getLocale().toString().toLowerCase()
+                if (isSpanishLocale(currentLocale)) {
+                    DateFormat df = new SimpleDateFormat(pattern, LCH.getLocale())
+                    DateFormatSymbols dateFormatSymbols = dateConverterService.getShortMonthsForSpanishLocale(currentLocale)
+                    df.setDateFormatSymbols(dateFormatSymbols)
+                    value = df.format(it)
+                }
+                else{
+                   value = it?.format(pattern)
+                }
             }
             catch (IllegalArgumentException x) {
                 log.error "Invalid default.date.format=${pattern} in locale: ${LCH.getLocale()}"
@@ -73,7 +89,6 @@ class LocalizeUtil {
             log.debug( "Unexpected exception formatting date", x )
             // Eat the exception and do nothing
         }
-
         return value
     }
 
@@ -108,5 +123,11 @@ class LocalizeUtil {
             value = messageSource.getMessage(key, args, locale)
         }
         return value
+    }
+
+    public static boolean isSpanishLocale(String localeString){
+        Pattern p = Pattern.compile("es_?.*")
+        Matcher m = p.matcher(localeString)
+        return m.find()
     }
 }
