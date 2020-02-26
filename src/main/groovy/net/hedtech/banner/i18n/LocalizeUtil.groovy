@@ -98,10 +98,22 @@ class LocalizeUtil {
 
         if (value) {
             try {
-                def pattern = getDateFormat();
-                value = Date.parse(pattern, it)
-                if (value.format(pattern) != it) {
-                    throw new ParseException(it, 0)
+                def pattern = getDateFormat()
+                DateConverterService dateConverterService = new DateConverterService()
+                String currentLocale = LCH.getLocale().toString().toLowerCase()
+                if (isSpanishLocale(currentLocale)) {
+                    DateFormat df = new SimpleDateFormat(pattern, LCH.getLocale())
+                    DateFormatSymbols dateFormatSymbols = dateConverterService.getShortMonthsForSpanishLocale(currentLocale)
+                    df.setDateFormatSymbols(dateFormatSymbols)
+                    value = df.format(it)
+                    if (df.format(value) != it) {
+                        throw new ParseException(it, 0)
+                    }
+                } else {
+                    value = Date.parse(pattern, it)
+                    if (value.format(pattern) != it) {
+                        throw new ParseException(it, 0)
+                    }
                 }
             }
             catch (Exception x) {
