@@ -105,7 +105,7 @@ class LocalizeUtil {
                     DateFormat df = new SimpleDateFormat(pattern, LCH.getLocale())
                     DateFormatSymbols dateFormatSymbols = dateConverterService.getShortMonthsForSpanishLocale(currentLocale)
                     df.setDateFormatSymbols(dateFormatSymbols)
-                    value = df.format(it)
+                    value = df.parse(it)
                     if (df.format(value) != it) {
                         throw new ParseException(it, 0)
                     }
