@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "9.32.1"
+version "9.33.1"
 group "banner.ui.ss"
 
 apply plugin:"eclipse"
@@ -112,7 +112,7 @@ task (generateSCSSFile, type: JavaExec)  {
     System.setProperty('scssFile',scssFile)
     System.setProperty('appName',appName)
     System.setProperty('appVersion',appVersion)
-
+    
     try {
         System.properties.each { k,v->
             if (k.startsWith("scssFile")) {
@@ -124,7 +124,7 @@ task (generateSCSSFile, type: JavaExec)  {
             }
         }
         classpath = sourceSets.main.runtimeClasspath
-
+        
     } catch (FileNotFoundException e) {
         println "Unable to generate theme SCSS file - unexpected exception"
         e.printStackTrace()

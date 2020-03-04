@@ -1,17 +1,23 @@
 /*******************************************************************************
-Copyright 2009-2015 Ellucian Company L.P. and its affiliates.
+Copyright 2009-2020 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 package net.hedtech.banner.i18n
 
+import com.ibm.icu.text.DateFormatSymbols
+import com.ibm.icu.text.DateFormat
+import com.ibm.icu.text.SimpleDateFormat
+import groovy.util.logging.Slf4j
 import org.springframework.context.i18n.LocaleContextHolder as LCH
 
 import net.hedtech.banner.exceptions.ApplicationException
 import java.text.NumberFormat
 import java.text.ParseException
-import org.apache.log4j.Logger
 import grails.util.Holders
 import org.springframework.context.MessageSource
+
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 /**
  * Utility methods for parsing and formatting fields with the current locale from LocaleContextHolder
@@ -20,6 +26,7 @@ import org.springframework.context.MessageSource
  *
  * Parse methods return null and empty string unchanged, and throw ApplicationException if the value is not parseable correctly.
  */
+@Slf4j
 class LocalizeUtil {
     def static formatNumber = { n ->
         def formatClosure = { it ->
@@ -56,23 +63,32 @@ class LocalizeUtil {
 
     def static formatDate = {
         def pattern = getDateFormat()
+        def dateConverterService = new DateConverterService()
         def value = it
         try {
             try {
-                value = it?.format(pattern)
+                String currentLocale = LCH.getLocale().toString().toLowerCase()
+                if (isSpanishLocale(currentLocale)) {
+                    DateFormat df = new SimpleDateFormat(pattern, LCH.getLocale())
+                    DateFormatSymbols dateFormatSymbols = dateConverterService.getShortMonthsForSpanishLocale(currentLocale)
+                    df.setDateFormatSymbols(dateFormatSymbols)
+                    value = df.format(it)
+                }
+                else{
+                   value = it?.format(pattern)
+                }
             }
             catch (IllegalArgumentException x) {
-                Logger.getLogger( LocalizeUtil ).error "Invalid default.date.format=${pattern} in locale: ${LCH.getLocale()}"
+                log.error "Invalid default.date.format=${pattern} in locale: ${LCH.getLocale()}"
                 // return an unusual format to highlight the error
                 // but not Java default format because it is locale-specific and breaks JSON rendering in Arabic.
                 value = it?.format('yyyy-MM-dd')
             }
         }
         catch (Exception x) {
-            Logger.getLogger( LocalizeUtil ).debug( "Unexpected exception formatting date", x )
+            log.debug( "Unexpected exception formatting date", x )
             // Eat the exception and do nothing
         }
-
         return value
     }
 
@@ -82,10 +98,22 @@ class LocalizeUtil {
 
         if (value) {
             try {
-                def pattern = getDateFormat();
-                value = Date.parse(pattern, it)
-                if (value.format(pattern) != it) {
-                    throw new ParseException(it, 0)
+                def pattern = getDateFormat()
+                DateConverterService dateConverterService = new DateConverterService()
+                String currentLocale = LCH.getLocale().toString().toLowerCase()
+                if (isSpanishLocale(currentLocale)) {
+                    DateFormat df = new SimpleDateFormat(pattern, LCH.getLocale())
+                    DateFormatSymbols dateFormatSymbols = dateConverterService.getShortMonthsForSpanishLocale(currentLocale)
+                    df.setDateFormatSymbols(dateFormatSymbols)
+                    value = df.parse(it)
+                    if (df.format(value) != it) {
+                        throw new ParseException(it, 0)
+                    }
+                } else {
+                    value = Date.parse(pattern, it)
+                    if (value.format(pattern) != it) {
+                        throw new ParseException(it, 0)
+                    }
                 }
             }
             catch (Exception x) {
@@ -107,5 +135,11 @@ class LocalizeUtil {
             value = messageSource.getMessage(key, args, locale)
         }
         return value
+    }
+
+    public static boolean isSpanishLocale(String localeString){
+        Pattern p = Pattern.compile("es_?.*")
+        Matcher m = p.matcher(localeString)
+        return m.find()
     }
 }

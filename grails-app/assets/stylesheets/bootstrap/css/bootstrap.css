@@ -222,6 +222,7 @@ table {
     text-shadow: none !important;
     background: transparent !important;
     box-shadow: none !important;
+    overflow: visible !important;
   }
   a,
   a:visited {
