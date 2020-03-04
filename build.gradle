@@ -151,3 +151,15 @@ integrationTest {
 test {
     ignoreFailures = true
 }
+
+cobertura{
+    coverageFormats = ['xml','html']
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat "full"
+        events "started", "skipped", "passed", "failed"
+        showStandardStreams false
+    }
+}

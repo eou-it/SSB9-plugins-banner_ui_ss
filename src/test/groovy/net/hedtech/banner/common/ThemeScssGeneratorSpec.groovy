@@ -6,8 +6,9 @@ package net.hedtech.banner.common
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import spock.lang.Ignore
 
-
+@Ignore
 class ThemeScssGeneratorSpec extends Specification {
     def APP_NAME=grails.util.Metadata.current.info?.app?.name
     def APP_VERSION=grails.util.Metadata.current.info?.app?.version
@@ -187,6 +188,7 @@ class ThemeScssGeneratorSpec extends Specification {
         'DarkSeaGreen'      |   '#8FBC8F'
     }
 
+    @Ignore
     def "includes -patch file exactly once"() {
         when:
         String markerText = "/* banner-ui-ss-patch.scss */"
