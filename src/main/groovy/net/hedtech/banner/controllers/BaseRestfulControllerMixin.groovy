@@ -115,11 +115,11 @@ class BaseRestfulControllerMixin {
             return createSuccessMap( entities, count, params, classSimpleName )
         }
         catch (ApplicationException e) {
-            log.error( e )
+            log.error( e.toString() )
             return createErrorResponseMap(e, [], e.returnMap(localizer)?.message, e.httpStatusCode)
         }
         catch (e) { // CI logging
-            log.error( e )
+            log.error( e.toString() )
             return createErrorResponseMap(e, [], localizer(code: 'default.not.listed.message'))
         }
     }
