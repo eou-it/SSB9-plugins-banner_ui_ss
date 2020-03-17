@@ -177,11 +177,15 @@ body {
   background-color: $themecolor3-2; /*#065AA5*/
 }
 
+/* Login Background image fix*/
 .pageBg {
-  @if variable_exists(themebgimage) {
-    /* @if is only supported on ETE, but bgimage is also only supported on ETE */
-    background-image: url("$themebgimage");
-  }
+  background-image: url("$themebgimage");
+  background-color: $themecolor1;
+}
+
+/* Login page Logo and background fix */
+.splashBg .ellucianName {
+  background-image: url("$themesecondaryLogo");
 }
 
 /* for login password link*/
