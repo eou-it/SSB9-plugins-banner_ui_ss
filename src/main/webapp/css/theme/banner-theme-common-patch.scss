@@ -177,15 +177,14 @@ body {
   background-color: $themecolor3-2; /*#065AA5*/
 }
 
-/* Login Background image fix*/
+/* Login Background image fix */
 .pageBg {
-  background-image: url("$themebgimage");
-  background-color: $themecolor1;
+  background-image: url("$themebgimage"); //Do not modify this
 }
 
 /* Login page Logo and background fix */
 .splashBg .ellucianName {
-  background-image: url("$themesecondaryLogo");
+  background-image: url("$themesecondaryLogo"); //Do not modify this
 }
 
 /* for login password link*/
