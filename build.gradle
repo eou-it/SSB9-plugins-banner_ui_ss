@@ -54,10 +54,10 @@ dependencies {
     testCompile "org.grails:grails-plugin-testing"
     testCompile "org.grails:grails-web-testing-support"
     compile 'commons-io:commons-io:2.6'
-    compile 'org.apache.poi:poi:3.12'
-    compile 'org.apache.poi:poi-ooxml:3.12'
-    compile 'org.apache.poi:poi-ooxml-schemas:3.12'
-    compile 'org.apache.poi:poi-scratchpad:3.12'
+    compile 'org.apache.poi:poi:4.1.2'
+    compile 'org.apache.poi:poi-ooxml:4.1.2'
+    compile 'org.apache.poi:poi-ooxml-schemas:4.1.2'
+    compile 'org.apache.poi:poi-scratchpad:4.1.2'
     compile 'org.apache.xmlbeans:xmlbeans:2.3.0'
     compile "org.grails.plugins:hibernate5"
     compile "org.hibernate:hibernate-core:5.1.5.Final"
