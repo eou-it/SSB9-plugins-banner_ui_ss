@@ -33,6 +33,7 @@ Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
     <meta name="logoutEndpoint" content="${grails.util.Holders.config.logoutEndpoint}"/>
     <meta name="guestLoginEnabled" content="${grails.util.Holders.config.guestLoginEnabled}"/>
     <meta name="guestAuthenticationEnabled" content="${session.guestUser}"/>
+    <meta name="globalGuestProxyBaseURL" content="${session.globalGuestProxyBaseURL}"/>
     <meta name="userLocale" content="${LocaleContextHolder.getLocale()}"/>
     <meta name="footerFadeAwayTime" content="${grails.util.Holders.config.footerFadeAwayTime}"/>
     <meta name="hideSSBHeaderComps" content="${session?.hideSSBHeaderComps}">
