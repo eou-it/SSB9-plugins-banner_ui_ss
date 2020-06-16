@@ -23,7 +23,7 @@ test/**/release_info.groovy.old
 plugin.xml
 *-rtl.css
 messages_ar_SA.properties
-src/main/webapp/css/theme/*-*_*_*.scss
+src/main/webapp/css/theme/*-*_*.scss
 build/
 gradle-wrapper.properties
 .gradle/
