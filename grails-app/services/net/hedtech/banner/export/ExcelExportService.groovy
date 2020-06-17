@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2014-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2014-2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.export
 
@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.ss.usermodel.FillPatternType
 
 class ExcelExportService {
     public enum FileType  {xls, xlsx}
@@ -47,7 +48,7 @@ class ExcelExportService {
         // Do we have an error row to add above the headers
         if (data.errorMessage) {
             CellStyle errorCellStyle = wb.createCellStyle()
-            errorCellStyle.setFillPattern( CellStyle.SOLID_FOREGROUND )
+            errorCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND)
             errorCellStyle.setFillForegroundColor( IndexedColors.RED.getIndex() )
             errorCellStyle.setDataFormat(TEXT_FORMAT)
 
