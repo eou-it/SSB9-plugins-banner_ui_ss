@@ -1,5 +1,5 @@
 /** *****************************************************************************
- Copyright 2009 - 2014 Ellucian Company L.P. and its affiliates.
+ Copyright 2009 - 2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.common
 
@@ -365,7 +365,7 @@ class RtlCssGenerator {
 
     def getFilesToTransformMapList(dir) {
         def files = []
-        final excludedDirs = ['modules', 'javascripts', 'build','xe-ui-components','xe-components','.git','.gradle']
+        final excludedDirs = ['modules', 'javascripts', 'build','xe-ui-components','xe-components','.git','.gradle', 'theme']
         dir.traverse( type: FileType.FILES, nameFilter: ~/.*(?<!-patch|-mf|rtl).css/,
                 excludeNameFilter: { it in excludedDirs },
                 preDir: {if(it.name in excludedDirs) return FileVisitResult.SKIP_SUBTREE }) { source ->
