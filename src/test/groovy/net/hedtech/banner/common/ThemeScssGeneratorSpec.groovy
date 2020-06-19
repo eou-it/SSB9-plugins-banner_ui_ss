@@ -1,26 +1,20 @@
 /*******************************************************************************
- Copyright 2009-2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.common
 
-
 import spock.lang.Specification
 import spock.lang.Unroll
-import spock.lang.Ignore
 
-@Ignore
 class ThemeScssGeneratorSpec extends Specification {
-    def APP_NAME=grails.util.Metadata.current.info?.app?.name
-    def APP_VERSION=grails.util.Metadata.current.info?.app?.version
+    String APP_NAME = grails.util.Metadata.current.info?.app?.name
+    String APP_VERSION=grails.util.Metadata.current.info?.app?.version
 
-    def themeScssGenerator = new ThemeScssGenerator()
-    def scssFile
-    def setup() {
-        String currentWorkingDir = System.getProperty("user.dir")
-        String baseDirPath = new File(new File(currentWorkingDir).getParent()).getParent()
-        scssFile = "${baseDirPath}/build/assets/theme/${APP_NAME}.scss"
-    }
-
+    ThemeScssGenerator themeScssGenerator = new ThemeScssGenerator()
+    String versionText = APP_VERSION ? ("-" + APP_VERSION).replaceAll(/\./, '_') : ""
+    String scssFilePath = "${System.properties['user.dir']}/src/main/webapp/css/theme/"
+    String scssFileName = (APP_NAME + versionText) + ".scss"
+    String scssFile = scssFilePath + scssFileName
 
 
     def "test remove comments ()"() {
@@ -188,7 +182,7 @@ class ThemeScssGeneratorSpec extends Specification {
         'DarkSeaGreen'      |   '#8FBC8F'
     }
 
-    @Ignore
+
     def "includes -patch file exactly once"() {
         when:
         String markerText = "/* banner-ui-ss-patch.scss */"

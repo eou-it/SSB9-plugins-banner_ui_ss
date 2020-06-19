@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2016 Ellucian Company L.P. and its affiliates.
+ Copyright 2016-2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 package net.hedtech.banner.ui.theme
@@ -40,11 +40,17 @@ class ThemeUtil {
                 return b.compareTo(a);
             }
         })
+        themeJSON['secondaryLogo'] = "../../assets/ellucian_logo.svg"
+        themeJSON['bgimage'] = themeJSON['color1']
         sorted.putAll( themeJSON )
         def content = templateSCSS
         sorted.each { k, v ->
             if ( v ) {
-                content = content.replace( "\$theme$k", v ) // also add "/*theme$k*/ " +  except for logo
+                if(k == "bgimage"){
+                    content = content.replace( 'background-image: url("$themebgimage")', 'background-color: '+v+';\n\t'+'background-image: none' )
+                } else {
+                    content = content.replace( "\$theme$k", v ) // also add "/*theme$k*/ " +  except for logo
+                }
             }
         }
         return content
