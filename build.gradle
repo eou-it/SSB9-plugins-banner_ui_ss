@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "9.33.3"
+version "9.34"
 group "banner.ui.ss"
 
 apply plugin:"eclipse"
@@ -147,4 +147,24 @@ codenarc {
     maxPriority1Violations = Integer.MAX_VALUE
     maxPriority2Violations = Integer.MAX_VALUE
     maxPriority3Violations = Integer.MAX_VALUE
+}
+
+integrationTest {
+    ignoreFailures = true
+}
+
+test {
+    ignoreFailures = true
+}
+
+cobertura{
+    coverageFormats = ['xml','html']
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat "full"
+        events "started", "skipped", "passed", "failed"
+        showStandardStreams false
+    }
 }

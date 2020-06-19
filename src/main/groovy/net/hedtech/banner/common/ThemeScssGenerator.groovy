@@ -1,5 +1,5 @@
 /** *****************************************************************************
- Copyright 2009-2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.common
 
@@ -784,7 +784,7 @@ The *-1 becomes *-active, *-2 becomes *-hover, and *-5 becomes *-light (much les
     }
 
     def appendSCSSPatchFile(String SCSSFile) {
-        String patchFilename = SCSSFile.substring(0, SCSSFile.indexOf('.scss'))+'-patch.scss'
+        String patchFilename = SCSSFile.substring(0, SCSSFile.lastIndexOf('-'))+'-patch.scss'
         appendFile( patchFilename, SCSSFile )
     }
 
