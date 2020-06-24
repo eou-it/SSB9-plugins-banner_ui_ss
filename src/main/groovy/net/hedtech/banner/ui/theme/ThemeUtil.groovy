@@ -40,7 +40,7 @@ class ThemeUtil {
                 return b.compareTo(a);
             }
         })
-        //themeJSON['secondaryLogo'] = "../../assets/ellucian_logo.svg"
+        themeJSON['secondaryLogo'] = "../../assets/ellucian_logo.svg"
         themeJSON['bgimage'] = themeJSON['color1']
         sorted.putAll( themeJSON )
         def content = templateSCSS
