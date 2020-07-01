@@ -48,6 +48,8 @@ class ThemeUtil {
             if ( v ) {
                 if(k == "bgimage"){
                     content = content.replace( 'background-image: url("$themebgimage")', 'background-color: '+v+';\n\t'+'background-image: none' )
+                }else if(k=='secondaryLogo'){
+                    content = content.replace( 'background-image: url("$themesecondaryLogo")', '' )
                 } else {
                     content = content.replace( "\$theme$k", v ) // also add "/*theme$k*/ " +  except for logo
                 }
