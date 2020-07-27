@@ -1,6 +1,7 @@
 /** *****************************************************************************
  Copyright 2011 - 2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
+
 package net.hedtech.banner.controllers
 
 import groovy.util.logging.Slf4j
