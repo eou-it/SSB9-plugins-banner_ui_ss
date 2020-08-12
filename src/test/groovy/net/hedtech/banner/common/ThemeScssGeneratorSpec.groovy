@@ -1,19 +1,21 @@
 /*******************************************************************************
- Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.common
-
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
-
 class ThemeScssGeneratorSpec extends Specification {
-    def APP_NAME=grails.util.Metadata.current.'app.name'
-    def APP_VERSION=null
+    String APP_NAME = grails.util.Metadata.current.info?.app?.name
+    String APP_VERSION=grails.util.Metadata.current.info?.app?.version
 
-    def themeScssGenerator = new ThemeScssGenerator()
-    def scssFile = "${System.properties['base.dir']}/target/web-app/css/theme/${APP_NAME}.scss"
+    ThemeScssGenerator themeScssGenerator = new ThemeScssGenerator()
+    String versionText = APP_VERSION ? ("-" + APP_VERSION).replaceAll(/\./, '_') : ""
+    String scssFilePath = "${System.properties['user.dir']}/src/main/webapp/css/theme/"
+    String scssFileName = (APP_NAME + versionText) + ".scss"
+    String scssFile = scssFilePath + scssFileName
+
 
     def "test remove comments ()"() {
         expect:
@@ -179,6 +181,7 @@ class ThemeScssGeneratorSpec extends Specification {
         'ReD'               |   '#FF0000'
         'DarkSeaGreen'      |   '#8FBC8F'
     }
+
 
     def "includes -patch file exactly once"() {
         when:

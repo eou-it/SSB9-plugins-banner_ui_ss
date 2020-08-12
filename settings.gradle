@@ -1,3 +1,5 @@
+rootProject.name = 'banner-ui-ss'
+
 include ':banner-core'
 project(':banner-core').projectDir = new File('../banner_core.git')
 
