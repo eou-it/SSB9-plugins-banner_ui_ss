@@ -2,6 +2,13 @@
  Copyright 2017-2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
+function clickEvent(element){
+    if(event.keyCode == 32){
+        element.click();
+        event.preventDefault();
+    }
+}
+
 /* global notifications */
 (function() {
     'use strict';
