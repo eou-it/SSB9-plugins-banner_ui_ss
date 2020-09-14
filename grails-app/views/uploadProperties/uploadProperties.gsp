@@ -35,7 +35,7 @@
     <span><g:message code="upload.properties.header2.subcontent"/></span>
     <div>
         <select ng-model="selectedLanguage" place class="pb-block pb-select pb-item  ng-valid ng-touched ng-dirty ng-valid-parse"
-                ng-change="selectCheckbox()">
+                ng-change="selectCheckbox()" autofocus>
             <option ng-repeat="x in lanProperties" value="{{x.code}}">{{x.language}}</option>
         </select>
     </div>
