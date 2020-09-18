@@ -143,7 +143,7 @@ function KeyTable ( oInit )
      * Private parameters
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    var _ACTIONABLE_COMPONENTS_CONSTANT = "a, area, button, input, object, select, textarea";
+    var _ACTIONABLE_COMPONENTS_CONSTANT = "a, area, button, input, object, select, textarea, span";
 
     var _ACTIONABLE_COMPONENTS_TO_SET_FOCUS = "input, select, textarea";
 
@@ -1121,6 +1121,10 @@ function KeyTable ( oInit )
         _fnSetFocusToCell(nTarget);
         var temp = $(':first-child', nTarget);
         temp = temp.length ? temp[0] : nTarget;
+        if(temp.classList[1]=="select2")
+        {
+             temp=$(':first-child',nTarget).find('input')[0];
+        }
         temp.focus();
         window.componentToFocusOnFlyoutClose = $(temp);
     }
@@ -1142,11 +1146,14 @@ function KeyTable ( oInit )
         var trelement = $(nTarget).closest('tr');
         var tdelements = $(trelement).find('td');
         tdLen = tdelements.length;
+        //Hide Focus for last column
+        /*
         getTDPos = (tdLen>2)?(tdLen-2):0;
         if(getTDPos === $(nTarget).index()) {
             $(nTarget).css('cssText','outline:0px !important');
             $(trelement).find(_INVISIBLE_COLUMN_CSS).addClass(_sFocusClass);
         }
+        */
     }
 
 
