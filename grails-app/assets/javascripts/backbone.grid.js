@@ -766,12 +766,7 @@ var dirtyCheckDefault = {
                 keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
                     // trigger the click action on the contained element, if any, or the td itself
                     var temp = $(':first-child',cell)
-                    temp = temp.length? temp.first():cell;
-                    if(temp[0].classList[1]=="select2")
-                    {
-                        temp=cell;
-                        console.log(temp);
-                    }
+                    temp = temp.length ==1 ? temp.first():cell;
                     temp.click();
                 });
 
