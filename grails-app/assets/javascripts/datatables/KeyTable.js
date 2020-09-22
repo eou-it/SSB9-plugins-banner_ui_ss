@@ -143,7 +143,7 @@ function KeyTable ( oInit )
      * Private parameters
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    var _ACTIONABLE_COMPONENTS_CONSTANT = "a, area, button, input, object, select, textarea, span";
+    var _ACTIONABLE_COMPONENTS_CONSTANT = "a, area, button, input, object, select, textarea, div";
 
     var _ACTIONABLE_COMPONENTS_TO_SET_FOCUS = "input, select, textarea";
 
@@ -1120,7 +1120,7 @@ function KeyTable ( oInit )
         _fnRemoveTabIndexToFormObjs();
         _fnSetFocusToCell(nTarget);
         var temp = $(':first-child', nTarget);
-        temp = temp.length==1 ? temp[0] : temp[0].classList[1]=="select2" ? temp.find('input')[0] : nTarget;
+        temp = temp.length==1 ? temp[0] : temp.parent().find('div')[0].classList[0].includes('select2') ? temp.parent().find('div').find('input')[0] : nTarget;
         temp.focus();
         window.componentToFocusOnFlyoutClose = $(temp);
     }
