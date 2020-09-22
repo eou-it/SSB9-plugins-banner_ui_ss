@@ -1,5 +1,5 @@
 85<!DOCTYPE html>
-<%-- Copyright 2016-2018 Ellucian Company L.P. and its affiliates. --%>
+<%-- Copyright 2016-2020 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" defaultCodec="none" %>
 <html xmlns:ng="http://angularjs.org" ng-strict-di>
@@ -609,7 +609,7 @@ dev[ng-model="theme"] {
         <div ng-model="theme" class="inputs group" ng-controller="themeEditorCtrl" xe-section="theme"><!-- xe-theme-editor -->
           <div xe-field="name">
             <label for="theme-name"><g:message code="theme.name"/></label>
-            <input id="theme-name" style="width:50%" ng-model="name"></input>
+            <input id="theme-name" style="width:50%" ng-model="name" autofocus></input>
           </div>
           <div xe-field="color1">
             <label for="theme-color1"><g:message code="theme.color1"/></label>
