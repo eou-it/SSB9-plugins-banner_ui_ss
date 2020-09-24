@@ -2,7 +2,7 @@
 <%@ page import="org.springframework.context.i18n.LocaleContextHolder" %>
 
 <%--
-Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
+Copyright 2009-2020 Ellucian Company L.P. and its affiliates.
 --%>
 <!DOCTYPE html>
 <html lang="${message(code: 'default.language.locale')}">
