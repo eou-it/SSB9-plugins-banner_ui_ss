@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2012-2014 Ellucian Company L.P. and its affiliates.
+ Copyright 2012-2020 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 
 /*
@@ -766,7 +766,7 @@ var dirtyCheckDefault = {
                 keyTable.event['action']( null, null, function actionSelectCell( cell, x, y ) {
                     // trigger the click action on the contained element, if any, or the td itself
                     var temp = $(':first-child',cell)
-                    temp = temp.length? temp.first():cell;
+                    temp = temp.length ==1 ? temp.first():cell;
                     temp.click();
                 });
 
