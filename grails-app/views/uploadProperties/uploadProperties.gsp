@@ -1,4 +1,4 @@
-<%-- Copyright 2017-2018 Ellucian Company L.P. and its affiliates. --%>
+<%-- Copyright 2017-2020 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html xmlns:ng="http://angularjs.org" ng-strict-di>
@@ -35,7 +35,7 @@
     <span><g:message code="upload.properties.header2.subcontent"/></span>
     <div>
         <select ng-model="selectedLanguage" place class="pb-block pb-select pb-item  ng-valid ng-touched ng-dirty ng-valid-parse"
-                ng-change="selectCheckbox()">
+                ng-change="selectCheckbox()" autofocus>
             <option ng-repeat="x in lanProperties" value="{{x.code}}">{{x.language}}</option>
         </select>
     </div>
@@ -50,7 +50,8 @@
             <div ng-repeat="x in lanProperties" ng-if="x.code"  class="pb-detail-item-container pb-boolean">
                 <input type="checkbox" name="checkboxInput" id="checkboxInput{{x.code}}" value="{{x.code}}"
                        class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse">
-                <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInput{{x.code}}">
+                <label tabindex="0" class="pb-block pb-boolean pb-item pb-label" for="checkboxInput{{x.code}}" role="checkbox"
+                       onkeypress="clickEvent(this)" onmousedown="clickEvent(this)" aria-checked="false" aria-labelledby="checkboxInput{{x.code}}">
                     {{x.language}}
                 </label>
 
@@ -85,7 +86,9 @@
                 <div class="pb-detail-item-container pb-boolean">
                     <input  type="checkbox" name="checkboxInputAd" id="checkboxInputAdvanced" ng-model="tablehide"
                            class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse" >
-                    <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInputAdvanced">
+                    <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInputAdvanced" tabindex="0"
+                           role="checkbox" onkeypress="clickEvent(this)" aria-checked="false" onmousedown="clickEvent(this)"
+                           aria-labelledby="checkboxInputAdvanced">
                         <g:message code="upload.properties.input.advanced"/>
                     </label>
                 </div>
@@ -113,7 +116,9 @@
                                                    type="checkbox" name="checkboxTable"
                                                    id="checkboxInput{{$index}}" dataId="{{filename.id}}"
                                                    value="{{filename.basename}}">
-                                            <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInput{{$index}}">
+                                            <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInput{{$index}}"
+                                                   tabindex="0" role="checkbox" onkeypress="clickEvent(this)" onmousedown="clickEvent(this)"
+                                                   aria-checked="false" aria-labelledby="checkboxInput{{$index}}">
                                                 {{filename.basename}}
                                                 </label></div>
                                     </td>
