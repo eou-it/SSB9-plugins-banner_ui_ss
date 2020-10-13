@@ -51,7 +51,7 @@ window.ExcelExportWizardView = Backbone.View.extend({
         if (this.url.indexOf("?") == -1) {
             formatS = "?fileType=" + format
         }
-        window.open(this.url + formatS);
+        window.open(this.url + formatS, '_self');
 
         $.modal.close();
     }
