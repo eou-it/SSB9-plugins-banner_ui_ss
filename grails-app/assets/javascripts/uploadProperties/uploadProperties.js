@@ -9,6 +9,9 @@ function clickEvent(element){
     if(keycode == 32 || keycode==13){
         element.click();
         event.preventDefault();
+    }else if(event.originalEvent != undefined){
+        element.click();
+        event.preventDefault();
     }
 }
 
