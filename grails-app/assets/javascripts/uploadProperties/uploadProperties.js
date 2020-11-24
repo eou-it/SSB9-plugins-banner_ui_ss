@@ -1,6 +1,16 @@
 /*******************************************************************************
- Copyright 2017-2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2017-2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
+
+function clickEvent(element){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    var isChecked = element.getAttribute("aria-checked")== 'true';
+    element.setAttribute("aria-checked",!isChecked);
+    if(keycode == 32 || keycode==13){
+        element.click();
+        event.preventDefault();
+    }
+}
 
 /* global notifications */
 (function() {
