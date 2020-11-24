@@ -1120,7 +1120,7 @@ function KeyTable ( oInit )
         _fnRemoveTabIndexToFormObjs();
         _fnSetFocusToCell(nTarget);
         var temp = $(':first-child', nTarget);
-        temp = temp.length==1 ? temp[0] : temp.parent().find('input')[0];
+        temp = temp.length==1 ? temp[0] : temp.parent().find('input').length==0? nTarget : temp.parent().find('input')[0];
         temp.focus();
         window.componentToFocusOnFlyoutClose = $(temp);
     }
