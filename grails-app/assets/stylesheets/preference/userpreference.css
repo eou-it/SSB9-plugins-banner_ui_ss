@@ -49,6 +49,10 @@ div#buttonContainer.buttonContainer {
 
 }
 
+body {
+    overflow-y: scroll!important;
+}
+
 @media screen and (min-width: 768px) {
 
     .xe-popup-container .xe-pop-content {
@@ -71,7 +75,7 @@ div#buttonContainer.buttonContainer {
     }
 
     div#buttonContainer.buttonContainer {
-        float: right;
+        float: left;
         height: 0%;
         bottom: auto;
         width: auto;
