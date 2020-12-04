@@ -19,6 +19,7 @@ function clickEvent(element){
     window.console = window.console || { log: function() {} }; //IE9 console.log polyfill stub
 
     var uploadPropApp = angular.module("uploadProperties", ["extensibility"]);
+    var baseLocal = $('#baselocal');
 
     var uploadPropCtrl = function($scope, $http, $timeout) {
         var propFiles = [],uploadProperties = 'uploadProperties',uploadedFile;
@@ -56,7 +57,9 @@ function clickEvent(element){
                 var errorNotification = new Notification({
                     message:$.i18n.prop("upload.properties.language.fetchFail") ,
                     type: "error",
-                    flash: true});
+                    flash: true,
+                    id : 'content',
+                    component : baseLocal});
                 notifications.addNotification(errorNotification);
                 console.log(error);
             })
@@ -107,7 +110,9 @@ function clickEvent(element){
                     .catch(function (error, status) {
                         var errorNotification = new Notification({
                             message:$.i18n.prop("upload.properties.language.uploadFail",[item.basename]) ,
-                            type: "error"});
+                            type: "error",
+                            id : 'content',
+                            component : baseLocal});
                         notifications.addNotification(errorNotification);
                         console.log(error);
                     })
@@ -155,7 +160,9 @@ function clickEvent(element){
                         .catch(function (error, status) {
                             var errorNotification = new Notification({
                                 message:$.i18n.prop("upload.properties.language.uploadFail",[request.data.basename]) ,
-                                type: "error"});
+                                type: "error",
+                                id : 'content',
+                                component : baseLocal});
                             notifications.addNotification(errorNotification);
                             console.log(error);
                         })
