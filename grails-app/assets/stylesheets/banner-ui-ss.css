@@ -955,7 +955,8 @@ div.infoicon {
 }
 
 .ui-pillbox li.ui-state-disabled {
-    color: #b2b3b7; /* EDS */
+    color: #5b5e65;
+    background-color: #f8f8f8;
 }
 
 .ui-pillbox li.ui-state-highlight {
