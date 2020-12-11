@@ -67,7 +67,7 @@ $.fn.screenReaderLabel = (function(){
         function createLabel($el, ariaLive, ariaLink) {
             var id = 'screen-reader-label-' + ++counter;
             var live = ariaLive ? ' aria-live="' + ariaLive + '"' : "";
-            var $label = $('<span style="display:none" role="region" id="' + id + '"' + live + '></span>').screenReaderOnly();
+            var $label = $('<span style="display:none" role="region" aria-label="'+text+'" id="' + id + '"' + live + '></span>').screenReaderOnly();
             $('body').append( $label );
 
             $el.attr(ariaLink, id);
