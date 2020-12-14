@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2020 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 //IE fix to support indexOf method on Array objects
 Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
