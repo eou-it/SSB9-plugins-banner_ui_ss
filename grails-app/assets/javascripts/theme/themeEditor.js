@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2016-2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2016-2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 /* global notifications */
 (function() {
@@ -312,7 +312,8 @@
                 var errorNotification  = notifications.addNotification(new Notification({
                     message: $.i18n.prop("js.notification.upload.error"),
                     type: "error",
-                    id: saveError
+                    id: "file",
+                    component: $('#theme-name')
                 }))
                 return
             }
@@ -339,7 +340,8 @@
                     var errorNotification  = notifications.addNotification(new Notification({
                         message: $.i18n.prop("js.notification.upload.error"),
                         type: "error",
-                        id: saveError
+                        id: 'theme-name',
+                        component:$('#theme-name')
                     }))
 
                 });
@@ -381,7 +383,8 @@
                 var errorNotification  = notifications.addNotification(new Notification({
                     message: $.i18n.prop("js.notification.upload.error"),
                     type: "error",
-                    id: saveError
+                    id: 'file',
+                    component :  $('#file')
                 }))
             } else {
                 var dispMsg = document.getElementById("uploadMsg");
@@ -408,21 +411,26 @@
                             var errorNotification = new Notification({
                                 message: $.i18n.prop("js.notification.upload.type"),
                                 type: "error",
-                                flash: true
+                                flash: false,
+                                id : 'file',
+                                component :  $('#file')
                             });
                             notifications.addNotification(errorNotification);
                         } else if (response.data == 'noData') {
                             var errorNotification = new Notification({
                                 message: $.i18n.prop("js.notification.upload.nodata"),
                                 type: "error",
-                                flash: true
+                                flash: false,
+                                id : 'file',
+                                component :  $('#file')
                             });
                             notifications.addNotification(errorNotification);
                         } else if (response.data == 'error') {
                             var errorNotification = new Notification({
                                 message: $.i18n.prop("js.notification.upload.error"),
                                 type: "error",
-                                id: saveError
+                                id : 'file',
+                                component :  $('#file')
                             });
                             notifications.addNotification(errorNotification);
                         } else {
@@ -440,7 +448,8 @@
                         var errorNotification = notifications.addNotification(new Notification({
                             message: $.i18n.prop("js.notification.upload.error"),
                             type: "error",
-                            id: saveError
+                            id : 'file',
+                            component :  $('#file')
                         }))
                     })['finally'](function () {
                     angular.element("input[type='file']").val(null);

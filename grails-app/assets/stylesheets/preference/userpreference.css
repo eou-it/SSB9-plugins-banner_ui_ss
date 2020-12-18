@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2017-2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2017-2020 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 .xe-popup-container .xe-pop-content {
@@ -49,6 +49,10 @@ div#buttonContainer.buttonContainer {
 
 }
 
+body {
+    overflow-y: scroll!important;
+}
+
 @media screen and (min-width: 768px) {
 
     .xe-popup-container .xe-pop-content {
@@ -71,7 +75,7 @@ div#buttonContainer.buttonContainer {
     }
 
     div#buttonContainer.buttonContainer {
-        float: right;
+        float: left;
         height: 0%;
         bottom: auto;
         width: auto;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2017-2020 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 div#buttonContainer.buttonContainer {
@@ -29,7 +29,7 @@ div#buttonContainer.buttonContainer {
 
     div#buttonContainer.buttonContainer {
         direction: rtl;
-        float: left;
+        float: right;
         height: 0%;
         bottom: auto;
         width: auto;
