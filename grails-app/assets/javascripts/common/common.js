@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2009-2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2020 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 //IE fix to support indexOf method on Array objects
 Array.prototype.indexOf=[].indexOf||function(a,b,c,r) {
@@ -67,7 +67,7 @@ $.fn.screenReaderLabel = (function(){
         function createLabel($el, ariaLive, ariaLink) {
             var id = 'screen-reader-label-' + ++counter;
             var live = ariaLive ? ' aria-live="' + ariaLive + '"' : "";
-            var $label = $('<span style="display:none" role="region" id="' + id + '"' + live + '></span>').screenReaderOnly();
+            var $label = $('<span style="display:none" role="region" aria-label="'+text+'" id="' + id + '"' + live + '></span>').screenReaderOnly();
             $('body').append( $label );
 
             $el.attr(ariaLink, id);
