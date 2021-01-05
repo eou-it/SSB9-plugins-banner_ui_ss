@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright 2018 Ellucian Company L.P. and its affiliates.                  *
+ *  Copyright 2020 Ellucian Company L.P. and its affiliates.                  *
  ******************************************************************************/
 
 #uploadContent {
@@ -50,10 +50,10 @@ label.pb-label {
     margin-top:5px;
 }
 
-.pb-boolean .pb-item.pb-boolean:checked+label {
+.pb-boolean .pb-item.pb-boolean:checked+span {
     background-image: url('../../checkbox/checkbox-selected_new.svg');
 }
-.pb-boolean .pb-item.pb-boolean+label {
+.pb-boolean .pb-item.pb-boolean+span {
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 1.25em;
