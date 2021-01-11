@@ -20,6 +20,7 @@
                 $scope.modalShown = !$scope.modalShown;
                 $timeout(function () {
                     angular.element('#xeModalPrivacyLink').focus();
+                    event.preventDefault();
                 });
             };
             $scope.aboutApi = {
