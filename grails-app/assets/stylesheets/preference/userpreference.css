@@ -47,6 +47,10 @@ div#buttonContainer.buttonContainer {
         width:100%;
     }
 
+    .ui-select-choices {
+        max-height: 75px;
+    }
+
 }
 
 body {
