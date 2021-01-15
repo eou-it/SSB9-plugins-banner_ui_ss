@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2011-2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2011-2020 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 
 $(document).ready(function() {
@@ -285,11 +285,11 @@ $(document).ready(function() {
 
             // Manage the prompts if available
             var promptsDiv;
+            var promptMessage = this.model.get( "promptMessage" );
             if (this.model.hasPrompts()) {
 
                 $(this.el).addClass( "notification-center-message-with-prompts" );
 
-                var promptMessage = this.model.get( "promptMessage" );
                 if (promptMessage) {
                     messageContainer.append( promptMessage );
                 }
@@ -328,7 +328,7 @@ $(document).ready(function() {
                 var actionButton = promptsDiv.find('button:first');
                 actionButton.removeClass('secondary');
                 actionButton.addClass('primary');
-                actionButton.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage+ " " + actionButton.text(), "off", "aria-labelledby");
+                actionButton.screenReaderLabel( ariaLabelledbyText + " " + notificationMessage+ " " + promptMessage + " " + actionButton.text(), "off", "aria-labelledby");
             }
             else{
                 var ariaNotificationItemTextElement = "<b class='offscreen' id='ariaNotificationCountText'> "+ ariaLabelledbyText +"</b>";
@@ -465,7 +465,7 @@ $(document).ready(function() {
             if ($(this.el).children('#notificationCenterAriaInfo').length == 0 ) {
                 //First time notification info.
                 var notificationCenterAriaInfo = "<p tabindex='-1' class='offscreen' role='alert'  id='notificationCenterAriaInfo'>";
-                notificationCenterAriaInfo +=$.i18n.prop("js.notification.countlabel",[count]);
+                //notificationCenterAriaInfo +=$.i18n.prop("js.notification.countlabel",[count]);
                 notificationCenterAriaInfo += $.i18n.prop("js.notification.help");
                 notificationCenterAriaInfo +="</p>";
                 $(this.el).prepend(notificationCenterAriaInfo);
