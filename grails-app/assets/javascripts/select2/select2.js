@@ -2011,7 +2011,7 @@ var requestTimeout
                 "       <input type='text' sanitize='true' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false' class='select2-input' role='combobox' aria-expanded='true'",
                 "       aria-autocomplete='list' />",
                 "   </div>",
-                "   <ul class='select2-results' role='listbox'>",
+                "   <ul class='select2-results' role='listbox' title='" +$.i18n.prop('select2.format.selection.too.big.singular')+ "'>",
                 "   </ul>",
                 "</div>"].join(""));
 
