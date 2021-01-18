@@ -1,4 +1,4 @@
-/* Copyright 2013-2015 Ellucian Company L.P. and its affiliates. */
+/* Copyright 2013-2021 Ellucian Company L.P. and its affiliates. */
 
 ;(function ( $, _, Backbone ) {
     Backbone.PagingControls = Backbone.View.extend({

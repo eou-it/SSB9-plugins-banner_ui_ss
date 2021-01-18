@@ -1,5 +1,5 @@
 ﻿/*******************************************************************************
- Copyright 2013-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2013-2021 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 /*
@@ -2629,7 +2629,7 @@ var requestTimeout
                 "  </li>",
                 "</ul>",
                 "<div class='select2-drop select2-drop-multi select2-display-none'>",
-                "   <ul class='select2-results'>",
+                "   <ul class='select2-results' role='listbox' >",
                 "   </ul>",
                 "</div>"].join(""));
             return container;
