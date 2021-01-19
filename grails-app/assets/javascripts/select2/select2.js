@@ -1772,7 +1772,7 @@ var requestTimeout
 
             if (search.val().length < opts.minimumInputLength) {
                 if (checkFormatter(opts.formatInputTooShort, "formatInputTooShort")) {
-                    render("<li class='select2-no-results' role='option' id='select2-no-results-id'>" + evaluate(opts.formatInputTooShort, opts.element, search.val(), opts.minimumInputLength) + "</li>");
+                    render("<li class='select2-no-results' role='option' >" + evaluate(opts.formatInputTooShort, opts.element, search.val(), opts.minimumInputLength) + "</li>");
                 } else {
                     render("");
                 }
@@ -1782,7 +1782,7 @@ var requestTimeout
 
             if (opts.maximumInputLength && search.val().length > opts.maximumInputLength) {
                 if (checkFormatter(opts.formatInputTooLong, "formatInputTooLong")) {
-                    render("<li class='select2-no-results' role='option' id='select2-no-results-id'>" + evaluate(opts.formatInputTooLong, opts.element, search.val(), opts.maximumInputLength) + "</li>");
+                    render("<li class='select2-no-results' role='option' >" + evaluate(opts.formatInputTooLong, opts.element, search.val(), opts.maximumInputLength) + "</li>");
                 } else {
                     render("");
                 }
@@ -1852,7 +1852,7 @@ var requestTimeout
                     }
 
                     if (data.results.length === 0 && checkFormatter(opts.formatNoMatches, "formatNoMatches")) {
-                        render("<li class='select2-no-results' role='option' id='select2-no-results-id'>" + evaluate(opts.formatNoMatches, opts.element, search.val()) + "</li>");
+                        render("<li class='select2-no-results' role='option' >" + evaluate(opts.formatNoMatches, opts.element, search.val()) + "</li>");
                         return;
                     }
 
@@ -3219,7 +3219,7 @@ var requestTimeout
             if(!this.opts.createSearchChoice && !choices.filter('.select2-result:not(.select2-selected)').length > 0){
                 if(!data || data && !data.more && this.results.find(".select2-no-results").length === 0) {
                     if (checkFormatter(self.opts.formatNoMatches, "formatNoMatches")) {
-                        this.results.append("<li class='select2-no-results' role='option' id='select2-no-results-id'>" + evaluate(self.opts.formatNoMatches, self.opts.element, self.search.val()) + "</li>");
+                        this.results.append("<li class='select2-no-results' role='option' >" + evaluate(self.opts.formatNoMatches, self.opts.element, self.search.val()) + "</li>");
                     }
                 }
             }
