@@ -1,4 +1,4 @@
-/* Copyright 2013-2015 Ellucian Company L.P. and its affiliates. */
+/* Copyright 2013-2021 Ellucian Company L.P. and its affiliates. */
 
 ;(function ( $, _, Backbone ) {
     Backbone.PagingControls = Backbone.View.extend({
@@ -133,7 +133,7 @@
           next     = $( this.elements.button ).attr('title',this.strings.next).addClass( this.css.pagingControl + " " + this.css.next + " " + dir ).attr('tabindex',-1),
           prev     = $( this.elements.button ).attr('title',this.strings.prev).addClass( this.css.pagingControl + " " + this.css.previous + " " + dir ).attr('tabindex',-1),
           page     = $( this.elements.pageLabel ).addClass( this.css.pagingText + " " + this.css.page ).text( this.strings.page ),
-          input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ).attr('tabindex',0),
+          input    = $( this.elements.text ).addClass( this.css.pageNumber ).val( pageInfo.page ).attr('tabindex',0).attr('title',this.strings.page).attr('aria-label',this.strings.page),
           of       = $( this.elements.span ).attr('id','of-n-pages').addClass( this.css.pagingText + " " + this.css.pageOf ).text( pageInfo.pages == 1 ? this.strings.pageOfOne : this.strings.of ),
           pages    = $( this.elements.span ).addClass( this.css.pagingText + " " + this.css.totalPages ).text( pageInfo.pages ),
           divider  = $( this.elements.div ).addClass( this.css.divider ),

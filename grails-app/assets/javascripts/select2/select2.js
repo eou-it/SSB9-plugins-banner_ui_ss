@@ -1,5 +1,5 @@
 ﻿/*******************************************************************************
- Copyright 2013-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2013-2021 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 /*
@@ -1010,6 +1010,8 @@ var requestTimeout
 
                                 innerContainer=$("<ul ></ul>");
                                 innerContainer.addClass("select2-result-sub");
+                                innerContainer.attr("role", "listbox");
+                                innerContainer.attr("aria-labelledby", label.attr('id'));
                                 populate(result.children, innerContainer, depth+1);
                                 node.append(innerContainer);
                             }
@@ -1770,7 +1772,7 @@ var requestTimeout
 
             if (search.val().length < opts.minimumInputLength) {
                 if (checkFormatter(opts.formatInputTooShort, "formatInputTooShort")) {
-                    render("<li class='select2-no-results'>" + evaluate(opts.formatInputTooShort, opts.element, search.val(), opts.minimumInputLength) + "</li>");
+                    render("<li class='select2-no-results' role='option' >" + evaluate(opts.formatInputTooShort, opts.element, search.val(), opts.minimumInputLength) + "</li>");
                 } else {
                     render("");
                 }
@@ -1780,7 +1782,7 @@ var requestTimeout
 
             if (opts.maximumInputLength && search.val().length > opts.maximumInputLength) {
                 if (checkFormatter(opts.formatInputTooLong, "formatInputTooLong")) {
-                    render("<li class='select2-no-results'>" + evaluate(opts.formatInputTooLong, opts.element, search.val(), opts.maximumInputLength) + "</li>");
+                    render("<li class='select2-no-results' role='option' >" + evaluate(opts.formatInputTooLong, opts.element, search.val(), opts.maximumInputLength) + "</li>");
                 } else {
                     render("");
                 }
@@ -1850,7 +1852,7 @@ var requestTimeout
                     }
 
                     if (data.results.length === 0 && checkFormatter(opts.formatNoMatches, "formatNoMatches")) {
-                        render("<li class='select2-no-results'>" + evaluate(opts.formatNoMatches, opts.element, search.val()) + "</li>");
+                        render("<li class='select2-no-results' role='option' >" + evaluate(opts.formatNoMatches, opts.element, search.val()) + "</li>");
                         return;
                     }
 
@@ -2629,7 +2631,7 @@ var requestTimeout
                 "  </li>",
                 "</ul>",
                 "<div class='select2-drop select2-drop-multi select2-display-none'>",
-                "   <ul class='select2-results'>",
+                "   <ul class='select2-results' role='listbox' >",
                 "   </ul>",
                 "</div>"].join(""));
             return container;
@@ -3217,7 +3219,7 @@ var requestTimeout
             if(!this.opts.createSearchChoice && !choices.filter('.select2-result:not(.select2-selected)').length > 0){
                 if(!data || data && !data.more && this.results.find(".select2-no-results").length === 0) {
                     if (checkFormatter(self.opts.formatNoMatches, "formatNoMatches")) {
-                        this.results.append("<li class='select2-no-results'>" + evaluate(self.opts.formatNoMatches, self.opts.element, self.search.val()) + "</li>");
+                        this.results.append("<li class='select2-no-results' role='option' >" + evaluate(self.opts.formatNoMatches, self.opts.element, self.search.val()) + "</li>");
                     }
                 }
             }
