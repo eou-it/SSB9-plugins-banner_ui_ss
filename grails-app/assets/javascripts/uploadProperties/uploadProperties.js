@@ -12,6 +12,15 @@ function clickEvent(element){
     }else if(event.originalEvent != undefined){
         element.click();
         event.preventDefault();
+    }else if(element.tagName !="LABEL"){
+        var parentNodeId = document.getElementById(element.id).parentNode.id;
+        var childNodes = document.getElementById(parentNodeId).childNodes;
+        for (i = 0; i < childNodes.length; i++) {
+            if(childNodes[i].nodeName == "LABEL"){
+                document.getElementById(childNodes[i].id).click();
+            }
+        }
+        event.preventDefault();
     }
 }
 
