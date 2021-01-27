@@ -1,10 +1,12 @@
 /*******************************************************************************
- Copyright 2017-2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2017-2021 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-function clickEvent(element){
+function clickEvent(id,element){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     var isChecked = element.getAttribute("aria-checked")== 'true';
+    var node = event.target;
+    var elementId = id+node.attributes.rowid.value;
     element.setAttribute("aria-checked",!isChecked);
     if(keycode == 32 || keycode==13){
         element.click();
@@ -13,13 +15,7 @@ function clickEvent(element){
         element.click();
         event.preventDefault();
     }else if(element.tagName !="LABEL"){
-        var parentNodeId = document.getElementById(element.id).parentNode.id;
-        var childNodes = document.getElementById(parentNodeId).childNodes;
-        for (i = 0; i < childNodes.length; i++) {
-            if(childNodes[i].nodeName == "LABEL"){
-                document.getElementById(childNodes[i].id).click();
-            }
-        }
+        document.getElementById(elementId).click();
         event.preventDefault();
     }
 }
