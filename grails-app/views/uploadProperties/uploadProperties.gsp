@@ -87,9 +87,9 @@
                 <div class="pb-detail-item-container pb-boolean" role="application">
                     <input  type="checkbox" name="checkboxInputAd" id="checkboxInputAdvanced" tabindex="-1" ng-model="tablehide"
                            class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse" />
-                    <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label" rowId="1" onkeypress="clickEvent('checkboxLabelAdvanced',this)" onmousedown="clickEvent('checkboxLabelAdvanced',this)"></span>
-                    <label class="pb-block pb-boolean pb-item pb-label" id="checkboxLabelAdvanced" rowId="1" for="checkboxInputAdvanced" tabindex="0"
-                           role="checkbox" onkeypress="clickEvent('checkboxLabelAdvanced',this)" aria-checked="false" onmousedown="clickEvent('checkboxLabelAdvanced',this)"
+                    <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label" rowId="label" onkeypress="clickEvent('advancedCheckbox-',this)" onmousedown="clickEvent('advancedCheckbox-',this)"></span>
+                    <label class="pb-block pb-boolean pb-item pb-label" id="advancedCheckbox-label" rowId="label" for="checkboxInputAdvanced" tabindex="0"
+                           role="checkbox" onkeypress="clickEvent('advancedCheckbox-',this)" aria-checked="false" onmousedown="clickEvent('advancedCheckbox-',this)"
                            aria-labelledby="checkboxInputAdvanced">
                         <g:message code="upload.properties.input.advanced"/>
                     </label>
