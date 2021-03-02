@@ -1,4 +1,4 @@
-<%-- Copyright 2017-2020 Ellucian Company L.P. and its affiliates. --%>
+<%-- Copyright 2017-2021 Ellucian Company L.P. and its affiliates. --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html xmlns:ng="http://angularjs.org" ng-strict-di>
@@ -46,13 +46,13 @@
         <div>
             <g:message code="upload.properties.other.message"/>
         </div>
-        <div xe-field="checkboxInput" id="checkboxInputContainer" aria-labelledby="checkboxInputLabel">
-            <div ng-repeat="x in lanProperties" ng-if="x.code"  class="pb-detail-item-container pb-boolean" role="application">
+        <div xe-field="checkboxInput" aria-labelledby="checkboxInputLabel">
+            <div ng-repeat="x in lanProperties" ng-if="x.code"  class="pb-detail-item-container pb-boolean" id="checkboxDiv-{{x.code}}" role="application">
                 <input type="checkbox" name="checkboxInput" tabindex="-1" id="checkboxInput{{x.code}}" value="{{x.code}}"
                        class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse"/>
-                <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label"></span>
-                <label class="pb-block pb-boolean pb-item pb-label" tabindex="0"  for="checkboxInput{{x.code}}" role="checkbox"
-                       onkeypress="clickEvent(this)" onmousedown="clickEvent(this)" aria-checked="false" %{--aria-labelledby="checkboxInput{{x.code}}"--}%>
+                <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label" rowId={{x.code}} onkeypress="clickEvent('checkboxLabel-',this)" onmousedown="clickEvent('checkboxLabel-',this)"></span>
+                <label class="pb-block pb-boolean pb-item pb-label" tabindex="0" id="checkboxLabel-{{x.code}}" rowId={{x.code}} for="checkboxInput{{x.code}}" role="checkbox"
+                       onkeypress="clickEvent('checkboxLabel-',this)" onmousedown="clickEvent('checkboxLabel-',this)" aria-checked="false" %{--aria-labelledby="checkboxInput{{x.code}}"--}%>
                     {{x.language}}
                 </label>
 
@@ -87,9 +87,9 @@
                 <div class="pb-detail-item-container pb-boolean" role="application">
                     <input  type="checkbox" name="checkboxInputAd" id="checkboxInputAdvanced" tabindex="-1" ng-model="tablehide"
                            class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse" />
-                    <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label"></span>
-                    <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInputAdvanced" tabindex="0"
-                           role="checkbox" onkeypress="clickEvent(this)" aria-checked="false" onmousedown="clickEvent(this)"
+                    <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label" rowId="label" onkeypress="clickEvent('advancedCheckbox-',this)" onmousedown="clickEvent('advancedCheckbox-',this)"></span>
+                    <label class="pb-block pb-boolean pb-item pb-label" id="advancedCheckbox-label" rowId="label" for="checkboxInputAdvanced" tabindex="0"
+                           role="checkbox" onkeypress="clickEvent('advancedCheckbox-',this)" aria-checked="false" onmousedown="clickEvent('advancedCheckbox-',this)"
                            aria-labelledby="checkboxInputAdvanced">
                         <g:message code="upload.properties.input.advanced"/>
                     </label>
@@ -118,9 +118,9 @@
                                                    type="checkbox" name="checkboxTable"
                                                    id="checkboxInput{{$index}}" dataId="{{filename.id}}"
                                                   value="{{filename.basename}}" tabindex="-1"/>
-                                           <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label"></span>
-                                           <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInput{{$index}}"
-                                                   tabindex="0" role="checkbox" onkeypress="clickEvent(this)" onmousedown="clickEvent(this)"
+                                           <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label" rowId={{$index}} onkeypress="clickEvent('checkboxLabel-',this)" onmousedown="clickEvent('checkboxLabel-',this)"></span>
+                                           <label class="pb-block pb-boolean pb-item pb-label" id="checkboxLabel-{{$index}}" rowId={{$index}} for="checkboxInput{{$index}}"
+                                                   tabindex="0" role="checkbox" onkeypress="clickEvent('checkboxLabel-',this)" onmousedown="clickEvent('checkboxLabel-',this)"
                                                    aria-checked="false" aria-labelledby="checkboxInput{{$index}}">
                                                 {{filename.basename}}
                                            </label>

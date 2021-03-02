@@ -1,16 +1,21 @@
 /*******************************************************************************
- Copyright 2017-2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2017-2021 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-function clickEvent(element){
+function clickEvent(id,element){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     var isChecked = element.getAttribute("aria-checked")== 'true';
+    var node = event.target;
+    var elementId = id+node.attributes.rowid.value;
     element.setAttribute("aria-checked",!isChecked);
     if(keycode == 32 || keycode==13){
         element.click();
         event.preventDefault();
     }else if(event.originalEvent != undefined){
         element.click();
+        event.preventDefault();
+    }else if(element.tagName !="LABEL"){
+        document.getElementById(elementId).click();
         event.preventDefault();
     }
 }
