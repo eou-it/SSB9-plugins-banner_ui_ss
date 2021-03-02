@@ -1,5 +1,5 @@
 /** *****************************************************************************
- Copyright 2014 Ellucian Company L.P. and its affiliates.
+ Copyright 2014-2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 // #################################################################################################################
@@ -8,6 +8,7 @@
 // #################################################################################################################
 window.ExcelExportWizardView = Backbone.View.extend({
     url: 'None',
+
 
     initialize: function() {
         _.bindAll(this);
@@ -51,7 +52,7 @@ window.ExcelExportWizardView = Backbone.View.extend({
         if (this.url.indexOf("?") == -1) {
             formatS = "?fileType=" + format
         }
-        window.open(this.url + formatS);
+        window.open(this.url + formatS, '_self');
 
         $.modal.close();
     }

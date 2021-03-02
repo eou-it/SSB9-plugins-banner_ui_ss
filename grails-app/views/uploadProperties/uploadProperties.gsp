@@ -34,7 +34,7 @@
     <h2><g:message code="upload.properties.header2.content"/></h2>
     <span><g:message code="upload.properties.header2.subcontent"/></span>
     <div>
-        <select ng-model="selectedLanguage" place class="pb-block pb-select pb-item  ng-valid ng-touched ng-dirty ng-valid-parse"
+        <select id='baselocal' ng-model="selectedLanguage" place class="pb-block pb-select pb-item  ng-valid ng-touched ng-dirty ng-valid-parse"
                 ng-change="selectCheckbox()" autofocus>
             <option ng-repeat="x in lanProperties" value="{{x.code}}">{{x.language}}</option>
         </select>
@@ -47,11 +47,12 @@
             <g:message code="upload.properties.other.message"/>
         </div>
         <div xe-field="checkboxInput" id="checkboxInputContainer" aria-labelledby="checkboxInputLabel">
-            <div ng-repeat="x in lanProperties" ng-if="x.code"  class="pb-detail-item-container pb-boolean">
-                <input type="checkbox" name="checkboxInput" id="checkboxInput{{x.code}}" value="{{x.code}}"
-                       class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse">
-                <label tabindex="0" class="pb-block pb-boolean pb-item pb-label" for="checkboxInput{{x.code}}" role="checkbox"
-                       onkeypress="clickEvent(this)" onmousedown="clickEvent(this)" aria-checked="false" aria-labelledby="checkboxInput{{x.code}}">
+            <div ng-repeat="x in lanProperties" ng-if="x.code"  class="pb-detail-item-container pb-boolean" role="application">
+                <input type="checkbox" name="checkboxInput" tabindex="-1" id="checkboxInput{{x.code}}" value="{{x.code}}"
+                       class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse"/>
+                <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label"></span>
+                <label class="pb-block pb-boolean pb-item pb-label" tabindex="0"  for="checkboxInput{{x.code}}" role="checkbox"
+                       onkeypress="clickEvent(this)" onmousedown="clickEvent(this)" aria-checked="false" %{--aria-labelledby="checkboxInput{{x.code}}"--}%>
                     {{x.language}}
                 </label>
 
@@ -83,9 +84,10 @@
                     </xe-text-box>
                 </div>
             <div>
-                <div class="pb-detail-item-container pb-boolean">
-                    <input  type="checkbox" name="checkboxInputAd" id="checkboxInputAdvanced" ng-model="tablehide"
-                           class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse" >
+                <div class="pb-detail-item-container pb-boolean" role="application">
+                    <input  type="checkbox" name="checkboxInputAd" id="checkboxInputAdvanced" tabindex="-1" ng-model="tablehide"
+                           class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse" />
+                    <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label"></span>
                     <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInputAdvanced" tabindex="0"
                            role="checkbox" onkeypress="clickEvent(this)" aria-checked="false" onmousedown="clickEvent(this)"
                            aria-labelledby="checkboxInputAdvanced">
@@ -111,16 +113,18 @@
                             <tbody>
                                 <tr ng-repeat="filename in propFiles track by $index">
                                     <td>
-                                        <div class="pb-detail-item-container pb-boolean">
+                                        <div class="pb-detail-item-container pb-boolean" role="application">
                                            <input class="pb-block pb-boolean pb-item  ng-untouched ng-valid ng-dirty ng-valid-parse"
                                                    type="checkbox" name="checkboxTable"
                                                    id="checkboxInput{{$index}}" dataId="{{filename.id}}"
-                                                   value="{{filename.basename}}">
-                                            <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInput{{$index}}"
+                                                  value="{{filename.basename}}" tabindex="-1"/>
+                                           <span tabindex="-1" class="pb-block pb-boolean pb-item pb-label"></span>
+                                           <label class="pb-block pb-boolean pb-item pb-label" for="checkboxInput{{$index}}"
                                                    tabindex="0" role="checkbox" onkeypress="clickEvent(this)" onmousedown="clickEvent(this)"
                                                    aria-checked="false" aria-labelledby="checkboxInput{{$index}}">
                                                 {{filename.basename}}
-                                                </label></div>
+                                           </label>
+                                        </div>
                                     </td>
                                     <td class="tableContent"><a href="${request.contextPath}/admin/i18n?locale={{fileLoc}}&amp;name={{filename.basename}}"
                                            target="_blank"><g:message code="upload.properties.viewother.window"/></a></td>

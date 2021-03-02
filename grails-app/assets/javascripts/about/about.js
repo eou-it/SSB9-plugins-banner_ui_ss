@@ -1,5 +1,5 @@
 /*********************************************************************************
- Copyright 2016-2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2016-2021 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
 (function(){
     'use strict';
@@ -19,7 +19,7 @@
             $scope.toggleModal = function() {
                 $scope.modalShown = !$scope.modalShown;
                 $timeout(function () {
-                    angular.element('#xeModalContainer').attr('tabindex', 0).focus();
+                    angular.element('#xeModalPrivacyLink')[0].focus();
                 });
             };
             $scope.aboutApi = {
@@ -32,7 +32,9 @@
                 otherPlugin: 'about.banner.other.plugins',
                 copyright: 'about.banner.copyright',
                 close : 'api.close',
-                copyrightLegalNotice: 'about.banner.copyrightLegalNotice'
+                copyrightLegalNotice: 'about.banner.copyrightLegalNotice',
+                ellucianPrivacyNotice: 'about.banner.ellucianPrivacyNotice',
+                ellucianPrivacyNoticeLink: 'about.banner.ellucianPrivacyNoticeLink'
             };
         }]);
 })();
